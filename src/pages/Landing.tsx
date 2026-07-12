@@ -275,15 +275,24 @@ function HowItWorks() {
   )
 }
 
-/* Leadership — drop in real names & photos from the College staff page. */
-const TEAM = [
-  { name: 'Rev. Fr. Superior', role: 'Proprietor / C.Ss.R' },
-  { name: 'The Principal', role: 'College Section' },
-  { name: 'The Head Teacher', role: 'Nursery & Primary' },
-  { name: 'Vice Principal', role: 'Academics' },
-  { name: 'The Chaplain', role: 'Spiritual Director' },
-  { name: 'The Bursar', role: 'Finance & Fees' },
+/* Leadership — names/roles from archangelschools.org.ng/college. To show the
+   real portraits: on the school site right-click each photo → Copy Image
+   Address → paste into `photo`. The illustrated avatar is the fallback. */
+const TEAM: { name: string; role: string; photo?: string }[] = [
+  { name: 'Very Rev. Fr. Michael Emerue, C.Ss.R', role: 'Manager' },
+  { name: 'Rev. Fr. (Dr) Godfrey Udeh, C.Ss.R', role: 'Administrator' },
+  { name: 'Mrs Catherine Noyelum Asiegbu', role: 'Assistant Administrator' },
+  { name: 'Ezinne (Mrs) Etoh Lawrencia C.', role: 'School Principal' },
+  { name: 'Mrs Udegbunam Fransisca O.', role: 'VP Administrator' },
 ]
+
+function TeamPortrait({ photo, name, index }: { photo?: string; name: string; index: number }) {
+  const [failed, setFailed] = useState(false)
+  if (photo && !failed) {
+    return <img src={photo} alt={name} loading="lazy" className="h-full w-full object-cover" onError={() => setFailed(true)} />
+  }
+  return <TeamAvatar index={index} />
+}
 
 function Team() {
   return (
@@ -295,28 +304,25 @@ function Team() {
           The leadership guiding Archangels&rsquo; Schools in faith, character and academic excellence.
         </p>
       </motion.div>
-      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
         {TEAM.map((m, i) => (
           <motion.div
             key={m.name}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.45, ease: 'easeOut', delay: (i % 6) * 0.08 }}
+            transition={{ duration: 0.45, ease: 'easeOut', delay: (i % 5) * 0.08 }}
             whileHover={{ y: -6 }}
             className="glass flex flex-col items-center p-5 text-center"
           >
             <div className="h-20 w-20 overflow-hidden rounded-full ring-2 ring-gold-400/40 sm:h-24 sm:w-24">
-              <TeamAvatar index={i} />
+              <TeamPortrait photo={m.photo} name={m.name} index={i} />
             </div>
             <div className="mt-4 text-sm font-semibold text-white">{m.name}</div>
             <div className="mt-1 text-[11px] uppercase tracking-wider text-gold-300">{m.role}</div>
           </motion.div>
         ))}
       </div>
-      <p className="mt-8 text-center text-xs text-navy-100/70">
-        Names &amp; portraits are placeholders — send me the College staff list and I&rsquo;ll slot them in.
-      </p>
     </section>
   )
 }

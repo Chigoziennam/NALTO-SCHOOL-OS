@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, CreditCard, Download, FileText, Shirt, User } from 'lucide-react'
+import { ArrowLeft, CreditCard, Download, FileText, Shirt, SlidersHorizontal, User } from 'lucide-react'
+import { PayAmountModal } from '../components/PayAmountModal'
 import { SCHOOL } from '../lib/school'
 import { formatDate, formatKobo } from '../lib/format'
 import { DEMO_GUARDIAN } from '../lib/demoData'
@@ -36,6 +38,7 @@ export default function ParentDashboard() {
   const { data: children, isLoading } = useChildren()
   const { data: history, isLoading: historyLoading } = useParentHistory()
   const { pay, overlay } = usePaystack()
+  const [partPayOpen, setPartPayOpen] = useState(false)
 
   const owingChild = children?.find((c) => c.balance_kobo > 0)
 
@@ -154,22 +157,43 @@ export default function ParentDashboard() {
                     ))}
                   </div>
                 </div>
-                <button
-                  onClick={() =>
-                    pay({
-                      amountKobo: owingChild.balance_kobo,
-                      email: guardian?.email ?? DEMO_GUARDIAN.email,
-                      studentId: owingChild.student_id,
-                      invoiceId: owingChild.invoice_id,
-                      guardianId: guardian?.id ?? DEMO_GUARDIAN.id,
-                      studentName: owingChild.student_name,
-                    })
-                  }
-                  className="btn-accent animate-glow-pulse"
-                >
-                  <CreditCard size={17} /> Pay Now
-                </button>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <button onClick={() => setPartPayOpen(true)} className="btn-ghost">
+                    <SlidersHorizontal size={16} /> Pay in Part
+                  </button>
+                  <button
+                    onClick={() =>
+                      pay({
+                        amountKobo: owingChild.balance_kobo,
+                        email: guardian?.email ?? DEMO_GUARDIAN.email,
+                        studentId: owingChild.student_id,
+                        invoiceId: owingChild.invoice_id,
+                        guardianId: guardian?.id ?? DEMO_GUARDIAN.id,
+                        studentName: owingChild.student_name,
+                      })
+                    }
+                    className="btn-accent animate-glow-pulse"
+                  >
+                    <CreditCard size={17} /> Pay Full
+                  </button>
+                </div>
               </div>
+              <PayAmountModal
+                open={partPayOpen}
+                onClose={() => setPartPayOpen(false)}
+                balanceKobo={owingChild.balance_kobo}
+                studentName={owingChild.student_name}
+                onPay={(amountKobo) =>
+                  pay({
+                    amountKobo,
+                    email: guardian?.email ?? DEMO_GUARDIAN.email,
+                    studentId: owingChild.student_id,
+                    invoiceId: owingChild.invoice_id,
+                    guardianId: guardian?.id ?? DEMO_GUARDIAN.id,
+                    studentName: owingChild.student_name,
+                  })
+                }
+              />
             </motion.section>
           )}
 

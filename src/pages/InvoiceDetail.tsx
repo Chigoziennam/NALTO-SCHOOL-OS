@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, CreditCard, Download } from 'lucide-react'
+import { PayAmountModal } from '../components/PayAmountModal'
 import html2pdf from 'html2pdf.js'
 import { SCHOOL } from '../lib/school'
 import { formatDate, formatKobo } from '../lib/format'
@@ -18,6 +19,7 @@ export default function InvoiceDetail() {
   const { data: guardian } = useGuardian()
   const { pay, overlay } = usePaystack()
   const cardRef = useRef<HTMLDivElement>(null)
+  const [payOpen, setPayOpen] = useState(false)
 
   const downloadPdf = () => {
     if (!cardRef.current || !invoice) return
@@ -140,23 +142,31 @@ export default function InvoiceDetail() {
                   <Download size={16} /> Download Invoice PDF
                 </button>
                 {invoice.balance_kobo > 0 && (
-                  <button
-                    onClick={() =>
-                      pay({
-                        amountKobo: invoice.balance_kobo,
-                        email: guardian?.email ?? DEMO_GUARDIAN.email,
-                        studentId: invoice.id,
-                        invoiceId: invoice.id,
-                        guardianId: guardian?.id ?? DEMO_GUARDIAN.id,
-                        studentName: invoice.student_name,
-                      })
-                    }
-                    className="btn-accent animate-glow-pulse"
-                  >
-                    <CreditCard size={16} /> Pay Balance — {formatKobo(invoice.balance_kobo)}
+                  <button onClick={() => setPayOpen(true)} className="btn-accent animate-glow-pulse">
+                    <CreditCard size={16} /> Pay — choose items or part payment
                   </button>
                 )}
               </div>
+
+              {invoice.balance_kobo > 0 && (
+                <PayAmountModal
+                  open={payOpen}
+                  onClose={() => setPayOpen(false)}
+                  balanceKobo={invoice.balance_kobo}
+                  studentName={invoice.student_name}
+                  items={invoice.items}
+                  onPay={(amountKobo) =>
+                    pay({
+                      amountKobo,
+                      email: guardian?.email ?? DEMO_GUARDIAN.email,
+                      studentId: invoice.id,
+                      invoiceId: invoice.id,
+                      guardianId: guardian?.id ?? DEMO_GUARDIAN.id,
+                      studentName: invoice.student_name,
+                    })
+                  }
+                />
+              )}
             </motion.div>
           )}
         </main>
