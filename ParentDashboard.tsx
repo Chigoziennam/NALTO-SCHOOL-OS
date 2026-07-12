@@ -33,6 +33,34 @@ function SkeletonCard() {
   )
 }
 
+/** Animated fees-paid progress bar — fills on scroll into view. */
+function PaidProgress({ paidKobo, billedKobo }: { paidKobo: number; billedKobo: number }) {
+  const pct = billedKobo > 0 ? Math.min(100, Math.round((paidKobo / billedKobo) * 100)) : 0
+  const done = pct >= 100
+  return (
+    <div className="mt-4">
+      <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider">
+        <span className="text-ink-400">Fees paid</span>
+        <span className={done ? 'text-status-paid-deep' : 'text-gold-700'}>{pct}%</span>
+      </div>
+      <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-ink-100">
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: `${pct}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: 'easeOut', delay: 0.2 }}
+          className={`h-full rounded-full ${
+            done
+              ? 'bg-gradient-to-r from-status-paid to-status-paid-deep'
+              : 'bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500'
+          }`}
+          style={{ boxShadow: done ? '0 0 12px rgba(30,142,90,0.5)' : '0 0 12px rgba(201,154,62,0.45)' }}
+        />
+      </div>
+    </div>
+  )
+}
+
 export default function ParentDashboard() {
   const { data: guardian } = useGuardian()
   const { data: children, isLoading } = useChildren()
@@ -63,23 +91,43 @@ export default function ParentDashboard() {
         </div>
 
         <main className="mx-auto max-w-5xl px-6">
-          {/* Greeting */}
+          {/* Greeting hero band */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="flex items-center justify-between pb-8 pt-10"
+            className="relative mt-8 overflow-hidden rounded-2xl px-7 py-9 text-white shadow-card sm:px-10"
+            style={{
+              background:
+                'radial-gradient(700px circle at 0% 0%, rgba(201,154,62,0.28), transparent 55%), radial-gradient(500px circle at 100% 100%, rgba(22,144,200,0.18), transparent 55%), linear-gradient(135deg, #163356, #0a1830)',
+            }}
           >
-            <div>
-              <h1 className="text-3xl sm:text-4xl">Welcome, {guardian?.full_name ?? '…'}</h1>
-              <p className="mt-2 text-ink-500">
-                {SCHOOL.currentSession} Session · {SCHOOL.currentTerm} — here&rsquo;s where your children stand.
-              </p>
+            {/* crest watermark */}
+            <div className="pointer-events-none absolute -right-8 -top-10 opacity-[0.09]">
+              <Crest className="h-56 w-56" />
             </div>
-            <div className="hidden h-12 w-12 items-center justify-center rounded-full bg-navy-900 font-semibold text-white sm:flex">
-              <User size={20} />
+            {/* moving light streak */}
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 w-1/3"
+              style={{ background: 'linear-gradient(105deg, transparent, rgba(230,199,128,0.10), transparent)' }}
+              animate={{ x: ['-120%', '340%'] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <div className="relative flex items-center justify-between gap-6">
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold-300">Parent Portal</div>
+                <h1 className="mt-2 text-3xl text-white sm:text-4xl">Welcome, {guardian?.full_name ?? '…'}</h1>
+                <p className="mt-2 text-sm text-navy-100">
+                  {SCHOOL.currentSession} Session · {SCHOOL.currentTerm} — here&rsquo;s where your children stand.
+                </p>
+              </div>
+              <div className="hidden h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-gold-300 ring-1 ring-gold-400/40 backdrop-blur sm:flex">
+                <User size={22} />
+              </div>
             </div>
           </motion.div>
+          <div className="pb-8" />
 
           {/* Children cards */}
           <section className="grid gap-5 sm:grid-cols-2">
@@ -113,10 +161,11 @@ export default function ParentDashboard() {
                     <div>
                       <div className="kpi-label">Balance</div>
                       <div className={`mt-1 font-mono ${child.balance_kobo > 0 ? 'text-status-owing-deep' : 'text-status-paid-deep'}`}>
-                        {child.balance_kobo > 0 ? formatKobo(child.balance_kobo) : 'Cleared'}
+                        {child.balance_kobo > 0 ? formatKobo(child.balance_kobo) : 'Cleared ✓'}
                       </div>
                     </div>
                   </div>
+                  <PaidProgress paidKobo={child.paid_kobo} billedKobo={child.billed_kobo} />
                   <Link
                     to={`/parent/invoice/${child.invoice_id}`}
                     className={`${child.balance_kobo > 0 ? 'btn-accent' : 'btn-secondary'} mt-5 w-full`}

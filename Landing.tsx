@@ -100,7 +100,7 @@ function HeavenHero() {
           src={bgSrc}
           alt=""
           aria-hidden
-          onError={() => bgSrc !== '/assets/heaven.jpg' && setBgSrc('/assets/heaven.jpg')}
+          onError={() => bgSrc !== '/assets/heaven.svg' && setBgSrc('/assets/heaven.svg')}
           className="absolute inset-0 h-full w-full animate-ken-burns object-cover"
         />
         <video
@@ -387,6 +387,44 @@ const BENTO_SPANS = [
   'sm:col-span-2 sm:row-span-2', 'sm:col-span-2 sm:row-span-2',
 ]
 
+/** Bento tile that degrades gracefully — if the photo can't load, it shows a
+ *  branded crest tile with the caption instead of an empty box. */
+function GalleryTile({ src, caption, spanClass, delay }: { src: string; caption: string; spanClass: string; delay: number }) {
+  const [failed, setFailed] = useState(false)
+  return (
+    <motion.figure
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.5, delay }}
+      className={`group relative row-span-2 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-card ${spanClass}`}
+    >
+      {failed ? (
+        <div
+          className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center"
+          style={{ background: 'radial-gradient(120% 100% at 50% 0%, rgba(201,154,62,0.14), transparent 60%), linear-gradient(160deg, #163356, #0a1830)' }}
+        >
+          <Crest className="h-12 w-12 opacity-60" />
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-300/90">{caption}</span>
+        </div>
+      ) : (
+        <>
+          <img
+            src={src}
+            alt={caption}
+            loading="lazy"
+            className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:saturate-[1.1]"
+            onError={() => setFailed(true)}
+          />
+          <figcaption className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-navy-950/85 to-transparent p-4 text-sm font-medium tracking-wide text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            {caption}
+          </figcaption>
+        </>
+      )}
+    </motion.figure>
+  )
+}
+
 function Gallery() {
   return (
     <section id="gallery" className="mx-auto max-w-6xl px-6 py-24">
@@ -397,25 +435,7 @@ function Gallery() {
       </motion.div>
       <div className="grid auto-rows-[130px] grid-cols-1 gap-3 sm:grid-cols-6">
         {SCHOOL.campusPhotos.map((p, i) => (
-          <motion.figure
-            key={p.caption}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-            className={`group relative row-span-2 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-card ${BENTO_SPANS[i % BENTO_SPANS.length]}`}
-          >
-            <img
-              src={p.src}
-              alt={p.caption}
-              loading="lazy"
-              className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:saturate-[1.1]"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-            />
-            <figcaption className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-navy-950/85 to-transparent p-4 text-sm font-medium tracking-wide text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-              {p.caption}
-            </figcaption>
-          </motion.figure>
+          <GalleryTile key={p.caption} src={p.src} caption={p.caption} spanClass={BENTO_SPANS[i % BENTO_SPANS.length]} delay={(i % 3) * 0.1} />
         ))}
       </div>
     </section>
