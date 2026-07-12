@@ -1,0 +1,106 @@
+{
+  "name": "NALTO — Owing Reminder (Mon/Wed/Fri 8am)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 8 * * 1,3,5" }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Schedule Mon/Wed/Fri 8am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/v_owing_students?balance_kobo=gt.0&select=student_id,student_name,class_name,balance_kobo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-owing",
+      "name": "Fetch Owing Students",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "",
+        "options": {}
+      },
+      "id": "split-items",
+      "name": "Split Into Items",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/student_guardians?student_id=eq.{{ $json.student_id }}&is_primary=eq.true&select=guardian_id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-primary-guardian",
+      "name": "Fetch Primary Guardian",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "loop",
+      "name": "Loop Over Guardians",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_BASE_URL }}/webhook/notify-guardian",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  guardian_id: $json[0].guardian_id,\n  template: 'owing_reminder',\n  payload: {\n    studentName: $('Split Into Items').item.json.student_name,\n    amount: $('Split Into Items').item.json.balance_kobo / 100,\n    term: 'Third Term 2025/2026',\n    schoolName: \"Archangels' Schools\"\n  }\n}) }}"
+      },
+      "id": "call-notify",
+      "name": "Call notify-guardian",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Schedule Mon/Wed/Fri 8am": { "main": [[{ "node": "Fetch Owing Students", "type": "main", "index": 0 }]] },
+    "Fetch Owing Students": { "main": [[{ "node": "Split Into Items", "type": "main", "index": 0 }]] },
+    "Split Into Items": { "main": [[{ "node": "Fetch Primary Guardian", "type": "main", "index": 0 }]] },
+    "Fetch Primary Guardian": { "main": [[{ "node": "Loop Over Guardians", "type": "main", "index": 0 }]] },
+    "Loop Over Guardians": {
+      "main": [
+        [],
+        [{ "node": "Call notify-guardian", "type": "main", "index": 0 }]
+      ]
+    },
+    "Call notify-guardian": { "main": [[{ "node": "Loop Over Guardians", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "instanceNote": "Env vars required: SUPABASE_URL, SUPABASE_SERVICE_KEY, N8N_BASE_URL. Loop output 2 processes each batch, looping back until done." }
+}

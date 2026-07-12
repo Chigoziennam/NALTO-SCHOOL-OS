@@ -1,0 +1,157 @@
+{
+  "name": "NALTO — Notify Guardian (sub-workflow)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notify-guardian",
+        "responseMode": "onReceived"
+      },
+      "id": "wh-notify",
+      "name": "Notify Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "notify-guardian"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/guardians?id=eq.{{ $json.body.guardian_id }}&select=id,full_name,email,whatsapp_phone,preferred_channel",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-guardian",
+      "name": "Fetch Guardian",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "typeValidation": "loose" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[0].preferred_channel }}",
+                    "rightValue": "email",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "email"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "typeValidation": "loose" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[0].preferred_channel }}",
+                    "rightValue": "whatsapp",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "whatsapp"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": 0 }
+      },
+      "id": "switch-channel",
+      "name": "Switch on Preferred Channel",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const req = $('Notify Webhook').first().json.body;\nconst guardian = $('Fetch Guardian').first().json[0];\nconst p = req.payload || {};\nconst naira = (n) => '\\u20a6' + Number(n || 0).toLocaleString('en-NG');\nconst brand = `\\n  <div style=\\\"font-family:Georgia,serif;max-width:560px;margin:0 auto;border:1px solid #d9d2c3;border-radius:12px;overflow:hidden\\\">\\n    <div style=\\\"background:#0a1830;color:#faf7ef;padding:24px 28px\\\">\\n      <div style=\\\"font-size:20px\\\">${p.schoolName || \"Archangels' Schools\"}</div>\\n      <div style=\\\"color:#e6c780;font-size:11px;letter-spacing:2px;text-transform:uppercase\\\">Dedicated to Excellence</div>\\n    </div>\\n    <div style=\\\"padding:28px;background:#fffdf8;color:#191510;font-family:Arial,sans-serif;font-size:14px;line-height:1.6\\\">{{BODY}}</div>\\n    <div style=\\\"padding:14px 28px;background:#faf7ef;color:#8b8272;font-size:11px\\\">Powered by Nalto \\u00b7 NALTO SchoolOS</div>\\n  </div>`;\nlet subject, body;\nswitch (req.template) {\n  case 'payment_receipt':\n    subject = 'Fee Payment Confirmed \\u2014 ' + (p.schoolName || \"Archangels' Schools\");\n    body = `<p>Dear ${guardian.full_name},</p><p>We have received your payment of <strong>${naira(p.amount)}</strong> for <strong>${p.studentName}</strong> (${p.term}).</p><p>Receipt No: <strong>${p.receiptNumber}</strong></p><p>Thank you for your promptness. God bless you.</p>`;\n    break;\n  case 'invoice_issued':\n    subject = 'Fee Invoice \\u2014 ' + (p.term || 'Term 3 2025/2026');\n    body = `<p>Dear ${guardian.full_name},</p><p>The fee invoice for <strong>${p.studentName}</strong> (${p.term}) is now available on the Parent Portal.</p><p>Total due: <strong>${naira(p.amount)}</strong>${p.dueDate ? ' \\u00b7 Due by <strong>' + p.dueDate + '</strong>' : ''}.</p><p>Kindly log in to view the breakdown and pay securely online.</p>`;\n    break;\n  case 'owing_reminder':\n    subject = 'Reminder: Outstanding Fees \\u2014 ' + (p.schoolName || \"Archangels' Schools\");\n    body = `<p>Dear ${guardian.full_name},</p><p>This is a gentle reminder that <strong>${p.studentName}</strong> has an outstanding balance of <strong>${naira(p.amount)}</strong> for ${p.term}.</p><p>Kindly settle the balance on the Parent Portal to keep your child's record in good standing.</p>`;\n    break;\n  default:\n    subject = p.subject || 'Notification \\u2014 ' + (p.schoolName || \"Archangels' Schools\");\n    body = `<p>Dear ${guardian.full_name},</p><p>${p.message || ''}</p>`;\n}\nreturn [{ json: {\n  to: guardian.email,\n  subject,\n  html: brand.replace('{{BODY}}', body),\n  guardian_id: guardian.id,\n  template_key: req.template,\n  channel: 'email',\n  payload: p\n} }];"
+      },
+      "id": "build-email",
+      "name": "Build Email From Template",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.RESEND_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  from: $env.NOTIFY_FROM_EMAIL,\n  to: [$json.to],\n  subject: $json.subject,\n  html: $json.html\n}) }}"
+      },
+      "id": "send-email",
+      "name": "Send Email (Resend)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// WhatsApp branch — no-op for now; production swaps in Twilio/WhatsApp Cloud API.\nconst req = $('Notify Webhook').first().json.body;\nconst guardian = $('Fetch Guardian').first().json[0];\nreturn [{ json: {\n  guardian_id: guardian.id,\n  template_key: req.template,\n  channel: 'whatsapp',\n  status: 'queued',\n  payload: req.payload || {}\n} }];"
+      },
+      "id": "whatsapp-noop",
+      "name": "WhatsApp (queued, no-op)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 120]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/notifications",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  school_id: $env.SCHOOL_ID,\n  guardian_id: $('Fetch Guardian').first().json[0].id,\n  channel: $json.channel || 'email',\n  template_key: $json.template_key,\n  payload: $json.payload || {},\n  status: $json.status || 'sent',\n  sent_at: new Date().toISOString(),\n  provider_message_id: $json.id || null\n}) }}"
+      },
+      "id": "log-notification",
+      "name": "Insert Notification Log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Notify Webhook": { "main": [[{ "node": "Fetch Guardian", "type": "main", "index": 0 }]] },
+    "Fetch Guardian": { "main": [[{ "node": "Switch on Preferred Channel", "type": "main", "index": 0 }]] },
+    "Switch on Preferred Channel": {
+      "main": [
+        [{ "node": "Build Email From Template", "type": "main", "index": 0 }],
+        [{ "node": "WhatsApp (queued, no-op)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build Email From Template": { "main": [[{ "node": "Send Email (Resend)", "type": "main", "index": 0 }]] },
+    "Send Email (Resend)": { "main": [[{ "node": "Insert Notification Log", "type": "main", "index": 0 }]] },
+    "WhatsApp (queued, no-op)": { "main": [[{ "node": "Insert Notification Log", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "instanceNote": "Env vars required: SUPABASE_URL, SUPABASE_SERVICE_KEY, SCHOOL_ID, RESEND_API_KEY, NOTIFY_FROM_EMAIL" }
+}

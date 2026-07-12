@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fb6dd"/>
+      <stop offset="0.35" stop-color="#b8d2ea"/>
+      <stop offset="0.7" stop-color="#e9f1f8"/>
+      <stop offset="1" stop-color="#fdfbf5"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.32" r="0.55">
+      <stop offset="0" stop-color="#fff8e6" stop-opacity="0.95"/>
+      <stop offset="0.4" stop-color="#f6ead0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f6ead0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cloud" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="4" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="120"/>
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+    <filter id="cloudSoft" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="4" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="160"/>
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+    <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6dd" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fff6dd" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <ellipse cx="800" cy="300" rx="900" ry="620" fill="url(#sun)"/>
+
+  <!-- distant cloud banks -->
+  <g filter="url(#cloudSoft)">
+    <ellipse cx="330" cy="520" rx="420" ry="130" fill="#ffffff" opacity="0.85"/>
+    <ellipse cx="1280" cy="470" rx="460" ry="150" fill="#ffffff" opacity="0.8"/>
+    <ellipse cx="820" cy="600" rx="520" ry="150" fill="#f4f8fc" opacity="0.9"/>
+  </g>
+
+  <!-- god rays from above -->
+  <g opacity="0.65">
+    <polygon points="700,-40 900,-40 1080,1000 520,1000" fill="url(#ray)"/>
+    <polygon points="430,-60 540,-60 300,1000 60,1000" fill="url(#ray)" opacity="0.6"/>
+    <polygon points="1090,-60 1200,-60 1500,1000 1260,1000" fill="url(#ray)" opacity="0.6"/>
+  </g>
+
+  <!-- foreground billowing clouds -->
+  <g filter="url(#cloud)">
+    <ellipse cx="180" cy="820" rx="440" ry="210" fill="#ffffff"/>
+    <ellipse cx="700" cy="920" rx="520" ry="220" fill="#fdfefe"/>
+    <ellipse cx="1330" cy="840" rx="470" ry="230" fill="#ffffff"/>
+    <ellipse cx="1020" cy="960" rx="420" ry="180" fill="#f7fafc"/>
+  </g>
+  <g filter="url(#cloudSoft)" opacity="0.9">
+    <ellipse cx="420" cy="960" rx="480" ry="170" fill="#ffffff"/>
+    <ellipse cx="1180" cy="990" rx="520" ry="170" fill="#ffffff"/>
+  </g>
+</svg>

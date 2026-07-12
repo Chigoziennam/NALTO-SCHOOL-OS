@@ -1,0 +1,182 @@
+{
+  "name": "NALTO — Paystack Webhook → Payment + Receipt",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "paystack-webhook",
+        "responseMode": "onReceived",
+        "options": { "rawBody": true }
+      },
+      "id": "wh-trigger",
+      "name": "Paystack Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "paystack-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst item = $input.first();\nconst sig = item.json.headers['x-paystack-signature'];\nconst body = item.json.body;\nconst hash = crypto\n  .createHmac('sha512', $env.PAYSTACK_SECRET)\n  .update(JSON.stringify(body))\n  .digest('hex');\nif (sig !== hash) {\n  throw new Error('Invalid Paystack signature');\n}\nif (body.event !== 'charge.success') {\n  return []; // only settle successful charges\n}\nconst d = body.data;\nreturn [{\n  json: {\n    reference: d.reference,\n    amount_kobo: d.amount,\n    paid_at: d.paid_at || new Date().toISOString(),\n    channel: 'paystack',\n    student_id: d.metadata?.student_id,\n    invoice_id: d.metadata?.invoice_id,\n    guardian_id: d.metadata?.guardian_id,\n    student_name: d.metadata?.student_name,\n    raw: d\n  }\n}];"
+      },
+      "id": "verify-sig",
+      "name": "Verify Paystack Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/payments?paystack_reference=eq.{{ $json.reference }}&status=eq.success&select=id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "idempotency",
+      "name": "Check Idempotency",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "leftValue": "={{ Array.isArray($json) ? $json.length : ($json.id ? 1 : 0) }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-new",
+      "name": "IF Not Yet Processed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/payments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  school_id: $env.SCHOOL_ID,\n  guardian_id: $('Verify Paystack Signature').first().json.guardian_id,\n  student_id: $('Verify Paystack Signature').first().json.student_id,\n  amount_kobo: $('Verify Paystack Signature').first().json.amount_kobo,\n  channel: 'paystack',\n  status: 'success',\n  paystack_reference: $('Verify Paystack Signature').first().json.reference,\n  paystack_authorization: $('Verify Paystack Signature').first().json.raw,\n  paid_at: $('Verify Paystack Signature').first().json.paid_at\n}) }}"
+      },
+      "id": "insert-payment",
+      "name": "Insert Payment Row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/payment_allocations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  payment_id: $json[0].id,\n  invoice_id: $('Verify Paystack Signature').first().json.invoice_id,\n  amount_kobo: $('Verify Paystack Signature').first().json.amount_kobo\n}) }}"
+      },
+      "id": "insert-allocation",
+      "name": "Insert Payment Allocation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, -80],
+      "notes": "DB trigger trg_alloc_refresh flips invoices.status automatically."
+    },
+    {
+      "parameters": {
+        "jsCode": "const receiptNumber = 'RCP-ARCH-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000);\nreturn [{ json: { receipt_number: receiptNumber, payment_id: $('Insert Payment Row').first().json[0].id } }];"
+      },
+      "id": "gen-receipt-no",
+      "name": "Generate Receipt Number",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1320, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/receipts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ payment_id: $json.payment_id, receipt_number: $json.receipt_number }) }}"
+      },
+      "id": "insert-receipt",
+      "name": "Insert Receipt Row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_BASE_URL }}/webhook/notify-guardian",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  guardian_id: $('Verify Paystack Signature').first().json.guardian_id,\n  template: 'payment_receipt',\n  payload: {\n    studentName: $('Verify Paystack Signature').first().json.student_name,\n    amount: $('Verify Paystack Signature').first().json.amount_kobo / 100,\n    receiptNumber: $('Generate Receipt Number').first().json.receipt_number,\n    invoiceId: $('Verify Paystack Signature').first().json.invoice_id,\n    term: 'Third Term 2025/2026',\n    schoolName: \"Archangels' Schools\"\n  }\n}) }}"
+      },
+      "id": "notify",
+      "name": "Call notify-guardian Sub-workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, -80]
+    },
+    {
+      "parameters": {},
+      "id": "noop-dup",
+      "name": "Already Processed (stop)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [880, 120]
+    }
+  ],
+  "connections": {
+    "Paystack Webhook": { "main": [[{ "node": "Verify Paystack Signature", "type": "main", "index": 0 }]] },
+    "Verify Paystack Signature": { "main": [[{ "node": "Check Idempotency", "type": "main", "index": 0 }]] },
+    "Check Idempotency": { "main": [[{ "node": "IF Not Yet Processed", "type": "main", "index": 0 }]] },
+    "IF Not Yet Processed": {
+      "main": [
+        [{ "node": "Insert Payment Row", "type": "main", "index": 0 }],
+        [{ "node": "Already Processed (stop)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Insert Payment Row": { "main": [[{ "node": "Insert Payment Allocation", "type": "main", "index": 0 }]] },
+    "Insert Payment Allocation": { "main": [[{ "node": "Generate Receipt Number", "type": "main", "index": 0 }]] },
+    "Generate Receipt Number": { "main": [[{ "node": "Insert Receipt Row", "type": "main", "index": 0 }]] },
+    "Insert Receipt Row": { "main": [[{ "node": "Call notify-guardian Sub-workflow", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "instanceNote": "Env vars required: PAYSTACK_SECRET, SUPABASE_URL, SUPABASE_SERVICE_KEY, SCHOOL_ID, N8N_BASE_URL" }
+}

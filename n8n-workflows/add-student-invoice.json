@@ -1,0 +1,215 @@
+{
+  "name": "NALTO — Add Student → Generate Invoice",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "student-added",
+        "responseMode": "onReceived"
+      },
+      "id": "wh-student",
+      "name": "Student Added Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "student-added"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/classes?id=eq.{{ $json.body.class_id }}&select=id,level_id,session_id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-class",
+      "name": "Fetch Class → Level",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/fee_templates?level_id=eq.{{ $json[0].level_id }}&term_id=eq.{{ $('Student Added Webhook').first().json.body.term_id || $env.CURRENT_TERM_ID }}&is_active=eq.true&applies_to=in.(all,{{ $('Student Added Webhook').first().json.body.is_new_intake ? 'new_intake' : 'returning' }})&select=id,applies_to",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-template",
+      "name": "Fetch Fee Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pick the most specific template: new_intake/returning beats 'all'.\nconst templates = $input.first().json;\nif (!Array.isArray(templates) || templates.length === 0) {\n  throw new Error('No active fee template found for this level/term');\n}\nconst specific = templates.find(t => t.applies_to !== 'all');\nreturn [{ json: { template_id: (specific || templates[0]).id } }];"
+      },
+      "id": "pick-template",
+      "name": "Pick Most Specific Template",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/fee_template_items?template_id=eq.{{ $json.template_id }}&select=fee_item_id,amount_kobo,fee_items(name)",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        }
+      },
+      "id": "fetch-items",
+      "name": "Fetch Template Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/invoices?select=id&limit=1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "count=exact" }
+          ]
+        },
+        "options": { "response": { "response": { "fullResponse": true } } }
+      },
+      "id": "count-invoices",
+      "name": "Count Invoices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// content-range: \"0-0/42\" → next serial = 43, zero-padded to 5.\nconst range = $input.first().json.headers['content-range'] || '0-0/0';\nconst count = parseInt(range.split('/')[1] || '0', 10);\nconst serial = String(count + 1).padStart(5, '0');\nreturn [{ json: { invoice_number: 'ARCH-2526-T3-' + serial } }];"
+      },
+      "id": "gen-invoice-no",
+      "name": "Generate Invoice Number",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/invoices",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  school_id: $env.SCHOOL_ID,\n  invoice_number: $json.invoice_number,\n  student_id: $('Student Added Webhook').first().json.body.student_id,\n  term_id: $('Student Added Webhook').first().json.body.term_id || $env.CURRENT_TERM_ID,\n  template_id: $('Pick Most Specific Template').first().json.template_id,\n  status: 'issued',\n  due_date: $env.CURRENT_TERM_DUE_DATE\n}) }}"
+      },
+      "id": "insert-invoice",
+      "name": "Insert Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One invoice_item per template line. DB trigger trg_items_total\n// auto-computes invoices.total_kobo after the batch insert.\nconst invoice = $('Insert Invoice').first().json[0];\nconst items = $('Fetch Template Items').first().json;\nreturn items.map(it => ({ json: {\n  invoice_id: invoice.id,\n  fee_item_id: it.fee_item_id,\n  description: it.fee_items?.name || 'Fee item',\n  amount_kobo: it.amount_kobo\n} }));"
+      },
+      "id": "map-items",
+      "name": "Map Invoice Items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/invoice_items",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      },
+      "id": "insert-items",
+      "name": "Insert Invoice Item",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/student_guardians?student_id=eq.{{ $('Student Added Webhook').first().json.body.student_id }}&is_primary=eq.true&select=guardian_id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-guardian-link",
+      "name": "Fetch Primary Guardian",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 0],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_BASE_URL }}/webhook/notify-guardian",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  guardian_id: $json[0] && $json[0].guardian_id,\n  template: 'invoice_issued',\n  payload: {\n    invoiceNumber: $('Generate Invoice Number').first().json.invoice_number,\n    term: 'Third Term 2025/2026',\n    schoolName: \"Archangels' Schools\"\n  }\n}) }}"
+      },
+      "id": "notify-issued",
+      "name": "Notify Guardian (invoice_issued)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 0],
+      "executeOnce": true
+    }
+  ],
+  "connections": {
+    "Student Added Webhook": { "main": [[{ "node": "Fetch Class → Level", "type": "main", "index": 0 }]] },
+    "Fetch Class → Level": { "main": [[{ "node": "Fetch Fee Template", "type": "main", "index": 0 }]] },
+    "Fetch Fee Template": { "main": [[{ "node": "Pick Most Specific Template", "type": "main", "index": 0 }]] },
+    "Pick Most Specific Template": { "main": [[{ "node": "Fetch Template Items", "type": "main", "index": 0 }]] },
+    "Fetch Template Items": { "main": [[{ "node": "Count Invoices", "type": "main", "index": 0 }]] },
+    "Count Invoices": { "main": [[{ "node": "Generate Invoice Number", "type": "main", "index": 0 }]] },
+    "Generate Invoice Number": { "main": [[{ "node": "Insert Invoice", "type": "main", "index": 0 }]] },
+    "Insert Invoice": { "main": [[{ "node": "Map Invoice Items", "type": "main", "index": 0 }]] },
+    "Map Invoice Items": { "main": [[{ "node": "Insert Invoice Item", "type": "main", "index": 0 }]] },
+    "Insert Invoice Item": { "main": [[{ "node": "Fetch Primary Guardian", "type": "main", "index": 0 }]] },
+    "Fetch Primary Guardian": { "main": [[{ "node": "Notify Guardian (invoice_issued)", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "instanceNote": "Env vars required: SUPABASE_URL, SUPABASE_SERVICE_KEY, SCHOOL_ID, CURRENT_TERM_ID, CURRENT_TERM_DUE_DATE, N8N_BASE_URL" }
+}

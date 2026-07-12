@@ -1,0 +1,22 @@
+name: Claude Code Base Action
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  claude:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run Claude Code Base Action
+        uses: Chigoziennam/claude-code-base-action@v1
+        with:
+          # Add any required inputs here
