@@ -1,0 +1,87 @@
+{
+  "name": "Nalto AI — Archangels' School Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nalto-ai",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-in",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300],
+      "webhookId": "nalto-ai"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the OpenRouter chat request from the incoming message.\n// The website POSTs: { message: string, history?: [{role, content}] }\nconst input = $input.first().json;\nconst body = input.body || input;\nconst message = (body.message || '').toString().slice(0, 800);\nconst history = Array.isArray(body.history) ? body.history.slice(-8) : [];\n\n// ---- School knowledge (edit these facts to match the real school) ----\nconst SYSTEM = `You are \"Nalto AI\", the warm, concise WhatsApp-style assistant for Archangels' Schools, a private Nursery, Primary and College in Satellite Town, Lagos (motto: \"Dedicated to Excellence\").\nAnswer parents' questions in 1-3 short sentences, friendly and clear. Only use the facts below. If you don't know, tell them to call +234 906 705 5706 or tap the WhatsApp button. Never invent fees or dates.\n\nFACTS:\n- Sections: Nursery/Early Years (ages 2-5), Primary (ages 6-11), College/Secondary (ages 11-17: Science, Arts, Commercial; prepares for WAEC, NECO, JAMB).\n- Termly fees: Nursery from N85,000, Primary from N110,000, College from N150,000. Pay online from the website (Pay School Fees) by card, transfer or USSD via Paystack; official receipt is instant.\n- Admissions: apply online on the Admissions page. Needed: birth certificate, 2 passport photos, last report card (for transfers), immunisation record. After submitting, the child does a short entrance assessment.\n- Uniforms: boys wear check shirt + navy shorts/trousers; girls wear check blouse + navy pinafore; sports days use the house-colour tracksuit. Order online from the School Store, collect at the office.\n- Resumption: current term resumes Monday 8th September; a full calendar is emailed to parents.\n- PTA: next meeting Saturday 4th October, 10:00am, College Hall.\n- Hours: Mon-Fri 7:45am-3:30pm (extended day to 5:00pm). Office open Sat 9:00am-1:00pm.\n- Contact: 1 Mission Street, Satellite Town, Lagos. College +234 906 705 5706, Primary +234 806 470 9091, info@archangelschools.org.ng.`;\n\nconst messages = [\n  { role: 'system', content: SYSTEM },\n  ...history,\n  { role: 'user', content: message }\n];\n\nreturn [{ json: { model: 'openai/gpt-4o-mini', messages, message } }];"
+      },
+      "id": "build-prompt",
+      "name": "Build Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "HTTP-Referer", "value": "https://archangelschools.org.ng" },
+            { "name": "X-Title", "value": "Nalto AI" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": $json.model, \"messages\": $json.messages, \"temperature\": 0.4, \"max_tokens\": 300 } }}",
+        "options": {}
+      },
+      "id": "openrouter",
+      "name": "OpenRouter Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "OpenRouter API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"reply\": ($json.choices && $json.choices[0] && $json.choices[0].message ? $json.choices[0].message.content : \"\"), \"ok\": !!($json.choices && $json.choices[0] && $json.choices[0].message) } }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Website",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [960, 300]
+    }
+  ],
+  "connections": {
+    "Chat Webhook": { "main": [[{ "node": "Build Prompt", "type": "main", "index": 0 }]] },
+    "Build Prompt": { "main": [[{ "node": "OpenRouter Chat", "type": "main", "index": 0 }]] },
+    "OpenRouter Chat": { "main": [[{ "node": "Respond to Website", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "nalto-ai-school-assistant" }
+}
