@@ -1,0 +1,1867 @@
+<title>YOWA Site Tech Pack</title>
+<meta name="description" content="Planning blueprint for the YOWA main site: brand system, live motion swatches, Worn By, Circle, AI concierge, Paystack checkout, Supabase data and roadmap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap">
+<style>
+/* Layout: a garment tech pack for a website. Numbered spec sheets with title blocks; YOWA brand swatches sit inside in Night, Day or Riot mode. Light theme reads as Day, dark theme as Night. */
+:root{
+  --bg:#F3EEE2; --sheet:#FBF8F1; --ink:#140F1F; --ink-2:#615872; --rule:#DCD3D2; --grid:rgba(20,15,31,.07);
+  --accent:#7A2FE0; --on-accent:#FFFFFF; --accent-soft:rgba(122,47,224,.16); --ok:#1D8A55; --stop:#C8321F;
+  --f-display:"Anton",Impact,"Arial Narrow",sans-serif;
+  --f-body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-label:"Syncopate","Arial Black",Arial,sans-serif;
+  --f-mantra:"Bungee","Arial Black",Impact,sans-serif;
+  --f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --e-settle:cubic-bezier(.16,1,.3,1); --e-pull:cubic-bezier(.65,0,.35,1);
+  --gut:clamp(16px,3vw,40px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#08060E; --sheet:#0F0B1D; --ink:#EFEAF7; --ink-2:#9A91B3; --rule:#2A2146; --grid:rgba(166,91,255,.08);
+    --accent:#B47BFF; --on-accent:#0B0714; --accent-soft:rgba(166,91,255,.2); --ok:#3ADB7A; --stop:#FF6B5E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#08060E; --sheet:#0F0B1D; --ink:#EFEAF7; --ink-2:#9A91B3; --rule:#2A2146; --grid:rgba(166,91,255,.08);
+  --accent:#B47BFF; --on-accent:#0B0714; --accent-soft:rgba(166,91,255,.2); --ok:#3ADB7A; --stop:#FF6B5E; color-scheme:dark;
+}
+/* YOWA brand modes: fixed looks, independent of the page theme */
+[data-mode="night"]{--m-bg:#08060E;--m-bg2:#161026;--m-fg:#EFEAF7;--m-muted:#A39ABB;--m-accent:#A65BFF;--m-on-accent:#0B0714;--m-brand:#7A2FE0;--m-pop:#2BE8FF;--m-red:#E23A2E;--m-line:rgba(166,91,255,.26)}
+[data-mode="day"]{--m-bg:#F3EEE2;--m-bg2:#FBF8F1;--m-fg:#140F1F;--m-muted:#655C73;--m-accent:#7A2FE0;--m-on-accent:#FFFFFF;--m-brand:#7A2FE0;--m-pop:#E23A2E;--m-red:#C8321F;--m-line:rgba(20,15,31,.14)}
+[data-mode="riot"]{--m-bg:#EC4638;--m-bg2:#D63A2D;--m-fg:#0B0714;--m-muted:#2A0906;--m-accent:#0B0714;--m-on-accent:#F3EEE2;--m-brand:#7A2FE0;--m-pop:#A65BFF;--m-red:#0B0714;--m-line:rgba(11,7,20,.28)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background-color:var(--bg);background-image:radial-gradient(var(--grid) 1px,transparent 1.4px);background-size:18px 18px;color:var(--ink);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:.2em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3,h4{text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0}
+code{font-family:var(--f-mono);font-size:.86em}
+.wrap{padding-inline:var(--gut)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── Sticky sheet bar ── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bg);border-bottom:1px solid var(--rule)}
+@supports ((-webkit-backdrop-filter:blur(8px)) or (backdrop-filter:blur(8px))){.bar{background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2)}}
+.bar-in{max-width:1200px;margin-inline:auto;display:flex;align-items:center;gap:16px;min-height:52px}
+.bar-id{display:flex;align-items:center;gap:12px;white-space:nowrap;flex:none;color:var(--ink);text-decoration:none}
+.bar-logo{display:block;width:64px;height:16px;background:var(--ink);-webkit-mask:url(assets/yowa-logo.png) center/contain no-repeat;mask:url(assets/yowa-logo.png) center/contain no-repeat}
+.bar-id span:last-child{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.bar-nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:0 1 auto;margin-left:auto}
+.bar-nav::-webkit-scrollbar{display:none}
+.bar-nav a{flex:none;font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;padding:9px;border-radius:999px}
+.bar-nav a:hover{color:var(--ink);background:var(--accent-soft)}
+.bar-nav a[aria-current="true"]{background:var(--accent);color:var(--on-accent)}
+@media (max-width:760px){.bar-id span:last-child{display:none}}
+
+/* ── Binder, sheets, title blocks ── */
+.binder{max-width:1200px;margin-inline:auto;padding-block:24px 72px;display:grid;gap:28px}
+.sheet{background:var(--sheet);border:1px solid var(--rule);scroll-margin-top:60px;min-width:0}
+.tb{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;grid-template-areas:"no title meta stamp";border-bottom:1.5px solid var(--ink)}
+.tb>*{padding:12px 16px;display:flex;align-items:center;min-width:0}
+.tb>*+*{border-left:1px solid var(--rule)}
+.tb-no{grid-area:no;font:700 9px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.tb h2{grid-area:title;margin:0;font:400 clamp(24px,3.2vw,34px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.tb-meta{grid-area:meta;font:400 11px/1.4 var(--f-mono);color:var(--ink-2);white-space:nowrap}
+.tb-stamp{grid-area:stamp}
+@media (max-width:760px){.tb{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"no stamp" "title title"}.tb-meta{display:none}.tb h2{border-left:0;border-top:1px solid var(--rule)}}
+.sb{padding:clamp(18px,3.2vw,40px);display:grid;gap:clamp(22px,3vw,36px);min-width:0}
+.sb>*{min-width:0}
+.stamp{display:inline-block;font:700 8.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;padding:7px 8px 6px;border:1.5px solid currentColor;border-radius:3px;transform:rotate(-2.5deg);color:var(--ok);white-space:nowrap}
+.stamp.stop{color:var(--stop)}
+.stamp.info{color:var(--accent)}
+.lbl{display:block;font:700 9px/1.5 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.lede{font-size:clamp(18px,2vw,21px);line-height:1.5;max-width:62ch}
+.prose{display:grid;gap:12px;max-width:68ch}
+.hl{background:linear-gradient(transparent 58%,var(--accent-soft) 58%);padding:0 .1em}
+.h3{margin:0;font:600 19px/1.25 var(--f-body)}
+.sec{display:grid;gap:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px 28px}
+.cols>*{min-width:0}
+.note{border:1px dashed var(--ink-2);padding:14px 16px;display:grid;gap:6px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;margin:0}
+.kv dt{font:700 8.5px/2 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.kv dd{margin:0}
+.bul{display:grid;gap:8px;padding-left:1.1em}
+.bul li::marker{color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));border:1px solid var(--rule)}
+.facts>div{padding:14px 16px;display:grid;gap:6px;align-content:start;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:0 -1px -1px 0}
+.facts p{font-size:15px}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0;border-top:1.5px solid var(--ink)}
+.principles>div{padding:14px 4px 16px;border-bottom:1px solid var(--rule);display:grid;gap:4px}
+.principles b{font:400 20px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.principles p{font-size:15px;color:var(--ink-2)}
+
+/* ── Tables ── */
+.tscroll{overflow-x:auto;border:1px solid var(--rule)}
+table.spec{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:640px}
+.spec th{text-align:left;font:700 8.5px/1.4 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);padding:11px 12px;background:var(--bg);border-bottom:1px solid var(--rule)}
+.spec td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}
+.spec tr:first-child td{border-top:0}
+.spec td code{white-space:nowrap}
+.spec .now{color:var(--ink-2)}
+
+/* ── Cover hero: the live YOWA door ── */
+.hero{position:relative;display:grid;background:var(--m-bg) url(assets/bg-swirl.jpg) center/cover;color:var(--m-fg);isolation:isolate;overflow:hidden;min-height:clamp(500px,66vh,680px)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
+.hero-shade{position:absolute;inset:0;z-index:-1;background:radial-gradient(120% 90% at 50% 42%,rgba(14,7,28,.12) 0%,rgba(8,4,18,.74) 100%);pointer-events:none;transition:opacity .6s}
+.hero-in{display:grid;grid-template-rows:auto 1fr auto;gap:16px;padding:clamp(14px,3vw,30px);transition:opacity .45s}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hero-sig{width:clamp(92px,13vw,132px);height:auto;filter:drop-shadow(0 0 10px rgba(166,91,255,.6))}
+.hero-ig{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--m-line);padding:9px 12px;border-radius:999px;background:rgba(8,6,14,.4)}
+.hero-mid{display:grid;justify-items:center;align-content:center;gap:16px;text-align:center}
+.kick{display:inline-flex;align-items:center;gap:9px;font:700 8.5px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase;padding:9px 16px;border:1px solid rgba(166,91,255,.45);border-radius:999px;background:rgba(20,10,45,.55)}
+.kick .dot{width:7px;height:7px;border-radius:50%;background:#A65BFF;box-shadow:0 0 0 0 rgba(166,91,255,.7);animation:pulse 1.6s ease infinite}
+.hero[data-state="live"] .kick{border-color:#E23A2E}
+.hero[data-state="live"] .kick .dot{background:#E23A2E}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(166,91,255,0);opacity:.6}}
+.logo{position:relative;width:min(84%,600px);line-height:0}
+.logo img{width:100%;height:auto;display:block;filter:drop-shadow(0 0 26px rgba(140,60,255,.55))}
+.logo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pupil{fill:var(--m-fg);transform-box:fill-box;transform-origin:center;transition:fill .3s}
+.logo.blink .pupil{animation:blink .22s ease-in-out}
+@keyframes blink{50%{transform:scaleY(.08)}}
+.logo[data-state="live"] .pupil{fill:#E23A2E}
+.logo[data-state="gone"] .pupil{transform:scaleY(.12)}
+.logo .gl{position:absolute;inset:0;opacity:0;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
+.logo .gl.a{background:#A65BFF}
+.logo .gl.b{background:#2BE8FF}
+.mantra{font:400 clamp(17px,3.2vw,28px)/1.2 var(--f-mantra);letter-spacing:.02em;margin:0}
+.mantra i{font-style:normal;color:#A65BFF;text-shadow:0 0 18px rgba(166,91,255,.55)}
+.mantra i:nth-child(2),.mantra i:nth-child(3){color:#FFFFFF;text-shadow:0 0 18px rgba(255,255,255,.45),0 0 34px rgba(166,91,255,.5)}
+.hero-cd{display:flex;gap:clamp(6px,1.4vw,10px);justify-content:center}
+.seg{min-width:clamp(58px,9vw,80px);padding:11px 6px 9px;border-radius:12px;background:rgba(20,14,34,.6);border:1px solid rgba(166,91,255,.24)}
+.seg b{display:block;font:400 clamp(26px,5vw,42px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.seg span{display:block;margin-top:6px;font:700 7.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--m-muted)}
+.hero[data-state="live"] .seg b{color:#FF6B5E}
+.hero-note{font-size:13px;color:rgba(239,234,247,.84);max-width:46ch}
+.hero-ctrl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:center;padding:12px;border-radius:14px;background:rgba(8,6,14,.6);border:1px solid rgba(166,91,255,.24);font-size:13px}
+.hero-ctrl label{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.hero-ctrl input[type=range]{width:min(190px,48vw);accent-color:#A65BFF}
+.hero-ctrl output{font:400 18px/1 var(--f-display);min-width:5.5ch;text-align:left;font-variant-numeric:tabular-nums}
+.hbtn{font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:11px 14px;border-radius:999px;border:1px solid rgba(166,91,255,.55);background:transparent;color:#FFFFFF;cursor:pointer}
+.hbtn:hover{border-color:#A65BFF}
+.hbtn.solid{background:linear-gradient(100deg,#7A2FE0,#A65BFF);border-color:transparent}
+.hbtn.ink{color:#140F1F;border-color:rgba(20,15,31,.35)}
+.hbtn.ink:hover{border-color:#7A2FE0}
+.till{position:absolute;inset:0;z-index:2;display:grid;align-content:center;justify-items:center;gap:14px;padding:clamp(16px,3vw,32px);color:#140F1F;text-align:center;opacity:0;visibility:hidden;transition:opacity .5s .2s,visibility 0s .7s}
+.hero.is-day .till{opacity:1;visibility:visible;transition:opacity .5s .35s,visibility 0s 0s}
+.hero.is-day .hero-in{opacity:0;pointer-events:none}
+.hero.is-day .hero-shade{opacity:0}
+.hero.is-day.no-gl{background:#F3EEE2}
+.till-k{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:#655C73}
+.till-h{font:400 clamp(34px,6vw,58px)/1 var(--f-display);text-transform:uppercase}
+.till-row{display:grid;grid-template-columns:repeat(3,minmax(0,150px));gap:10px;width:100%;justify-content:center}
+.tcard{background:#FBF8F1;border:1px solid rgba(20,15,31,.12);border-radius:8px;padding:8px 8px 10px;display:grid;gap:4px;text-align:left}
+.tcard svg{width:100%;height:auto;aspect-ratio:1;background:#EDE6D6;border-radius:5px;color:#140F1F}
+.tcard b{font:600 12.5px/1.2 var(--f-body)}
+.tcard span{font:500 11px/1.2 var(--f-body);color:#655C73}
+.stripe{height:5px;width:min(100%,480px);background:repeating-linear-gradient(90deg,#7A2FE0 0 26px,transparent 26px 52px);border-radius:3px}
+.till p{font-size:14px;max-width:44ch;color:#3B3447}
+.flat{fill:none;stroke:currentColor;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.flat .seam{stroke-width:2;stroke-dasharray:5 5}
+
+/* ── Cover sheet body ── */
+.titleblock{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--ink)}
+.titleblock>div{padding:10px 12px;display:grid;gap:4px;border-right:1px solid var(--rule);min-width:0}
+.titleblock>div:last-child{border-right:0}
+.titleblock .v{font:500 14px/1.35 var(--f-body)}
+@media (max-width:900px){.titleblock{grid-template-columns:repeat(2,minmax(0,1fr))}.titleblock>div{border-bottom:1px solid var(--rule)}.titleblock>div:nth-child(even){border-right:0}.titleblock>div:nth-last-child(-n+2){border-bottom:0}}
+.contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));border-top:1.5px solid var(--ink)}
+.contents a{display:flex;gap:12px;align-items:baseline;padding:11px 6px;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none}
+.contents a:hover{background:var(--accent-soft)}
+.contents .n{font:700 8.5px/1 var(--f-label);letter-spacing:.1em;color:var(--ink-2)}
+
+/* ── Brand system ── */
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:960px){.modes{grid-template-columns:1fr}}
+.mode{border:1px solid var(--rule);display:grid;grid-template-rows:auto 1fr;min-width:0;background:var(--sheet)}
+.mode-stage{position:relative;aspect-ratio:4/3;background:var(--m-bg);color:var(--m-fg);overflow:hidden;isolation:isolate;padding:14px;display:grid;align-content:space-between;gap:8px}
+.mode-info{padding:14px 16px 16px;display:grid;gap:8px;align-content:start;border-top:1px solid var(--rule)}
+.mode-info h3{margin:0;font:400 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.mode-info p{font-size:14.5px}
+.swirl-bg{background:var(--m-bg) url(assets/bg-swirl.jpg) center/cover}
+.swirl-bg::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120% 100% at 50% 42%,rgba(14,7,28,.28),rgba(8,4,18,.86))}
+.mini-top{display:flex;justify-content:space-between;align-items:center;font:700 7.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--m-muted)}
+.mini-logo{display:block;width:52px;height:13px;background:var(--m-fg);-webkit-mask:url(assets/yowa-logo.png) center/contain no-repeat;mask:url(assets/yowa-logo.png) center/contain no-repeat}
+.mini-big{width:78%;justify-self:center;aspect-ratio:701/178;background:#FFFFFF;-webkit-mask:url(assets/yowa-logo.png) center/contain no-repeat;mask:url(assets/yowa-logo.png) center/contain no-repeat;filter:drop-shadow(0 0 14px rgba(166,91,255,.8))}
+.mini-mantra{font:400 13px/1.2 var(--f-mantra);text-align:center;color:#A65BFF}
+.mini-mantra i{font-style:normal;color:#FFFFFF}
+.mini-cd{display:flex;gap:5px;justify-content:center}
+.mini-cd span{font:400 17px/1 var(--f-display);padding:6px 6px 5px;border-radius:6px;background:rgba(20,14,34,.65);border:1px solid rgba(166,91,255,.28);min-width:32px;text-align:center}
+.mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.mini-grid div{background:var(--m-bg2);border:1px solid var(--m-line);border-radius:5px;padding:5px;display:grid;gap:3px}
+.mini-grid svg{width:100%;height:auto;aspect-ratio:1;background:#EDE6D6;border-radius:3px;color:#140F1F}
+.mini-grid b{font:600 9.5px/1.2 var(--f-body)}
+.mini-grid span{font:500 8.5px/1.2 var(--f-body);color:var(--m-muted)}
+.riot-dots{position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(11,7,20,.22) 1.4px,transparent 1.6px);background-size:9px 9px}
+.riot-big{font:400 clamp(46px,7vw,76px)/.86 var(--f-display);text-transform:uppercase;text-shadow:3px 0 0 #A65BFF,-3px 0 0 #2BE8FF}
+.sticker{justify-self:end;align-self:end;display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:#0B0714;color:#F3EEE2;font:400 15px/1 var(--f-display);text-transform:uppercase;text-align:center;transform:rotate(-12deg);box-shadow:0 0 0 3px #F3EEE2}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px}
+.chip{border:1px solid var(--rule);display:grid;grid-template-rows:56px auto;min-width:0}
+.chip i{display:block;background:var(--c);border-bottom:1px solid var(--rule)}
+.chip div{padding:8px 10px;display:grid;gap:2px}
+.chip b{font:600 13px/1.2 var(--f-body)}
+.chip code{font-size:11.5px;color:var(--ink-2)}
+.chip span{font-size:12px;color:var(--ink-2);line-height:1.35}
+.type{display:grid;border-top:1.5px solid var(--ink)}
+.type>div{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:8px 20px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+@media (max-width:640px){.type>div{grid-template-columns:1fr}}
+.type .spec-a{font:400 40px/1 var(--f-display);text-transform:uppercase}
+.type .spec-b{font:500 18px/1.3 var(--f-body)}
+.type .spec-c{font:700 12px/1.3 var(--f-label);letter-spacing:.16em;text-transform:uppercase}
+.type .spec-d{font:400 26px/1.1 var(--f-mantra);color:var(--accent)}
+.marks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+.mark{border:1px solid var(--rule);display:grid;grid-template-rows:120px auto}
+.mark-art{display:grid;place-items:center;background:#0B0714;color:#EFEAF7;border-bottom:1px solid var(--rule)}
+.mark-art img{max-width:78%;max-height:80px;height:auto;width:auto}
+.mark-art svg{width:64px;height:64px}
+.glyph{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.glyph .eye{fill:currentColor;stroke:none}
+.glyphs{display:flex;gap:18px;color:#A65BFF}
+.glyphs svg{width:44px;height:44px}
+.mark div:last-child{padding:10px 12px;display:grid;gap:3px}
+.mark b{font:600 14px/1.25 var(--f-body)}
+.mark span{font-size:13px;color:var(--ink-2);line-height:1.45}
+.num042{font:400 60px/1 var(--f-display);color:#A65BFF;letter-spacing:.04em}
+
+/* ── Motion swatches ── */
+.tokens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--rule)}
+.tokens>div{padding:14px;display:grid;gap:6px;align-content:start;border-right:1px solid var(--rule);min-width:0}
+.tokens>div:last-child{border-right:0}
+@media (max-width:860px){.tokens{grid-template-columns:repeat(2,minmax(0,1fr))}.tokens>div:nth-child(2){border-right:0}.tokens>div:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
+.tok-v{font:400 22px/1.1 var(--f-display);letter-spacing:.02em}
+.tok-n{font-size:13px;color:var(--ink-2)}
+.curve{width:100%;max-width:150px;height:auto}
+.curve .ax{stroke:var(--rule);stroke-width:1}
+.curve .cv{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round}
+.rules{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.rules li{font-size:13px;border:1px solid var(--rule);padding:6px 11px;border-radius:999px}
+.sw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:900px){.sw-grid{grid-template-columns:1fr}}
+.swatch{margin:0;border:1px solid var(--rule);background:var(--sheet);display:grid;grid-template-rows:auto 1fr;min-width:0}
+.sw-stage{position:relative;aspect-ratio:16/10;background:var(--m-bg);color:var(--m-fg);overflow:hidden;isolation:isolate;touch-action:pan-y;min-width:0}
+.sw-stage.tall{aspect-ratio:auto;min-height:420px}
+@media (max-width:560px){.sw-stage{aspect-ratio:auto;min-height:300px}.sw-stage.tall{min-height:440px}}
+.mode-tag{position:absolute;left:10px;top:10px;z-index:9;font:700 7.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;padding:6px 8px;border-radius:999px;background:var(--m-bg);color:var(--m-muted);box-shadow:inset 0 0 0 1px var(--m-line)}
+.sw-cap{padding:14px 16px 16px;display:grid;gap:10px;border-top:1px solid var(--rule);align-content:start}
+.sw-head{display:flex;align-items:center;gap:10px}
+.sw-code{font:700 8.5px/1 var(--f-label);letter-spacing:.12em;color:var(--ink-2)}
+.sw-head h3{margin:0;font:600 17px/1.2 var(--f-body)}
+.replay{margin-left:auto;flex:none;font:700 8px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--rule);background:transparent;padding:9px 11px;border-radius:999px;cursor:pointer}
+.replay:hover{border-color:var(--ink)}
+.sw-cap p{font-size:14.5px}
+.sw-cap .kv{font-size:13.5px}
+.refs{font-size:13px;color:var(--ink-2)}
+.m-display{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.02em;line-height:.9}
+.m-label{font:700 8px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--m-muted)}
+.mbtn{font:700 8px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:9px 11px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-bg2);color:var(--m-fg);cursor:pointer}
+.mbtn[aria-pressed="true"],.mbtn.solid{background:var(--m-accent);color:var(--m-on-accent);border-color:var(--m-accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+
+/* S-01 signature */
+.st-sig{display:grid;place-items:center;padding:26px}
+.sigbox{position:relative;width:min(76%,420px)}
+.sigbox img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 10px rgba(166,91,255,.6));-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%))}
+.pen{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 10px #FFFFFF,0 0 24px #A65BFF;opacity:0;pointer-events:none}
+/* S-02, S-03 logo stages */
+.st-logo{display:grid;place-items:center;align-content:center;gap:18px;padding:22px}
+.st-logo .logo{width:min(80%,440px)}
+.st-eye{cursor:crosshair}
+.glitch-state{font:400 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.04em;min-height:22px}
+.glitch-state.live{color:#FF6B5E}
+/* S-04 countdown */
+.st-count{display:grid;place-items:center;align-content:center;gap:14px;padding:18px}
+.cd{display:flex;gap:clamp(6px,1.4vw,14px);align-items:flex-start}
+.cd-g{display:grid;gap:7px;justify-items:center}
+.cd-d{display:flex;gap:4px}
+.flap{position:relative;width:clamp(28px,4vw,44px);height:clamp(42px,6vw,64px);perspective:500px;font:400 clamp(28px,4.2vw,46px)/1 var(--f-display)}
+.fl-cur,.fl-next{position:absolute;inset:0;display:grid;place-items:center;background:var(--m-bg2);color:var(--m-fg);border:1px solid var(--m-line);border-radius:6px;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.fl-next{transform:rotateX(90deg)}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--m-bg);opacity:.8;z-index:2}
+.flap.flip .fl-cur{animation:flOut .19s var(--e-pull) forwards}
+.flap.flip .fl-next{animation:flIn .19s .19s var(--e-settle) forwards}
+@keyframes flOut{to{transform:rotateX(-90deg)}}
+@keyframes flIn{from{transform:rotateX(90deg)}to{transform:rotateX(0)}}
+.cd-sep{font:400 clamp(24px,3.6vw,40px)/1 var(--f-display);color:var(--m-accent);padding-top:.25em}
+.cd-note{font-size:13px;color:var(--m-muted);text-align:center}
+.cd-note b{color:var(--m-accent)}
+/* S-05 BYBD */
+.st-bybd{display:grid;place-items:center;align-content:center;gap:16px;padding:18px 18px 64px}
+.bybd-word{font:400 clamp(40px,8vw,96px)/1 var(--f-mantra);text-transform:uppercase;text-align:center;color:#A65BFF;text-shadow:0 0 22px rgba(166,91,255,.55);max-width:100%;overflow-wrap:anywhere}
+.bybd-word.w{color:#FFFFFF;text-shadow:0 0 22px rgba(255,255,255,.45),0 0 40px rgba(166,91,255,.55)}
+.bybd-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:min(100%,460px)}
+.bybd-grid div{border:1px solid var(--m-line);border-radius:10px;padding:14px 4px 10px;text-align:center;background:rgba(122,47,224,.08);min-width:0}
+.bybd-grid b{display:block;font:400 clamp(16px,2.6vw,24px)/1 var(--f-display);color:#A65BFF;overflow-wrap:anywhere;text-shadow:0 0 16px rgba(166,91,255,.45)}
+.bybd-grid div:nth-child(2) b,.bybd-grid div:nth-child(3) b{color:#FFFFFF}
+.bybd-grid span{display:block;margin-top:6px;font:700 7px/1 var(--f-label);letter-spacing:.14em;color:var(--m-muted)}
+.bybd-name{position:absolute;left:12px;right:12px;bottom:12px;display:flex;gap:8px;align-items:center}
+.bybd-name label{font:700 7.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--m-muted);white-space:nowrap}
+.bybd-name input{flex:1;min-width:0;background:var(--m-bg2);border:1px solid var(--m-line);border-radius:999px;padding:9px 12px;color:var(--m-fg);font-size:13px}
+/* S-06 ticker */
+.st-ticker{display:grid;align-content:center;gap:12px}
+.tick-row{overflow:hidden;white-space:nowrap;border-block:1px solid var(--m-line);padding-block:9px}
+.tick-row.alt{background:var(--m-brand);color:#FFFFFF;border:0}
+.tick-track{display:inline-flex;will-change:transform}
+.tick-set{display:inline-block;padding-right:.4em}
+.tick-row .tick-set{font:700 clamp(10px,1.4vw,13px)/1.4 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:#A65BFF}
+.tick-row.alt .tick-set{font:400 clamp(28px,4.2vw,44px)/1 var(--f-display);letter-spacing:.03em;color:#FFFFFF}
+.tick-meter{position:absolute;right:12px;bottom:10px}
+/* S-07 Worn By wall */
+.st-wall{cursor:grab;display:grid;align-content:center}
+.st-wall.grabbing{cursor:grabbing}
+.wall-track{display:flex;gap:12px;padding-inline:12px;will-change:transform;width:max-content}
+.wtile{flex:none;width:clamp(128px,16vw,160px);aspect-ratio:3/4;border:0;border-radius:8px;padding:10px;display:grid;grid-template-rows:auto 1fr auto auto;text-align:left;cursor:inherit;background:linear-gradient(165deg,#2A1860,#0E0A1A 72%);color:var(--m-fg);box-shadow:inset 0 0 0 1px var(--m-line);position:relative;overflow:hidden}
+.wtile::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:repeating-linear-gradient(90deg,#A65BFF 0 14px,transparent 14px 28px)}
+.wt-cat{font:700 7.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--m-muted);margin-top:4px}
+.wt-big{align-self:center;justify-self:center;font:400 58px/1 var(--f-display);color:transparent;-webkit-text-stroke:1.5px rgba(239,234,247,.7)}
+.wt-name{font:600 13px/1.2 var(--f-body)}
+.wt-h{font:500 11px/1.3 var(--f-body);color:var(--m-muted)}
+.look{position:absolute;inset:12px;z-index:5;background:var(--m-bg);color:var(--m-fg);border-radius:10px;box-shadow:0 0 0 1px var(--m-line),0 18px 40px rgba(0,0,0,.45);padding:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:14px;cursor:default}
+.look-portrait{border-radius:8px;background:linear-gradient(165deg,#2A1860,#0E0A1A 72%);box-shadow:inset 0 0 0 1px var(--m-line);position:relative;min-height:120px}
+.hot{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#A65BFF;color:#0B0714;font:700 11px/22px var(--f-body);text-align:center;box-shadow:0 0 0 4px rgba(166,91,255,.28)}
+.look-info{display:grid;gap:8px;align-content:start;min-width:0}
+.look-name{font:400 28px/.95 var(--f-display);text-transform:uppercase}
+.look-info p{font-size:13px;color:var(--m-muted)}
+.look-info ol{font-size:13px;padding-left:1.2em;display:grid;gap:3px}
+.look-btns{display:flex;flex-wrap:wrap;gap:6px}
+.look-close{position:absolute;top:8px;right:8px}
+/* S-08 product card (Day) */
+.st-card{display:grid;place-items:center;padding:16px 16px 20px}
+.pcard{width:min(100%,400px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;align-items:center}
+.pc-media{position:relative;border-radius:8px;background:#EDE6D6;box-shadow:inset 0 0 0 1px var(--m-line);overflow:hidden;cursor:pointer;aspect-ratio:4/5;display:grid;place-items:center;border:0;padding:0;color:#140F1F}
+.pc-media svg{width:82%;height:auto}
+.pc-tee{transform-box:fill-box;transform-origin:50% 16%}
+.tee-print{font:400 24px var(--f-display);fill:currentColor;letter-spacing:.08em}
+.pc-sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.55) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
+.pc-film{position:absolute;left:8px;top:8px;font:700 7.5px/1 var(--f-label);letter-spacing:.12em;padding:5px 6px;border-radius:3px;background:#7A2FE0;color:#FFFFFF;opacity:0;transition:opacity .2s}
+.pc-bar{position:absolute;left:8px;right:8px;bottom:8px;height:2px;background:rgba(20,15,31,.15)}
+.pc-bar i{display:block;height:100%;background:#7A2FE0;transform:scaleX(0);transform-origin:left}
+.pc-media.filming .pc-tee{animation:sway 3s var(--e-pull) infinite}
+.pc-media.filming .pc-sheen{animation:sheen 3s linear infinite}
+.pc-media.filming .pc-film{opacity:1}
+.pc-media.filming .pc-bar i{animation:bar 3s linear infinite}
+@keyframes sway{0%,100%{transform:rotate(0) translateY(0)}30%{transform:rotate(-2.2deg) translateY(-3px)}70%{transform:rotate(1.8deg) translateY(2px)}}
+@keyframes sheen{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pc-info{display:grid;gap:9px;min-width:0}
+.pc-name{font:400 26px/.95 var(--f-display);text-transform:uppercase}
+.pc-price{font:600 14px/1 var(--f-body)}
+.pc-sizes{display:flex;flex-wrap:wrap;gap:5px}
+.pc-size{font:600 11px/1 var(--f-body);padding:7px 8px;border-radius:5px;border:1px solid var(--m-line);background:transparent;color:var(--m-fg);cursor:pointer;min-width:30px}
+.pc-size[aria-pressed="true"]{background:var(--m-fg);color:var(--m-bg)}
+.pc-stock{font:500 12px/1.35 var(--f-body);color:var(--m-muted)}
+.pc-stock b{color:#7A2FE0}
+.pc-add{font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:13px 14px;border-radius:999px;border:0;background:var(--m-accent);color:var(--m-on-accent);cursor:pointer;transition:transform .35s var(--e-settle)}
+.bag{position:absolute;top:10px;right:12px;font:700 7.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:8px 10px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--m-fg);background:var(--m-bg2)}
+.fly{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#7A2FE0;box-shadow:0 0 0 2px #FBF8F1;z-index:6;pointer-events:none}
+/* S-09 Circle gate */
+.st-gate{display:grid;place-items:center;padding:18px}
+.gate{display:grid;gap:10px;width:min(100%,360px)}
+.gate-label{font:400 clamp(26px,3.6vw,36px)/.95 var(--f-display);text-transform:uppercase}
+.gate-row{display:flex;gap:8px}
+.gate-row input{flex:1;min-width:0;font:600 16px/1 var(--f-body);letter-spacing:.24em;text-transform:uppercase;padding:12px;border-radius:10px;border:1px solid var(--m-line);background:rgba(8,6,14,.6);color:var(--m-fg)}
+.gate-row input::placeholder{color:var(--m-muted);letter-spacing:.1em}
+.gate-row input:focus{outline:none;border-color:#A65BFF;box-shadow:0 0 0 3px rgba(166,91,255,.2)}
+.gate-row button{font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:0 16px;border-radius:10px;border:0;background:linear-gradient(100deg,#7A2FE0,#A65BFF);color:#FFFFFF;cursor:pointer}
+.gate-msg{font-size:13px;color:var(--m-muted);min-height:1.5em}
+.gate-msg.bad{color:#FF8A7E;font-weight:600}
+.gate-in{display:grid;gap:12px;justify-items:center;text-align:center}
+.gi-word{font:400 clamp(34px,5vw,56px)/.9 var(--f-display);text-transform:uppercase}
+.gi-sub{font-size:13px;color:var(--m-muted)}
+.gi-rail{display:flex;gap:8px}
+.gi-rail i{width:46px;height:58px;border-radius:6px;background:linear-gradient(165deg,#2A1860,#0E0A1A);box-shadow:inset 0 0 0 1px var(--m-line)}
+.curtain{position:absolute;top:0;bottom:0;width:50.5%;z-index:6;pointer-events:none;background:#08060E url(assets/bg-swirl.jpg) center/cover;transform:scaleX(0)}
+.c-left{left:0;transform-origin:left center}
+.c-right{right:0;transform-origin:right center}
+/* S-10 concierge (Day) */
+.st-chat{display:grid;place-items:center;padding:14px}
+.chat{width:min(100%,400px);height:380px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;border-radius:12px;background:var(--m-bg2);box-shadow:inset 0 0 0 1px var(--m-line),0 10px 30px rgba(20,15,31,.1);overflow:hidden}
+.chat-head{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--m-line)}
+.chat-eye{width:30px;height:30px;border-radius:50%;background:#140F1F;display:grid;place-items:center}
+.chat-eye i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #FFFFFF;display:grid;place-items:center}
+.chat-eye i::after{content:"";width:6px;height:6px;border-radius:50%;background:#FFFFFF}
+.chat.thinking .chat-eye i::after{animation:blink .7s ease-in-out infinite}
+.chat-title{font:600 13px/1.2 var(--f-body)}
+.chat-title span{display:block;font:500 11px/1.2 var(--f-body);color:var(--m-muted)}
+.chat-tag{margin-left:auto;font:700 7px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--m-muted);border:1px solid var(--m-line);padding:5px 6px;border-radius:999px}
+.chat-body{overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:0}
+.msg{max-width:86%;padding:8px 11px;border-radius:12px;font:400 13px/1.45 var(--f-body)}
+.msg.user{align-self:flex-end;background:#140F1F;color:#FBF8F1;border-bottom-right-radius:3px}
+.msg.bot{align-self:flex-start;background:var(--m-bg);color:var(--m-fg);box-shadow:inset 0 0 0 1px var(--m-line);border-bottom-left-radius:3px}
+.msg.tool{align-self:flex-start;padding:0;background:none}
+.msg.tool code{display:inline-block;font:600 10.5px/1.3 var(--f-mono);padding:5px 9px;border-radius:999px;border:1px dashed #7A2FE0;color:#5A1FB0}
+.msg.typing{display:flex;gap:4px;padding:11px 12px}
+.msg.typing i{width:6px;height:6px;border-radius:50%;background:var(--m-muted);animation:dots 1s infinite}
+.msg.typing i:nth-child(2){animation-delay:.15s}
+.msg.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dots{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.chat-foot{padding:9px 10px;border-top:1px solid var(--m-line);display:grid;gap:8px}
+.chat-quick{display:flex;flex-wrap:wrap;gap:6px}
+.chat-quick span{font:600 11px/1 var(--f-body);padding:8px 10px;border-radius:999px;background:#7A2FE0;color:#FFFFFF}
+.chat-quick span+span{background:transparent;color:var(--m-fg);box-shadow:inset 0 0 0 1px var(--m-line)}
+.chat-input{font:400 12.5px/1 var(--f-body);color:var(--m-muted);padding:10px 12px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--m-line)}
+/* S-11 pay + signed receipt */
+.st-pay{display:grid;place-items:center;padding:16px}
+.pay-order{width:min(100%,330px);display:grid;gap:8px;padding:16px;border-radius:12px;background:var(--m-bg2);box-shadow:inset 0 0 0 1px var(--m-line)}
+.po-row{display:flex;justify-content:space-between;gap:10px;font:500 13px/1.3 var(--f-body)}
+.po-row span:last-child{font-variant-numeric:tabular-nums}
+.po-row.total{font-weight:700;border-top:1px solid var(--m-line);padding-top:9px}
+.pay-btn{margin-top:4px;font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;padding:14px;border-radius:999px;border:0;background:#7A2FE0;color:#FFFFFF;cursor:pointer}
+.pay-btn:disabled{opacity:.7;cursor:progress}
+.pay-sheet{position:absolute;left:0;right:0;bottom:0;z-index:4;background:#FFFFFF;color:#140F1F;padding:16px;border-radius:14px 14px 0 0;box-shadow:0 -12px 30px rgba(20,15,31,.22);display:grid;gap:10px}
+.ps-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ps-title{font:600 13.5px/1.2 var(--f-body)}
+.ps-lock{font:700 7px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:#655C73}
+.ps-ch{display:flex;flex-wrap:wrap;gap:6px}
+.ps-ch span{font:600 11px/1 var(--f-body);padding:9px 11px;border-radius:7px;border:1px solid rgba(20,15,31,.18)}
+.ps-ch span:first-child{border-color:#140F1F}
+.pay-status{font:600 12.5px/1.3 var(--f-body);color:#655C73}
+.pay-status.ok{color:#1D8A55}
+.receipt{width:min(100%,340px);display:grid;gap:10px;justify-items:center;text-align:center;padding:18px 16px;border-radius:14px;background:#08060E url(assets/bg-swirl.jpg) center/cover;color:#EFEAF7;position:relative;isolation:isolate;overflow:hidden}
+.receipt::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.72)}
+.receipt .sigbox{width:70%}
+.rc-k{font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:#A39ABB}
+.rc-no{font:400 30px/1 var(--f-display);letter-spacing:.03em}
+.rc-no span{color:#A65BFF}
+.rc-s{font-size:12.5px;color:#C9C1DA}
+
+/* ── References ── */
+.refs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:14px}
+.ref{border:1px solid var(--rule);padding:14px;display:grid;gap:8px;align-content:start;background:var(--sheet);min-width:0}
+.ref .meta{font:700 8px/1.6 var(--f-label);letter-spacing:.1em;color:var(--ink-2);text-transform:uppercase}
+.ref h4{margin:0;font:600 16px/1.25 var(--f-body)}
+.ref p{font-size:14px}
+.ref .go{font:700 8px/1 var(--f-label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+.ref.hf{padding-top:28px;position:relative}
+.ref.hf::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:repeating-linear-gradient(90deg,transparent 0 6px,var(--sheet) 6px 12px,transparent 12px 18px) center/100% 6px no-repeat,var(--ink)}
+.ref .match{font-size:13.5px;border-left:3px solid var(--accent);padding-left:10px}
+
+/* ── Map and storyboard ── */
+.map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rule)}
+.map>section{padding:16px;display:grid;gap:10px;align-content:start;border-right:1px solid var(--rule);min-width:0}
+.map>section:last-child{border-right:0}
+@media (max-width:900px){.map{grid-template-columns:1fr}.map>section{border-right:0;border-bottom:1px solid var(--rule)}.map>section:last-child{border-bottom:0}}
+.map h3{margin:0;font:400 22px/1 var(--f-display);text-transform:uppercase}
+.map .mt{font-size:13.5px;color:var(--ink-2)}
+.route{display:grid;padding:0;margin:0;list-style:none}
+.route li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px dashed var(--rule);font-size:14px}
+.route code{color:var(--ink-2);font-size:11.5px;text-align:right}
+.frames{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px 14px;list-style:none;padding:0;margin:0}
+@media (max-width:980px){.frames{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.frames{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.frame{display:grid;gap:8px;align-content:start;min-width:0}
+.phone{aspect-ratio:9/16;border:1.5px solid var(--ink);border-radius:14px;padding:9px 7px;display:flex;flex-direction:column;gap:5px;overflow:hidden;background:#0B0714;color:#EFEAF7;position:relative}
+.phone.day{background:#F3EEE2;color:#140F1F}
+.fr-n{font:700 8px/1 var(--f-label);letter-spacing:.12em;color:var(--ink-2)}
+.fr-cap{font-size:13px;line-height:1.4}
+.w-line{height:3px;border-radius:2px;background:currentColor;opacity:.35}
+.w-bar{height:6px;border-radius:2px;background:currentColor;opacity:.8}
+.w-box{border:1px solid currentColor;border-radius:4px;opacity:.55}
+.w-fill{border-radius:4px;background:linear-gradient(160deg,#6D3BD6,#2A1860)}
+.w-logo{height:11px;background:currentColor;-webkit-mask:url(assets/yowa-logo.png) center/contain no-repeat;mask:url(assets/yowa-logo.png) center/contain no-repeat}
+.w-row{display:flex;gap:4px}
+.w-row>*{flex:1}
+.w-btn{height:10px;border-radius:999px;background:#A65BFF}
+.phone.day .w-btn{background:#7A2FE0}
+.w-num{font:400 14px/1 var(--f-display);text-align:center;letter-spacing:.06em}
+.w-big{font:400 20px/.9 var(--f-mantra);text-align:center;color:#A65BFF}
+.w-grow{flex:1}.w-c{align-self:center}.w-sig{width:70%;height:auto;align-self:center}
+.w-top{justify-content:space-between}.w-top>*{flex:none}
+.w-hero{display:grid;place-items:center;align-content:center;gap:6px;padding:8px;border-radius:6px;background:#1a1036 url(assets/bg-swirl.jpg) center/cover}
+.w-cd{display:flex;gap:3px}.w-cd span{font:400 10px/1 var(--f-display);padding:3px;border-radius:3px;background:rgba(20,14,34,.7)}
+.w-tick{font:700 5.5px/1.6 var(--f-label);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;overflow:hidden;padding:4px 2px;border-block:1px solid rgba(166,91,255,.4);color:#A65BFF}
+.w-tick.alt{background:#7A2FE0;color:#fff;font:400 11px/1 var(--f-display);border:0}
+.w-k{font:700 6px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.w-rail{display:flex;gap:4px;overflow:hidden}.w-card{flex:0 0 44%;display:grid;gap:3px}.w-pic{aspect-ratio:4/5;border-radius:3px;background:linear-gradient(160deg,#6D3BD6,#2A1860)}
+.w-stock{height:3px;background:rgba(255,255,255,.2);border-radius:2px}.w-stock i{display:block;height:100%;background:#A65BFF;border-radius:2px}
+.w-tile{flex:0 0 40%;aspect-ratio:3/4;border-radius:4px;background:linear-gradient(165deg,#2A1860,#0E0A1A);border-top:2px solid #A65BFF}
+.w-film{border-radius:4px;background:repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.25) 5px 8px) top/100% 5px no-repeat,repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.25) 5px 8px) bottom/100% 5px no-repeat,linear-gradient(160deg,#4A1A94,#140F1F)}
+.w-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px}.w-grid div{aspect-ratio:1;border-radius:3px;background:linear-gradient(160deg,#3A2380,#140F1F);position:relative}
+.w-grid div::after{content:"SOLD";position:absolute;inset:auto 3px 3px auto;font:700 5px/1 var(--f-label);color:#E23A2E}
+.pdp{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.pdp{grid-template-columns:1fr}}
+.pdp-wire{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px;border:1.5px solid var(--ink);border-radius:12px;padding:12px;background:#F3EEE2;color:#140F1F}
+.pdp-wire>div{display:grid;gap:8px;align-content:start}
+.pw{position:relative;border:1px solid rgba(20,15,31,.3);border-radius:6px;min-height:34px;display:flex;align-items:center;padding:6px 8px 6px 32px;font-size:12px}
+.pw.tall{min-height:150px;background:#EDE6D6}
+.pw.mid{min-height:70px}
+.pin{position:absolute;left:6px;top:6px;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#140F1F;color:#FBF8F1;font:700 10px/1 var(--f-body)}
+.legend{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.legend li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;font-size:14.5px;align-items:start}
+.legend .pin{position:static;background:var(--ink);color:var(--sheet)}
+
+/* ── Circle and Worn By ── */
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rule)}
+@media (max-width:860px){.tiers{grid-template-columns:1fr}}
+.tier{padding:16px;display:grid;gap:8px;align-content:start;border-right:1px solid var(--rule);min-width:0}
+.tier:last-child{border-right:0}
+@media (max-width:860px){.tier{border-right:0;border-bottom:1px solid var(--rule)}.tier:last-child{border-bottom:0}}
+.tier-h{display:flex;align-items:center;gap:12px}
+.tier-h svg{width:38px;height:38px;color:var(--accent)}
+.tier-h b{font:400 26px/1 var(--f-display);text-transform:uppercase}
+.tier p{font-size:14.5px}
+.tier ul{font-size:14px}
+.anat{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:760px){.anat{grid-template-columns:1fr}}
+.anat-tile{position:relative;aspect-ratio:3/4;border-radius:10px;padding:14px;display:grid;grid-template-rows:auto 1fr auto auto auto;gap:4px;background:linear-gradient(165deg,#2A1860,#0E0A1A 72%);color:#EFEAF7;overflow:hidden}
+.anat-tile::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(90deg,#A65BFF 0 16px,transparent 16px 32px)}
+.anat-tile .pin{position:static;display:inline-grid;background:#A65BFF;color:#0B0714;margin-right:6px}
+.anat-tile .row{display:flex;align-items:center;font-size:13px}
+.anat-tile .big{align-self:center;justify-self:center;font:400 72px/1 var(--f-display);color:transparent;-webkit-text-stroke:1.5px rgba(239,234,247,.7)}
+.rights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.rights{grid-template-columns:1fr}}
+.rights>div{border:1px solid var(--rule);padding:14px;display:grid;gap:6px;align-content:start}
+.rights b{font:400 20px/1 var(--f-display);text-transform:uppercase}
+.rights p{font-size:14px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;display:flex;align-items:center;gap:8px;font-size:14px;border:1px solid var(--rule);padding:7px 12px 7px 8px;border-radius:999px}
+.steps li::before{content:counter(st);display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--sheet);font:700 10px/1 var(--f-body)}
+
+/* ── Diagrams ── */
+.dg{margin:0;display:grid;gap:10px}
+.dg-scroll{overflow-x:auto;border:1px solid var(--rule);background:var(--sheet)}
+.dg svg{display:block;width:100%;min-width:780px;height:auto;color:var(--ink)}
+.dg .bx{fill:var(--sheet);stroke:currentColor;stroke-width:1.5}
+.dg .bx.soft{fill:var(--bg)}
+.dg .bx.hi{stroke:var(--accent);stroke-width:2.5}
+.dg .t{font:600 13px var(--f-body);fill:currentColor}
+.dg .t.hi{fill:var(--accent)}
+.dg .s{font:400 11px var(--f-mono);fill:var(--ink-2)}
+.dg .a{stroke:currentColor;stroke-width:1.5;fill:none}
+.dg .a.hi{stroke:var(--accent);stroke-width:2.4}
+.dg .a.back{stroke-dasharray:5 4}
+.dg .al{font:500 11.5px var(--f-body);fill:currentColor}
+.dg .al.hi{fill:var(--accent);font-weight:700}
+.dg .life{stroke:var(--rule);stroke-width:1.5;stroke-dasharray:4 5}
+.dg .num{font:700 11px var(--f-body);fill:var(--sheet)}
+.dg .numbg{fill:var(--ink)}
+.dg .numbg.hi{fill:var(--accent)}
+.dg .mk{fill:currentColor}
+.dg .mk.hi{fill:var(--accent)}
+.dg .dot{fill:currentColor}
+.dg .tick{stroke:var(--rule);stroke-width:1}
+.dg figcaption{font-size:14px;color:var(--ink-2);max-width:74ch}
+
+/* ── Data, stack, measures ── */
+.data{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.data{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.data{grid-template-columns:1fr}}
+.dgroup{border:1px solid var(--rule);display:grid;align-content:start;min-width:0}
+.dgroup.exists{border-color:var(--accent)}
+.dgroup h3{margin:0;padding:10px 12px;border-bottom:1px solid var(--rule);font:700 8.5px/1.4 var(--f-label);letter-spacing:.12em;text-transform:uppercase;background:var(--bg);display:flex;justify-content:space-between;gap:8px}
+.dgroup dl{margin:0;display:grid}
+.dgroup dt{padding:9px 12px 0;font:600 12.5px/1.3 var(--f-mono)}
+.dgroup dd{margin:0;padding:3px 12px 9px;font-size:13px;color:var(--ink-2);border-bottom:1px dashed var(--rule)}
+.dgroup dd:last-child{border-bottom:0}
+.pom{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:760px){.pom{grid-template-columns:1fr}}
+.tee{width:100%;max-width:240px;height:auto;color:var(--ink)}
+.tee .body{fill:var(--bg);stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+.tee .rib{fill:none;stroke:currentColor;stroke-width:1.2}
+.tee .st{fill:none;stroke:currentColor;stroke-width:1;stroke-dasharray:3 3}
+.tee .m{stroke:var(--accent);stroke-width:1.5}
+.tee .ml{font:700 12px var(--f-body);fill:var(--accent)}
+.tee .mk{fill:var(--accent)}
+
+/* ── Roadmap, needs, sources ── */
+.phases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--rule);list-style:none;padding:0;margin:0}
+.phases>li{padding:14px;display:grid;gap:8px;align-content:start;border-right:1px solid var(--rule);min-width:0}
+.phases>li:last-child{border-right:0}
+@media (max-width:980px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}.phases>li:nth-child(2){border-right:0}.phases>li:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
+@media (max-width:560px){.phases{grid-template-columns:1fr}.phases>li{border-right:0;border-bottom:1px solid var(--rule)}.phases>li:last-child{border-bottom:0}}
+.ph-when{font:700 8px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.ph-name{font:400 24px/1 var(--f-display);text-transform:uppercase}
+.phases ul{display:grid;gap:5px;font-size:14px;padding-left:1.1em}
+.needs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;list-style:none;padding:0;margin:0}
+@media (max-width:760px){.needs{grid-template-columns:1fr}}
+.needs li{border-top:1px dashed var(--rule)}
+.needs label{display:flex;gap:10px;align-items:flex-start;padding:10px 0;cursor:pointer;font-size:14.5px}
+.needs input{margin-top:.28em;width:16px;height:16px;accent-color:var(--accent);flex:none}
+.needs input:checked+span{text-decoration:line-through;text-decoration-color:var(--ink-2);color:var(--ink-2)}
+.need-count{font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.sources{columns:2 320px;column-gap:28px;font-size:13.5px;padding-left:1.1em}
+.sources li{break-inside:avoid;margin-bottom:6px}
+.foot{max-width:1200px;margin:0 auto;padding-block:0 40px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;font:700 8px/1.6 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+
+@media (prefers-reduced-motion: reduce){
+  .kick .dot,.msg.typing i{animation:none}
+  .pc-media.filming .pc-tee,.pc-media.filming .pc-sheen,.pc-media.filming .pc-bar i{animation:none}
+}
+</style>
+
+<header class="bar">
+  <div class="bar-in wrap">
+    <a class="bar-id" href="#s00" aria-label="YOWA site tech pack, back to top"><span class="bar-logo" aria-hidden="true"></span><span>Site tech pack · YW-WEB-01 · Rev A</span></a>
+    <nav class="bar-nav" aria-label="Sheets">
+      <a href="#s01">01 Brief</a><a href="#s02">02 Brand</a><a href="#s03">03 Motion</a><a href="#s04">04 Refs</a><a href="#s05">05 Map</a><a href="#s06">06 Circle</a><a href="#s07">07 Drops</a><a href="#s08">08 Concierge</a>
+    </nav>
+  </div>
+</header>
+
+<main class="binder wrap" id="binder">
+
+<section class="sheet cover" id="s00" aria-labelledby="s00-t">
+  <div class="hero" id="hero" data-mode="night">
+    <canvas id="hero-swirl" aria-hidden="true"></canvas>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-in">
+      <div class="hero-top">
+        <img class="hero-sig" id="sig-src" src="assets/yowa-signature.png" alt="YOWA signature" width="560" height="351">
+        <span class="hero-ig">@yowa_bybd</span>
+      </div>
+      <div class="hero-mid">
+        <span class="kick"><i class="dot" aria-hidden="true"></i><span id="hero-kick">Next drop loading</span></span>
+        <h1 class="sr" id="s00-t">YOWA main site: live hero prototype</h1>
+        <div class="logo" id="hero-logo" data-eye>
+          <img src="assets/yowa-logo-nodot.png" alt="YOWA" width="701" height="178">
+          <span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span>
+          <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
+        </div>
+        <p class="mantra"><i>Be</i> <i>You</i> <i>Be</i> <i>Different</i></p>
+        <div class="hero-cd" id="hero-cd">
+          <div class="seg"><b data-u="d">04</b><span>Days</span></div>
+          <div class="seg"><b data-u="h">19</b><span>Hours</span></div>
+          <div class="seg"><b data-u="m">12</b><span>Mins</span></div>
+          <div class="seg"><b data-u="s">40</b><span>Secs</span></div>
+        </div>
+        <p class="hero-note" id="hero-note">The swirl turns faster as the drop gets closer. Move the slider to feel it.</p>
+      </div>
+      <div class="hero-ctrl">
+        <label for="drop-in">Drop in <input type="range" id="drop-in" min="0" max="100" value="70" step="1"> <output id="drop-in-out" for="drop-in">4d 19h</output></label>
+        <button class="hbtn" type="button" id="hero-glitch">Glitch</button>
+        <button class="hbtn solid" type="button" id="hero-shop">Go to the shop →</button>
+      </div>
+    </div>
+    <div class="till" id="till" aria-hidden="true">
+      <span class="till-k">Day mode · the till</span>
+      <div class="till-h">The shop</div>
+      <div class="till-row">
+        <div class="tcard"><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M70 30 Q100 52 130 30 L160 42 L190 80 L166 96 L150 78 L150 176 L50 176 L50 78 L34 96 L10 80 L40 42 Z"/><path class="flat" d="M73 32 Q100 58 127 32"/><path class="flat seam" d="M50 168 H150"/></svg><b>Be Different Tee</b><span>XS to XXL</span></div>
+        <div class="tcard"><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M70 30 Q100 52 130 30 L160 42 L190 80 L166 96 L150 78 L150 176 L50 176 L50 78 L34 96 L10 80 L40 42 Z"/><path class="flat seam" d="M76 34 L50 78 M124 34 L150 78"/><path class="flat" d="M73 32 Q100 58 127 32"/></svg><b>Liberty Raglan</b><span>XS to XXL</span></div>
+        <div class="tcard"><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M36 122 C36 62 164 62 164 122 Z"/><path class="flat" d="M24 122 Q100 156 176 122 Q100 136 24 122 Z"/><path class="flat seam" d="M100 70 V122 M64 82 Q80 100 78 122 M136 82 Q120 100 122 122"/><circle class="flat" cx="100" cy="66" r="5"/></svg><b>042 Cap</b><span>One size</span></div>
+      </div>
+      <div class="stripe" aria-hidden="true"></div>
+      <p>Calm, fast and product-first. The swirl stays at the door; the till lets the pieces and the checkout lead.</p>
+      <button class="hbtn ink" type="button" id="hero-door">← Back to the door</button>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="titleblock">
+      <div><span class="lbl">Brand</span><span class="v">YOWA</span></div>
+      <div><span class="lbl">Style no.</span><span class="v">YW-WEB-01</span></div>
+      <div><span class="lbl">Rev</span><span class="v">A · 30.09.2026</span></div>
+      <div><span class="lbl">Prepared by</span><span class="v">Nalto</span></div>
+      <div><span class="lbl">Instagram</span><span class="v">@yowa_bybd</span></div>
+      <div><span class="lbl">Status</span><span class="v"><span class="stamp info">Planning</span></span></div>
+    </div>
+    <div class="cols">
+      <p class="lede">The plan for YOWA's main site, specced like a garment before it goes to the factory. The hero above is live: your real wordmark, the swirl, the eye in the O, and a drop countdown.</p>
+      <div class="note">
+        <span class="lbl">How to use this pack</span>
+        <p>Drag the slider to bring the drop closer, tap Glitch, or go to the shop to see the door switch to the till. Every motion idea on Sheet 03 is live and replayable. Nothing here is built yet.</p>
+      </div>
+    </div>
+    <nav class="contents" aria-label="Contents">
+      <a href="#s01"><span class="n">01</span>Brief and what the waitlist tells us</a>
+      <a href="#s02"><span class="n">02</span>Brand system and modes</a>
+      <a href="#s03"><span class="n">03</span>Motion swatches (live)</a>
+      <a href="#s04"><span class="n">04</span>Reference board</a>
+      <a href="#s05"><span class="n">05</span>Site map and storyboard</a>
+      <a href="#s06"><span class="n">06</span>Circle and Worn By</a>
+      <a href="#s07"><span class="n">07</span>Drops engine</a>
+      <a href="#s08"><span class="n">08</span>AI concierge</a>
+    </nav>
+  </div>
+</section>
+
+<section class="sheet" id="s01" aria-labelledby="s01-t">
+  <div class="tb"><span class="tb-no">Sheet 01</span><h2 id="s01-t">What we're building</h2><span class="tb-meta">YW-WEB-01 · Rev A</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">The full YOWA store, built to feel like a drop. <span class="hl">The waitlist grows into the Circle.</span> Every drop gets a live countdown and live stock, the people who wore YOWA sit inside the shop, an AI concierge answers in seconds, and Paystack takes the money.</p>
+    <div class="sec">
+      <span class="lbl">What your waitlist already tells us</span>
+      <div class="facts">
+        <div><span class="lbl">Mantra</span><p>Be You Be Different, set as a four-word grid.</p></div>
+        <div><span class="lbl">Codes</span><p>💜 ⚔️ 🐉 and 042.</p></div>
+        <div><span class="lbl">Pieces so far</span><p>Liberty raglans, 042 caps, Be Different tees.</p></div>
+        <div><span class="lbl">Promise</span><p>Handmade, limited batches. When the run is gone, it's gone.</p></div>
+        <div><span class="lbl">Waitlist perks</span><p>Early access, an early-bird discount, first look at styling. The Circle keeps all three.</p></div>
+        <div><span class="lbl">Look</span><p>Violet swirl on near-black, purple glow, a glitching wordmark and a handwritten signature.</p></div>
+        <div><span class="lbl">Data</span><p>Supabase waitlist: name, email, usual size, IG handle. The main site uses the same project.</p></div>
+        <div><span class="lbl">Channel</span><p>Instagram @yowa_bybd.</p></div>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="lbl">The pages</span>
+      <div class="map">
+        <section>
+          <h3>The door</h3>
+          <p class="mt">Night mode. Swirl, glow, glitch. Built to make people feel the drop.</p>
+          <ul class="route">
+            <li>Home<code>/</code></li>
+            <li>Drop page<code>/drop/[slug]</code></li>
+            <li>Worn By wall<code>/worn-by</code></li>
+            <li>One look<code>/worn-by/[person]</code></li>
+            <li>The Circle<code>/circle</code></li>
+            <li>Archive of past drops<code>/archive</code></li>
+            <li>Journal and behind the scenes<code>/journal</code></li>
+          </ul>
+        </section>
+        <section>
+          <h3>The till</h3>
+          <p class="mt">Day mode. Cream, calm and fast, so the pieces and the checkout lead.</p>
+          <ul class="route">
+            <li>Shop<code>/shop</code></li>
+            <li>Product<code>/p/[slug]</code></li>
+            <li>Bag and checkout<code>/checkout</code></li>
+            <li>Order and tracking<code>/order/[ref]</code></li>
+            <li>Account<code>/account</code></li>
+            <li>Help and concierge<code>/help</code></li>
+            <li>Size guide<code>/size-guide</code></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Back office</h3>
+          <p class="mt">For you and the YOWA team. Replaces the waitlist admin page.</p>
+          <ul class="route">
+            <li>Orders and refunds<code>/admin/orders</code></li>
+            <li>Products, stock, batches<code>/admin/stock</code></li>
+            <li>Drops and countdowns<code>/admin/drops</code></li>
+            <li>Worn By entries<code>/admin/worn-by</code></li>
+            <li>Circle and waitlist<code>/admin/circle</code></li>
+            <li>Concierge conversations<code>/admin/inbox</code></li>
+            <li>Receipts, drop alerts<code>email + WhatsApp</code></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="lbl">Principles</span>
+      <div class="principles">
+        <div><b>Event, not catalogue</b><p>The homepage is a stage for the current drop, with live stock and a real countdown.</p></div>
+        <div><b>Loud at the door, quiet at the till</b><p>Night mode where people feel the brand. Day mode where they choose a size and pay.</p></div>
+        <div><b>Proof sells</b><p>Worn By lives inside shopping: badges on product pages and shop-the-look on every celeb photo.</p></div>
+        <div><b>Keep the promise</b><p>Waitlist perks become Circle perks on day one: early access, the early-bird discount, first look at styling.</p></div>
+        <div><b>Built for mobile data</b><p>A mid-range Android on 4G is the test phone. Video plays only when the connection can afford it.</p></div>
+        <div><b>Answers fast, a human close</b><p>The concierge handles sizing, stock and order tracking, and hands over to WhatsApp when it should.</p></div>
+      </div>
+    </div>
+    <div class="note">
+      <span class="lbl">The rest of the plan</span>
+      <p>Checkout and Paystack, the Supabase data model, the Higgsfield shot list, the stack and the roadmap are written up in the repo at <code>yowa/BLUEPRINT.md</code>. The main site itself is now being built in <code>yowa/site</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s02" aria-labelledby="s02-t">
+  <div class="tb"><span class="tb-no">Sheet 02</span><h2 id="s02-t">Brand system and modes</h2><span class="tb-meta">From the waitlist</span><span class="tb-stamp"><span class="stamp info">Evolves the waitlist</span></span></div>
+  <div class="sb">
+    <p class="lede">Your waitlist already has a strong identity, and people signed up to it. The main site keeps it and turns it into a system: <span class="hl">one brand, three modes</span>, each with a job.</p>
+    <div class="modes">
+      <article class="mode">
+        <div class="mode-stage swirl-bg" data-mode="night">
+          <div class="mini-top"><span class="mini-logo" aria-hidden="true"></span><span>@yowa_bybd</span></div>
+          <div class="mini-big" role="img" aria-label="YOWA wordmark"></div>
+          <div class="mini-mantra">Be <i>You</i> <i>Be</i> Different</div>
+          <div class="mini-cd" aria-hidden="true"><span>04</span><span>19</span><span>12</span><span>40</span></div>
+        </div>
+        <div class="mode-info"><span class="lbl">The door</span><h3>Night</h3><p>Void, the live swirl, purple glow, glitch on events. Home, drop pages, Worn By and the Circle.</p></div>
+      </article>
+      <article class="mode">
+        <div class="mode-stage" data-mode="day">
+          <div class="mini-top"><span class="mini-logo" aria-hidden="true"></span><span>Bag 1</span></div>
+          <div class="mini-grid">
+            <div><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M70 30 Q100 52 130 30 L160 42 L190 80 L166 96 L150 78 L150 176 L50 176 L50 78 L34 96 L10 80 L40 42 Z"/></svg><b>Be Different Tee</b><span>XS to XXL</span></div>
+            <div><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M70 30 Q100 52 130 30 L160 42 L190 80 L166 96 L150 78 L150 176 L50 176 L50 78 L34 96 L10 80 L40 42 Z"/><path class="flat seam" d="M76 34 L50 78 M124 34 L150 78"/></svg><b>Liberty Raglan</b><span>XS to XXL</span></div>
+            <div><svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M36 122 C36 62 164 62 164 122 Z"/><path class="flat" d="M24 122 Q100 156 176 122 Q100 136 24 122 Z"/></svg><b>042 Cap</b><span>One size</span></div>
+          </div>
+          <div class="stripe" style="width:100%" aria-hidden="true"></div>
+        </div>
+        <div class="mode-info"><span class="lbl">The till</span><h3>Day</h3><p>Cream paper, ink and purple for actions. Shop, product pages, checkout, account and help.</p></div>
+      </article>
+      <article class="mode">
+        <div class="mode-stage" data-mode="riot">
+          <i class="riot-dots" aria-hidden="true"></i>
+          <div class="mini-top"><span class="mini-logo" aria-hidden="true"></span><span>Drop status</span></div>
+          <div class="riot-big">Live<br>now</div>
+          <div class="sticker">Circle<br>first</div>
+        </div>
+        <div class="mode-info"><span class="lbl">The moment</span><h3>Riot</h3><p>Your red with purple. For a drop going live, a sell-out or a campaign day. Used for hours, never for weeks.</p></div>
+      </article>
+    </div>
+
+    <div class="sec">
+      <span class="lbl">Palette, taken from the waitlist</span>
+      <div class="palette">
+        <div class="chip"><i style="--c:#08060E"></i><div><b>Void</b><code>#08060E</code><span>Night background</span></div></div>
+        <div class="chip"><i style="--c:#0E0A1A"></i><div><b>Void 2</b><code>#0E0A1A</code><span>Raised panels at night</span></div></div>
+        <div class="chip"><i style="--c:#7A2FE0"></i><div><b>Purple</b><code>#7A2FE0</code><span>Brand and buttons</span></div></div>
+        <div class="chip"><i style="--c:#A65BFF"></i><div><b>Purple light</b><code>#A65BFF</code><span>Glow and accents at night</span></div></div>
+        <div class="chip"><i style="--c:#4A1A94"></i><div><b>Purple deep</b><code>#4A1A94</code><span>Depth and gradients</span></div></div>
+        <div class="chip"><i style="--c:#33297A"></i><div><b>Swirl indigo</b><code>#33297A</code><span>Dark band of the swirl</span></div></div>
+        <div class="chip"><i style="--c:#A94BF2"></i><div><b>Swirl violet</b><code>#A94BF2</code><span>Light band of the swirl</span></div></div>
+        <div class="chip"><i style="--c:#E23A2E"></i><div><b>Red</b><code>#E23A2E</code><span>Live, sold out, Riot</span></div></div>
+        <div class="chip"><i style="--c:#F3EEE2"></i><div><b>Cream</b><code>#F3EEE2</code><span>Day background</span></div></div>
+        <div class="chip"><i style="--c:#EFEAF7"></i><div><b>Ink</b><code>#EFEAF7</code><span>Text at night</span></div></div>
+        <div class="chip"><i style="--c:#8A82A0"></i><div><b>Muted</b><code>#8A82A0</code><span>Secondary text at night</span></div></div>
+        <div class="chip"><i style="--c:#2BE8FF"></i><div><b>Glitch cyan</b><code>#2BE8FF</code><span>Glitch split only</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="lbl">Type: three faces, plus the mantra as lettering</span>
+      <div class="type">
+        <div><div><span class="lbl">Display</span><b>Anton</b></div><div class="spec-a">Drop is live · 04:19:12</div></div>
+        <div><div><span class="lbl">Text</span><b>Space Grotesk</b></div><div class="spec-b">Handmade in small batches. When the run is gone, it's gone.</div></div>
+        <div><div><span class="lbl">Labels</span><b>Syncopate</b></div><div class="spec-c">Early access · Circle · 042</div></div>
+        <div><div><span class="lbl">Mantra only</span><b>Bungee, as artwork</b></div><div class="spec-d">Be You Be Different</div></div>
+      </div>
+      <p class="prose" style="font-size:14.5px;color:var(--ink-2)">The waitlist loads four font families. The site loads three and draws the mantra as lettering artwork, which saves a font download on every page.</p>
+    </div>
+
+    <div class="sec">
+      <span class="lbl">Marks</span>
+      <div class="marks">
+        <div class="mark"><div class="mark-art"><img src="assets/yowa-logo.png" alt="YOWA wordmark" width="701" height="178"></div><div><b>Wordmark with the eye</b><span>The dot in the O becomes an eye. It follows the cursor, blinks, turns red when a drop goes live and closes when it sells out.</span></div></div>
+        <div class="mark"><div class="mark-art"><img src="assets/yowa-signature.png" alt="YOWA signature" width="560" height="351"></div><div><b>Signature</b><span>Writes itself on the first visit and signs every order confirmation. We vectorise it so the pen follows the real stroke.</span></div></div>
+        <div class="mark"><div class="mark-art"><div class="glyphs" aria-label="Concept glyphs: heart, crossed swords, dragon" role="img">
+          <svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M12 20.5 L4 12.5 A4.6 4.6 0 0 1 12 6.8 A4.6 4.6 0 0 1 20 12.5 Z"/></svg>
+          <svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M4 4 L17 17 M20 4 L7 17 M14.5 19.5 L19.5 14.5 M4.5 14.5 L9.5 19.5 M18 18 L20.5 20.5 M6 18 L3.5 20.5"/></svg>
+          <svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M3 17 L7 10 L10 14 L13 7 L16 12 L21 6 M16 12 L21 13 M3 17 L8 19"/><circle class="eye" cx="19" cy="8.2" r="1.2"/></svg>
+        </div></div><div><b>💜 ⚔️ 🐉, redrawn</b><span>Your emoji codes drawn in the wordmark's geometry, so they look the same on every phone. They also name the Circle tiers. Concept sketches only.</span></div></div>
+        <div class="mark"><div class="mark-art"><span class="num042">042</span></div><div><b>042</b><span>Your number. It names the cap line and can mark tags and batches. Tell me what it stands for before we build a story on it.</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="lbl">What we keep, what we upgrade</span>
+      <div class="tscroll">
+        <table class="spec">
+          <thead><tr><th>Waitlist today</th><th>Main site</th></tr></thead>
+          <tbody>
+            <tr><td class="now">Swirl photo with a slow zoom</td><td>Live swirl in brand colours that speeds up as a drop gets closer. The photo stays as the fallback.</td></tr>
+            <tr><td class="now">Wordmark glitches every 4.2 seconds</td><td>Glitch fires on events only: hover, drop live, sold out.</td></tr>
+            <tr><td class="now">Signature revealed left to right</td><td>Vectorised signature; the pen follows the real stroke.</td></tr>
+            <tr><td class="now">Emoji 💜 ⚔️ 🐉</td><td>Custom glyphs that match the wordmark.</td></tr>
+            <tr><td class="now">Counter shows a fixed 214 plus signups from this browser</td><td>The real count from Supabase, through a count-only function.</td></tr>
+            <tr><td class="now">Countdown fixed to 26 Sep 2026, now passed</td><td>Drop times come from the drops table.</td></tr>
+            <tr><td class="now">Four typefaces</td><td>Three, with the mantra as artwork.</td></tr>
+            <tr><td class="now">One look</td><td>Night, Day and Riot modes.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s03" aria-labelledby="s03-t">
+  <div class="tb"><span class="tb-no">Sheet 03</span><h2 id="s03-t">Motion swatches</h2><span class="tb-meta">Live · replayable</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">Eleven motion moments, built live on this page from your real brand. Each lists its timing, where it lives on the site and how it gets built. They play once as you reach them; press Replay any time.</p>
+    <div class="tokens">
+      <div><span class="lbl">Durations</span><span class="tok-v">160 · 320 · 700 · 1200 ms</span><span class="tok-n">micro · UI · reveal · film</span></div>
+      <div><span class="lbl">Settle</span><svg class="curve" viewBox="0 0 120 80" aria-hidden="true"><path class="ax" d="M10 70 H110 M10 70 V10"/><path class="cv" d="M10 70 C26 10 40 10 110 10"/></svg><code>cubic-bezier(.16, 1, .3, 1)</code><span class="tok-n">Things landing: reveals, cards, panels</span></div>
+      <div><span class="lbl">Pull</span><svg class="curve" viewBox="0 0 120 80" aria-hidden="true"><path class="ax" d="M10 70 H110 M10 70 V10"/><path class="cv" d="M10 70 C75 70 45 10 110 10"/></svg><code>cubic-bezier(.65, 0, .35, 1)</code><span class="tok-n">Things drawn across: signature, wipes</span></div>
+      <div><span class="lbl">Stagger</span><span class="tok-v">40 · 80 · 120 ms</span><span class="tok-n">letters · words · cards</span></div>
+    </div>
+    <ul class="rules"><li>Transform and opacity only</li><li>One signature moment per screen</li><li>Glitch on events, never on a loop</li><li>Loops pause off screen</li><li>Every moment has a reduced-motion version</li><li>No scroll-jacking</li></ul>
+
+    <div class="sw-grid">
+
+      <figure class="swatch" id="sw-sig">
+        <div class="sw-stage swirl-bg st-sig" data-mode="night"><span class="mode-tag">Night</span>
+          <div class="sigbox" data-sig><img src="assets/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span class="pen" aria-hidden="true"></span></div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-01</span><h3>Signature write-on</h3><button class="replay" type="button" data-replay="sig">Replay</button></div>
+          <p>The signature writes itself on the first visit, then signs every order confirmation. The pen tip rides the ink.</p>
+          <dl class="kv"><dt>Timing</dt><dd>1.6 s, pull easing, first visit only</dd><dt>Lives on</dt><dd>Intro, order confirmation, receipt emails</dd><dt>Build</dt><dd>Vectorised signature drawn with stroke dashes; this demo uses a mask</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-eye">
+        <div class="sw-stage swirl-bg st-logo st-eye" data-mode="night"><span class="mode-tag">Night</span>
+          <div class="logo" id="eye-logo"><img src="assets/yowa-logo-nodot.png" alt="YOWA" width="701" height="178"><svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg></div>
+          <div class="chips" role="group" aria-label="Eye state">
+            <button class="mbtn" type="button" data-eye-state="" aria-pressed="true">Watching</button>
+            <button class="mbtn" type="button" data-eye-state="live" aria-pressed="false">Drop live</button>
+            <button class="mbtn" type="button" data-eye-state="gone" aria-pressed="false">Sold out</button>
+          </div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-02</span><h3>The eye in the O</h3><button class="replay" type="button" data-replay="eye">Blink</button></div>
+          <p>The dot in your O is an eye. It follows the cursor or your finger, blinks now and then, turns red when a drop is live and closes when it sells out. Stay woke, literally.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Follows with easing; 220 ms blink every 3 to 7 s</dd><dt>Lives on</dt><dd>Nav logo, hero, loader, 404 page</dd><dt>Build</dt><dd>SVG wordmark with the dot as its own shape</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-glitch">
+        <div class="sw-stage swirl-bg st-logo" data-mode="night"><span class="mode-tag">Night</span>
+          <div class="logo" id="glitch-logo"><img src="assets/yowa-logo-nodot.png" alt="YOWA" width="701" height="178"><span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span><svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg></div>
+          <div class="glitch-state" id="glitch-state" aria-live="polite">Next drop loading</div>
+          <div class="chips"><button class="mbtn" type="button" data-glitch="hover">Glitch</button><button class="mbtn" type="button" data-glitch="live">Drop goes live</button><button class="mbtn" type="button" data-glitch="gone">Sold out</button></div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-03</span><h3>Glitch with purpose</h3><button class="replay" type="button" data-replay="glitch">Replay</button></div>
+          <p>On the waitlist the wordmark glitches every 4.2 seconds, so people stop noticing. On the site it fires when something happens: a hover, a drop going live, a sell-out.</p>
+          <dl class="kv"><dt>Timing</dt><dd>520 ms in six steps</dd><dt>Lives on</dt><dd>Wordmark, drop status, sold-out screen</dd><dt>Rule</dt><dd>Never on a loop</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-count">
+        <div class="sw-stage st-count" data-mode="night"><span class="mode-tag">Night</span>
+          <span class="m-label">Next drop</span>
+          <div class="cd" role="img" aria-label="Sample drop countdown">
+            <div class="cd-g"><div class="cd-d"><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span></div><span class="m-label">Days</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-g"><div class="cd-d"><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span></div><span class="m-label">Hrs</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-g"><div class="cd-d"><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span></div><span class="m-label">Min</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-g"><div class="cd-d"><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span><span class="flap"><span class="fl-cur">0</span><span class="fl-next">0</span></span></div><span class="m-label">Sec</span></div>
+          </div>
+          <p class="cd-note">Batch capped on purpose. When the run is gone, <b>it's gone.</b></p>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-04</span><h3>Drop countdown</h3><button class="replay" type="button" data-replay="count">Replay</button></div>
+          <p>Split-flap digits in Anton, with your waitlist line underneath. Drop times come from Supabase and sync to server time, so a phone with the wrong clock still shows the truth.</p>
+          <dl class="kv"><dt>Timing</dt><dd>380 ms flip per digit</dd><dt>Lives on</dt><dd>Hero, drop page, Circle page</dd><dt>Data</dt><dd>drops.early_access_at and public_at</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-bybd">
+        <div class="sw-stage swirl-bg st-bybd" data-mode="night"><span class="mode-tag">Night</span>
+          <div class="bybd-word" id="bybd-word" hidden></div>
+          <div class="bybd-grid" id="bybd-grid"><div><b>Be</b><span>01</span></div><div><b data-you>You</b><span>02</span></div><div><b>Be</b><span>03</span></div><div><b>Diff.</b><span>04</span></div></div>
+          <div class="bybd-name"><label for="bybd-name">Circle name</label><input id="bybd-name" type="text" placeholder="Type a name, then Replay" maxlength="14" autocomplete="off"></div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-05</span><h3>Be You Be Different, made personal</h3><button class="replay" type="button" data-replay="bybd">Replay</button></div>
+          <p>Your four-word grid becomes a scroll beat, one word per screen. For signed-in Circle members, You becomes their name.</p>
+          <dl class="kv"><dt>Timing</dt><dd>650 ms per word, settle easing</dd><dt>Lives on</dt><dd>Homepage story, Circle welcome, emails</dd><dt>Data</dt><dd>Name from the waitlist or Circle profile</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-ticker">
+        <div class="sw-stage st-ticker" data-mode="night"><span class="mode-tag">Night</span>
+          <div class="tick-row"><div class="tick-track"><span class="tick-set">Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · Next Drop Loading · </span><span class="tick-set" aria-hidden="true">Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · Next Drop Loading · </span></div></div>
+          <div class="tick-row alt"><div class="tick-track"><span class="tick-set">Circle gets in first · When it's gone, it's gone · </span><span class="tick-set" aria-hidden="true">Circle gets in first · When it's gone, it's gone · </span></div></div>
+          <span class="m-label tick-meter">Scroll speed <b data-speed>0.00</b></span>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-06</span><h3>Scroll-speed ticker</h3><button class="replay" type="button" data-replay="ticker">Push</button></div>
+          <p>Your ticker copy, now listening to the page: scroll faster and it speeds up and leans into the direction you are going.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Base drift plus scroll velocity, eased</dd><dt>Lives on</dt><dd>Under the hero, drop banners</dd><dt>Build</dt><dd>GSAP Observer velocity</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-wall">
+        <div class="sw-stage st-wall" data-mode="night" tabindex="0" aria-label="Worn By wall demo. Drag or use the arrow keys; press a tile to open the look."><span class="mode-tag">Night · placeholders</span>
+          <div class="wall-track">
+            <button class="wtile" type="button" data-name="Celeb 01" data-cat="Music" data-pieces="Be Different Tee, L|042 Cap"><span class="wt-cat">Music</span><span class="wt-big">01</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" data-name="Celeb 02" data-cat="Film" data-pieces="Liberty Raglan, M"><span class="wt-cat">Film</span><span class="wt-big">02</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" data-name="Celeb 03" data-cat="Sport" data-pieces="Be Different Tee, XL"><span class="wt-cat">Sport</span><span class="wt-big">03</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" data-name="Celeb 04" data-cat="Creator" data-pieces="042 Cap|Liberty Raglan, L"><span class="wt-cat">Creator</span><span class="wt-big">04</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" data-name="Celeb 05" data-cat="Music" data-pieces="Liberty Raglan, S"><span class="wt-cat">Music</span><span class="wt-big">05</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" data-name="Celeb 06" data-cat="Style" data-pieces="Be Different Tee, M|042 Cap"><span class="wt-cat">Style</span><span class="wt-big">06</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 01" data-cat="Music" data-pieces="Be Different Tee, L|042 Cap"><span class="wt-cat">Music</span><span class="wt-big">01</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 02" data-cat="Film" data-pieces="Liberty Raglan, M"><span class="wt-cat">Film</span><span class="wt-big">02</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 03" data-cat="Sport" data-pieces="Be Different Tee, XL"><span class="wt-cat">Sport</span><span class="wt-big">03</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 04" data-cat="Creator" data-pieces="042 Cap|Liberty Raglan, L"><span class="wt-cat">Creator</span><span class="wt-big">04</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 05" data-cat="Music" data-pieces="Liberty Raglan, S"><span class="wt-cat">Music</span><span class="wt-big">05</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+            <button class="wtile" type="button" tabindex="-1" aria-hidden="true" data-name="Celeb 06" data-cat="Style" data-pieces="Be Different Tee, M|042 Cap"><span class="wt-cat">Style</span><span class="wt-big">06</span><span class="wt-name">Name goes here</span><span class="wt-h">@handle · IG post</span></button>
+          </div>
+          <div class="look" hidden>
+            <div class="look-portrait" aria-hidden="true"><span class="hot" style="left:46%;top:44%">1</span><span class="hot" style="left:54%;top:14%">2</span></div>
+            <div class="look-info">
+              <span class="m-label look-cat">Music</span>
+              <div class="look-name">Celeb 01</div>
+              <p>Photo cleared with their team. Posted on Instagram.</p>
+              <ol class="look-pieces"><li>Be Different Tee, L</li></ol>
+              <div class="look-btns"><button class="mbtn solid" type="button">Shop the look</button><button class="mbtn" type="button">View post</button></div>
+            </div>
+            <button class="mbtn look-close" type="button">Close</button>
+          </div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-07</span><h3>Worn By wall</h3><button class="replay" type="button" data-replay="wall">Throw</button></div>
+          <p>Drag and throw the wall; it keeps moving and slows like something with weight. Tap a tile to open the look, with numbered hotspots that link to the exact pieces. Tiles here are placeholders until you send the real list.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Inertia decays 6% per frame; open 520 ms</dd><dt>Lives on</dt><dd>/worn-by, homepage strip, product pages</dd><dt>Build</dt><dd>Pointer events with inertia; shared-element open</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-card">
+        <div class="sw-stage st-card" data-mode="day"><span class="mode-tag">Day</span>
+          <span class="bag" aria-live="polite">Bag <b data-bag>0</b></span>
+          <div class="pcard">
+            <button class="pc-media" type="button" aria-label="Play product film">
+              <svg viewBox="0 0 200 200" aria-hidden="true"><g class="pc-tee"><path class="flat" d="M70 30 Q100 52 130 30 L160 42 L190 80 L166 96 L150 78 L150 176 L50 176 L50 78 L34 96 L10 80 L40 42 Z"/><path class="flat" d="M73 32 Q100 58 127 32"/><path class="flat seam" d="M50 168 H150"/><text class="tee-print" x="100" y="118" text-anchor="middle">BYBD</text></g></svg>
+              <span class="pc-sheen" aria-hidden="true"></span><span class="pc-film" aria-hidden="true">Film · 3s</span><span class="pc-bar" aria-hidden="true"><i></i></span>
+            </button>
+            <div class="pc-info">
+              <div class="pc-name">Be Different Tee</div>
+              <div class="pc-price">₦45,000 <span class="m-label">sample</span></div>
+              <div class="pc-sizes" role="group" aria-label="Size">
+                <button class="pc-size" type="button" aria-pressed="false" data-left="8 left in XS">XS</button>
+                <button class="pc-size" type="button" aria-pressed="false" data-left="12 left in S">S</button>
+                <button class="pc-size" type="button" aria-pressed="false" data-left="9 left in M">M</button>
+                <button class="pc-size" type="button" aria-pressed="true" data-left="3 left in L" data-note="your waitlist size">L</button>
+                <button class="pc-size" type="button" aria-pressed="false" data-left="5 left in XL">XL</button>
+                <button class="pc-size" type="button" aria-pressed="false" data-left="Sold out in XXL" data-note="notify me">XXL</button>
+              </div>
+              <p class="pc-stock"><b>3 left in L</b> · <span>your waitlist size</span></p>
+              <button class="pc-add" type="button">Add to bag</button>
+            </div>
+          </div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-08</span><h3>Living product card</h3><button class="replay" type="button" data-replay="card">Play film</button></div>
+          <p>A still first, then a 3-second film on hover or tap. The size given on the waitlist is picked for you. Add to bag leans toward your cursor and the piece flies into the bag.</p>
+          <dl class="kv"><dt>Timing</dt><dd>3 s film loop; 700 ms flight</dd><dt>Lives on</dt><dd>Shop grid, drop rail, product page</dd><dt>Build</dt><dd>Higgsfield loop, preload none, poster first</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-gate">
+        <div class="sw-stage swirl-bg st-gate" data-mode="night"><span class="mode-tag">Night</span>
+          <form class="gate" id="gate-form" novalidate>
+            <span class="m-label">Next drop · Circle early access</span>
+            <label class="gate-label" for="gate-code">Enter your Circle code</label>
+            <div class="gate-row"><input id="gate-code" type="text" autocomplete="off" spellcheck="false" placeholder="Code"><button type="submit">Enter</button></div>
+            <p class="gate-msg" role="status">Demo code: BYBD</p>
+          </form>
+          <div class="gate-in" hidden><span class="m-label">Early access · Circle</span><div class="gi-word">You're in</div><p class="gi-sub">Everyone else gets in when the countdown ends.</p><div class="gi-rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div><button class="mbtn" type="button" id="gate-reset">Lock again</button></div>
+          <span class="curtain c-left" aria-hidden="true"></span><span class="curtain c-right" aria-hidden="true"></span>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-09</span><h3>Circle early access</h3><button class="replay" type="button" data-replay="gate">Replay</button></div>
+          <p>The waitlist promised early access, so every drop opens for the Circle first, by personal link or code. A wrong code glitches; the right one pulls the swirl across like a curtain.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Shake 520 ms; curtain 420 + 640 ms</dd><dt>Lives on</dt><dd>Drop page during the early window</dd><dt>Data</dt><dd>drops.gate_mode, per-member codes</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-chat">
+        <div class="sw-stage tall st-chat" data-mode="day"><span class="mode-tag">Day</span>
+          <div class="chat" id="chat">
+            <div class="chat-head"><span class="chat-eye" aria-hidden="true"><i></i></span><div class="chat-title">Ask YOWA<span>Answers in seconds · a person on WhatsApp</span></div><span class="chat-tag">Demo script</span></div>
+            <div class="chat-body" aria-live="polite"></div>
+            <div class="chat-foot"><div class="chat-quick" hidden><span>Yes, WhatsApp me</span><span>Talk to a person</span></div><div class="chat-input">Ask about sizes, stock or your order…</div></div>
+          </div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-10</span><h3>Concierge</h3><button class="replay" type="button" data-replay="chat">Replay</button></div>
+          <p>Answers with live data and shows its checks as chips, so people see it looked things up. It knows the size they gave on the waitlist. The avatar is the eye, blinking while it thinks. Scripted here; Sheet 08 has the real build.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Streams as it writes</dd><dt>Lives on</dt><dd>Every page, product fit button, order page</dd><dt>Build</dt><dd>Supabase Edge Function and OpenRouter</dd></dl>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" id="sw-pay">
+        <div class="sw-stage tall st-pay" data-mode="day"><span class="mode-tag">Day</span>
+          <div class="pay-order" id="pay-order">
+            <div class="po-row"><span>Be Different Tee · L</span><span>₦45,000</span></div>
+            <div class="po-row"><span>Early-bird discount (Circle)</span><span>−₦4,500</span></div>
+            <div class="po-row"><span>Delivery</span><span>₦3,500</span></div>
+            <div class="po-row total"><span>Total</span><span>₦44,000</span></div>
+            <button class="pay-btn" type="button" data-label="Pay ₦44,000">Pay ₦44,000</button>
+          </div>
+          <div class="pay-sheet" hidden>
+            <div class="ps-head"><span class="ps-title">Secure payment</span><span class="ps-lock">Paystack popup · simulated</span></div>
+            <div class="ps-ch"><span>Card</span><span>Transfer</span><span>USSD</span><span>Bank</span></div>
+            <p class="pay-status" aria-live="polite">Waiting for payment…</p>
+          </div>
+          <div class="receipt" hidden>
+            <span class="rc-k">Order confirmed · YW-2610-8K3F</span>
+            <div class="sigbox" data-sig><img src="assets/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span class="pen" aria-hidden="true"></span></div>
+            <div class="rc-no">Piece No. <span>017</span> of 120</div>
+            <p class="rc-s">Hand-finished and signed. Receipt sent to your email.</p>
+            <button class="mbtn" type="button" id="pay-reset">Reset</button>
+          </div>
+        </div>
+        <figcaption class="sw-cap">
+          <div class="sw-head"><span class="sw-code">S-11</span><h3>Pay, then a signed receipt</h3><button class="replay" type="button" data-replay="pay">Replay</button></div>
+          <p>Paystack takes the payment. The confirmation is signed with the YOWA signature and names the piece's number in its batch, because every run is limited. Prices and batch size are samples.</p>
+          <dl class="kv"><dt>Timing</dt><dd>Sheet 480 ms; signature 1.5 s</dd><dt>Lives on</dt><dd>Checkout success, order page, receipt email</dd><dt>Build</dt><dd>Paystack Initialize + popup + Verify (Sheet 09)</dd></dl>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s04" aria-labelledby="s04-t">
+  <div class="tb"><span class="tb-no">Sheet 04</span><h2 id="s04-t">Reference board</h2><span class="tb-meta">Web + Higgsfield</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">What the best fashion sites are doing in 2026, and the Higgsfield motion presets already in your account that fit YOWA. Every card says what to take from it.</p>
+    <div class="sec">
+      <span class="lbl">On the web</span>
+      <div class="refs-grid">
+        <article class="ref"><span class="meta">Merci Michel · Awwwards Site of the Day · 21 Jul 2026</span><h4>Lacoste, Polo Factory</h4><p>Turns how a polo is made into a playful 3D factory.</p><p class="match">For YOWA: a "how the batch was made" page. Handmade is your story, so show the hands.</p><a class="go" href="https://www.awwwards.com/sites/lacoste-polo-factory">Open ↗</a></article>
+        <article class="ref"><span class="meta">makemepulse · Site of the Day · 9 Jul 2026</span><h4>Brunello Cucinelli, AI e-commerce</h4><p>A shop without fixed pages, where AI agents guide people by what they want.</p><p class="match">For YOWA: the concierge works like a stylist, not a help desk.</p><a class="go" href="https://www.awwwards.com/sites/brunello-cucinelli-ai-e-com">Open ↗</a></article>
+        <article class="ref"><span class="meta">Awwwards · fashion winners 2026</span><h4>MIU MIU, Serotoninn, Lacoste Ace Breaker, Aralesk</h4><p>The current bar for fashion motion and e-commerce craft.</p><p class="match">For YOWA: check every screen against these before launch.</p><a class="go" href="https://www.awwwards.com/websites/fashion/">Open ↗</a></article>
+        <article class="ref"><span class="meta">Awwwards Site of the Day</span><h4>Jacquemus</h4><p>Playful art direction that still puts the product first.</p><p class="match">For YOWA: let the pieces be the heroes at the till.</p><a class="go" href="https://www.awwwards.com/sites/jacquemus">Open ↗</a></article>
+        <article class="ref"><span class="meta">London streetwear · drop culture</span><h4>Corteiz password drops</h4><p>Drops behind a password shared on Instagram and X. Getting in feels earned.</p><p class="match">For YOWA: Circle codes for early access (S-09).</p><a class="go" href="https://trenchtrenchtrench.com/features/corteiz-who-rules-the-world">TRENCH feature ↗</a> <a class="go" href="https://growthcurve.co/corteiz-growth-playbook-how-crtz-turned-drops-stunts-and-owned-distribution-into-a-repeatable-attention-system">Growth playbook ↗</a></article>
+        <article class="ref"><span class="meta">Amsterdam · African heritage streetwear</span><h4>Daily Paper</h4><p>Heritage told with global polish, across its own store and flagships.</p><p class="match">For YOWA: tell the story behind each piece with the same confidence.</p><a class="go" href="https://dailypaperclothing.com/">Open ↗</a></article>
+        <article class="ref"><span class="meta">Lagos skate label</span><h4>WAFFLESNCREAM</h4><p>Community first, with a flagship and an online store.</p><p class="match">For YOWA: Worn By and the Circle are your community, not only proof.</p><a class="go" href="https://www.wafflesncream.com/pages/lagos-store">Open ↗</a></article>
+        <article class="ref"><span class="meta">Lagos to London, Paris and Dubai</span><h4>Severe Nature</h4><p>A Nigerian streetwear label that opened stores abroad.</p><p class="match">For YOWA: plan for diaspora buyers from day one, with USD and shipping.</p><a class="go" href="https://www.appearhere.co.uk/inspire/blog/from-lagos-to-london">Open ↗</a></article>
+        <article class="ref"><span class="meta">Highsnobiety</span><h4>Nigeria's streetwear renaissance</h4><p>The scene YOWA launches into.</p><a class="go" href="https://www.highsnobiety.com/p/nigeria-streetwear-culture/">Open ↗</a></article>
+        <article class="ref"><span class="meta">Codrops · January 2026</span><h4>Infinite Canvas</h4><p>A pannable image space built for performance.</p><p class="match">For YOWA: the build behind the Worn By wall (S-07).</p><a class="go" href="https://tympanus.net/codrops/2026/01/07/infinite-canvas-building-a-seamless-pan-anywhere-image-space/">Open ↗</a></article>
+        <article class="ref"><span class="meta">Since 30 Apr 2025</span><h4>GSAP is 100% free</h4><p>SplitText, ScrollTrigger, Flip and MorphSVG, free for commercial use.</p><p class="match">For YOWA: every swatch on Sheet 03 maps to a free GSAP plugin.</p><a class="go" href="https://gsap.com/blog/3-13/">GSAP 3.13 ↗</a> <a class="go" href="https://tympanus.net/codrops/2025/05/14/from-splittext-to-morphsvg-5-creative-demos-using-free-gsap-plugins/">Codrops demos ↗</a></article>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="lbl">In your Higgsfield account</span>
+      <div class="refs-grid">
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Clones</h4><p>Identical copies of one person fill the scene.</p><p class="match">Be You Be Different, literally: a street of identical people, one wearing YOWA.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/9cedf121-64a9-4eb9-88e9-608844ff1929.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Frozen in motion</h4><p>The subject freezes mid-air while the street keeps moving.</p><p class="match">The one who stands still stands out. Hero film or drop teaser.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/59c46689-f756-4843-b298-f34b9761187e.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Melting</h4><p>Clothing stretches into liquid trails.</p><p class="match">Your swirl, moving on a person. A Riot-mode drop teaser.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/f661157c-af00-46f7-8b7c-6a7ae711ef98.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Studio slide</h4><p>Copies of one person slide past each other in layers.</p><p class="match">Lookbook reels, one per piece.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/c129fb83-2014-4a37-a3f8-6c7dfeab0254.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Cutout</h4><p>The world breaks into floating paper layers, then snaps back.</p><p class="match">A campaign edit that pairs with the glitch.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/a64711ac-93b8-46ee-a9ce-37ee5c18e148.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Scrapbook collage</h4><p>A full-body shot with close-up detail panels.</p><p class="match">Product page montage: stitching, print, fit.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub/84f761d0-2033-417f-aee0-a2029cfb78fe.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">2D motion</span><h4>Fashion Editorial Reveal</h4><p>An editorial layout that builds itself.</p><p class="match">Lookbook openers.</p><a class="go" href="https://cdn.higgsfield.ai/marketing-studio-v2-2d-motion/7227e3ac-beaa-4504-9e5b-f6d047886faf.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Mixed media</span><h4>Halftone Street Collage</h4><p>Street collage with a halftone print look.</p><p class="match">Riot-mode drop posts for Instagram and TikTok.</p><a class="go" href="https://cdn.higgsfield.ai/marketing-studio-motion-preview/ebc2e460-9324-4241-a4ac-6bba19ad0084.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Hypermotion</span><h4>Wheatpaste Wall</h4><p>Posters pasted onto a wall.</p><p class="match">Drop announcements: the date pasted across the city.</p><a class="go" href="https://cdn.higgsfield.ai/marketing-studio-motion-preview/458431c6-813b-42b2-9adc-bbf380d8c106.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">2D motion</span><h4>Music Zine Collage</h4><p>Zine-style collage motion.</p><p class="match">Worn By intro for the music people who wore YOWA.</p><a class="go" href="https://cdn.higgsfield.ai/marketing-studio-v2-2d-motion/fa95fcb8-3065-4689-aff0-2bef242c69c8.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Hypermotion</span><h4>Monospace Callouts</h4><p>Product callouts in small labels.</p><p class="match">Fabric, weight and fit callouts on product pages.</p><a class="go" href="https://cdn.higgsfield.ai/marketing-studio-motion-preview/aef59e19-f388-4dcc-b55a-e43a5c48c835.mp4">Watch preview ↗</a></article>
+        <article class="ref hf"><span class="meta">Viral effect</span><h4>Earth zoom</h4><p>The camera drops from orbit to street level in one move.</p><p class="match">A launch film opener that lands on YOWA's home city.</p><a class="go" href="https://cdn.higgsfield.ai/viral_hub_preset/d1b7d148-46a1-4e57-b808-4af2e8c823f1.mp4">Watch preview ↗</a></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s05" aria-labelledby="s05-t">
+  <div class="tb"><span class="tb-no">Sheet 05</span><h2 id="s05-t">Homepage and product page</h2><span class="tb-meta">Storyboard</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">The homepage in scroll order, as it will look on a phone, then the product page. The site map of every page is on Sheet 01.</p>
+    <ol class="frames">
+      <li class="frame"><div class="phone"><div class="w-grow"></div><img class="w-sig" src="assets/yowa-signature.png" alt=""><div class="w-line w-c" style="width:50%"></div><div class="w-num">087</div><div class="w-grow"></div></div><span class="fr-n">01</span><p class="fr-cap">The signature writes itself. First visit only, 1.6 s.</p></li>
+      <li class="frame"><div class="phone"><div class="w-row w-top"><div class="w-logo" style="flex:0 0 38%"></div><div class="w-line" style="flex:0 0 22%"></div></div><div class="w-hero w-grow"><div class="w-logo" style="width:78%;height:16px"></div><div class="w-big">Be You</div><div class="w-cd"><span>04</span><span>19</span><span>12</span></div><div class="w-btn" style="width:62%"></div></div></div><span class="fr-n">02</span><p class="fr-cap">Hero: live swirl, the eye, countdown or Live now, Enter the drop.</p></li>
+      <li class="frame"><div class="phone"><div class="w-tick">Be You Be Different · 042 ·</div><div class="w-tick alt">Circle gets in first ·</div><div class="w-line" style="width:80%"></div><div class="w-line" style="width:60%"></div><div class="w-grow"></div></div><span class="fr-n">03</span><p class="fr-cap">Ticker that speeds up with the scroll.</p></li>
+      <li class="frame"><div class="phone"><span class="w-k">The drop</span><div class="w-rail"><div class="w-card"><div class="w-pic"></div><div class="w-line"></div><div class="w-stock"><i style="width:30%"></i></div></div><div class="w-card"><div class="w-pic"></div><div class="w-line"></div><div class="w-stock"><i style="width:70%"></i></div></div><div class="w-card"><div class="w-pic"></div><div class="w-line"></div><div class="w-stock"><i style="width:50%"></i></div></div></div><div class="w-grow"></div></div><span class="fr-n">04</span><p class="fr-cap">Drop rail: pinned sideways scroll, living cards, live stock per size.</p></li>
+      <li class="frame"><div class="phone"><div class="w-grow"></div><div class="w-big" style="font-size:30px;color:#FFFFFF">You</div><div class="w-grow"></div><div class="w-line w-c" style="width:40%"></div></div><span class="fr-n">05</span><p class="fr-cap">Be You Be Different, one word per screen, your name for members.</p></li>
+      <li class="frame"><div class="phone"><span class="w-k">Worn by</span><div class="w-rail"><div class="w-tile"></div><div class="w-tile"></div><div class="w-tile"></div></div><div class="w-line" style="width:70%"></div><div class="w-grow"></div></div><span class="fr-n">06</span><p class="fr-cap">Worn By strip: drag the wall, tap for the look.</p></li>
+      <li class="frame"><div class="phone"><span class="w-k">Finished by hand</span><div class="w-film w-grow"></div><img class="w-sig" src="assets/yowa-signature.png" alt="" style="width:46%"></div><span class="fr-n">07</span><p class="fr-cap">Behind the scenes film, signed off with the signature.</p></li>
+      <li class="frame"><div class="phone"><span class="w-k">Archive</span><div class="w-grid"><div></div><div></div><div></div><div></div><div></div><div></div></div><div class="w-grow"></div></div><span class="fr-n">08</span><p class="fr-cap">Past drops, all sold out, all collectable.</p></li>
+      <li class="frame"><div class="phone"><div class="w-grow"></div><span class="w-k" style="text-align:center">Join the Circle</span><div class="w-box" style="height:14px"></div><div class="w-box" style="height:14px"></div><div class="w-btn"></div><div class="w-grow"></div></div><span class="fr-n">09</span><p class="fr-cap">Circle sign-up: email and WhatsApp, waitlist members already in.</p></li>
+      <li class="frame"><div class="phone"><div class="w-grow"></div><div class="w-logo" style="height:26px"></div><div class="w-line" style="width:70%"></div><div class="w-line" style="width:50%"></div><div class="w-line" style="width:60%"></div></div><span class="fr-n">10</span><p class="fr-cap">Footer: giant wordmark whose eye still follows you.</p></li>
+    </ol>
+    <div class="sec">
+      <span class="lbl">Product page (Day mode)</span>
+      <div class="pdp">
+        <div class="pdp-wire" role="img" aria-label="Product page wireframe with lettered parts A to H">
+          <div>
+            <div class="pw tall"><span class="pin">A</span>Living still</div>
+            <div class="pw mid"><span class="pin">B</span>Gallery</div>
+            <div class="pw"><span class="pin">C</span>3D view</div>
+          </div>
+          <div>
+            <div class="pw" style="font-weight:600">Be Different Tee · ₦45,000</div>
+            <div class="pw"><span class="pin">D</span>XS S M [L] XL XXL</div>
+            <div class="pw"><span class="pin">E</span>3 left in L</div>
+            <div class="pw"><span class="pin">F</span>Worn by ● ● ●</div>
+            <div class="pw"><span class="pin">G</span>Add to bag</div>
+            <div class="pw"><span class="pin">H</span>Ask about fit</div>
+          </div>
+        </div>
+        <ul class="legend">
+          <li><span class="pin">A</span><span>Living still: a 3-second film on hover or tap, poster first.</span></li>
+          <li><span class="pin">B</span><span>Gallery: full looks first, then close-ups of stitching and print.</span></li>
+          <li><span class="pin">C</span><span>3D view: a Higgsfield 3D model, once we have tested the quality.</span></li>
+          <li><span class="pin">D</span><span>Size picker, with the size from the waitlist already chosen.</span></li>
+          <li><span class="pin">E</span><span>Stock per size, live during drops.</span></li>
+          <li><span class="pin">F</span><span>Worn by badges that open the looks.</span></li>
+          <li><span class="pin">G</span><span>Add to bag, or Notify me when a size sells out.</span></li>
+          <li><span class="pin">H</span><span>Ask about fit: opens the concierge with this piece loaded.</span></li>
+          <li><span class="pin">+</span><span>Every product gets an auto-made share image, so links look good in WhatsApp and Instagram DMs.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s06" aria-labelledby="s06-t">
+  <div class="tb"><span class="tb-no">Sheet 06</span><h2 id="s06-t">Circle and Worn By</h2><span class="tb-meta">Community + proof</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">The waitlist becomes the Circle, and your emoji codes become its tiers. Worn By shows the people who wore YOWA, inside the shop.</p>
+    <div class="tiers">
+      <div class="tier"><div class="tier-h"><svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M12 20.5 L4 12.5 A4.6 4.6 0 0 1 12 6.8 A4.6 4.6 0 0 1 20 12.5 Z"/></svg><b>Heart</b></div><p>You joined. Every waitlist member starts here.</p><ul class="bul"><li>Early access to every drop</li><li>The early-bird discount they were promised</li><li>First look at styling</li></ul></div>
+      <div class="tier"><div class="tier-h"><svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M4 4 L17 17 M20 4 L7 17 M14.5 19.5 L19.5 14.5 M4.5 14.5 L9.5 19.5 M18 18 L20.5 20.5 M6 18 L3.5 20.5"/></svg><b>Sword</b></div><p>You bought. Your first order moves you up.</p><ul class="bul"><li>Everything in Heart</li><li>A longer early-access window</li><li>A signed, numbered card for every piece</li></ul></div>
+      <div class="tier"><div class="tier-h"><svg viewBox="0 0 24 24" class="glyph" aria-hidden="true"><path d="M3 17 L7 10 L10 14 L13 7 L16 12 L21 6 M16 12 L21 13 M3 17 L8 19"/><circle class="eye" cx="19" cy="8.2" r="1.2"/></svg><b>Dragon</b></div><p>You're core: three drops bought, or friends who joined through you.</p><ul class="bul"><li>First in line for every drop</li><li>Surprise pieces and invites</li><li>A say in what gets made next</li></ul></div>
+    </div>
+    <div class="sec">
+      <span class="lbl">From waitlist to Circle</span>
+      <ol class="steps"><li>Waitlist rows stay in Supabase</li><li>Launch email: "Claim your Circle spot"</li><li>One-tap sign-in by email link</li><li>Profile picks up name, size and IG handle</li><li>They land as Heart, discount ready</li></ol>
+    </div>
+    <div class="sec">
+      <span class="lbl">Worn By: one tile</span>
+      <div class="anat">
+        <div class="anat-tile" role="img" aria-label="Worn By tile with lettered parts A to F">
+          <div class="row"><span class="pin">B</span>Music</div>
+          <div class="big">01</div>
+          <div class="row"><span class="pin">A</span>Portrait, rights cleared</div>
+          <div class="row"><span class="pin">C</span>Name · date worn</div>
+          <div class="row"><span class="pin">D</span>Pieces worn</div>
+        </div>
+        <ul class="legend">
+          <li><span class="pin">A</span><span>Portrait, only when we own it or have permission.</span></li>
+          <li><span class="pin">B</span><span>Category: Music, Film, Sport, Creator or Style.</span></li>
+          <li><span class="pin">C</span><span>Name and the date they wore it.</span></li>
+          <li><span class="pin">D</span><span>Pieces worn, each linked to its product page.</span></li>
+          <li><span class="pin">E</span><span>Tap opens the look: numbered hotspots on the photo and Shop the look.</span></li>
+          <li><span class="pin">F</span><span>Their Instagram handle and a link to the original post.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="lbl">Photo rights, one per entry</span>
+      <div class="rights">
+        <div><b>Owned</b><p>Our own shoot. Show the full image.</p></div>
+        <div><b>Permission</b><p>They or their team said yes, and we log it. Show the full image with credit.</p></div>
+        <div><b>Embed only</b><p>No rights. Show a text tile; Instagram's own embed loads only when someone taps View post.</p></div>
+      </div>
+      <p class="prose" style="font-size:14.5px;color:var(--ink-2)">Why not embed every post automatically: each Instagram embed pulls Instagram's script and media, which is slow on mobile data, and it breaks when a post is deleted. Copied embeds need no API key; Instagram's oEmbed API needs a Meta app token.</p>
+    </div>
+    <div class="sec">
+      <span class="lbl">Adding someone in the admin, about two minutes</span>
+      <ol class="steps"><li>Paste the Instagram post link</li><li>Upload the photo</li><li>Pick the pieces</li><li>Tap to place hotspots</li><li>Set the rights</li><li>Publish</li></ol>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="s07" aria-labelledby="s07-t">
+  <div class="tb"><span class="tb-no">Sheet 07</span><h2 id="s07-t">Drops engine</h2><span class="tb-meta">States + rules</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <figure class="dg">
+      <div class="dg-scroll">
+        <svg viewBox="0 0 980 240" role="img" aria-label="A drop moves from Teaser to Early access to Public to Sold out to Archive on times set in Supabase; a restock sends it from Sold out back to Public.">
+          <defs>
+            <marker id="m7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk" d="M0 0 L10 5 L0 10 z"/></marker>
+            <marker id="m7h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk hi" d="M0 0 L10 5 L0 10 z"/></marker>
+          </defs>
+          <circle class="dot" cx="12" cy="117" r="5"/><line class="a" x1="17" y1="117" x2="29" y2="117"/>
+          <rect class="bx" x="30" y="84" width="150" height="66" rx="8"/><text class="t" x="105" y="112" text-anchor="middle">Teaser</text><text class="s" x="105" y="132" text-anchor="middle">countdown · notify me</text>
+          <rect class="bx hi" x="222" y="84" width="150" height="66" rx="8"/><text class="t hi" x="297" y="112" text-anchor="middle">Early access</text><text class="s" x="297" y="132" text-anchor="middle">Circle code or link</text>
+          <rect class="bx" x="414" y="84" width="150" height="66" rx="8"/><text class="t" x="489" y="112" text-anchor="middle">Public</text><text class="s" x="489" y="132" text-anchor="middle">everyone buys</text>
+          <rect class="bx" x="606" y="84" width="150" height="66" rx="8"/><text class="t" x="681" y="112" text-anchor="middle">Sold out</text><text class="s" x="681" y="132" text-anchor="middle">restock alerts</text>
+          <rect class="bx soft" x="798" y="84" width="150" height="66" rx="8"/><text class="t" x="873" y="112" text-anchor="middle">Archive</text><text class="s" x="873" y="132" text-anchor="middle">lookbook + story</text>
+          <line class="a hi" x1="182" y1="117" x2="220" y2="117" marker-end="url(#m7h)"/>
+          <line class="a" x1="374" y1="117" x2="412" y2="117" marker-end="url(#m7)"/>
+          <line class="a" x1="566" y1="117" x2="604" y2="117" marker-end="url(#m7)"/>
+          <line class="a" x1="758" y1="117" x2="796" y2="117" marker-end="url(#m7)"/>
+          <line class="tick" x1="201" y1="64" x2="201" y2="108"/><text class="s" x="201" y="58" text-anchor="middle">early_access_at</text>
+          <line class="tick" x1="393" y1="64" x2="393" y2="108"/><text class="s" x="393" y="58" text-anchor="middle">public_at</text>
+          <line class="tick" x1="585" y1="64" x2="585" y2="108"/><text class="s" x="585" y="58" text-anchor="middle">stock 0 or ends_at</text>
+          <line class="tick" x1="777" y1="64" x2="777" y2="108"/><text class="s" x="777" y="58" text-anchor="middle">archive</text>
+          <path class="a back" d="M681 152 C681 206 489 206 489 156" marker-end="url(#m7)"/>
+          <text class="al" x="585" y="222" text-anchor="middle">restock</text>
+        </svg>
+      </div>
+      <figcaption>A drop moves left to right on times set in Supabase. Only a restock sends it back from Sold out to Public. The first hours of Public switch the site into Riot mode.</figcaption>
+    </figure>
+    <ul class="bul">
+      <li>The countdown runs on server time, so a wrong phone clock never shows the wrong time.</li>
+      <li>Circle members get in first with a personal code or link. Hype drops can add a shared password.</li>
+      <li>Live stock per size (Supabase Realtime) and a count of people in the drop (Presence).</li>
+      <li>Stock is held for 15 minutes from checkout start, then released automatically (pg_cron).</li>
+      <li>Limits per customer, and Cloudflare Turnstile on checkout during drops to slow bots.</li>
+      <li>Sold out is a designed screen with restock alerts and the next drop. It never looks like an error.</li>
+      <li>A waiting room for very large drops comes later.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sheet" id="s08" aria-labelledby="s08-t">
+  <div class="tb"><span class="tb-no">Sheet 08</span><h2 id="s08-t">AI concierge</h2><span class="tb-meta">OpenRouter</span><span class="tb-stamp"><span class="stamp">Ready</span></span></div>
+  <div class="sb">
+    <p class="lede">Your Nalto AI already talks to OpenRouter through n8n, with no streaming and no tools. For YOWA, one Supabase Edge Function does the job end to end, so answers stream in and use live stock and order data.</p>
+    <figure class="dg">
+      <div class="dg-scroll">
+        <svg viewBox="0 0 980 400" role="img" aria-label="The chat widget sends a question to the concierge Edge Function, which retrieves policy text from pgvector, sends the prompt and tools to OpenRouter, runs tool calls against Supabase data, hands over to WhatsApp when needed, and streams the answer back.">
+          <defs>
+            <marker id="m8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk" d="M0 0 L10 5 L0 10 z"/></marker>
+            <marker id="m8h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk hi" d="M0 0 L10 5 L0 10 z"/></marker>
+          </defs>
+          <rect class="bx" x="20" y="170" width="150" height="76" rx="8"/><text class="t" x="95" y="203" text-anchor="middle">Chat widget</text><text class="s" x="95" y="223" text-anchor="middle">site · product · order</text>
+          <rect class="bx soft" x="270" y="24" width="210" height="352" rx="10"/><text class="t" x="375" y="54" text-anchor="middle">concierge</text><text class="s" x="375" y="72" text-anchor="middle">Supabase Edge Function</text>
+          <text class="al" x="290" y="108">1  retrieve policies</text><text class="al" x="290" y="218">2  ask the model</text><text class="al" x="290" y="328">3  run tools</text><text class="s" x="375" y="362" text-anchor="middle">rate limit · log every chat</text>
+          <rect class="bx" x="590" y="72" width="210" height="64" rx="8"/><text class="t" x="695" y="100" text-anchor="middle">Knowledge base</text><text class="s" x="695" y="120" text-anchor="middle">gte-small → pgvector</text>
+          <rect class="bx hi" x="590" y="182" width="210" height="64" rx="8"/><text class="t hi" x="695" y="210" text-anchor="middle">OpenRouter</text><text class="s" x="695" y="230" text-anchor="middle">Haiku 4.5 → 2.5 Flash</text>
+          <rect class="bx" x="590" y="292" width="210" height="64" rx="8"/><text class="t" x="695" y="320" text-anchor="middle">Supabase data</text><text class="s" x="695" y="340" text-anchor="middle">products · stock · orders</text>
+          <rect class="bx" x="850" y="292" width="120" height="64" rx="8"/><text class="t" x="910" y="320" text-anchor="middle">WhatsApp</text><text class="s" x="910" y="340" text-anchor="middle">a person</text>
+          <line class="a" x1="170" y1="196" x2="268" y2="196" marker-end="url(#m8)"/><text class="al" x="219" y="188" text-anchor="middle">question</text>
+          <line class="a back" x1="270" y1="222" x2="172" y2="222" marker-end="url(#m8)"/><text class="al" x="219" y="242" text-anchor="middle">streamed answer</text>
+          <line class="a" x1="480" y1="104" x2="588" y2="104" marker-start="url(#m8)" marker-end="url(#m8)"/><text class="al" x="534" y="96" text-anchor="middle">top matches</text>
+          <line class="a hi" x1="480" y1="214" x2="588" y2="214" marker-start="url(#m8h)" marker-end="url(#m8h)"/><text class="al hi" x="534" y="206" text-anchor="middle">prompt + tools</text>
+          <line class="a" x1="480" y1="324" x2="588" y2="324" marker-start="url(#m8)" marker-end="url(#m8)"/><text class="al" x="534" y="316" text-anchor="middle">tool calls</text>
+          <line class="a" x1="800" y1="324" x2="848" y2="324" marker-end="url(#m8)"/><text class="al" x="824" y="316" text-anchor="middle">handoff</text>
+        </svg>
+      </div>
+      <figcaption>One Edge Function does the work. It looks up your policies, asks the model through OpenRouter, runs any tools against live Supabase data, then streams the answer back. The OpenRouter key never leaves the function.</figcaption>
+    </figure>
+    <div class="cols">
+      <div class="sec"><span class="lbl">Tools it can call</span>
+        <ul class="bul">
+          <li><code>search_products</code> and <code>get_product</code></li>
+          <li><code>check_stock</code> per size</li>
+          <li><code>recommend_size</code> from height, weight and fit, starting from the waitlist size</li>
+          <li><code>shipping_quote</code> by state or country</li>
+          <li><code>track_order</code>, which needs the order number and the email or phone, so nobody can look up someone else's order</li>
+          <li><code>policy_lookup</code> for delivery, returns and care</li>
+          <li><code>handoff_to_human</code>: a WhatsApp link carrying the chat ID</li>
+        </ul>
+      </div>
+      <div class="sec"><span class="lbl">Rules it follows</span>
+        <ul class="bul">
+          <li>Never states stock, prices or dates without checking with a tool.</li>
+          <li>No refund promises beyond the policy.</li>
+          <li>Hands over on payment disputes, damaged items, anger or anything legal.</li>
+          <li>Replies in the customer's language, Pidgin included, and keeps it short.</li>
+          <li>Every chat is logged and reviewable in the admin inbox.</li>
+          <li>The OpenRouter key lives only in Supabase function secrets.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="lbl">Models on OpenRouter, list prices, September 2026</span>
+      <div class="tscroll">
+        <table class="spec">
+          <thead><tr><th>Role</th><th>Model</th><th>Per 1M tokens (in / out)</th><th>Per chat*</th></tr></thead>
+          <tbody>
+            <tr><td>Primary</td><td><code>anthropic/claude-haiku-4.5</code></td><td>$1 / $5</td><td>≈ $0.019</td></tr>
+            <tr><td>Fallback</td><td><code>google/gemini-2.5-flash</code></td><td>$0.30 / $2.50</td><td>≈ $0.007</td></tr>
+            <tr><td>Budget option</td><td><code>openai/gpt-5-mini</code></td><td>$0.25 / $2</td><td>≈ $0.006</td></tr>
+            <tr><td class="now">Nalto AI today</td><td class="now"><code>openai/gpt-4o-mini</code> via n8n</td><td class="now">–</td><td class="now">No tools or streaming</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="font-size:14px;color:var(--ink-2)">*A chat of about five turns: 12,500 input and 1,250 output tokens. A thousand chats a month on Haiku 4.5 costs about $19. GPT-5 mini can spend extra reasoning tokens, so we measure its speed before choosing it. Working name: Ask YOWA. You pick the final name and voice.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="foot wrap"><span>YOWA · Be You Be Different · 042</span><span>Site tech pack YW-WEB-01 · Rev A · Prepared by Nalto</span></footer>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches;
+
+  /* ── Live swirl: WebGL domain-warped bands in the waitlist's colours ── */
+  function createSwirl(canvas) {
+    let gl = null;
+    try { gl = canvas.getContext('webgl', { antialias: false, alpha: false }); } catch (e) { gl = null; }
+    if (!gl) return null;
+    const vs = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+    const fs = [
+      'precision mediump float;',
+      'uniform vec2 R;uniform float T;uniform vec2 M;uniform float X;',
+      'const vec3 IND=vec3(.2,.161,.478);const vec3 VIO=vec3(.663,.294,.949);',
+      'const vec3 VOID=vec3(.031,.024,.055);const vec3 CREAM=vec3(.953,.933,.886);',
+      'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),u.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),u.x),u.y);}',
+      'float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}',
+      'void main(){',
+      ' vec2 p=(gl_FragCoord.xy-.5*R)/min(R.x,R.y);',
+      ' vec2 m=(M-.5)*R/min(R.x,R.y);',
+      ' float d=length(p-m);float an=1.1*exp(-d*d*2.5);',
+      ' float c=cos(an),s=sin(an);vec2 pw=mat2(c,-s,s,c)*(p-m)+m;',
+      ' vec2 q=vec2(fb(pw*1.2+vec2(0.,T)),fb(pw*1.2+vec2(5.2,-T)));',
+      ' vec2 r=vec2(fb(pw*1.5+2.4*q+vec2(1.7,9.2)+.7*T),fb(pw*1.5+2.4*q+vec2(8.3,2.8)-.6*T));',
+      ' float v=fb(pw*1.1+3.*r);',
+      ' float b=sin((v*7.+length(r)*3.-T*1.6)*3.14159);',
+      ' float k=smoothstep(-.09,.09,b);',
+      ' vec3 col=mix(IND,VIO,k);',
+      ' float g=1.-smoothstep(.15,1.25,length(p*vec2(.85,1.05)));',
+      ' col=mix(VOID,col,.35+.65*g);',
+      ' col+=(h(gl_FragCoord.xy+T)-.5)*.035;',
+      ' float w=clamp(v*.9+.12*k,0.,1.);',
+      ' float t=X*1.25-.05;',
+      ' col=mix(CREAM,col,smoothstep(t-.05,t,w));',
+      ' gl_FragColor=vec4(col,1.);',
+      '}'
+    ].join('\n');
+    const compile = (type, src) => {
+      const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o);
+      return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null;
+    };
+    const v = compile(gl.VERTEX_SHADER, vs), f = compile(gl.FRAGMENT_SHADER, fs);
+    if (!v || !f) return null;
+    const pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    gl.useProgram(pr);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = { R: gl.getUniformLocation(pr, 'R'), T: gl.getUniformLocation(pr, 'T'), M: gl.getUniformLocation(pr, 'M'), X: gl.getUniformLocation(pr, 'X') };
+    const st = { speed: 1, mix: 0, mixTo: 0, t: 7.3, m: [.5, .5], mTo: [.5, .5], on: false, raf: 0, last: 0 };
+    function resize() {
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.6;
+      const w = Math.max(2, Math.round(canvas.clientWidth * scale)), h = Math.max(2, Math.round(canvas.clientHeight * scale));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+    }
+    function draw() {
+      resize();
+      gl.uniform2f(U.R, canvas.width, canvas.height); gl.uniform1f(U.T, st.t);
+      gl.uniform2f(U.M, st.m[0], st.m[1]); gl.uniform1f(U.X, st.mix);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function frame(now) {
+      const dt = Math.min(0.05, (now - st.last) / 1000 || 0); st.last = now;
+      st.t += dt * 0.12 * st.speed;
+      st.m[0] += (st.mTo[0] - st.m[0]) * 0.05; st.m[1] += (st.mTo[1] - st.m[1]) * 0.05;
+      st.mix += (st.mixTo - st.mix) * Math.min(1, dt * 2.4);
+      draw();
+      if (st.on) st.raf = requestAnimationFrame(frame);
+    }
+    return {
+      start() { if (st.on) return; if (reduced()) { st.mix = st.mixTo; draw(); return; } st.on = true; st.last = performance.now(); st.raf = requestAnimationFrame(frame); },
+      stop() { st.on = false; cancelAnimationFrame(st.raf); },
+      setSpeed(v) { st.speed = v; },
+      setMix(v) { st.mixTo = v; if (reduced() || !st.on) { st.mix = v; draw(); } },
+      pointer(x, y) { st.mTo = [x, y]; },
+      draw
+    };
+  }
+
+  /* ── The eye: the dot in the O follows the pointer and blinks ── */
+  function makeEye(logo, host) {
+    const g = logo.querySelector('.pupil-g'); if (!g) return;
+    const MAX = 26; let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    function loop() {
+      x += (tx - x) * 0.18; y += (ty - y) * 0.18;
+      g.setAttribute('transform', 'translate(' + x.toFixed(2) + ' ' + y.toFixed(2) + ')');
+      raf = (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) ? requestAnimationFrame(loop) : 0;
+    }
+    function look(cx, cy) {
+      if (reduced()) return;
+      const r = logo.getBoundingClientRect(); if (!r.width) return;
+      const s = r.width / 701, ex = r.left + 235.5 * s, ey = r.top + 89 * s;
+      const dx = cx - ex, dy = cy - ey, d = Math.hypot(dx, dy) || 1, k = Math.min(MAX, d / 8) / d;
+      tx = dx * k; ty = dy * k; if (!raf) raf = requestAnimationFrame(loop);
+    }
+    (host || window).addEventListener('pointermove', e => look(e.clientX, e.clientY), { passive: true });
+    (function blink() {
+      setTimeout(() => {
+        if (!reduced() && document.visibilityState === 'visible') { logo.classList.remove('blink'); void logo.offsetWidth; logo.classList.add('blink'); }
+        blink();
+      }, 3200 + Math.random() * 3800);
+    })();
+  }
+
+  /* ── Glitch with purpose: fires on events, never on a loop ── */
+  function makeGlitch(logo) {
+    const img = logo.querySelector('img'); const layers = $$('.gl', logo);
+    const url = 'url("' + img.getAttribute('src') + '")';
+    layers.forEach(l => { l.style.webkitMaskImage = url; l.style.maskImage = url; });
+    return function fire() {
+      if (reduced()) return;
+      const kf = a => [
+        { opacity: 0, transform: 'translate(0,0)' },
+        { opacity: .9, transform: 'translate(' + (-9 * a) + 'px,' + (2 * a) + 'px)', offset: .2 },
+        { opacity: .85, transform: 'translate(' + (6 * a) + 'px,' + (-3 * a) + 'px)', offset: .45 },
+        { opacity: .6, transform: 'translate(' + (-3 * a) + 'px,' + a + 'px)', offset: .7 },
+        { opacity: 0, transform: 'translate(0,0)' }
+      ];
+      if (layers[0]) layers[0].animate(kf(1), { duration: 520, easing: 'steps(6,end)' });
+      if (layers[1]) layers[1].animate(kf(-1), { duration: 520, delay: 40, easing: 'steps(6,end)' });
+      img.animate([
+        { transform: 'none', clipPath: 'inset(0 0 0 0)' },
+        { transform: 'translate(-7px) skewX(-5deg)', clipPath: 'inset(12% 0 58% 0)', offset: .2 },
+        { transform: 'translate(8px) skewX(4deg)', clipPath: 'inset(62% 0 8% 0)', offset: .45 },
+        { transform: 'translate(-4px)', clipPath: 'inset(38% 0 38% 0)', offset: .7 },
+        { transform: 'none', clipPath: 'inset(0 0 0 0)' }
+      ], { duration: 520, easing: 'steps(6,end)' });
+    };
+  }
+  window.__yowa = { createSwirl, makeEye, makeGlitch };
+
+  /* ── Cover hero: swirl + eye + countdown + door/till switch ── */
+  const hero = $('#hero'), canvas = $('#hero-swirl'), logo = $('#hero-logo');
+  const range = $('#drop-in'), out = $('#drop-in-out'), kick = $('#hero-kick'), note = $('#hero-note');
+  const swirl = createSwirl(canvas);
+  if (!swirl) { canvas.remove(); hero.classList.add('no-gl'); }
+  const fire = makeGlitch(logo);
+  makeEye(logo, hero);
+  const MAXS = 14 * 86400; let remaining = 0, last = Date.now(), wasLive = false;
+  const units = { d: $('[data-u="d"]', hero), h: $('[data-u="h"]', hero), m: $('[data-u="m"]', hero), s: $('[data-u="s"]', hero) };
+  const pad = n => String(n).padStart(2, '0');
+  const fmt = s => { const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60); return d ? d + 'd ' + h + 'h' : h ? h + 'h ' + m + 'm' : m ? m + 'm ' + (s % 60) + 's' : s + 's'; };
+  function paint() {
+    const s = Math.max(0, Math.floor(remaining)), live = s <= 0;
+    units.d.textContent = pad(Math.min(99, Math.floor(s / 86400))); units.h.textContent = pad(Math.floor(s % 86400 / 3600));
+    units.m.textContent = pad(Math.floor(s % 3600 / 60)); units.s.textContent = pad(s % 60);
+    out.textContent = live ? 'Live' : fmt(s);
+    hero.dataset.state = live ? 'live' : ''; logo.dataset.state = live ? 'live' : '';
+    kick.textContent = live ? 'The drop is live' : (s < 3600 ? 'Doors open soon' : 'Next drop loading');
+    note.textContent = live ? 'The drop is live. Circle members went in first; everyone else is in now.' : 'The swirl turns faster as the drop gets closer. Move the slider to feel it.';
+    if (live && !wasLive) fire();
+    wasLive = live;
+    if (swirl) swirl.setSpeed(live ? 3.2 : 0.45 + 2.4 * Math.pow(1 - Math.min(1, s / MAXS), 3));
+  }
+  function fromRange() { const v = +range.value / 100; remaining = MAXS * Math.pow(v, 3); last = Date.now(); paint(); }
+  range.addEventListener('input', fromRange);
+  fromRange();
+  setInterval(() => { const now = Date.now(); if (remaining > 0) remaining = Math.max(0, remaining - (now - last) / 1000); last = now; paint(); }, 1000);
+  hero.addEventListener('pointermove', e => {
+    if (!swirl) return; const r = hero.getBoundingClientRect();
+    swirl.pointer((e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height);
+  }, { passive: true });
+  $('#hero-glitch').addEventListener('click', fire);
+  const till = $('#till');
+  $('#hero-shop').addEventListener('click', () => {
+    hero.classList.add('is-day'); till.setAttribute('aria-hidden', 'false');
+    if (swirl) swirl.setMix(1);
+    setTimeout(() => $('#hero-door').focus({ preventScroll: true }), 650);
+  });
+  $('#hero-door').addEventListener('click', () => {
+    hero.classList.remove('is-day'); till.setAttribute('aria-hidden', 'true');
+    if (swirl) swirl.setMix(0);
+    $('#hero-shop').focus({ preventScroll: true });
+  });
+  if (swirl) {
+    new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? swirl.start() : swirl.stop()), { threshold: 0.05 }).observe(hero);
+    swirl.draw();
+  }
+  setTimeout(fire, 700);
+
+  /* ── Sheet bar: highlight the sheet in view ── */
+  const links = $$('.bar-nav a'); const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const nio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(l => l.removeAttribute('aria-current'));
+    const a = byId.get(e.target.id); if (!a) return;
+    a.setAttribute('aria-current', 'true');
+    const nav = a.parentElement; nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.clientWidth / 2, behavior: reduced() ? 'auto' : 'smooth' });
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  $$('.sheet').forEach(s => nio.observe(s));
+  /* ── Motion swatches ── */
+  const demos = {};
+
+  // S-01 signature write-on; the pen follows the ink height traced from the PNG
+  const RAW = [.6,.524,.422,.325,.322,.61,.476,.427,.336,.228,.353,.615,.541,.715,.627,.698,.786,.718,.618,.701,.707,.692,.655,.587,.658,.684,.553,.533,.604,.635,.575,.553,.655,.652,.647,.632,.613,.59,.55,.484,.729,.729,.732,.658,.732,.818,.729,.721,.721];
+  const PEN = RAW.map((v, i, a) => (a[Math.max(0, i - 1)] + v + a[Math.min(a.length - 1, i + 1)]) / 3);
+  const penY = x => { const f = x * (PEN.length - 1), i = Math.floor(f), k = f - i; return PEN[i] + ((PEN[Math.min(PEN.length - 1, i + 1)] - PEN[i]) * k); };
+  function writeSig(box, dur) {
+    const pen = box.querySelector('.pen');
+    if (reduced()) { box.style.setProperty('--p', 1); pen.style.opacity = 0; return; }
+    const t0 = performance.now(), D = dur || 1600, ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / D), e = ease(p), x = Math.min(1, Math.max(0, e * 1.1 - .05));
+      box.style.setProperty('--p', e.toFixed(4));
+      pen.style.left = (x * 100) + '%'; pen.style.top = (penY(x) * 100) + '%'; pen.style.opacity = p < 1 ? 1 : 0;
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  demos.sig = { sw: $('#sw-sig'), play: () => writeSig($('#sw-sig [data-sig]')) };
+
+  // S-02 the eye
+  const eyeLogo = $('#eye-logo');
+  makeEye(eyeLogo, $('#sw-eye .sw-stage'));
+  $$('#sw-eye [data-eye-state]').forEach(b => b.addEventListener('click', () => {
+    $$('#sw-eye [data-eye-state]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    eyeLogo.dataset.state = b.dataset.eyeState;
+  }));
+  demos.eye = { sw: $('#sw-eye'), play: () => { eyeLogo.classList.remove('blink'); void eyeLogo.offsetWidth; eyeLogo.classList.add('blink'); } };
+
+  // S-03 glitch with purpose
+  const gLogo = $('#glitch-logo'), gState = $('#glitch-state'), gFire = makeGlitch(gLogo);
+  gLogo.addEventListener('pointerenter', gFire);
+  $$('#sw-glitch [data-glitch]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.glitch; gFire();
+    gLogo.dataset.state = k === 'live' ? 'live' : k === 'gone' ? 'gone' : '';
+    gState.textContent = k === 'live' ? 'Live now' : k === 'gone' ? "It's gone" : 'Next drop loading';
+    gState.classList.toggle('live', k === 'live');
+  }));
+  demos.glitch = { sw: $('#sw-glitch'), play: gFire };
+
+  // S-04 split-flap countdown
+  (function () {
+    const sw = $('#sw-count'), flaps = $$('.flap', sw);
+    const target = Date.now() + (((5 * 24 + 14) * 3600) + 7 * 60 + 33) * 1000;
+    let timer = 0;
+    const digits = () => { const s = Math.max(0, Math.floor((target - Date.now()) / 1000)); return pad(Math.min(99, Math.floor(s / 86400))) + pad(Math.floor(s % 86400 / 3600)) + pad(Math.floor(s % 3600 / 60)) + pad(s % 60); };
+    function render(anim) {
+      const str = digits();
+      flaps.forEach((f, i) => {
+        const cur = f.querySelector('.fl-cur'), nx = f.querySelector('.fl-next'), ch = str[i];
+        if (cur.textContent === ch) return;
+        if (!anim || reduced()) { cur.textContent = ch; return; }
+        nx.textContent = ch; f.classList.remove('flip'); void f.offsetWidth; f.classList.add('flip');
+        setTimeout(() => { cur.textContent = ch; f.classList.remove('flip'); }, 390);
+      });
+    }
+    render(false);
+    sw.addEventListener('sw:in', () => { if (!timer) timer = setInterval(() => render(true), 1000); });
+    sw.addEventListener('sw:out', () => { clearInterval(timer); timer = 0; });
+    demos.count = { sw, play: () => { flaps.forEach(f => { f.querySelector('.fl-cur').textContent = '0'; }); render(true); } };
+  })();
+
+  // S-05 Be You Be Different beat
+  (function () {
+    const sw = $('#sw-bybd'), word = $('#bybd-word'), grid = $('#bybd-grid'), you = $('[data-you]', sw), input = $('#bybd-name');
+    const name = () => (input.value.trim() || 'You').slice(0, 14);
+    input.addEventListener('input', () => { you.textContent = name(); });
+    let timers = [];
+    function play() {
+      timers.forEach(clearTimeout); timers = [];
+      if (reduced()) { you.textContent = name(); return; }
+      const seq = ['Be', name(), 'Be', 'Different'];
+      grid.hidden = true; word.hidden = false;
+      seq.forEach((w, i) => timers.push(setTimeout(() => {
+        word.textContent = w; word.classList.toggle('w', i === 1 || i === 2);
+        word.animate([{ transform: 'scale(1.35)', opacity: 0, filter: 'blur(6px)' }, { transform: 'scale(1)', opacity: 1, filter: 'blur(0px)' }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }, i * 650)));
+      timers.push(setTimeout(() => { word.hidden = true; grid.hidden = false; you.textContent = name(); grid.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300 }); }, seq.length * 650 + 500));
+    }
+    demos.bybd = { sw, play };
+  })();
+
+  // S-06 scroll-speed ticker
+  (function () {
+    const sw = $('#sw-ticker'), rows = $$('.tick-track', sw), meter = $('[data-speed]', sw);
+    const xs = [0, -1], w = [1, 1]; let v = 0, lastY = window.scrollY, lastT = performance.now(), on = false, raf = 0;
+    const measure = () => rows.forEach((r, i) => { w[i] = r.firstElementChild.getBoundingClientRect().width || 1; });
+    function frame(now) {
+      const dt = Math.min(64, now - lastT); lastT = now;
+      const y = window.scrollY, inst = (y - lastY) / Math.max(dt, 1); lastY = y;
+      v += (inst - v) * 0.12;
+      const speed = 0.04 + Math.min(3, Math.abs(v)) * 0.55;
+      xs[0] -= speed * dt; xs[1] += speed * dt * 0.8;
+      rows.forEach((r, i) => {
+        while (xs[i] <= -w[i]) xs[i] += w[i]; while (xs[i] > 0) xs[i] -= w[i];
+        const sk = Math.max(-8, Math.min(8, v * 5)) * (i ? -1 : 1);
+        r.style.transform = 'translate3d(' + xs[i].toFixed(1) + 'px,0,0) skewX(' + sk.toFixed(2) + 'deg)';
+      });
+      meter.textContent = Math.abs(v).toFixed(2);
+      if (on) raf = requestAnimationFrame(frame);
+    }
+    const start = () => { if (on || reduced()) return; on = true; measure(); lastT = performance.now(); lastY = window.scrollY; raf = requestAnimationFrame(frame); };
+    const stop = () => { on = false; cancelAnimationFrame(raf); };
+    sw.addEventListener('sw:in', start); sw.addEventListener('sw:out', stop);
+    addEventListener('resize', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    demos.ticker = { sw, play: () => { v = 2.5; start(); } };
+  })();
+
+  // S-07 Worn By wall: drag, throw, open the look
+  (function () {
+    const sw = $('#sw-wall'), stage = $('.st-wall', sw), track = $('.wall-track', sw), look = $('.look', sw);
+    let x = 0, v = 0, half = 1, drag = false, lastX = 0, lastT = 0, moved = 0, on = false, raf = 0, lf = 0, pid = null;
+    const measure = () => { half = track.scrollWidth / 2 || 1; };
+    const wrap = () => { while (x <= -half) x += half; while (x > 0) x -= half; };
+    const put = () => { wrap(); track.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)'; };
+    function frame(now) {
+      const dt = Math.min(48, now - lf); lf = now;
+      if (!drag) {
+        if (Math.abs(v) > 0.01) { x += v * dt; v *= Math.pow(0.94, dt / 16); }
+        else if (!reduced() && look.hidden) x -= 0.025 * dt;
+      }
+      put();
+      if (on) raf = requestAnimationFrame(frame);
+    }
+    const start = () => { if (on) return; on = true; measure(); lf = performance.now(); raf = requestAnimationFrame(frame); };
+    const stop = () => { on = false; cancelAnimationFrame(raf); };
+    function openLook(t) {
+      $('.look-cat', look).textContent = t.dataset.cat; $('.look-name', look).textContent = t.dataset.name;
+      const ol = $('.look-pieces', look); ol.textContent = '';
+      t.dataset.pieces.split('|').forEach(p => { const li = document.createElement('li'); li.textContent = p; ol.appendChild(li); });
+      look.hidden = false;
+      if (!reduced()) {
+        const tr = t.getBoundingClientRect(), lr = look.getBoundingClientRect();
+        look.animate([
+          { transformOrigin: '0 0', transform: 'translate(' + (tr.left - lr.left) + 'px,' + (tr.top - lr.top) + 'px) scale(' + (tr.width / lr.width) + ',' + (tr.height / lr.height) + ')', opacity: .5 },
+          { transformOrigin: '0 0', transform: 'none', opacity: 1 }
+        ], { duration: 520, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }
+      $('.look-close', look).focus({ preventScroll: true });
+    }
+    const closeLook = () => { look.hidden = true; stage.focus({ preventScroll: true }); };
+    stage.addEventListener('pointerdown', e => {
+      if (!look.hidden) return;
+      drag = true; moved = 0; lastX = e.clientX; lastT = performance.now(); v = 0; pid = e.pointerId;
+      try { stage.setPointerCapture(pid); } catch (_) { }
+      stage.classList.add('grabbing');
+    });
+    stage.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const now = performance.now(), dx = e.clientX - lastX;
+      x += dx; moved += Math.abs(dx); v = dx / Math.max(1, now - lastT); lastX = e.clientX; lastT = now;
+      if (!on) put();
+    });
+    stage.addEventListener('pointerup', e => {
+      if (!drag) return;
+      drag = false; stage.classList.remove('grabbing');
+      try { stage.releasePointerCapture(pid); } catch (_) { }
+      if (moved < 6) { const el = document.elementFromPoint(e.clientX, e.clientY), t = el && el.closest('.wtile'); if (t) openLook(t); }
+    });
+    stage.addEventListener('pointercancel', () => { drag = false; stage.classList.remove('grabbing'); });
+    $('.look-close', look).addEventListener('click', closeLook);
+    $$('.wtile', sw).forEach(t => t.addEventListener('click', e => { if (e.detail === 0) openLook(t); }));
+    stage.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { v = 0; x += 176; if (!on) put(); }
+      else if (e.key === 'ArrowRight') { v = 0; x -= 176; if (!on) put(); }
+      else if (e.key === 'Escape' && !look.hidden) closeLook();
+    });
+    sw.addEventListener('sw:in', start); sw.addEventListener('sw:out', stop);
+    addEventListener('resize', measure);
+    demos.wall = { sw, play: () => { v = -1.4; start(); } };
+  })();
+
+  // S-08 living product card
+  (function () {
+    const sw = $('#sw-card'), stage = $('.st-card', sw), media = $('.pc-media', sw), add = $('.pc-add', sw), bag = $('.bag', sw), n = $('[data-bag]', sw);
+    const stockB = $('.pc-stock b', sw), stockS = $('.pc-stock span', sw);
+    let count = 0, filmT = 0;
+    const film = on => { media.classList.toggle('filming', on && !reduced()); media.setAttribute('aria-label', on ? 'Pause product film' : 'Play product film'); };
+    media.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') film(true); });
+    media.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') film(false); });
+    media.addEventListener('click', () => film(!media.classList.contains('filming')));
+    stage.addEventListener('pointermove', e => {
+      if (reduced() || e.pointerType !== 'mouse') return;
+      const r = add.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      add.style.transform = Math.hypot(dx, dy) < 110 ? 'translate(' + (dx * .22).toFixed(1) + 'px,' + (dy * .22).toFixed(1) + 'px)' : '';
+    });
+    stage.addEventListener('pointerleave', () => { add.style.transform = ''; });
+    $$('.pc-size', sw).forEach(b => b.addEventListener('click', () => {
+      $$('.pc-size', sw).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      stockB.textContent = b.dataset.left; stockS.textContent = b.dataset.note || 'ships in 2 days';
+      add.textContent = /Sold out/.test(b.dataset.left) ? 'Notify me' : 'Add to bag';
+    }));
+    add.addEventListener('click', () => {
+      if (add.textContent === 'Notify me') { stockS.textContent = "we'll message you when it's back"; return; }
+      count++;
+      if (reduced()) { n.textContent = count; return; }
+      const sr = stage.getBoundingClientRect(), ar = add.getBoundingClientRect(), br = bag.getBoundingClientRect();
+      const dot = document.createElement('span'); dot.className = 'fly'; stage.appendChild(dot);
+      const x0 = ar.left - sr.left + ar.width / 2, y0 = ar.top - sr.top + ar.height / 2;
+      const dx = br.left - sr.left + br.width / 2 - x0, dy = br.top - sr.top + br.height / 2 - y0;
+      dot.style.left = x0 + 'px'; dot.style.top = y0 + 'px';
+      const a = dot.animate([
+        { transform: 'translate(0px,0px) scale(1)' },
+        { transform: 'translate(' + (dx * .5) + 'px,' + (dy * .5 - 70) + 'px) scale(.85)', offset: .5 },
+        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.35)' }
+      ], { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)' });
+      a.onfinish = () => { dot.remove(); n.textContent = count; bag.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 360, easing: 'cubic-bezier(.16,1,.3,1)' }); };
+    });
+    demos.card = { sw, play: () => { film(true); clearTimeout(filmT); filmT = setTimeout(() => film(false), 3200); } };
+  })();
+
+  // S-09 Circle early-access gate
+  (function () {
+    const sw = $('#sw-gate'), form = $('#gate-form'), input = $('#gate-code'), msg = $('.gate-msg', sw), row = $('.gate-row', sw), inside = $('.gate-in', sw), cl = $('.c-left', sw), cr = $('.c-right', sw);
+    let timers = [];
+    const shake = () => row.animate([
+      { transform: 'translateX(0)', filter: 'none' },
+      { transform: 'translateX(-12px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' },
+      { transform: 'translateX(10px)', filter: 'drop-shadow(-3px 0 0 #2BE8FF) drop-shadow(3px 0 0 #A65BFF)' },
+      { transform: 'translateX(-7px)', filter: 'none' },
+      { transform: 'translateX(4px)', filter: 'none' },
+      { transform: 'translateX(0)', filter: 'none' }
+    ], { duration: 520, easing: 'ease-out' });
+    function submit() {
+      const ok = input.value.trim().toUpperCase() === 'BYBD';
+      if (!ok) { msg.textContent = "That code isn't right. Circle members get theirs by email."; msg.classList.add('bad'); if (!reduced()) shake(); return; }
+      msg.classList.remove('bad'); msg.textContent = 'Code accepted.';
+      if (reduced()) { form.hidden = true; inside.hidden = false; return; }
+      [cl, cr].forEach(c => c.getAnimations().forEach(a => a.cancel()));
+      const close = [cl, cr].map(c => c.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 420, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' }));
+      close[0].onfinish = () => {
+        form.hidden = true; inside.hidden = false;
+        [cl, cr].forEach(c => c.animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(0)' }], { duration: 640, delay: 140, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' }));
+      };
+    }
+    form.addEventListener('submit', e => { e.preventDefault(); submit(); });
+    function reset() {
+      timers.forEach(clearTimeout); timers = [];
+      [cl, cr].forEach(c => c.getAnimations().forEach(a => a.cancel()));
+      inside.hidden = true; form.hidden = false; input.value = ''; msg.textContent = 'Demo code: BYBD'; msg.classList.remove('bad');
+    }
+    $('#gate-reset').addEventListener('click', reset);
+    demos.gate = { sw, play: () => { reset(); input.value = 'WOKE'; submit(); timers.push(setTimeout(() => { input.value = 'BYBD'; submit(); }, 1100)); } };
+  })();
+
+  // S-10 concierge, scripted
+  (function () {
+    const sw = $('#sw-chat'), chat = $('#chat'), body = $('.chat-body', sw), quick = $('.chat-quick', sw);
+    const SCRIPT = [
+      ['user', 'Is the Liberty raglan boxy? On the waitlist I said L.'],
+      ['tool', 'get_product · liberty-raglan · fit, stock'],
+      ['bot', "It's a relaxed fit, not boxy, so L is right for you. There are 4 left in L. Want me to hold one while you check out?"],
+      ['user', "Where's my order? YW-2610-8K3F"],
+      ['tool', 'track_order · YW-2610-8K3F · email matched'],
+      ['bot', 'Signed off and packed this morning. It is with the rider and should reach you tomorrow before 6pm. Want updates on WhatsApp?']
+    ];
+    let timers = [];
+    const add = (who, text, anim) => {
+      const el = document.createElement('div'); el.className = 'msg ' + who;
+      if (who === 'tool') { const c = document.createElement('code'); c.textContent = text; el.appendChild(c); } else el.textContent = text;
+      body.appendChild(el);
+      if (anim) el.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.16,1,.3,1)' });
+      body.scrollTop = body.scrollHeight;
+    };
+    const fill = () => { body.textContent = ''; SCRIPT.forEach(([w, t]) => add(w, t, false)); quick.hidden = false; };
+    function play() {
+      timers.forEach(clearTimeout); timers = []; body.textContent = ''; quick.hidden = true; chat.classList.remove('thinking');
+      if (reduced()) { fill(); return; }
+      let t = 250;
+      SCRIPT.forEach(([w, text]) => {
+        if (w === 'bot') {
+          timers.push(setTimeout(() => {
+            chat.classList.add('thinking');
+            const ty = document.createElement('div'); ty.className = 'msg bot typing'; ty.setAttribute('aria-label', 'Typing');
+            ty.append(document.createElement('i'), document.createElement('i'), document.createElement('i'));
+            body.appendChild(ty); body.scrollTop = body.scrollHeight;
+            timers.push(setTimeout(() => { ty.remove(); chat.classList.remove('thinking'); add(w, text, true); }, 1000));
+          }, t));
+          t += 2500;
+        } else { timers.push(setTimeout(() => add(w, text, true), t)); t += w === 'tool' ? 700 : 1000; }
+      });
+      timers.push(setTimeout(() => { quick.hidden = false; }, t));
+    }
+    fill();
+    demos.chat = { sw, play };
+  })();
+
+  // S-11 pay, then a signed receipt
+  (function () {
+    const sw = $('#sw-pay'), order = $('#pay-order'), btn = $('.pay-btn', sw), sheet = $('.pay-sheet', sw), status = $('.pay-status', sw), receipt = $('.receipt', sw);
+    let timers = [];
+    function reset() {
+      timers.forEach(clearTimeout); timers = [];
+      sheet.hidden = true; receipt.hidden = true; order.hidden = false; btn.disabled = false; btn.textContent = btn.dataset.label;
+      status.classList.remove('ok'); status.textContent = 'Waiting for payment…';
+    }
+    function run() {
+      reset(); btn.disabled = true; btn.textContent = 'Opening secure payment…';
+      const r = reduced(), q = (fn, ms) => timers.push(setTimeout(fn, r ? 0 : ms));
+      q(() => { sheet.hidden = false; if (!r) sheet.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); }, 600);
+      q(() => { status.textContent = 'Payment confirmed'; status.classList.add('ok'); }, 2000);
+      q(() => {
+        sheet.hidden = true; order.hidden = true; receipt.hidden = false;
+        if (!r) receipt.animate([{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
+        writeSig($('[data-sig]', receipt), 1500);
+      }, 2800);
+    }
+    btn.addEventListener('click', run);
+    $('#pay-reset').addEventListener('click', reset);
+    demos.pay = { sw, play: run };
+  })();
+
+  // Replay buttons, play-once-on-arrival, pause loops off screen
+  $$('[data-replay]').forEach(b => b.addEventListener('click', () => { const d = demos[b.dataset.replay]; if (d) d.play(); }));
+  const played = new WeakSet();
+  Object.values(demos).forEach(d => d.sw.addEventListener('sw:in', () => { if (played.has(d.sw)) return; played.add(d.sw); if (!reduced()) d.play(); }));
+  const sio = new IntersectionObserver(es => es.forEach(e => e.target.dispatchEvent(new CustomEvent(e.isIntersecting ? 'sw:in' : 'sw:out'))), { threshold: 0.3 });
+  $$('.swatch').forEach(s => sio.observe(s));
+  /*SCRIPT-MORE*/
+})();
+</script>
