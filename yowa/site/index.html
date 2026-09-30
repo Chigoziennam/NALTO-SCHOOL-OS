@@ -506,8 +506,7 @@ const CONFIG = {
   DROP_NAME: 'Drop 01',
   DROP_AT: null,                 // e.g. '2026-10-17T18:00:00+01:00' starts the countdown; null shows "Loading"
   CODE: 'BYBD',                  // hype gate for the shop. Real protection moves server-side with Paystack.
-  SUPABASE_URL: 'https://emclkprkvzrbqmwbbwqu.supabase.co',
-  SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtY2xrcHJrdnpyYnFtd2Jid3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2MTUzOTQsImV4cCI6MjA2NDE5MTM5NH0.JWIsqxs1C91sQpJA1cuDOkpCgiy0b6qYi2d0EEAhykc', // public anon key, insert-only on the waitlist table
+  JOIN_ENDPOINT: '/api/join',  // sign-ups reach Supabase through a Vercel function, so no key sits in the page
   FORMSPREE: 'https://formspree.io/f/mbgjaedg',
   PAYSTACK_PUBLIC_KEY: '',       // pk_live_… once prices are in
   CHAT_ENDPOINT: '/api/chat',    // OpenRouter through a Vercel function
@@ -849,17 +848,17 @@ const CELEBS = [
     wg.appendChild(el);
   });
 
-  /* ── The list: same Supabase waitlist table + Formspree backup ── */
+  /* ── The list: same Supabase waitlist table (via /api/join) + Formspree backup ── */
   $('#join').addEventListener('submit', e => {
     e.preventDefault(); const f = e.target, msg = $('#form-msg'), btn = f.querySelector('button');
     const row = { name: f.name.value.trim(), email: f.email.value.trim(), size: f.size.value || null, instagram: f.instagram.value.trim() || null };
     if (!row.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(row.email)) { msg.textContent = 'Add your name and a real email so the code can reach you.'; return; }
     btn.disabled = true; btn.textContent = 'Adding you…'; msg.textContent = '';
     if (CONFIG.PREVIEW) { f.hidden = true; $('#done').hidden = false; $('#done p').textContent = 'Preview only. On the live site this adds you to the YOWA list in Supabase.'; return; }
-    const sb = CONFIG.SUPABASE_URL.startsWith('http') ? fetch(CONFIG.SUPABASE_URL + '/rest/v1/waitlist', { method: 'POST', headers: { apikey: CONFIG.SUPABASE_ANON, Authorization: 'Bearer ' + CONFIG.SUPABASE_ANON, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(row) }) : Promise.reject(new Error('no supabase'));
+    const sb = fetch(CONFIG.JOIN_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(row) });
     const fd = new FormData(f); const fsp = fetch(CONFIG.FORMSPREE, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
     Promise.allSettled([sb, fsp]).then(res => {
-      const ok = res.some(r => r.status === 'fulfilled' && (r.value.ok || r.value.status === 409));
+      const ok = res.some(r => r.status === 'fulfilled' && r.value.ok);
       if (!ok) { btn.disabled = false; btn.textContent = 'Try again'; msg.textContent = "That didn't go through. Check your connection and try again."; return; }
       f.hidden = true; $('#done').hidden = false; store.set('yowa-joined', true);
     });

@@ -23,4 +23,4 @@ Missing photos fall back to the swirl + line drawings, so the site never looks b
 ## Vercel
 - Root directory: `yowa/site`
 - Env var `OPENROUTER_API_KEY` for the Ask YOWA chat (`api/chat.js`)
-- Sign-ups write to the same Supabase `waitlist` table as the waitlist site (insert-only anon key)
+- Env vars `SUPABASE_URL` and `SUPABASE_ANON_KEY` for sign-ups (`api/join.js`). They write to the same Supabase `waitlist` table as the waitlist site, and the key stays on the server. Formspree still gets a copy either way.
