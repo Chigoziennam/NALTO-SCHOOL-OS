@@ -32,3 +32,10 @@ Missing photos fall back to the swirl + line drawings, so the site never looks b
 - Root directory: `yowa/site`
 - Env var `OPENROUTER_API_KEY` for the Ask YOWA chat (`api/chat.js`)
 - Env vars `SUPABASE_URL` and `SUPABASE_ANON_KEY` for sign-ups (`api/join.js`). They write to the same Supabase `waitlist` table as the waitlist site, and the key stays on the server. Formspree still gets a copy either way.
+
+## Domain: yowabybd.com (registered at Hostinger)
+Add `yowabybd.com` in Vercel → Project → Settings → Domains (let it redirect `www` to it), then do one of these in Hostinger hPanel → Domains → yowabybd.com:
+- **Nameservers (simplest):** change them to `ns1.vercel-dns.com` and `ns2.vercel-dns.com`. Vercel then runs all DNS for the domain. Email records (MX) would need adding in Vercel later.
+- **Or keep Hostinger's nameservers** and edit the DNS records: delete the parking `A @ 2.57.91.91` and `CNAME www → yowabybd.com`, then add `A @ 76.76.21.21` and `CNAME www → cname.vercel-dns.com`. If Vercel's Domains page shows different values for the project, use those.
+
+Vercel issues the HTTPS certificate on its own once the domain points at it.
