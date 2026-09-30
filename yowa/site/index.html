@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YOWA</title>
+<meta name="description" content="YOWA. Be You Be Different. Handmade raglan long sleeves, caps and skull caps in limited runs. When it's gone, it's gone.">
+<meta property="og:title" content="YOWA · Be You Be Different">
+<meta property="og:description" content="Handmade, limited runs. Get the code before the drop.">
+<meta property="og:image" content="img/skateboard.jpg">
+<meta name="theme-color" content="#08060E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap">
+<style>
+/* YOWA main site. Night mode throughout; the live swirl sits behind the whole page and the photos move on top of it. */
+:root{
+  --void:#08060E; --void-2:#0E0A1A; --panel:#140E26;
+  --purple:#7A2FE0; --purple-l:#A65BFF; --purple-d:#4A1A94;
+  --red:#E23A2E; --cream:#F3EEE2; --ink:#EFEAF7; --mut:#9A91B3; --cyan:#2BE8FF;
+  --line:rgba(166,91,255,.22); --glow:rgba(140,60,255,.55);
+  --f-display:"Anton",Impact,"Arial Narrow",sans-serif;
+  --f-body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-label:"Syncopate","Arial Black",Arial,sans-serif;
+  --f-mantra:"Bungee","Arial Black",Impact,sans-serif;
+  --e-settle:cubic-bezier(.16,1,.3,1); --e-pull:cubic-bezier(.65,0,.35,1);
+  --gut:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--void);color:var(--ink);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+img{max-width:100%}
+[hidden]{display:none!important}
+::selection{background:var(--purple);color:#fff}
+:focus-visible{outline:2px solid var(--purple-l);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{padding-inline:var(--gut)}
+.label{font:700 9px/1.4 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
+.display{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.02em;line-height:.9;font-weight:400}
+
+/* ── Live background: the swirl behind everything ── */
+#swirl{position:fixed;inset:0;width:100%;height:100%;z-index:-3;display:block;background:#1a1036 url(img/brand/bg-swirl-full.jpg) center/cover}
+.veil{position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(130% 100% at 50% 30%,rgba(14,7,28,.25),rgba(8,4,18,.86))}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ── Header ── */
+.top{position:fixed;left:0;right:0;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+.top.stuck{background:rgba(8,6,14,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
+.top-in{display:flex;align-items:center;gap:18px;height:62px}
+.brand{display:block;width:84px;height:22px;background:#fff;-webkit-mask:url(img/brand/yowa-logo.png) center/contain no-repeat;mask:url(img/brand/yowa-logo.png) center/contain no-repeat;flex:none}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a,.bag-btn,.menu-btn{font:700 8.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:11px 12px;border-radius:999px;border:1px solid transparent;background:none;cursor:pointer;white-space:nowrap}
+.nav a:hover{border-color:var(--line)}
+.bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
+.bag-btn b{color:var(--purple-l)}
+.menu-btn{display:none;border-color:var(--line)}
+@media (max-width:820px){.nav{display:none}.menu-btn{display:block;margin-left:auto}}
+.sheet-menu{position:fixed;inset:0;z-index:70;background:rgba(8,6,14,.96);display:grid;align-content:center;justify-items:center;gap:6px;padding:24px}
+.sheet-menu a{font:400 clamp(40px,12vw,64px)/1.05 var(--f-display);text-transform:uppercase;text-decoration:none}
+.sheet-menu a:hover{color:var(--purple-l)}
+.sheet-menu button{margin-top:18px}
+
+/* ── Hero ── */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden;isolation:isolate}
+.hero-photo{position:absolute;inset:-6%;z-index:-1;background-position:center 30%;background-size:cover;mix-blend-mode:luminosity;opacity:.9;filter:contrast(1.12) saturate(0);animation:ken 26s ease-in-out infinite alternate;will-change:transform}
+.hero-photo.none{display:none}
+@keyframes ken{from{transform:scale(1.02) translate3d(var(--px,0),var(--py,0),0)}to{transform:scale(1.12) translate3d(var(--px,0),var(--py,0),0) rotate(.6deg)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(8,6,14,.55) 0%,rgba(8,6,14,0) 30%,rgba(8,6,14,0) 60%,rgba(8,6,14,.9) 100%);pointer-events:none}
+.hero-in{display:grid;justify-items:center;align-content:center;text-align:center;gap:18px;padding:110px var(--gut) 40px}
+.sig{position:absolute;left:var(--gut);top:84px;width:clamp(96px,12vw,150px)}
+.sig img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 12px rgba(166,91,255,.6));-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%))}
+.pen{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px var(--purple-l);opacity:0;pointer-events:none}
+.kick{display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;padding:10px 18px;border:1px solid rgba(166,91,255,.45);border-radius:999px;background:rgba(20,10,45,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.kick i{width:7px;height:7px;border-radius:50%;background:var(--purple-l);animation:pulse 1.6s ease infinite}
+.live .kick{border-color:var(--red)} .live .kick i{background:var(--red)}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(166,91,255,0);opacity:.6}}
+.logo{position:relative;width:min(88vw,760px);line-height:0}
+.logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 34px var(--glow))}
+.logo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pupil{fill:#fff;transform-box:fill-box;transform-origin:center;transition:fill .3s}
+.logo.blink .pupil{animation:blink .22s ease-in-out}
+@keyframes blink{50%{transform:scaleY(.08)}}
+.live .logo .pupil{fill:var(--red)}
+.gl{position:absolute;inset:0;opacity:0;pointer-events:none;mix-blend-mode:screen;-webkit-mask:url(img/brand/yowa-logo-nodot.png) center/contain no-repeat;mask:url(img/brand/yowa-logo-nodot.png) center/contain no-repeat}
+.gl.a{background:var(--purple-l)} .gl.b{background:var(--cyan)}
+.mantra{margin:0;font:400 clamp(18px,3.4vw,32px)/1.2 var(--f-mantra)}
+.mantra i{font-style:normal;color:var(--purple-l);text-shadow:0 0 18px rgba(166,91,255,.55)}
+.mantra i:nth-child(2),.mantra i:nth-child(3){color:#fff;text-shadow:0 0 18px rgba(255,255,255,.45),0 0 34px rgba(166,91,255,.5)}
+.cd{display:flex;gap:clamp(6px,1.4vw,12px)}
+.seg{min-width:clamp(62px,10vw,86px);padding:12px 6px 10px;border-radius:14px;background:rgba(20,14,34,.6);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.seg b{display:block;font:400 clamp(28px,6vw,48px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.seg span{display:block;margin-top:6px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.live .seg b{color:#FF6B5E}
+.hero-note{font-size:14px;color:rgba(239,234,247,.85);max-width:42ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:16px 22px;border-radius:999px;border:1px solid rgba(166,91,255,.55);background:rgba(8,6,14,.4);color:#fff;cursor:pointer;transition:transform .35s var(--e-settle),border-color .2s,background .2s;overflow:hidden}
+.btn:hover{border-color:var(--purple-l)}
+.btn.solid{background:linear-gradient(100deg,var(--purple),var(--purple-l));border-color:transparent;box-shadow:0 12px 34px rgba(122,47,224,.45)}
+.btn.solid::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sweep 3.4s ease-in-out infinite}
+@keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+/* ── Ticker ── */
+.ticker{border-block:1px solid var(--line);background:rgba(8,6,14,.55);overflow:hidden;white-space:nowrap;padding-block:10px}
+.ticker.alt{background:var(--purple);border:0;padding-block:12px}
+.tt{display:inline-flex;will-change:transform}
+.tt span{padding-right:.4em;font:700 11px/1.4 var(--f-label);letter-spacing:.26em;text-transform:uppercase;color:var(--purple-l)}
+.ticker.alt .tt span{font:400 clamp(26px,4vw,44px)/1 var(--f-display);letter-spacing:.03em;color:#fff}
+
+/* ── Sections ── */
+section{position:relative}
+.sec{padding-block:clamp(72px,11vw,140px)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:clamp(28px,4vw,48px)}
+.sec-head h2{margin:0;font:400 clamp(52px,11vw,150px)/.85 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
+.sec-head p{max-width:44ch;color:rgba(239,234,247,.82);margin:0}
+.panel{background:rgba(8,6,14,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+
+/* ── The drop (Corteiz-plain grid) ── */
+.drop-bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
+.lockstate{display:flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase}
+.lockstate i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(226,58,46,.2)}
+.unlocked .lockstate i{background:#3ADB7A;box-shadow:0 0 0 4px rgba(58,219,122,.2)}
+.gate{display:flex;gap:8px}
+.gate input{width:min(180px,40vw);background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:999px;padding:12px 16px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#fff}
+.gate input::placeholder{color:var(--mut);letter-spacing:.14em}
+.gate input:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.2)}
+.gate-msg{font-size:13px;color:var(--mut);min-height:1.4em;margin:0}
+.gate-msg.bad{color:#FF8A7E}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.6vw,20px)}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:540px){.grid{grid-template-columns:1fr}}
+.card{display:grid;gap:12px;text-align:left;border:0;background:none;padding:0;cursor:pointer;color:inherit}
+.frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate}
+.frame::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.55)}
+.frame .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
+.frame .art svg{width:66%;height:auto;filter:drop-shadow(0 0 16px rgba(166,91,255,.7))}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--e-settle),opacity .5s}
+.frame img+img{opacity:0}
+.card:hover .frame img:first-of-type{transform:scale(1.06)}
+.card:hover .frame img+img{opacity:1}
+.frame .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(166,91,255,.35) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
+.card:hover .sheen{animation:shine 1.1s var(--e-pull)}
+@keyframes shine{to{transform:translateX(120%)}}
+.frame .tag{position:absolute;left:10px;top:10px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:7px 8px;border-radius:999px;background:rgba(8,6,14,.7);border:1px solid var(--line)}
+.frame .tag.red{border-color:var(--red);color:#FF8A7E}
+.card-row{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.card-name{font:400 clamp(22px,2.6vw,30px)/1 var(--f-display);text-transform:uppercase}
+.card-price{font:600 14px/1 var(--f-body);white-space:nowrap}
+.card-sub{font-size:13px;color:var(--mut);margin-top:-6px}
+.flat{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+.flat .seam{stroke-width:1.6;stroke-dasharray:5 5}
+
+/* ── Manifesto ── */
+.mani{max-width:1100px}
+.mani p{margin:0;font:400 clamp(34px,6.4vw,84px)/.98 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
+.mani .w{opacity:.22;transition:opacity .5s ease,color .5s}
+.mani .w.on{opacity:1}
+.mani .w.hot{color:var(--purple-l)}
+.mani-sign{display:flex;align-items:center;gap:18px;margin-top:34px;flex-wrap:wrap}
+.mani-sign img{width:150px;height:auto;filter:drop-shadow(0 0 12px rgba(166,91,255,.6))}
+.mani-sign span{font:700 9px/1.6 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
+@media (prefers-reduced-motion:reduce){.mani .w{opacity:1}}
+
+/* ── Gallery: in real life ── */
+.rail{position:relative;overflow:hidden;cursor:grab;touch-action:pan-y;padding-block:6px}
+.rail.grabbing{cursor:grabbing}
+.rail-track{display:flex;gap:14px;width:max-content;will-change:transform;padding-inline:var(--gut)}
+.shot{flex:none;width:clamp(240px,30vw,420px);aspect-ratio:3/4;border:0;padding:0;border-radius:8px;overflow:hidden;position:relative;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;cursor:inherit;isolation:isolate}
+.shot::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.5)}
+.shot img{position:absolute;inset:-8% -12%;width:124%;height:116%;object-fit:cover;transform:translate3d(var(--sx,0),0,0);will-change:transform}
+.shot .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
+.shot .art svg{width:58%;height:auto;filter:drop-shadow(0 0 16px rgba(166,91,255,.7))}
+.shot .cap{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:space-between;align-items:center;font:700 8px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase}
+.shot .cap i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1.6s infinite}
+.rail-hint{display:flex;justify-content:space-between;gap:12px;margin-top:16px}
+.lightbox{position:fixed;inset:0;z-index:80;background:rgba(8,6,14,.94);display:grid;place-items:center;padding:24px}
+.lightbox figure{margin:0;max-width:min(92vw,900px);max-height:86svh;display:grid;gap:12px;justify-items:center}
+.lightbox .lb-media{position:relative;width:min(92vw,720px);aspect-ratio:3/4;max-height:78svh;border-radius:10px;overflow:hidden;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;cursor:zoom-in}
+.lightbox .lb-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--e-settle)}
+.lightbox .lb-media.zoom{cursor:zoom-out}
+.lightbox .lb-media.zoom img{transform:scale(1.9)}
+.lightbox .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
+.lightbox .art svg{width:56%}
+.lb-close{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:18px}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%)}
+.lb-prev{left:14px}.lb-next{right:14px}
+
+/* ── Worn by ── */
+.worn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.worn{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.celeb{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:linear-gradient(165deg,#2A1860,#0E0A1A 72%);border:1px solid var(--line);display:grid;grid-template-rows:auto 1fr auto;padding:14px;text-decoration:none;isolation:isolate}
+.celeb::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(90deg,var(--purple-l) 0 16px,transparent 16px 32px)}
+.celeb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;transition:transform .9s var(--e-settle)}
+.celeb:hover img{transform:scale(1.05)}
+.celeb .who{align-self:end;display:grid;gap:4px}
+.celeb .who b{font:400 clamp(20px,2.4vw,28px)/1 var(--f-display);text-transform:uppercase}
+.celeb .who span{font-size:12.5px;color:var(--mut)}
+.celeb .eye{align-self:center;justify-self:center;width:62px;height:62px;border-radius:50%;box-shadow:inset 0 0 0 9px rgba(239,234,247,.8);display:grid;place-items:center}
+.celeb .eye::after{content:"";width:20px;height:20px;border-radius:50%;background:rgba(239,234,247,.85);animation:look 5s ease-in-out infinite}
+@keyframes look{0%,100%{transform:translate(0,0)}25%{transform:translate(9px,-4px)}50%{transform:translate(-8px,3px)}75%{transform:translate(3px,8px)}}
+.celeb.filled .eye{display:none}
+@media (prefers-reduced-motion:reduce){.celeb .eye::after{animation:none}}
+
+/* ── The list (emails) ── */
+.join{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center}
+@media (max-width:900px){.join{grid-template-columns:1fr}}
+.join h2{margin:0;font:400 clamp(52px,9vw,120px)/.86 var(--f-display);text-transform:uppercase}
+.join h2 em{font-style:normal;color:var(--purple-l)}
+.perks{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;padding:0;list-style:none}
+.perks li{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:10px 12px;border:1px solid var(--line);border-radius:999px}
+.form{background:rgba(14,10,26,.82);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,34px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;gap:14px}
+.fld{display:grid;gap:7px}
+.fld label{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--purple-l)}
+.fld input,.fld select{width:100%;background:rgba(8,6,14,.65);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:#fff;font-size:15px;appearance:none;-webkit-appearance:none}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.16)}
+.fld select option{background:var(--void-2)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.frow{grid-template-columns:1fr}}
+.form .btn{justify-content:center;width:100%;padding:18px}
+.form-msg{font-size:13.5px;color:var(--mut);margin:0;min-height:1.4em}
+.done{text-align:center;display:grid;gap:10px;justify-items:center;padding:12px 0}
+.done b{font:400 40px/1 var(--f-display);text-transform:uppercase}
+.done p{margin:0;color:rgba(239,234,247,.85);max-width:32ch}
+
+/* ── Footer ── */
+.foot{padding-block:clamp(64px,10vw,120px) 40px;border-top:1px solid var(--line)}
+.foot .logo{width:100%;max-width:none;margin-bottom:34px}
+.foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 24px;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+.foot-row a{text-decoration:none}
+.foot-row a:hover{color:var(--purple-l)}
+
+/* ── Product sheet + bag ── */
+.scrim{position:fixed;inset:0;z-index:74;background:rgba(8,6,14,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.pview{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:16px;pointer-events:none}
+.pview-in{pointer-events:auto;width:min(1040px,100%);max-height:calc(100svh - 32px);overflow:auto;background:var(--void-2);border:1px solid var(--line);border-radius:18px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+@media (max-width:820px){.pview-in{grid-template-columns:1fr}}
+.pv-media{position:relative;min-height:360px}
+.pv-media .frame{aspect-ratio:auto;height:100%;min-height:360px;border-radius:0}
+.pv-thumbs{position:absolute;left:12px;bottom:12px;display:flex;gap:6px}
+.pv-thumbs button{width:44px;height:54px;border-radius:6px;border:1px solid var(--line);background:#140E26 center/cover;cursor:pointer;padding:0}
+.pv-thumbs button[aria-pressed="true"]{border-color:#fff}
+.pv-info{padding:clamp(20px,3vw,36px);display:grid;gap:16px;align-content:start}
+.pv-info h3{margin:0;font:400 clamp(38px,5vw,60px)/.9 var(--f-display);text-transform:uppercase}
+.pv-price{font:600 18px/1 var(--f-body)}
+.pv-desc{color:rgba(239,234,247,.82);margin:0}
+.sizes{display:flex;flex-wrap:wrap;gap:6px}
+.size{min-width:46px;padding:11px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600;font-size:13px}
+.size[aria-pressed="true"]{background:#fff;color:var(--void)}
+.pv-close{position:absolute;top:12px;right:12px;z-index:2}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:76;width:min(420px,100%);background:var(--cream);color:#140F1F;display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(0,0,0,.4)}
+.dr-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid rgba(20,15,31,.12)}
+.dr-head b{font:400 30px/1 var(--f-display);text-transform:uppercase}
+.dr-body{overflow:auto;padding:12px 22px;display:grid;gap:12px;align-content:start}
+.dr-item{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding-bottom:12px;border-bottom:1px dashed rgba(20,15,31,.15)}
+.dr-item .th{width:64px;height:80px;border-radius:6px;background:#2A1860 url(img/brand/bg-swirl.jpg) center/cover}
+.dr-item b{display:block;font:400 18px/1 var(--f-display);text-transform:uppercase}
+.dr-item span{font-size:13px;color:#655C73}
+.dr-item button{border:0;background:none;text-decoration:underline;cursor:pointer;font-size:13px;color:#655C73}
+.dr-foot{padding:18px 22px calc(18px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(20,15,31,.12);display:grid;gap:12px}
+.dr-foot .row{display:flex;justify-content:space-between;font-weight:600}
+.dr-foot .btn{justify-content:center;width:100%;color:#fff}
+.dr-note{font-size:12.5px;color:#655C73;margin:0}
+.dr-empty{color:#655C73;padding:30px 0;text-align:center}
+.x{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;cursor:pointer;opacity:.85}
+
+/* ── Chat ── */
+.chat-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(8,6,14,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);cursor:pointer;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase}
+.chat-fab .ey{width:34px;height:34px;border-radius:50%;background:var(--purple);display:grid;place-items:center}
+.chat-fab .ey i,.chat-head .ey i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #fff;display:grid;place-items:center}
+.chat-fab .ey i::after,.chat-head .ey i::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.chat{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:66;width:min(380px,calc(100vw - 32px));height:min(520px,calc(100svh - 120px));display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--cream);color:#140F1F;border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.chat-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(20,15,31,.12)}
+.chat-head .ey{width:32px;height:32px;border-radius:50%;background:#140F1F;display:grid;place-items:center}
+.chat.thinking .chat-head .ey i::after{animation:blink .7s ease-in-out infinite}
+.chat-head b{font:600 14px/1.2 var(--f-body)}
+.chat-head span{display:block;font-size:11.5px;color:#655C73}
+.chat-head .x{margin-left:auto;color:#140F1F}
+.chat-body{overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:86%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.45;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:#140F1F;color:#FBF8F1;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:#FBF8F1;box-shadow:inset 0 0 0 1px rgba(20,15,31,.12);border-bottom-left-radius:4px}
+.chat-form{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(20,15,31,.12)}
+.chat-form input{flex:1;min-width:0;border:1px solid rgba(20,15,31,.18);border-radius:999px;padding:11px 14px;background:#fff;color:#140F1F}
+.chat-form button{border:0;border-radius:999px;padding:0 16px;background:var(--purple);color:#fff;font:700 8.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.chips button{border:1px solid rgba(20,15,31,.2);background:transparent;border-radius:999px;padding:7px 10px;font-size:12.5px;cursor:pointer;color:#140F1F}
+
+/* ── Reveal on scroll (content stays visible without JS) ── */
+.js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
+.js .rv.in{transform:none;opacity:1}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.hero-photo{animation:none}.btn.solid::after{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="swirl" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top" id="top">
+  <div class="top-in wrap">
+    <a class="brand" href="#home" aria-label="YOWA home"></a>
+    <nav class="nav" aria-label="Main">
+      <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
+    </nav>
+    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false">Menu</button>
+    <button class="bag-btn" type="button" id="bag-open">Bag (<b id="bag-count">0</b>)</button>
+  </div>
+</header>
+
+<div class="sheet-menu" id="menu" hidden>
+  <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
+  <button class="x" type="button" id="menu-close">Close</button>
+</div>
+
+<main>
+  <section class="hero" id="home">
+    <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
+    <div class="sig" id="sig"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span class="pen" aria-hidden="true"></span></div>
+    <div class="hero-in">
+      <span class="kick"><i aria-hidden="true"></i><span id="kick">Drop 01 · Loading</span></span>
+      <h1 class="sr">YOWA</h1>
+      <div class="logo" id="logo" data-eye>
+        <img src="img/brand/yowa-logo-nodot.png" alt="YOWA" width="701" height="178">
+        <span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span>
+        <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
+      </div>
+      <p class="mantra"><i>Be</i> <i>You</i> <i>Be</i> <i>Different</i></p>
+      <div class="cd" id="cd" aria-label="Countdown to the drop">
+        <div class="seg"><b data-u="d">00</b><span>Days</span></div>
+        <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
+        <div class="seg"><b data-u="m">00</b><span>Mins</span></div>
+        <div class="seg"><b data-u="s">00</b><span>Secs</span></div>
+      </div>
+      <p class="hero-note" id="hero-note">Raglan long sleeves, caps and skull caps. Handmade, limited run. The code goes to the list first.</p>
+      <div class="hero-cta">
+        <a class="btn solid" href="#drop" data-magnet>Enter the drop</a>
+        <a class="btn" href="#list" data-magnet>Get the code</a>
+      </div>
+    </div>
+    <div class="ticker" aria-hidden="true"><div class="tt"><span>Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · 💜⚔️🐉 · </span><span>Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · 💜⚔️🐉 · </span></div></div>
+  </section>
+
+  <section class="sec panel" id="drop" aria-labelledby="drop-t">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2 id="drop-t">Drop 01</h2>
+        <p>Raglan long sleeves, caps and skull caps. Made by hand in small runs. Prices land with the drop. When the run is gone, it's gone.</p>
+      </div>
+      <div class="drop-bar" id="drop-bar">
+        <span class="lockstate"><i aria-hidden="true"></i><span id="lock-text">Locked · the list gets the code first</span></span>
+        <form class="gate" id="gate" novalidate>
+          <label class="sr" for="code">Drop code</label>
+          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="Code">
+          <button class="btn" type="submit">Enter</button>
+        </form>
+      </div>
+      <p class="gate-msg" id="gate-msg" role="status"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <div class="ticker alt" aria-hidden="true"><div class="tt"><span>When it's gone, it's gone · The list gets in first · </span><span>When it's gone, it's gone · The list gets in first · </span></div></div>
+
+  <section class="sec" id="message" aria-labelledby="msg-t">
+    <div class="wrap">
+      <span class="label rv">To every YOWA fan</span>
+      <h2 class="sr" id="msg-t">A message to YOWA fans</h2>
+      <div class="mani" id="mani">
+        <p>They told you to blend in. You didn't. Every piece is made by hand, in small runs, for the ones who would rather stand out than fit in. We don't chase the crowd. We don't make copies. When it's gone, it's gone. Be You. Be Different. Stay woke. 💜⚔️🐉</p>
+      </div>
+      <div class="mani-sign rv"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span>042 · Made for the Circle</span></div>
+    </div>
+  </section>
+
+  <section class="sec panel" id="gallery" aria-labelledby="gal-t">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2 id="gal-t">In real life</h2>
+        <p>No renders. The real pieces on real people. Drag through, tap any shot to see it up close.</p>
+      </div>
+    </div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Gallery. Drag or use the arrow keys; press Enter on a photo to open it.">
+      <div class="rail-track" id="rail-track"></div>
+    </div>
+    <div class="wrap rail-hint"><span class="label">Drag · Tap to zoom</span><span class="label" id="rail-count"></span></div>
+  </section>
+
+  <section class="sec" id="worn" aria-labelledby="worn-t">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2 id="worn-t">Worn by</h2>
+        <p>The ones who wore it first. Tap a name to see the post.</p>
+      </div>
+      <div class="worn" id="worn-grid"></div>
+    </div>
+  </section>
+
+  <section class="sec panel" id="list" aria-labelledby="list-t">
+    <div class="wrap join">
+      <div class="rv">
+        <span class="label">The Circle</span>
+        <h2 id="list-t">Get the <em>code</em> first</h2>
+        <p style="margin:18px 0 0;max-width:44ch;color:rgba(239,234,247,.85)">Join the list and the drop code lands in your inbox before anyone else sees the shop. Waitlist members are already in.</p>
+        <ul class="perks"><li>Early access</li><li>Early-bird discount</li><li>First look at styling</li></ul>
+      </div>
+      <div class="form rv" id="form-box">
+        <form id="join" novalidate>
+          <div class="fld"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" placeholder="What do we call you?" required></div>
+          <div class="fld" style="margin-top:14px"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required></div>
+          <div class="frow" style="margin-top:14px">
+            <div class="fld"><label for="f-size">Usual size</label><select id="f-size" name="size"><option value="">Prefer not to say</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
+            <div class="fld"><label for="f-ig">IG handle</label><input id="f-ig" name="instagram" type="text" placeholder="@yourname"></div>
+          </div>
+          <button class="btn solid" type="submit" style="margin-top:18px">Get on the list</button>
+          <p class="form-msg" id="form-msg" role="status"></p>
+        </form>
+        <div class="done" id="done" hidden><b>You're in</b><p>Watch your inbox. The code comes to you before the shop opens. 💜</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="logo" id="foot-logo">
+      <img src="img/brand/yowa-logo-nodot.png" alt="YOWA" width="701" height="178" loading="lazy">
+      <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
+    </div>
+    <div class="foot-row">
+      <span>Be You Be Different · 042 · 💜⚔️🐉</span>
+      <a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a>
+      <span>Limited runs · no spam, just the drop</span>
+      <span>Built by Nalto</span>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="pview" id="pview" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
+  <div class="pview-in">
+    <div class="pv-media"><div class="frame" id="pv-frame"></div><div class="pv-thumbs" id="pv-thumbs"></div><button class="x pv-close" type="button" id="pv-close" style="color:#fff">Close</button></div>
+    <div class="pv-info">
+      <span class="label" id="pv-line">Drop 01</span>
+      <h3 id="pv-title">Piece</h3>
+      <div class="pv-price" id="pv-price"></div>
+      <p class="pv-desc" id="pv-desc"></p>
+      <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
+      <button class="btn solid" type="button" id="pv-add">Add to bag</button>
+      <p class="gate-msg" id="pv-msg" role="status"></p>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" hidden aria-label="Bag">
+  <div class="dr-head"><b>Bag</b><button class="x" type="button" id="bag-close">Close</button></div>
+  <div class="dr-body" id="dr-body"></div>
+  <div class="dr-foot">
+    <div class="row"><span>Subtotal</span><span id="dr-total">₦0</span></div>
+    <button class="btn solid" type="button" id="checkout">Checkout with Paystack</button>
+    <p class="dr-note" id="dr-note">Card, bank transfer and USSD through Paystack. Delivery is added at checkout.</p>
+  </div>
+</aside>
+
+<button class="chat-fab" type="button" id="chat-open" aria-expanded="false"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
+<div class="chat" id="chat" hidden role="dialog" aria-label="Ask YOWA">
+  <div class="chat-head"><span class="ey" aria-hidden="true"><i></i></span><div><b>Ask YOWA</b><span>Sizes, the drop, your order</span></div><button class="x" type="button" id="chat-close">Close</button></div>
+  <div class="chat-body" id="chat-body" aria-live="polite"></div>
+  <div class="chips" id="chat-chips"><button type="button">When is the drop?</button><button type="button">How do I get the code?</button><button type="button">What sizes?</button></div>
+  <form class="chat-form" id="chat-form"><label class="sr" for="chat-in">Message</label><input id="chat-in" type="text" autocomplete="off" placeholder="Type a message"><button type="submit">Send</button></form>
+</div>
+
+<script>
+/* ════════════════ EDIT HERE ════════════════ */
+const CONFIG = {
+  DROP_NAME: 'Drop 01',
+  DROP_AT: null,                 // e.g. '2026-10-17T18:00:00+01:00' starts the countdown; null shows "Loading"
+  CODE: 'BYBD',                  // hype gate for the shop. Real protection moves server-side with Paystack.
+  SUPABASE_URL: 'https://emclkprkvzrbqmwbbwqu.supabase.co',
+  SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtY2xrcHJrdnpyYnFtd2Jid3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2MTUzOTQsImV4cCI6MjA2NDE5MTM5NH0.JWIsqxs1C91sQpJA1cuDOkpCgiy0b6qYi2d0EEAhykc', // public anon key, insert-only on the waitlist table
+  FORMSPREE: 'https://formspree.io/f/mbgjaedg',
+  PAYSTACK_PUBLIC_KEY: '',       // pk_live_… once prices are in
+  CHAT_ENDPOINT: '/api/chat',    // OpenRouter through a Vercel function
+  HERO: 'img/skateboard.jpg',    // the skateboard shot, main background
+  PREVIEW: false                 // true only in the design preview link (no network there)
+};
+// Prices in naira. null = "Price drops soon". Photos: drop files into img/ with these names.
+const PRODUCTS = [
+  { id: 'raglan-ls', name: 'Raglan Long Sleeve', line: 'Drop 01', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    images: ['img/raglan-1.jpg', 'img/raglan-2.jpg', 'img/raglan-3.jpg'], desc: 'Raglan long sleeve, finished by hand. Relaxed through the body, long in the arm.' },
+  { id: 'cap-042', name: '042 Cap', line: 'Drop 01', price: null, art: 'cap', sizes: ['One size'],
+    images: ['img/cap-1.jpg', 'img/cap-2.jpg', 'img/cap-3.jpg'], desc: 'The 042 cap. Structured crown, curved brim, adjustable back.' },
+  { id: 'skull-cap', name: 'Skull Cap', line: 'Drop 01', price: null, art: 'beanie', sizes: ['One size'],
+    images: ['img/skullcap-1.jpg', 'img/skullcap-2.jpg', 'img/skullcap-3.jpg'], desc: 'Knit skull cap with a folded cuff. One size, made to be worn every day.' }
+];
+const GALLERY = ['img/gallery-1.jpg', 'img/gallery-2.jpg', 'img/gallery-3.jpg', 'img/gallery-4.jpg', 'img/gallery-5.jpg', 'img/gallery-6.jpg', 'img/gallery-7.jpg', 'img/gallery-8.jpg'];
+// Celebs: fill name, what they wore, their IG post link and a photo in img/. Empty entries show as "coming soon".
+const CELEBS = [
+  { name: '', wore: '', ig: '', photo: '' }, { name: '', wore: '', ig: '', photo: '' },
+  { name: '', wore: '', ig: '', photo: '' }, { name: '', wore: '', ig: '', photo: '' }
+];
+/* ═══════════════════════════════════════════ */
+
+(() => {
+  document.documentElement.classList.add('js');
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches;
+  const pad = n => String(n).padStart(2, '0');
+  const naira = n => '₦' + Number(n).toLocaleString('en-NG');
+  const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
+
+  /* ── Product art (shows until a photo loads) ── */
+  const ART = {
+    raglan: '<svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M72 28 Q100 48 128 28 L150 36 L186 150 L166 158 L140 80 L140 180 L60 180 L60 80 L34 158 L14 150 L50 36 Z"/><path class="flat" d="M75 30 Q100 54 125 30"/><path class="flat seam" d="M78 31 L60 80 M122 31 L140 80 M60 172 H140 M18 142 L37 149 M182 142 L163 149"/></svg>',
+    cap: '<svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M36 122 C36 62 164 62 164 122 Z"/><path class="flat" d="M24 122 Q100 156 176 122 Q100 136 24 122 Z"/><path class="flat seam" d="M100 70 V122 M64 82 Q80 100 78 122 M136 82 Q120 100 122 122"/><circle class="flat" cx="100" cy="66" r="5"/><text x="100" y="106" text-anchor="middle" fill="currentColor" style="font:400 18px Anton,Impact,sans-serif;letter-spacing:2px">042</text></svg>',
+    beanie: '<svg viewBox="0 0 200 200" aria-hidden="true"><path class="flat" d="M50 118 C50 48 150 48 150 118 Z"/><path class="flat" d="M44 116 H156 V152 H44 Z"/><path class="flat seam" d="M58 118 V150 M72 118 V150 M86 118 V150 M114 118 V150 M128 118 V150 M142 118 V150"/><path class="flat" d="M92 124 H108 V144 H92 Z"/></svg>'
+  };
+  const artFor = i => ART[['raglan', 'cap', 'beanie'][i % 3]];
+  function frameHTML(p, extra) {
+    const imgs = p.images.slice(0, 2).map((s, i) => '<img src="' + s + '" alt="' + (i ? '' : p.name) + '" loading="lazy" onerror="this.remove()">').join('');
+    return '<div class="art">' + ART[p.art] + '</div>' + imgs + '<span class="sheen" aria-hidden="true"></span>' + (extra || '');
+  }
+
+  /* ── Live swirl background (WebGL), photo fallback ── */
+  function createSwirl(canvas) {
+    let gl = null;
+    try { gl = canvas.getContext('webgl', { antialias: false, alpha: false }); } catch (e) { gl = null; }
+    if (!gl) return null;
+    const fs = ['precision mediump float;', 'uniform vec2 R;uniform float T;uniform vec2 M;',
+      'const vec3 IND=vec3(.2,.161,.478);const vec3 VIO=vec3(.663,.294,.949);const vec3 VOID=vec3(.031,.024,.055);',
+      'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),u.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),u.x),u.y);}',
+      'float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}',
+      'void main(){vec2 p=(gl_FragCoord.xy-.5*R)/min(R.x,R.y);vec2 m=(M-.5)*R/min(R.x,R.y);',
+      'float d=length(p-m);float an=1.1*exp(-d*d*2.5);float c=cos(an),s=sin(an);vec2 pw=mat2(c,-s,s,c)*(p-m)+m;',
+      'vec2 q=vec2(fb(pw*1.2+vec2(0.,T)),fb(pw*1.2+vec2(5.2,-T)));',
+      'vec2 r=vec2(fb(pw*1.5+2.4*q+vec2(1.7,9.2)+.7*T),fb(pw*1.5+2.4*q+vec2(8.3,2.8)-.6*T));',
+      'float v=fb(pw*1.1+3.*r);float b=sin((v*7.+length(r)*3.-T*1.6)*3.14159);float k=smoothstep(-.09,.09,b);',
+      'vec3 col=mix(IND,VIO,k);float g=1.-smoothstep(.15,1.35,length(p*vec2(.85,1.05)));col=mix(VOID,col,.35+.65*g);',
+      'col+=(h(gl_FragCoord.xy+T)-.5)*.03;gl_FragColor=vec4(col,1.);}'].join('\n');
+    const mk = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+    const v = mk(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'), f = mk(gl.FRAGMENT_SHADER, fs);
+    if (!v || !f) return null;
+    const pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    gl.useProgram(pr); gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = { R: gl.getUniformLocation(pr, 'R'), T: gl.getUniformLocation(pr, 'T'), M: gl.getUniformLocation(pr, 'M') };
+    const st = { speed: 1, t: 7.3, m: [.5, .5], mTo: [.5, .5], on: false, raf: 0, last: 0 };
+    const resize = () => { const sc = Math.min(window.devicePixelRatio || 1, 1.5) * .5, w = Math.max(2, Math.round(innerWidth * sc)), h = Math.max(2, Math.round(innerHeight * sc)); if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); } };
+    const draw = () => { resize(); gl.uniform2f(U.R, canvas.width, canvas.height); gl.uniform1f(U.T, st.t); gl.uniform2f(U.M, st.m[0], st.m[1]); gl.drawArrays(gl.TRIANGLES, 0, 3); };
+    function frame(now) { const dt = Math.min(.05, (now - st.last) / 1000 || 0); st.last = now; st.t += dt * .12 * st.speed; st.m[0] += (st.mTo[0] - st.m[0]) * .04; st.m[1] += (st.mTo[1] - st.m[1]) * .04; draw(); if (st.on) st.raf = requestAnimationFrame(frame); }
+    return {
+      start() { if (st.on) return; if (reduced()) { draw(); return; } st.on = true; st.last = performance.now(); st.raf = requestAnimationFrame(frame); },
+      stop() { st.on = false; cancelAnimationFrame(st.raf); },
+      speed(v) { st.speed = v; }, pointer(x, y) { st.mTo = [x, y]; }, draw
+    };
+  }
+  const swirl = createSwirl($('#swirl'));
+  if (swirl) {
+    swirl.start();
+    addEventListener('pointermove', e => swirl.pointer(e.clientX / innerWidth, 1 - e.clientY / innerHeight), { passive: true });
+    document.addEventListener('visibilitychange', () => document.hidden ? swirl.stop() : swirl.start());
+    addEventListener('resize', () => swirl.draw());
+  }
+
+  /* ── Hero photo: moves with the pointer and the scroll, swirl colours run through it ── */
+  const heroPhoto = $('#hero-photo');
+  const probe = new Image();
+  probe.onload = () => { heroPhoto.style.backgroundImage = 'url("' + CONFIG.HERO + '")'; };
+  probe.onerror = () => heroPhoto.classList.add('none');
+  probe.src = CONFIG.HERO;
+  if (!reduced()) addEventListener('pointermove', e => { heroPhoto.style.setProperty('--px', ((e.clientX / innerWidth - .5) * -24).toFixed(1) + 'px'); heroPhoto.style.setProperty('--py', ((e.clientY / innerHeight - .5) * -18).toFixed(1) + 'px'); }, { passive: true });
+
+  /* ── Signature writes itself ── */
+  const PEN = [.6, .524, .422, .325, .322, .61, .476, .427, .336, .228, .353, .615, .541, .715, .627, .698, .786, .718, .618, .701, .707, .692, .655, .587, .658, .684, .553, .533, .604, .635, .575, .553, .655, .652, .647, .632, .613, .59, .55, .484, .729, .729, .732, .658, .732, .818, .729, .721, .721].map((v, i, a) => (a[Math.max(0, i - 1)] + v + a[Math.min(a.length - 1, i + 1)]) / 3);
+  function writeSig(box) {
+    const pen = box.querySelector('.pen'); if (reduced()) return;
+    const t0 = performance.now(), D = 1600, ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / D), e = ease(p), x = Math.min(1, Math.max(0, e * 1.1 - .05)), fi = x * (PEN.length - 1), i = Math.floor(fi);
+      box.style.setProperty('--p', e.toFixed(4)); pen.style.left = x * 100 + '%';
+      pen.style.top = (PEN[i] + ((PEN[Math.min(PEN.length - 1, i + 1)] - PEN[i]) * (fi - i))) * 100 + '%'; pen.style.opacity = p < 1 ? 1 : 0;
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  writeSig($('#sig'));
+
+  /* ── The eye in the O ── */
+  function makeEye(logo) {
+    const g = logo.querySelector('.pupil-g'); let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const loop = () => { x += (tx - x) * .18; y += (ty - y) * .18; g.setAttribute('transform', 'translate(' + x.toFixed(2) + ' ' + y.toFixed(2) + ')'); raf = (Math.abs(tx - x) > .1 || Math.abs(ty - y) > .1) ? requestAnimationFrame(loop) : 0; };
+    addEventListener('pointermove', e => {
+      if (reduced()) return; const r = logo.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
+      const s = r.width / 701, dx = e.clientX - (r.left + 235.5 * s), dy = e.clientY - (r.top + 89 * s), d = Math.hypot(dx, dy) || 1, k = Math.min(28, d / 9) / d;
+      tx = dx * k; ty = dy * k; if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    (function blink() { setTimeout(() => { if (!reduced() && !document.hidden) { logo.classList.remove('blink'); void logo.offsetWidth; logo.classList.add('blink'); } blink(); }, 3000 + Math.random() * 4000); })();
+  }
+  makeEye($('#logo')); makeEye($('#foot-logo'));
+
+  /* ── Glitch: on events only ── */
+  function glitch(logo) {
+    if (reduced()) return; const img = logo.querySelector('img'), L = $$('.gl', logo);
+    const kf = a => [{ opacity: 0, transform: 'translate(0,0)' }, { opacity: .9, transform: 'translate(' + (-9 * a) + 'px,' + (2 * a) + 'px)', offset: .2 }, { opacity: .85, transform: 'translate(' + (6 * a) + 'px,' + (-3 * a) + 'px)', offset: .45 }, { opacity: 0, transform: 'translate(0,0)' }];
+    L[0] && L[0].animate(kf(1), { duration: 520, easing: 'steps(6,end)' }); L[1] && L[1].animate(kf(-1), { duration: 520, delay: 40, easing: 'steps(6,end)' });
+    img.animate([{ transform: 'none', clipPath: 'inset(0 0 0 0)' }, { transform: 'translate(-7px) skewX(-5deg)', clipPath: 'inset(12% 0 58% 0)', offset: .25 }, { transform: 'translate(8px) skewX(4deg)', clipPath: 'inset(62% 0 8% 0)', offset: .5 }, { transform: 'none', clipPath: 'inset(0 0 0 0)' }], { duration: 520, easing: 'steps(6,end)' });
+  }
+  const heroLogo = $('#logo');
+  heroLogo.addEventListener('pointerenter', () => glitch(heroLogo));
+  setTimeout(() => glitch(heroLogo), 1700);
+
+  /* ── Countdown / drop state ── */
+  const hero = $('#home'), U = { d: $('[data-u="d"]'), h: $('[data-u="h"]'), m: $('[data-u="m"]'), s: $('[data-u="s"]') };
+  const target = CONFIG.DROP_AT ? new Date(CONFIG.DROP_AT).getTime() : null; let wasLive = false;
+  function tick() {
+    if (!target) { $('#kick').textContent = CONFIG.DROP_NAME + ' · Loading'; $('#cd').hidden = true; return; }
+    const ms = target - Date.now(), live = ms <= 0, s = Math.max(0, Math.floor(ms / 1000));
+    U.d.textContent = pad(Math.min(99, Math.floor(s / 86400))); U.h.textContent = pad(Math.floor(s % 86400 / 3600)); U.m.textContent = pad(Math.floor(s % 3600 / 60)); U.s.textContent = pad(s % 60);
+    hero.classList.toggle('live', live); $('#kick').textContent = live ? CONFIG.DROP_NAME + ' · Live now' : CONFIG.DROP_NAME + ' · Loading';
+    if (live && !wasLive) glitch(heroLogo); wasLive = live;
+    if (swirl) swirl.speed(live ? 3 : .5 + 2.3 * Math.pow(1 - Math.min(1, s / (14 * 86400)), 3));
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ── Tickers that listen to the scroll ── */
+  const tracks = $$('.tt'); const xs = tracks.map((_, i) => i % 2 ? -1 : 0); let tv = 0, ly = scrollY, lt = performance.now();
+  function tickers(now) {
+    const dt = Math.min(64, now - lt); lt = now; const y = scrollY; tv += ((y - ly) / Math.max(dt, 1) - tv) * .12; ly = y;
+    const sp = .045 + Math.min(3, Math.abs(tv)) * .5;
+    tracks.forEach((t, i) => { const w = t.firstElementChild.getBoundingClientRect().width || 1; xs[i] += (i % 2 ? .8 : -1) * sp * dt; while (xs[i] <= -w) xs[i] += w; while (xs[i] > 0) xs[i] -= w; t.style.transform = 'translate3d(' + xs[i].toFixed(1) + 'px,0,0) skewX(' + (Math.max(-7, Math.min(7, tv * 4)) * (i % 2 ? -1 : 1)).toFixed(2) + 'deg)'; });
+    requestAnimationFrame(tickers);
+  }
+  if (!reduced()) requestAnimationFrame(tickers);
+
+  /* ── Header state + menu ── */
+  const top = $('#top'); const onScroll = () => top.classList.toggle('stuck', scrollY > 40); addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  const menu = $('#menu'); $('#menu-open').addEventListener('click', () => { menu.hidden = false; $('#menu-open').setAttribute('aria-expanded', 'true'); });
+  const closeMenu = () => { menu.hidden = true; $('#menu-open').setAttribute('aria-expanded', 'false'); };
+  $('#menu-close').addEventListener('click', closeMenu); $$('#menu a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ── Magnetic buttons ── */
+  $$('[data-magnet]').forEach(b => {
+    b.addEventListener('pointermove', e => { if (reduced() || e.pointerType !== 'mouse') return; const r = b.getBoundingClientRect(); b.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px)'; });
+    b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+  });
+
+  /* ── The drop: gate + grid ── */
+  let unlocked = store.get('yowa-unlocked', false);
+  const dropBar = $('#drop-bar');
+  function paintLock() { dropBar.classList.toggle('unlocked', unlocked); $('#lock-text').textContent = unlocked ? 'Unlocked · welcome to the Circle' : 'Locked · the list gets the code first'; $('#gate').hidden = unlocked; }
+  $('#gate').addEventListener('submit', e => {
+    e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), msg = $('#gate-msg');
+    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); msg.classList.remove('bad'); msg.textContent = "You're in. Pick your pieces."; paintLock(); renderGrid(); glitch(heroLogo); }
+    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Join the list below and it comes to your inbox first."; if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
+  });
+  const grid = $('#grid');
+  function renderGrid() {
+    grid.textContent = '';
+    PRODUCTS.forEach(p => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'card rv in';
+      const tag = p.price == null ? '<span class="tag">Price drops soon</span>' : (!unlocked ? '<span class="tag red">Locked</span>' : '<span class="tag">Limited run</span>');
+      b.innerHTML = '<div class="frame">' + frameHTML(p, tag) + '</div><div class="card-row"><span class="card-name"></span><span class="card-price"></span></div><div class="card-sub"></div>';
+      b.querySelector('.card-name').textContent = p.name; b.querySelector('.card-price').textContent = p.price == null ? '₦ ——' : naira(p.price);
+      b.querySelector('.card-sub').textContent = p.sizes.length > 1 ? p.sizes[0] + ' to ' + p.sizes[p.sizes.length - 1] : p.sizes[0];
+      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b);
+    });
+  }
+  paintLock(); renderGrid();
+
+  /* ── Product view ── */
+  const pview = $('#pview'), scrim = $('#scrim'); let current = null, size = null, lastFocus = null;
+  function openProduct(p) {
+    current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
+    $('#pv-title').textContent = p.name; $('#pv-line').textContent = p.line; $('#pv-desc').textContent = p.desc;
+    $('#pv-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price);
+    const fr = $('#pv-frame'); fr.innerHTML = frameHTML({ ...p, images: [p.images[0]] });
+    const th = $('#pv-thumbs'); th.textContent = '';
+    p.images.forEach((src, i) => { const probeImg = new Image(); probeImg.onload = () => { const t = document.createElement('button'); t.type = 'button'; t.setAttribute('aria-label', 'Photo ' + (i + 1)); t.setAttribute('aria-pressed', String(i === 0)); t.style.backgroundImage = 'url("' + src + '")'; t.addEventListener('click', () => { fr.innerHTML = frameHTML({ ...p, images: [src] }); $$('button', th).forEach(x => x.setAttribute('aria-pressed', String(x === t))); }); th.appendChild(t); }; probeImg.src = src; });
+    const sz = $('#pv-sizes'); sz.textContent = '';
+    p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size'; b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
+    const add = $('#pv-add'); $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
+    if (p.price == null) add.textContent = 'Notify me when it drops'; else if (!unlocked) add.textContent = 'Enter the code to buy'; else add.textContent = 'Add to bag';
+    pview.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden';
+    if (!reduced()) $('.pview-in').animate([{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' });
+    $('#pv-close').focus({ preventScroll: true });
+  }
+  function closeProduct() { pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (lastFocus) lastFocus.focus({ preventScroll: true }); }
+  $('#pv-close').addEventListener('click', closeProduct);
+  $('#pv-add').addEventListener('click', () => {
+    const p = current, msg = $('#pv-msg');
+    if (p.price == null) { closeProduct(); location.hash = '#list'; return; }
+    if (!unlocked) { closeProduct(); location.hash = '#drop'; $('#code').focus(); return; }
+    if (!size) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; return; }
+    addToBag(p, size); closeProduct(); openBag();
+  });
+
+  /* ── Bag ── */
+  let bag = store.get('yowa-bag', []);
+  const drawer = $('#drawer');
+  function saveBag() { store.set('yowa-bag', bag); $('#bag-count').textContent = bag.reduce((n, i) => n + i.qty, 0); }
+  function addToBag(p, s) { const hit = bag.find(i => i.id === p.id && i.size === s); if (hit) hit.qty++; else bag.push({ id: p.id, size: s, qty: 1 }); saveBag(); }
+  function renderBag() {
+    const body = $('#dr-body'); body.textContent = ''; let total = 0;
+    if (!bag.length) { const e = document.createElement('p'); e.className = 'dr-empty'; e.textContent = 'Your bag is empty. The drop is where the good stuff is.'; body.appendChild(e); }
+    bag.forEach((it, idx) => {
+      const p = PRODUCTS.find(x => x.id === it.id); if (!p) return; total += (p.price || 0) * it.qty;
+      const row = document.createElement('div'); row.className = 'dr-item';
+      row.innerHTML = '<div class="th"></div><div><b></b><span></span></div><button type="button">Remove</button>';
+      row.querySelector('b').textContent = p.name; row.querySelector('span').textContent = it.size + ' · ' + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
+      const t = new Image(); t.onload = () => { row.querySelector('.th').style.backgroundImage = 'url("' + p.images[0] + '")'; }; t.src = p.images[0];
+      row.querySelector('button').addEventListener('click', () => { bag.splice(idx, 1); saveBag(); renderBag(); }); body.appendChild(row);
+    });
+    $('#dr-total').textContent = naira(total); $('#checkout').disabled = !bag.length;
+  }
+  function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
+  function closeBag() { drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; $('#bag-open').focus({ preventScroll: true }); }
+  $('#bag-open').addEventListener('click', openBag); $('#bag-close').addEventListener('click', closeBag);
+  scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); });
+  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!$('#chat').hidden) toggleChat(false); });
+  $('#checkout').addEventListener('click', () => {
+    $('#dr-note').textContent = CONFIG.PAYSTACK_PUBLIC_KEY ? 'Opening Paystack…' : 'Checkout opens when prices and the Paystack key are in. Your bag is saved.';
+    // Next step: POST the bag to /api/checkout; the server prices it from the catalogue, calls Paystack Initialize,
+    // and returns an access_code for new PaystackPop().resumeTransaction(access_code).
+  });
+  saveBag();
+
+  /* ── Manifesto: words light up as you read ── */
+  const mp = $('#mani p'); const words = mp.textContent.trim().split(/\s+/); mp.textContent = '';
+  const HOT = /^(Be|You\.|Different\.|woke\.|gone,|gone\.|hand,)$/;
+  const spans = words.map(w => { const s = document.createElement('span'); s.className = 'w' + (HOT.test(w) ? ' hot' : ''); s.textContent = w; mp.append(s, ' '); return s; });
+  function lightWords() { if (reduced()) { spans.forEach(s => s.classList.add('on')); return; } const r = mp.getBoundingClientRect(), pr = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .1))); const k = Math.round(pr * spans.length); spans.forEach((s, i) => s.classList.toggle('on', i < k)); }
+  addEventListener('scroll', lightWords, { passive: true }); lightWords();
+
+  /* ── Gallery: drag, throw, parallax inside each shot, lightbox ── */
+  const track = $('#rail-track'), rail = $('#rail'); const shots = GALLERY.map((src, i) => ({ src, i }));
+  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i>Real life</span><span>' + pad(s.i + 1) + '</span></div>'; b.addEventListener('click', e => { if (e.detail === 0) openLightbox(s.i); }); track.appendChild(b); });
+  $('#rail-count').textContent = pad(shots.length) + ' shots';
+  let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null;
+  const maxX = () => Math.min(0, rail.clientWidth - track.scrollWidth);
+  function railFrame() {
+    if (!drag) { if (Math.abs(gv) > .01) { gx += gv * 16; gv *= .93; } }
+    const mx = maxX(); if (gx > 0) { gx += (0 - gx) * .18; gv = 0; } if (gx < mx) { gx += (mx - gx) * .18; gv = 0; }
+    track.style.transform = 'translate3d(' + gx.toFixed(1) + 'px,0,0)';
+    const cw = rail.clientWidth; $$('.shot', track).forEach(el => { const r = el.getBoundingClientRect(), c = (r.left + r.width / 2) / cw - .5; el.style.setProperty('--sx', (c * -40).toFixed(1) + 'px'); });
+    requestAnimationFrame(railFrame);
+  }
+  requestAnimationFrame(railFrame);
+  rail.addEventListener('pointerdown', e => { drag = true; moved = 0; lx = e.clientX; ltm = performance.now(); gv = 0; pid = e.pointerId; try { rail.setPointerCapture(pid); } catch (_) { } rail.classList.add('grabbing'); });
+  rail.addEventListener('pointermove', e => { if (!drag) return; const now = performance.now(), dx = e.clientX - lx; gx += dx; moved += Math.abs(dx); gv = dx / Math.max(1, now - ltm); lx = e.clientX; ltm = now; });
+  rail.addEventListener('pointerup', e => { if (!drag) return; drag = false; rail.classList.remove('grabbing'); try { rail.releasePointerCapture(pid); } catch (_) { } if (moved < 6) { const el = document.elementFromPoint(e.clientX, e.clientY), s = el && el.closest('.shot'); if (s) openLightbox($$('.shot', track).indexOf(s)); } });
+  rail.addEventListener('pointercancel', () => { drag = false; rail.classList.remove('grabbing'); });
+  rail.addEventListener('keydown', e => { if (e.key === 'ArrowRight') gx -= 320; if (e.key === 'ArrowLeft') gx += 320; });
+  function openLightbox(i) {
+    const lb = document.createElement('div'); lb.className = 'lightbox'; lb.id = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Photo');
+    lb.innerHTML = '<figure><div class="lb-media"></div><figcaption class="label"></figcaption></figure><button class="x lb-close" type="button">Close</button><button class="x lb-nav lb-prev" type="button" aria-label="Previous photo">←</button><button class="x lb-nav lb-next" type="button" aria-label="Next photo">→</button>';
+    document.body.appendChild(lb); document.body.style.overflow = 'hidden';
+    const media = lb.querySelector('.lb-media'), cap = lb.querySelector('figcaption');
+    const show = k => { i = (k + shots.length) % shots.length; media.classList.remove('zoom'); media.innerHTML = '<div class="art">' + artFor(i) + '</div><img src="' + shots[i].src + '" alt="Photo ' + (i + 1) + '" onerror="this.remove()">'; cap.textContent = 'Real life · ' + pad(i + 1) + ' / ' + pad(shots.length) + ' · tap to zoom'; if (!reduced()) media.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' }); };
+    const close = () => { lb.remove(); document.body.style.overflow = ''; rail.focus({ preventScroll: true }); document.removeEventListener('keydown', key); };
+    const key = e => { if (e.key === 'Escape') close(); if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); };
+    media.addEventListener('click', e => { const r = media.getBoundingClientRect(); const img = media.querySelector('img'); if (img) img.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + '% ' + ((e.clientY - r.top) / r.height * 100) + '%'; media.classList.toggle('zoom'); });
+    lb.querySelector('.lb-close').addEventListener('click', close); lb.querySelector('.lb-prev').addEventListener('click', () => show(i - 1)); lb.querySelector('.lb-next').addEventListener('click', () => show(i + 1));
+    lb.addEventListener('click', e => { if (e.target === lb) close(); }); document.addEventListener('keydown', key);
+    show(i); lb.querySelector('.lb-close').focus({ preventScroll: true });
+  }
+
+  /* ── Worn by ── */
+  const wg = $('#worn-grid');
+  CELEBS.forEach((c, i) => {
+    const filled = !!c.name; const el = document.createElement(filled && c.ig ? 'a' : 'div'); el.className = 'celeb rv' + (filled ? ' filled' : '');
+    if (filled && c.ig) { el.href = c.ig; el.target = '_blank'; el.rel = 'noopener'; }
+    el.innerHTML = '<span class="label">' + (filled ? 'Worn by' : 'Coming soon') + '</span><span class="eye" aria-hidden="true"></span><span class="who"><b></b><span></span></span>';
+    el.querySelector('b').textContent = filled ? c.name : 'Name here'; el.querySelector('.who span').textContent = filled ? (c.wore || 'YOWA') + ' · see the post' : 'Photo and IG post drop soon';
+    if (c.photo) { const im = document.createElement('img'); im.src = c.photo; im.alt = c.name; im.loading = 'lazy'; im.onerror = () => im.remove(); el.appendChild(im); }
+    wg.appendChild(el);
+  });
+
+  /* ── The list: same Supabase waitlist table + Formspree backup ── */
+  $('#join').addEventListener('submit', e => {
+    e.preventDefault(); const f = e.target, msg = $('#form-msg'), btn = f.querySelector('button');
+    const row = { name: f.name.value.trim(), email: f.email.value.trim(), size: f.size.value || null, instagram: f.instagram.value.trim() || null };
+    if (!row.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(row.email)) { msg.textContent = 'Add your name and a real email so the code can reach you.'; return; }
+    btn.disabled = true; btn.textContent = 'Adding you…'; msg.textContent = '';
+    if (CONFIG.PREVIEW) { f.hidden = true; $('#done').hidden = false; $('#done p').textContent = 'Preview only. On the live site this adds you to the YOWA list in Supabase.'; return; }
+    const sb = CONFIG.SUPABASE_URL.startsWith('http') ? fetch(CONFIG.SUPABASE_URL + '/rest/v1/waitlist', { method: 'POST', headers: { apikey: CONFIG.SUPABASE_ANON, Authorization: 'Bearer ' + CONFIG.SUPABASE_ANON, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(row) }) : Promise.reject(new Error('no supabase'));
+    const fd = new FormData(f); const fsp = fetch(CONFIG.FORMSPREE, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+    Promise.allSettled([sb, fsp]).then(res => {
+      const ok = res.some(r => r.status === 'fulfilled' && (r.value.ok || r.value.status === 409));
+      if (!ok) { btn.disabled = false; btn.textContent = 'Try again'; msg.textContent = "That didn't go through. Check your connection and try again."; return; }
+      f.hidden = true; $('#done').hidden = false; store.set('yowa-joined', true);
+    });
+  });
+
+  /* ── Ask YOWA: OpenRouter through /api/chat, with offline answers ── */
+  const chat = $('#chat'), cbody = $('#chat-body'); let history = [];
+  function say(who, text) { const m = document.createElement('div'); m.className = 'msg ' + who; m.textContent = text; cbody.appendChild(m); cbody.scrollTop = cbody.scrollHeight; return m; }
+  function toggleChat(open) { chat.hidden = !open; $('#chat-open').setAttribute('aria-expanded', String(open)); if (open) { if (!cbody.children.length) say('bot', "Hey, I'm YOWA's assistant. Ask me about the drop, sizes or your order."); $('#chat-in').focus({ preventScroll: true }); } }
+  $('#chat-open').addEventListener('click', () => toggleChat(chat.hidden)); $('#chat-close').addEventListener('click', () => toggleChat(false));
+  function offline(q) {
+    q = q.toLowerCase();
+    if (/code|password|early|access/.test(q)) return "The code goes to the list first. Join with your email in the Get the code section and it lands in your inbox before the shop opens.";
+    if (/when|date|drop|time/.test(q)) return CONFIG.DROP_AT ? 'The drop opens ' + new Date(CONFIG.DROP_AT).toLocaleString() + '. The list gets the code first.' : "The date drops soon. Join the list and you'll hear first.";
+    if (/size|fit|small|large/.test(q)) return 'Raglan long sleeves come in XS to XXL with a relaxed body. Caps and skull caps are one size. Tell me your height and usual size and I will suggest one.';
+    if (/price|cost|how much|₦|naira/.test(q)) return 'Prices land with the drop. Join the list to see them first.';
+    if (/order|deliver|ship|track/.test(q)) return 'Once orders open you can track yours with your order number and email. For anything urgent a person will reply on WhatsApp.';
+    return "Good question. A person from YOWA can help with that on Instagram @yowa_bybd while I learn more.";
+  }
+  async function ask(q) {
+    say('me', q); history.push({ role: 'user', content: q }); chat.classList.add('thinking'); const wait = say('bot', '…');
+    let reply = '';
+    try { const r = await fetch(CONFIG.CHAT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history.slice(-10) }) }); if (r.ok) { const d = await r.json(); reply = (d.reply || '').trim(); } } catch (e) { }
+    if (!reply) reply = offline(q);
+    chat.classList.remove('thinking'); wait.textContent = reply; history.push({ role: 'assistant', content: reply });
+  }
+  $('#chat-form').addEventListener('submit', e => { e.preventDefault(); const v = $('#chat-in').value.trim(); if (!v) return; $('#chat-in').value = ''; ask(v); });
+  $$('#chat-chips button').forEach(b => b.addEventListener('click', () => ask(b.textContent)));
+
+  /* ── Reveal on scroll ── */
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  $$('.rv').forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
