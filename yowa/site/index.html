@@ -855,13 +855,14 @@ const CELEBS = [
   }
   const burstFrom = el => { const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); };
   // The phone's back button closes whatever sheet is open instead of leaving the site.
+  // It only ever steps back over a step it added itself, so it can't take anyone off the page.
   const backstack = (() => {
-    let closer = null;
-    addEventListener('popstate', () => { const c = closer; closer = null; if (c) c(true); });
+    let closer = null, pushed = false;
+    addEventListener('popstate', () => { const c = closer; closer = null; pushed = false; if (c) c(true); });
     return {
-      open(fn) { const had = !!closer; closer = fn; if (!had) try { history.pushState({ yowa: 1 }, ''); } catch (e) { } },  // a sheet opened from another one takes over its step
-      close() { if (!closer) return; closer = null; try { history.back(); } catch (e) { } },
-      drop() { closer = null; }
+      open(fn) { const had = !!closer; closer = fn; if (!had) try { history.pushState({ yowa: 1 }, ''); pushed = true; } catch (e) { pushed = false; } },  // a sheet opened from another one takes over its step
+      close() { if (!closer) return; closer = null; if (!pushed) return; pushed = false; try { history.back(); } catch (e) { } },
+      drop() { closer = null; pushed = false; }
     };
   })();
 
