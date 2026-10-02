@@ -2,20 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>YOWA</title>
-<meta name="description" content="YOWA. Be You Be Different. The Liberty Raglan in red and blue, the 042 cap and skull caps. Handmade, limited runs. When it's gone, it's gone.">
+<meta name="description" content="YOWA. Be You Be Different 💜⚔️🐉. The Liberty Raglan in red and blue, the 042 cap and skull caps. Handmade, limited runs. When it's gone, it's gone.">
 <link rel="canonical" href="https://yowabybd.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yowabybd.com/">
-<meta property="og:title" content="YOWA · Be You Be Different">
+<meta property="og:title" content="YOWA · Be You Be Different 💜⚔️🐉">
 <meta property="og:description" content="Handmade, limited runs. Get the code before the drop.">
-<meta property="og:image" content="https://yowabybd.com/img/library/yowa-1496.jpg">
+<meta property="og:image" content="https://yowabybd.com/img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="YOWA: a skater in the blue Liberty Raglan mid-kickflip">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#08060E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="img/brand/favicon-48.png">
+<link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="YOWA">
+<link rel="preload" as="image" href="img/library/yowa-skate.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap"></noscript>
 <style>
 /* YOWA main site. Night mode throughout; the live swirl sits behind the whole page and the photos move on top of it. */
 :root{
@@ -38,6 +50,7 @@ body{margin:0;background:var(--void);color:var(--ink);font:400 16px/1.6 var(--f-
 @supports (overflow:clip){html,body{overflow-x:clip}}
 a{color:inherit}
 button,input,select{font:inherit;color:inherit}
+a,button,input,select,label{-webkit-tap-highlight-color:transparent}
 img{max-width:100%}
 [hidden]{display:none!important}
 ::selection{background:var(--purple);color:#fff}
@@ -53,40 +66,60 @@ img{max-width:100%}
 .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ── Header ── */
-.top{position:fixed;left:0;right:0;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+.top{position:fixed;left:0;right:0;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .35s,border-color .35s,transform .45s var(--e-settle),opacity .3s;border-bottom:1px solid transparent}
+.top.away{transform:translateY(-100%)}
 .top.stuck{background:rgba(8,6,14,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
 .top-in{display:flex;align-items:center;gap:18px;height:62px}
-.brand{display:block;width:84px;height:22px;background:#fff;-webkit-mask:url(img/brand/yowa-logo.png) center/contain no-repeat;mask:url(img/brand/yowa-logo.png) center/contain no-repeat;flex:none}
+.brand{position:relative;display:block;width:80px;height:50px;flex:none;line-height:0;-webkit-tap-highlight-color:transparent}
+.brand img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 10px rgba(166,91,255,.7));-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%))}
+.brand .pen{width:6px;height:6px;margin:-3px 0 0 -3px}
+@media (min-width:960px){.brand{width:92px;height:58px}}
 .nav{display:flex;gap:4px;margin-left:auto}
 .nav a,.bag-btn,.menu-btn{font:700 8.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:11px 12px;border-radius:999px;border:1px solid transparent;background:none;cursor:pointer;white-space:nowrap}
-.nav a:hover{border-color:var(--line)}
+@media (hover:hover){.nav a:hover{border-color:var(--line)}}
 .bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
 .bag-btn b{color:var(--purple-l)}
 .menu-btn{display:none;border-color:var(--line)}
 @media (max-width:980px){.nav{display:none}.menu-btn{display:block;margin-left:auto}}
 .sheet-menu{position:fixed;inset:0;z-index:70;background:rgba(8,6,14,.96);display:grid;align-content:center;justify-items:center;gap:6px;padding:24px}
 .sheet-menu a{font:400 clamp(40px,12vw,64px)/1.05 var(--f-display);text-transform:uppercase;text-decoration:none}
-.sheet-menu a:hover{color:var(--purple-l)}
+@media (hover:hover){.sheet-menu a:hover{color:var(--purple-l)}}
 .sheet-menu button{margin-top:18px}
+.sheet-menu .menu-sig{width:120px;height:auto;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(166,91,255,.7))}
+.sheet-menu .menu-bybd{margin:16px 0 0;font:400 15px/1.3 var(--f-mantra);color:var(--purple-l);text-align:center}
+.sheet-menu:not([hidden])>*{animation:menuin .7s var(--e-settle) both}
+.sheet-menu>:nth-child(2){animation-delay:45ms}.sheet-menu>:nth-child(3){animation-delay:90ms}.sheet-menu>:nth-child(4){animation-delay:135ms}.sheet-menu>:nth-child(5){animation-delay:180ms}.sheet-menu>:nth-child(6){animation-delay:225ms}.sheet-menu>:nth-child(7){animation-delay:270ms}.sheet-menu>:nth-child(8){animation-delay:315ms}.sheet-menu>:nth-child(9){animation-delay:360ms}.sheet-menu>:nth-child(10){animation-delay:405ms}
+@keyframes menuin{from{opacity:0;transform:translateY(28px) skewY(4deg)}}
 
 /* ── Hero ── */
-.hero{position:relative;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden;isolation:isolate}
-.hero-media{position:absolute;inset:0;z-index:-1;overflow:hidden;background:#140E26}
-.slides{position:absolute;inset:-3%;transform:translate3d(var(--px,0px),var(--py,0px),0);transition:transform .6s var(--e-settle)}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
-.slide.on{opacity:1}
+.hero{position:relative;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden;isolation:isolate;-webkit-tap-highlight-color:transparent;touch-action:pan-y pinch-zoom}
+@media (hover:none){.hero{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}}
+.hero-media{position:absolute;inset:0;z-index:-1;overflow:hidden;background:#140E26;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.slides{position:absolute;inset:-3%;transform:translate3d(var(--px,0px),var(--py,0px),0);transition:transform .6s var(--e-settle);pointer-events:none}
+/* A new photo cuts in hard under a glitch; the old one stays underneath until it's covered. Crossfade with reduced motion. */
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .3s ease}
+@media (prefers-reduced-motion:no-preference){.slide{transition:none}}
+.slide.on{opacity:1;z-index:2}
+.slide.was{opacity:1;z-index:1}
+.slide.on,.slide.was{animation:kb 9s ease-out both}
+.hero.paused .slide{animation-play-state:paused}
 .slide img,.slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 26%}
 .slide video{opacity:0;transition:opacity .5s ease}
 .slide.moving video{opacity:1}
-.slide.on img,.slide.on video{animation:kb 9s ease-out both}
 @keyframes kb{from{transform:scale(1.14)}to{transform:scale(1.02)}}
-.hero-media::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,6,14,.6) 0%,rgba(8,6,14,.1) 26%,rgba(8,6,14,.35) 52%,rgba(8,6,14,.94) 100%),radial-gradient(130% 90% at 50% 38%,transparent 45%,rgba(60,20,130,.55) 100%)}
-.slide-cap{position:absolute;right:14px;top:78px;z-index:2;font:700 7.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;padding:8px 10px;border-radius:999px;background:rgba(8,6,14,.66);border:1px solid var(--line)}
-.dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:2;display:flex;gap:6px}
-@media (max-width:959px){.dots{bottom:62px}.sig{display:none}}
-.dots i{width:22px;height:3px;border-radius:2px;background:rgba(239,234,247,.3)}
-.dots i.on{background:var(--purple-l)}
-.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:16px;padding:120px var(--gut) 34px}
+.hero-media::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,6,14,.6) 0%,rgba(8,6,14,.1) 26%,rgba(8,6,14,.35) 52%,rgba(8,6,14,.94) 100%),radial-gradient(130% 90% at 50% 38%,transparent 45%,rgba(60,20,130,.55) 100%);transition:opacity .4s ease}
+.hero.paused .hero-media::after{opacity:.35}
+.slide-cap{position:absolute;right:12px;top:calc(80px + env(safe-area-inset-top,0px));z-index:3;display:flex;align-items:center;gap:7px;font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:8px 11px;border-radius:999px;background:rgba(8,6,14,.66);border:1px solid var(--line);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);cursor:pointer}
+.slide-cap b{color:var(--purple-l)}
+.slide-cap::after{content:"\2197";color:var(--purple-l);font:600 11px/1 var(--f-body);letter-spacing:0}
+/* Story bars: one per photo, the current one fills while it's up. Tap right for the next, left for the last, swipe, or hold to pause and see the fit. */
+.bars{position:absolute;left:12px;right:12px;top:calc(68px + env(safe-area-inset-top,0px));z-index:3;display:flex;gap:4px;pointer-events:none}
+.bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.26)}
+.bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%;box-shadow:0 0 8px rgba(166,91,255,.8)}
+.bars i.past b{transform:scaleX(1)}
+.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:16px;padding:120px var(--gut) 78px;transition:opacity .35s ease}
+/* Holding a photo on a phone clears everything off it */
+@media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top,.hold .chat-fab,.hold .hero+.dragon{opacity:0;pointer-events:none}}
 @media (min-width:960px){
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,min(42vw,600px))}
   .hero-in{grid-column:1;grid-row:1;justify-items:start;align-content:center;text-align:left;padding:120px 32px 40px var(--gut)}
@@ -94,13 +127,10 @@ img{max-width:100%}
   .hero-media{position:relative;inset:auto;z-index:0;grid-column:2;grid-row:1;margin:88px var(--gut) 26px 0;border-radius:16px;box-shadow:0 0 0 1px var(--line),0 30px 90px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.25)}
   .hero-media::after{background:linear-gradient(180deg,transparent 62%,rgba(8,6,14,.55) 100%),radial-gradient(140% 100% at 50% 40%,transparent 60%,rgba(60,20,130,.45) 100%)}
   .hero-media::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;z-index:3;background:repeating-linear-gradient(90deg,var(--purple-l) 0 22px,transparent 22px 44px)}
-  .slide-cap{top:16px}
-  .hero .ticker{grid-column:1/-1}
+  .slide-cap{top:28px}
+  .bars{top:14px;left:14px;right:14px}
   .hero .logo{width:min(48vw,700px)}
-  .sig{left:auto;right:calc(min(42vw,600px) + var(--gut) + 20px)}
 }
-.sig{position:absolute;left:var(--gut);top:84px;width:clamp(96px,12vw,150px)}
-.sig img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 12px rgba(166,91,255,.6));-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%))}
 .pen{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px var(--purple-l);opacity:0;pointer-events:none}
 .kick{display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;padding:10px 18px;border:1px solid rgba(166,91,255,.45);border-radius:999px;background:rgba(20,10,45,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .kick i{width:7px;height:7px;border-radius:50%;background:var(--purple-l);animation:pulse 1.6s ease infinite}
@@ -118,6 +148,9 @@ img{max-width:100%}
 .mantra{margin:0;font:400 clamp(18px,3.4vw,32px)/1.2 var(--f-mantra)}
 .mantra i{font-style:normal;color:var(--purple-l);text-shadow:0 0 18px rgba(166,91,255,.55)}
 .mantra i:nth-child(2),.mantra i:nth-child(3){color:#fff;text-shadow:0 0 18px rgba(255,255,255,.45),0 0 34px rgba(166,91,255,.5)}
+.mantra .emo{display:inline-flex;gap:.12em;margin-left:.15em;vertical-align:-.04em;cursor:pointer}
+.mantra .emo span{display:inline-block;animation:emo 3s var(--e-settle) infinite;animation-delay:calc(var(--i) * .16s + 1.2s)}
+@keyframes emo{0%,62%,100%{transform:none}70%{transform:translateY(-.3em) scale(1.2) rotate(-8deg)}80%{transform:translateY(0) scale(.94)}88%{transform:scale(1.04)}}
 .cd{display:flex;gap:clamp(6px,1.4vw,12px)}
 .seg{min-width:clamp(62px,10vw,86px);padding:12px 6px 10px;border-radius:14px;background:rgba(20,14,34,.6);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .seg b{display:block;font:400 clamp(28px,6vw,48px)/1 var(--f-display);font-variant-numeric:tabular-nums}
@@ -126,18 +159,41 @@ img{max-width:100%}
 .hero-note{font-size:14px;color:rgba(239,234,247,.85);max-width:42ch}
 .hero-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .btn{position:relative;display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:16px 22px;border-radius:999px;border:1px solid rgba(166,91,255,.55);background:rgba(8,6,14,.4);color:#fff;cursor:pointer;transition:transform .35s var(--e-settle),border-color .2s,background .2s;overflow:hidden}
-.btn:hover{border-color:var(--purple-l)}
+@media (hover:hover){.btn:hover{border-color:var(--purple-l)}}
 .btn.solid{background:linear-gradient(100deg,var(--purple),var(--purple-l));border-color:transparent;box-shadow:0 12px 34px rgba(122,47,224,.45)}
 .btn.solid::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sweep 3.4s ease-in-out infinite}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Ticker ── */
-.ticker{border-block:1px solid var(--line);background:rgba(8,6,14,.55);overflow:hidden;white-space:nowrap;padding-block:10px}
-.ticker.alt{background:var(--purple);border:0;padding-block:12px}
-.tt{display:inline-flex;will-change:transform}
-.tt span{padding-right:.4em;font:700 11px/1.4 var(--f-label);letter-spacing:.26em;text-transform:uppercase;color:var(--purple-l)}
-.ticker.alt .tt span{font:400 clamp(26px,4vw,44px)/1 var(--f-display);letter-spacing:.03em;color:#fff}
+/* ── Dragons: serpent ribbons that slither across the seams between sections, the words riding their back ── */
+.dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none;overflow:hidden;transition:opacity .35s ease}
+.dragon svg{display:block;width:100%;height:100%}
+.d-glow,.d-edge,.d-body,.d-scale{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.d-glow{stroke:rgba(166,91,255,.2);stroke-width:76px}
+.d-edge{stroke:#26104F;stroke-width:52px}
+.d-body{stroke-width:44px}
+.d-scale{stroke:rgba(255,255,255,.13);stroke-width:36px;stroke-dasharray:1 26}
+.d-text{font-family:var(--f-display);font-size:24px;letter-spacing:.05em;fill:#fff}
+.d-m{visibility:hidden}
+.dragon .s0{stop-color:#5B22B8}
+.dragon .s1{stop-color:#A65BFF}
+.dragon.void .d-glow{stroke:rgba(166,91,255,.12)}
+.dragon.void .d-edge{stroke:rgba(166,91,255,.6)}
+.dragon.void .s0{stop-color:#0B0716}
+.dragon.void .s1{stop-color:#21104A}
+.dragon.void .d-scale{stroke:rgba(166,91,255,.22)}
+.dragon.void .d-text{fill:var(--purple-l)}
+@media (min-width:960px){.dragon{height:172px;margin-block:-60px}.d-glow{stroke-width:88px}.d-edge{stroke-width:60px}.d-body{stroke-width:52px}.d-scale{stroke-width:42px;stroke-dasharray:1 30}.d-text{font-size:29px}}
+
+/* ── Glitch: a photo tears into slices, splits red and cyan, drops out for a frame and snaps back ── */
+.gx{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;isolation:isolate;background:#000}
+.gx i{position:absolute;inset:0;background-repeat:no-repeat;background-size:cover}
+.gx .r,.gx .c{mix-blend-mode:screen;background-blend-mode:multiply}
+.gx .r{background-color:#f00}
+.gx .c{background-color:#0ff}
+.gx .neg{filter:invert(1) hue-rotate(180deg)}
+.gx .n{background:repeating-linear-gradient(0deg,rgba(255,255,255,.14) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
+.frame .tag,.lib-tile .no,.lib-tile .cap,.shot .cap{z-index:2}
 
 /* ── Sections ── */
 section{position:relative}
@@ -145,7 +201,8 @@ section{position:relative}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:clamp(28px,4vw,48px)}
 .sec-head h2{margin:0;font:400 clamp(52px,11vw,150px)/.85 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
 .sec-head p{max-width:44ch;color:rgba(239,234,247,.82);margin:0}
-.panel{background:rgba(8,6,14,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+/* Dark panels and section photos fade out at their edges, so no section ends on a straight line: the dragons swim through the swirl between them */
+.panel::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:rgba(8,6,14,.82);-webkit-mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent);mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent)}
 
 /* ── The drop (Corteiz-plain grid) ── */
 .drop-bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
@@ -161,23 +218,21 @@ section{position:relative}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.6vw,20px)}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:540px){.card-name{font-size:19px}.card-price{font-size:12px}}
-.photo-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.photo-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent,#000 140px,#000 calc(100% - 140px),transparent);mask-image:linear-gradient(180deg,transparent,#000 140px,#000 calc(100% - 140px),transparent)}
 .photo-bg img,.photo-bg video{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;object-position:center 30%;opacity:.34;filter:grayscale(1) contrast(1.2);transform:translate3d(0,var(--py,0px),0) scale(1.04);will-change:transform}
 .photo-bg video{opacity:0;transition:opacity 1.2s ease}
 .photo-bg.moving video{opacity:.34}
 .photo-bg::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(122,47,224,.42),rgba(74,26,148,.2) 50%,rgba(226,58,46,.12));mix-blend-mode:color}
 .photo-bg::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,var(--void) 0%,rgba(8,6,14,.35) 22%,rgba(8,6,14,.35) 78%,var(--void) 100%)}
 .card{display:grid;gap:12px;text-align:left;border:0;background:none;padding:0;cursor:pointer;color:inherit}
-.frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate}
+.frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate;transition:transform .3s var(--e-settle)}
 .frame::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.55)}
 .frame .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
 .frame .art svg{width:66%;height:auto;filter:drop-shadow(0 0 16px rgba(166,91,255,.7))}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--e-settle),opacity .5s}
 .frame img+img{opacity:0}
-.card:hover .frame img:first-of-type{transform:scale(1.06)}
-.card:hover .frame img+img{opacity:1}
+@media (hover:hover){.card:hover .frame img:first-of-type{transform:scale(1.06)}.card:hover .frame img+img{opacity:1}.card:hover .sheen{animation:shine 1.1s var(--e-pull)}}
 .frame .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(166,91,255,.35) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
-.card:hover .sheen{animation:shine 1.1s var(--e-pull)}
 @keyframes shine{to{transform:translateX(120%)}}
 .frame .tag{position:absolute;left:10px;top:10px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:7px 8px;border-radius:999px;background:rgba(8,6,14,.7);border:1px solid var(--line)}
 .frame .tag.red{border-color:var(--red);color:#FF8A7E}
@@ -213,7 +268,7 @@ section{position:relative}
 .rail-hint{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 16px;margin-top:16px}
 .rail-hint a{text-decoration:none;color:var(--ink);transition:color .2s}
 .rail-hint a b{color:var(--purple-l);font-weight:700}
-.rail-hint a:hover{color:var(--purple-l)}
+@media (hover:hover){.rail-hint a:hover{color:var(--purple-l)}}
 /* Phones: the rail becomes a plain grid, so the page only scrolls up and down */
 @media (max-width:700px){
   .rail{overflow:visible;cursor:auto;touch-action:auto;padding-inline:var(--gut)}
@@ -225,7 +280,7 @@ section{position:relative}
 }
 .lightbox{position:fixed;inset:0;z-index:80;background:rgba(8,6,14,.94);display:grid;place-items:center;padding:24px}
 .lightbox figure{margin:0;max-width:min(92vw,1100px);display:grid;gap:12px;justify-items:center}
-.lightbox .lb-media{--ar:.75;position:relative;aspect-ratio:var(--ar);width:min(92vw,calc(74vh * var(--ar)),1100px);width:min(92vw,calc(74svh * var(--ar)),1100px);border-radius:10px;overflow:hidden;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;cursor:zoom-in;touch-action:pan-y pinch-zoom}
+.lightbox .lb-media{--ar:.75;position:relative;aspect-ratio:var(--ar);width:min(92vw,calc(74vh * var(--ar)),1100px);width:min(92vw,calc(74svh * var(--ar)),1100px);border-radius:10px;overflow:hidden;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;cursor:zoom-in;touch-action:pinch-zoom}
 .lb-foot{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:center;text-align:center}
 .lightbox .lb-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--e-settle)}
 .lightbox .lb-media.zoom{cursor:zoom-out}
@@ -241,7 +296,7 @@ section{position:relative}
 .lib-shelves{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 auto;min-width:0;padding:2px}
 .lib-side{display:flex;align-items:center;gap:14px;margin-left:auto}
 .pill{flex:none;display:inline-flex;align-items:center;gap:8px;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(8,6,14,.55);cursor:pointer;white-space:nowrap;transition:background .25s,color .25s,border-color .25s}
-.pill:hover{border-color:var(--purple-l)}
+@media (hover:hover){.pill:hover{border-color:var(--purple-l)}}
 .pill i{font-style:normal;color:var(--purple-l)}
 .pill[aria-pressed="true"]{background:#fff;color:var(--void);border-color:#fff}
 .pill[aria-pressed="true"] i{color:var(--purple)}
@@ -256,11 +311,10 @@ section{position:relative}
 @keyframes shimmer{to{background-position:-150% 0}}
 .lib-tile img{display:block;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .7s ease,transform 1.1s var(--e-settle)}
 .lib-tile.ok img{opacity:1;transform:none}
-.lib-tile.ok:hover img{transform:scale(1.05)}
+@media (hover:hover){.lib-tile.ok:hover img{transform:scale(1.05)}.lib-tile:hover .cap{transform:none}.lib-tile:hover{box-shadow:0 0 0 1px var(--purple-l),0 18px 50px rgba(122,47,224,.3)}}
 .lib-tile .no{position:absolute;left:8px;top:8px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;padding:7px 8px;border-radius:999px;background:rgba(8,6,14,.7);border:1px solid var(--line)}
 .lib-tile .cap{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;background:linear-gradient(180deg,transparent,rgba(8,6,14,.88));font:700 8px/1.5 var(--f-label);letter-spacing:.14em;text-transform:uppercase;transform:translateY(101%);transition:transform .45s var(--e-settle)}
-.lib-tile:hover .cap,.lib-tile:focus-visible .cap{transform:none}
-.lib-tile:hover{box-shadow:0 0 0 1px var(--purple-l),0 18px 50px rgba(122,47,224,.3)}
+.lib-tile:focus-visible .cap{transform:none}
 @media (hover:none){.lib-tile .cap{display:none}}
 .js .lib-tile{opacity:0;transform:translateY(28px);transition:opacity .8s var(--e-settle) var(--d,0ms),transform .8s var(--e-settle) var(--d,0ms),box-shadow .3s}
 .js .lib-tile.in{opacity:1;transform:none}
@@ -268,12 +322,12 @@ section{position:relative}
 .lib-index li{animation:rowin .6s var(--e-settle) both;animation-delay:var(--d,0ms)}
 @keyframes rowin{from{opacity:0;transform:translateY(12px)}}
 .lib-row{width:100%;display:grid;grid-template-areas:"no nm sh go";grid-template-columns:86px minmax(0,1fr) auto 24px;gap:6px 18px;align-items:center;padding:16px 6px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;transition:background .3s,padding .45s var(--e-settle)}
-.lib-row:hover,.lib-row:focus-visible{background:rgba(122,47,224,.14);padding-left:16px}
+.lib-row:focus-visible{background:rgba(122,47,224,.14);padding-left:16px}
+@media (hover:hover){.lib-row:hover{background:rgba(122,47,224,.14);padding-left:16px}.lib-row:hover .go{transform:translateX(4px)}}
 .lib-row .no{grid-area:no;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;color:var(--mut)}
 .lib-row .nm{grid-area:nm;font:400 clamp(20px,2.8vw,36px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
 .lib-row .sh{grid-area:sh;font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
 .lib-row .go{grid-area:go;color:var(--purple-l);transition:transform .45s var(--e-settle)}
-.lib-row:hover .go{transform:translateX(4px)}
 .lib-row .th{grid-area:th;display:none;width:52px;height:66px;border-radius:6px;object-fit:cover;background:#140E26}
 @media (max-width:700px){.lib-row{grid-template-areas:"th no go" "th nm go";grid-template-columns:52px minmax(0,1fr) 18px;padding:12px 2px}.lib-row .th{display:block}.lib-row .sh{display:none}.lib-row .nm{font-size:20px}}
 .lib-peek{position:fixed;left:0;top:0;z-index:45;width:250px;border-radius:10px;overflow:hidden;pointer-events:none;opacity:0;background:#140E26;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px var(--line),0 0 40px rgba(122,47,224,.35);transition:opacity .25s ease;will-change:transform}
@@ -290,7 +344,7 @@ section{position:relative}
 .celeb{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:linear-gradient(165deg,#2A1860,#0E0A1A 72%);border:1px solid var(--line);display:grid;grid-template-rows:auto 1fr auto;padding:14px;text-decoration:none;isolation:isolate}
 .celeb::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(90deg,var(--purple-l) 0 16px,transparent 16px 32px)}
 .celeb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;transition:transform .9s var(--e-settle)}
-.celeb:hover img{transform:scale(1.05)}
+@media (hover:hover){.celeb:hover img{transform:scale(1.05)}}
 .celeb .who{align-self:end;display:grid;gap:4px}
 .celeb .who b{font:400 clamp(20px,2.4vw,28px)/1 var(--f-display);text-transform:uppercase}
 .celeb .who span{font-size:12.5px;color:var(--mut)}
@@ -310,7 +364,7 @@ section{position:relative}
 .form{background:rgba(14,10,26,.82);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,34px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;gap:14px}
 .fld{display:grid;gap:7px}
 .fld label{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--purple-l)}
-.fld input,.fld select{width:100%;background:rgba(8,6,14,.65);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:#fff;font-size:15px;appearance:none;-webkit-appearance:none}
+.fld input,.fld select{width:100%;background:rgba(8,6,14,.65);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:#fff;font-size:16px;appearance:none;-webkit-appearance:none}
 .fld input:focus,.fld select:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.16)}
 .fld select option{background:var(--void-2)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -322,17 +376,25 @@ section{position:relative}
 .done p{margin:0;color:rgba(239,234,247,.85);max-width:32ch}
 
 /* ── Footer ── */
-.foot{padding-block:clamp(64px,10vw,120px) 40px;border-top:1px solid var(--line)}
+.foot{padding-block:clamp(64px,10vw,120px) calc(96px + env(safe-area-inset-bottom,0px))}
 .foot .logo{width:100%;max-width:none;margin-bottom:34px}
 .foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 24px;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 .foot-row a{text-decoration:none}
-.foot-row a:hover{color:var(--purple-l)}
+@media (hover:hover){.foot-row a:hover{color:var(--purple-l)}}
 
 /* ── Product sheet + bag ── */
 .scrim{position:fixed;inset:0;z-index:74;background:rgba(8,6,14,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .pview{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:16px;pointer-events:none}
 .pview-in{pointer-events:auto;width:min(1040px,100%);max-height:calc(100svh - 32px);overflow:auto;background:var(--void-2);border:1px solid var(--line);border-radius:18px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
 @media (max-width:820px){.pview-in{grid-template-columns:1fr}}
+.pv-grab{display:none}
+/* Phones: the product opens as a bottom sheet. Drag the handle down to put it away. */
+@media (max-width:820px){
+  .pview{place-items:end stretch;padding:0}
+  .pview-in{width:100%;max-height:calc(100svh - 28px - env(safe-area-inset-top,0px));border-radius:22px 22px 0 0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px);overscroll-behavior:contain}
+  .pv-grab{display:block;position:absolute;left:25%;right:25%;top:0;height:40px;z-index:3;touch-action:none;cursor:grab}
+  .pv-grab::after{content:"";position:absolute;left:50%;top:9px;width:44px;height:5px;margin-left:-22px;border-radius:3px;background:rgba(255,255,255,.85);box-shadow:0 1px 8px rgba(0,0,0,.5)}
+}
 .pv-media{position:relative;min-height:360px}
 .pv-media .frame{aspect-ratio:auto;height:100%;min-height:360px;border-radius:0}
 .pv-thumbs{position:absolute;left:12px;bottom:12px;display:flex;gap:6px}
@@ -345,7 +407,7 @@ section{position:relative}
 .sizes{display:flex;flex-wrap:wrap;gap:6px}
 .size{min-width:46px;padding:11px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600;font-size:13px}
 .size[aria-pressed="true"]{background:#fff;color:var(--void)}
-.pv-close{position:absolute;top:12px;right:12px;z-index:2}
+.pv-close{position:absolute;top:12px;right:12px;z-index:4}
 .drawer{position:fixed;top:0;right:0;bottom:0;z-index:76;width:min(420px,100%);background:var(--cream);color:#140F1F;display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(0,0,0,.4)}
 .dr-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid rgba(20,15,31,.12)}
 .dr-head b{font:400 30px/1 var(--f-display);text-transform:uppercase}
@@ -363,8 +425,11 @@ section{position:relative}
 .x{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;cursor:pointer;opacity:.85}
 
 /* ── Ask YOWA: the same purple swirl as the page, moving slowly behind the messages ── */
-.chat-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9)),#2A1060 url(img/brand/bg-swirl.jpg) center/cover;box-shadow:0 12px 34px rgba(122,47,224,.45);color:#fff;cursor:pointer;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;transition:box-shadow .3s,transform .35s var(--e-settle)}
-.chat-fab:hover{box-shadow:0 14px 44px rgba(122,47,224,.7),0 0 0 1px rgba(166,91,255,.6);transform:translateY(-2px)}
+.chat-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9)),#2A1060 url(img/brand/bg-swirl.jpg) center/cover;box-shadow:0 12px 34px rgba(122,47,224,.45);color:#fff;cursor:pointer;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;transition:box-shadow .3s,transform .35s var(--e-settle),opacity .3s,padding .4s var(--e-settle),gap .4s var(--e-settle)}
+.chat-fab .t{display:block;max-width:96px;overflow:hidden;white-space:nowrap;transition:max-width .4s var(--e-settle),opacity .3s}
+.chat-fab.mini{padding-right:8px;gap:0}
+.chat-fab.mini .t{max-width:0;opacity:0}
+@media (hover:hover){.chat-fab:hover{box-shadow:0 14px 44px rgba(122,47,224,.7),0 0 0 1px rgba(166,91,255,.6);transform:translateY(-2px)}}
 .chat-fab .ey{width:34px;height:34px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
 .chat-fab .ey i,.chat-head .ey i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #fff;display:grid;place-items:center}
 .chat-fab .ey i::after,.chat-head .ey i::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
@@ -394,23 +459,41 @@ section{position:relative}
 .chat-form button{border:0;border-radius:999px;padding:0 16px;background:#fff;color:var(--purple-d);font:700 8.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
 .chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
 .chips button{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);border-radius:999px;padding:7px 10px;font-size:12.5px;cursor:pointer;color:#fff;transition:background .2s,border-color .2s}
-.chips button:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5)}
+@media (hover:hover){.chips button:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5)}}
 @media (prefers-reduced-motion:reduce){.chat::before,.msg.typing i{animation:none}}
+
+/* ── Phone furniture: scroll progress line, toast, emoji burst ── */
+.progress{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:61;height:2px;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--purple),var(--purple-l),#fff);box-shadow:0 0 10px var(--purple-l);pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:96;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:12px 18px;border-radius:999px;background:rgba(28,11,66,.95);border:1px solid rgba(166,91,255,.5);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 30px rgba(122,47,224,.35);font:600 13.5px/1.3 var(--f-body);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.burst{position:fixed;left:0;top:0;z-index:97;pointer-events:none;font-size:24px;line-height:1;will-change:transform,opacity}
+/* Touch screens: a press shows, since there's no hover */
+.shot{transition:transform .3s var(--e-settle)}
+@media (hover:none){
+  .btn:active,.pill:active,.x:active,.bag-btn:active,.menu-btn:active,.size:active,.chips button:active,.chat-fab:active{transform:scale(.95)}
+  .card:active .frame,.shot:active{transform:scale(.97)}
+  .lib-tile:active{box-shadow:0 0 0 2px var(--purple-l)}
+  .lib-row:active{background:rgba(122,47,224,.18)}
+}
+/* Section titles glitch in as they arrive */
+.js .sec-head.in h2{animation:tglitch .7s steps(1,end) .12s both}
+@keyframes tglitch{0%{transform:none;text-shadow:none;clip-path:none}12%{transform:translateX(4px) skewX(-8deg);text-shadow:-4px 0 #2BE8FF,4px 0 #A65BFF}24%{transform:translateX(-5px);text-shadow:3px 0 #E23A2E,-3px 0 #2BE8FF;clip-path:inset(0 0 46% 0)}36%{transform:translateX(7px);clip-path:inset(54% 0 0 0)}48%{transform:none;text-shadow:-2px 0 #2BE8FF,2px 0 #A65BFF;clip-path:none}62%{transform:translateX(-2px);text-shadow:none}74%,100%{transform:none;text-shadow:none;clip-path:none}}
 
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.hero-photo{animation:none}.btn.solid::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.js .sec-head.in h2,.mantra .emo span,.sheet-menu:not([hidden])>*{animation:none}}
 </style>
 </head>
 <body>
 <canvas id="swirl" aria-hidden="true"></canvas>
 <div class="veil" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <header class="top" id="top">
   <div class="top-in wrap">
-    <a class="brand" href="#home" aria-label="YOWA home"></a>
+    <a class="brand" href="#home" aria-label="YOWA home"><img src="img/brand/yowa-signature.png" alt="" width="560" height="351"><span class="pen" aria-hidden="true"></span></a>
     <nav class="nav" aria-label="Main">
       <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#library">Library</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
     </nav>
@@ -420,14 +503,15 @@ section{position:relative}
 </header>
 
 <div class="sheet-menu" id="menu" hidden>
+  <img class="menu-sig" src="img/brand/yowa-signature.png" alt="" width="560" height="351">
   <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#library">Library</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
+  <p class="menu-bybd">Be You Be Different 💜⚔️🐉</p>
   <button class="x" type="button" id="menu-close">Close</button>
 </div>
 
 <main>
   <section class="hero" id="home">
-    <div class="hero-media" id="hero-media" aria-hidden="true"><div class="slides" id="slides"></div><span class="slide-cap" id="slide-cap"></span><span class="dots" id="dots"></span></div>
-    <div class="sig" id="sig"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span class="pen" aria-hidden="true"></span></div>
+    <div class="hero-media" id="hero-media" aria-hidden="true"><div class="slides" id="slides"></div><span class="slide-cap" id="slide-cap"></span><span class="bars" id="bars"></span></div>
     <div class="hero-in">
       <span class="kick"><i aria-hidden="true"></i><span id="kick">Drop 01 · Loading</span></span>
       <h1 class="sr">YOWA</h1>
@@ -436,7 +520,7 @@ section{position:relative}
         <span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span>
         <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
       </div>
-      <p class="mantra"><i>Be</i> <i>You</i> <i>Be</i> <i>Different</i></p>
+      <p class="mantra"><i>Be</i> <i>You</i> <i>Be</i> <i>Different</i> <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
       <div class="cd" id="cd" aria-label="Countdown to the drop">
         <div class="seg"><b data-u="d">00</b><span>Days</span></div>
         <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
@@ -449,8 +533,9 @@ section{position:relative}
         <a class="btn" href="#list" data-magnet>Get the code</a>
       </div>
     </div>
-    <div class="ticker" aria-hidden="true"><div class="tt"><span>Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · 💜⚔️🐉 · </span><span>Be You Be Different · 042 · Stay Woke · Handmade Batch · Limited Run · 💜⚔️🐉 · </span></div></div>
   </section>
+
+  <div class="dragon" aria-hidden="true" data-text="Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · Handmade Batch · Limited Run · "></div>
 
   <section class="sec panel" id="drop" aria-labelledby="drop-t">
     <div class="wrap">
@@ -471,15 +556,16 @@ section{position:relative}
     </div>
   </section>
 
-  <div class="ticker alt" aria-hidden="true"><div class="tt"><span>No rules · No limits · Just vision · The mindset, not the trend · </span><span>No rules · No limits · Just vision · The mindset, not the trend · </span></div></div>
+  <div class="dragon void" aria-hidden="true" data-text="No rules · No limits · Just vision · Be You Be Different 💜⚔️🐉 · The mindset, not the trend · "></div>
 
   <section class="sec" id="message" aria-labelledby="msg-t">
+    <!-- Background: YW·010 (the crew on the rooftop), with its motion clip -->
     <div class="photo-bg" aria-hidden="true" data-video="img/motion/crew.mp4"><img src="img/library/yowa-9924.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
       <span class="label rv">To every YOWA fan</span>
       <h2 class="sr" id="msg-t">A message to YOWA fans</h2>
       <div class="mani" id="mani">
-        <p>They told you to blend in. You didn't. No rules. No limits. Just vision. Every piece is made by hand, in small runs, for the ones who would rather stand out than fit in. It represents the mindset, not the trend. When it's gone, it's gone. Be You. Be Different. Stay woke. 💜⚔️🐉</p>
+        <p>They told you to blend in. You didn't. No rules. No limits. Just vision. Every piece is made by hand, in small runs, for the ones who would rather stand out than fit in. It represents the mindset, not the trend. When it's gone, it's gone. Be You. Be Different. 💜⚔️🐉 Stay woke.</p>
       </div>
       <div class="mani-sign rv"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span>042 · Made for the Circle</span></div>
     </div>
@@ -495,7 +581,7 @@ section{position:relative}
     <div class="rail" id="rail" tabindex="0" aria-label="Gallery. Drag or use the arrow keys; press Enter on a photo to open it.">
       <div class="rail-track" id="rail-track"></div>
     </div>
-    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">53</b> photos in the Library →</a></div>
+    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
   </section>
 
   <section class="sec" id="library" aria-labelledby="lib-t">
@@ -520,7 +606,11 @@ section{position:relative}
     <div class="lib-peek" id="lib-peek" aria-hidden="true"><img alt=""></div>
   </section>
 
+  <div class="dragon" aria-hidden="true" data-text="042 · Made for the Circle · Be You Be Different 💜⚔️🐉 · Stay Woke · "></div>
+
   <section class="sec" id="worn" aria-labelledby="worn-t">
+    <!-- Background: YW·042 (Red and black) -->
+    <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1518.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 id="worn-t">Worn by</h2>
@@ -531,7 +621,8 @@ section{position:relative}
   </section>
 
   <section class="sec panel" id="list" aria-labelledby="list-t">
-    <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1480.jpg" alt="" loading="lazy"></div>
+    <!-- Background: YW·033 (Liberty Raglan · Black, full fit) -->
+    <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1524.jpg" alt="" loading="lazy"></div>
     <div class="wrap join">
       <div class="rv">
         <span class="label">The Circle</span>
@@ -563,7 +654,7 @@ section{position:relative}
       <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
     </div>
     <div class="foot-row">
-      <span>Be You Be Different · 042 · 💜⚔️🐉</span>
+      <span>Be You Be Different 💜⚔️🐉 · 042</span>
       <a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a>
       <span>Limited runs · no spam, just the drop</span>
       <span>Built by Nalto</span>
@@ -574,7 +665,7 @@ section{position:relative}
 <div class="scrim" id="scrim" hidden></div>
 <div class="pview" id="pview" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
   <div class="pview-in">
-    <div class="pv-media"><div class="frame" id="pv-frame"></div><div class="pv-thumbs" id="pv-thumbs"></div><button class="x pv-close" type="button" id="pv-close" style="color:#fff">Close</button></div>
+    <div class="pv-media"><div class="frame" id="pv-frame"></div><div class="pv-thumbs" id="pv-thumbs"></div><span class="pv-grab" aria-hidden="true"></span><button class="x pv-close" type="button" id="pv-close" style="color:#fff">Close</button></div>
     <div class="pv-info">
       <span class="label" id="pv-line">Drop 01</span>
       <h3 id="pv-title">Piece</h3>
@@ -597,7 +688,7 @@ section{position:relative}
   </div>
 </aside>
 
-<button class="chat-fab" type="button" id="chat-open" aria-expanded="false"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
+<button class="chat-fab" type="button" id="chat-open" aria-expanded="false"><span class="ey" aria-hidden="true"><i></i></span><span class="t">Ask YOWA</span></button>
 <div class="chat" id="chat" hidden role="dialog" aria-label="Ask YOWA">
   <div class="chat-head"><span class="ey" aria-hidden="true"><i></i></span><div><b>Ask YOWA</b><span>Sizes, the drop, your order</span></div><button class="x" type="button" id="chat-close">Close</button></div>
   <div class="chat-body" id="chat-body" aria-live="polite"></div>
@@ -615,14 +706,13 @@ const CONFIG = {
   FORMSPREE: 'https://formspree.io/f/mbgjaedg',
   PAYSTACK_PUBLIC_KEY: '',       // pk_live_… once prices are in
   CHAT_ENDPOINT: '/api/chat',    // OpenRouter through a Vercel function
-  HERO_SLIDES: [                 // hero slideshow, first one leads. The skateboard shot goes first once it's in img/
-    { src: 'img/skateboard.jpg', cap: 'Drop 01' },
-    // video: a looping clip that plays over its photo (the photo shows until the clip is ready). hold: ms on screen.
-    { src: 'img/library/yowa-1496.jpg', video: 'img/motion/jump.mp4', cap: 'Liberty Raglan · Red · The jump', hold: 7900 },
-    { src: 'img/look-4.jpg', cap: 'Liberty Raglan · Blue' },
-    { src: 'img/look-1.jpg', cap: 'Liberty Raglan · Blue and Red' },
-    { src: 'img/look-2.jpg', cap: 'Liberty Raglan · Red' },
-    { src: 'img/look-3.jpg', cap: 'Liberty Raglan · Blue and Red' }
+  // Hero slideshow, in this order. Each photo is pinned by its Library code (no), so it never shifts.
+  // pos: the part of the photo that stays in frame on a phone. Optional: hold (ms on screen), video (a looping clip over the photo).
+  HERO_SLIDES: [
+    { no: 'YW·054', src: 'img/library/yowa-skate.jpg', cap: 'Kickflip', pos: '56% 50%' },
+    { no: 'YW·010', src: 'img/library/yowa-9924.jpg', cap: 'The crew', pos: '58% 50%' },
+    { no: 'YW·033', src: 'img/library/yowa-1524.jpg', cap: 'Black, full fit', pos: '50% 38%' },
+    { no: 'YW·042', src: 'img/library/yowa-1518.jpg', cap: 'Red and black', pos: '52% 50%' }
   ],
   LIBRARY_FEED: 'https://yowa-library.vercel.app/api/photos', // photos filed in yowa-library join the Library on their own; '' turns it off
   PREVIEW: false                 // true only in the design preview link (no network there)
@@ -631,16 +721,16 @@ const CONFIG = {
 const PRODUCTS = [
   { id: 'liberty-blue', name: 'Liberty Raglan', colour: 'Blue', line: 'Drop 01', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     images: ['img/raglan-blue-1.jpg', 'img/raglan-blue-2.jpg', 'img/detail-script.jpg', 'img/detail-studs.jpg'],
-    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different written down the sleeve. Handmade, limited run.' },
+    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
   { id: 'liberty-red', name: 'Liberty Raglan', colour: 'Red', line: 'Drop 01', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     images: ['img/raglan-red-1.jpg', 'img/raglan-red-2.jpg', 'img/detail-print.jpg'],
-    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different written down the sleeve. Handmade, limited run.' },
+    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
   { id: 'liberty-grey', name: 'Liberty Raglan', colour: 'Grey', line: 'Drop 01', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     images: ['img/library/yowa-1477.jpg', 'img/library/yowa-1458.jpg'],
     desc: 'Grey studded sleeves on a black body, the Liberty print and YOWA across the chest, the heart, sword and dragon on the back. Handmade, limited run.' },
   { id: 'liberty-black', name: 'Liberty Raglan', colour: 'Black', line: 'Drop 01', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     images: ['img/library/yowa-1522.jpg', 'img/library/yowa-1427.jpg', 'img/library/yowa-1523.jpg'],
-    desc: 'All black, studs down both sleeves, the Liberty print and Be You Be Different written down the sleeve. Handmade, limited run.' },
+    desc: 'All black, studs down both sleeves, the Liberty print and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
   { id: 'cap-042', name: '042 Cap', colour: 'Black patch', line: 'Drop 01', price: null, art: 'cap', sizes: ['One size'],
     images: ['img/library/yowa-1002.jpg', 'img/library/yowa-0997.jpg', 'img/library/yowa-1360.jpg'], desc: 'Black cap covered in patches: 042, the YOWA wordmark, the heart and the signature down the side. Studded crown. One size.' },
   { id: 'skull-cap', name: 'Skull Cap', colour: 'Camo or black', line: 'Drop 01', price: null, art: 'beanie', sizes: ['One size'],
@@ -650,68 +740,71 @@ const GALLERY = [
   { src: 'img/look-4.jpg', cap: 'Liberty Raglan · Blue' },
   { src: 'img/detail-print.jpg', cap: 'The Liberty print' },
   { src: 'img/look-2.jpg', cap: 'Liberty Raglan · Red' },
-  { src: 'img/detail-script.jpg', cap: 'Be You Be Different, down the sleeve' },
+  { src: 'img/detail-script.jpg', cap: 'Be You Be Different 💜⚔️🐉, down the sleeve' },
   { src: 'img/look-3.jpg', cap: 'Blue and red' },
   { src: 'img/detail-studs.jpg', cap: 'Studded raglan seams' },
   { src: 'img/look-1.jpg', cap: 'Drop 01' },
   { src: 'img/library/yowa-1522.jpg', cap: 'Liberty Raglan · Black' }
 ];
-// Library: every photo from yowa-library (shoot 01). Numbers follow this order; add new photos at the end.
+// Library: every photo on file. Each carries its own code (no), written here and never worked out from the order,
+// so YW·010 is always the same photo. Add new photos at the end with the next free code.
 // src is the full photo, the grid loads the small copy in img/library/t/. shelf groups the filters; product links "Shop this piece".
+// Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
 const LIBRARY = [
-  { src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelf: 'Streets', product: 'liberty-red' },
-  { src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelf: 'Campaign', product: 'liberty-blue' },
-  { src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelf: 'Streets', product: 'liberty-blue' },
-  { src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelf: 'Campaign' },
-  { src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelf: 'Streets' },
-  { src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelf: 'Crew' },
-  { src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Campaign', product: 'liberty-red' },
-  { src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
-  { src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelf: 'Campaign' },
-  { src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelf: 'Crew', product: 'cap-042' },
-  { src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelf: 'Campaign' },
-  { src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Streets', product: 'liberty-red' },
-  { src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelf: 'Crew', product: 'cap-042' },
-  { src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
-  { src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelf: 'Streets', product: 'liberty-grey' },
-  { src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
-  { src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
-  { src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-1408.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
-  { src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' }
+  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelf: 'Streets', product: 'liberty-red' },
+  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelf: 'Campaign', product: 'liberty-blue' },
+  { no: 'YW·003', src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·005', src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelf: 'Streets', product: 'liberty-blue' },
+  { no: 'YW·007', src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·008', src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelf: 'Campaign' },
+  { no: 'YW·009', src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelf: 'Streets' },
+  { no: 'YW·010', src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelf: 'Crew' },
+  { no: 'YW·011', src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·013', src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Campaign', product: 'liberty-red' },
+  { no: 'YW·015', src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
+  { no: 'YW·016', src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·018', src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelf: 'Campaign' },
+  { no: 'YW·019', src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·021', src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelf: 'Crew', product: 'cap-042' },
+  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·023', src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·025', src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelf: 'Campaign' },
+  { no: 'YW·026', src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Streets', product: 'liberty-red' },
+  { no: 'YW·028', src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·030', src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·032', src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelf: 'Crew', product: 'cap-042' },
+  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·034', src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·035', src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·036', src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
+  { no: 'YW·037', src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelf: 'Streets', product: 'liberty-grey' },
+  { no: 'YW·039', src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·040', src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
+  { no: 'YW·041', src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·042', src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
+  { no: 'YW·043', src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·045', src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
+  { no: 'YW·047', src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·048', src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·049', src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·050', src: 'img/library/yowa-1408.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
+  { no: 'YW·051', src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·052', src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·053', src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
+  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelf: 'Streets', product: 'liberty-blue' }
 ];
 const CELEBS = [
   { name: '', wore: '', ig: '', photo: '' }, { name: '', wore: '', ig: '', photo: '' },
@@ -730,6 +823,47 @@ const CELEBS = [
   const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
   // Library photos have a small copy in img/library/t/ for grids and cards; the full one is for the viewer.
   const small = s => s.indexOf('img/library/') === 0 ? s.replace('img/library/', 'img/library/t/') : s;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const BYBD = 'Be You Be Different 💜⚔️🐉';
+  const SITE = ($('link[rel=canonical]') || {}).href || location.href.split('#')[0];
+  const touchUI = matchMedia('(hover: none)');
+  const tilt = { x: 0, y: 0, at: 0 };   // how the phone is tilted, -1..1; the hero photo and the eye both use it
+  // Haptics where the phone has them (Android); nothing happens anywhere else.
+  const buzz = p => { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) { } };
+  // iOS only shows :active press states when the page listens for touches.
+  document.addEventListener('touchstart', () => { }, { passive: true });
+  const toastEl = $('#toast'); let toastT = 0;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toastEl.hidden = true; }, 2400);
+    if (!reduced()) toastEl.animate([{ opacity: 0, transform: 'translate(-50%,14px)' }, { opacity: 1, transform: 'translate(-50%,0)' }], { duration: 360, easing: 'cubic-bezier(.16,1,.3,1)' });
+  }
+  // The phone's own share sheet; copy the link where there isn't one.
+  async function shareLink(url, title, text) {
+    if (navigator.share) { try { await navigator.share({ title, text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(url); toast('Link copied'); buzz(10); } catch (e) { toast(url); }
+  }
+  // 💜⚔️🐉 burst out of a point and fall away.
+  function burst(x, y, n) {
+    if (reduced()) return; const E = ['💜', '⚔️', '🐉'];
+    for (let i = 0; i < (n || 18); i++) {
+      const s = document.createElement('span'); s.className = 'burst'; s.setAttribute('aria-hidden', 'true'); s.textContent = E[i % 3]; s.style.left = x + 'px'; s.style.top = y + 'px'; document.body.appendChild(s);
+      const a = -Math.PI / 2 + rnd(-1.3, 1.3), v = rnd(80, 210), r = rnd(-160, 160), ax = Math.cos(a) * v, ay = Math.sin(a) * v;
+      const at = (mx, my, sc, rot) => 'translate(-50%,-50%) translate(' + mx.toFixed(0) + 'px,' + my.toFixed(0) + 'px) scale(' + sc + ') rotate(' + rot.toFixed(0) + 'deg)';
+      s.animate([{ transform: at(0, 0, .3, 0), opacity: 0 }, { transform: at(ax * .6, ay * .6, 1.15, r * .4), opacity: 1, offset: .32 }, { transform: at(ax, ay + 190, .8, r), opacity: 0 }], { duration: rnd(1050, 1550), easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => s.remove();
+    }
+  }
+  const burstFrom = el => { const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); };
+  // The phone's back button closes whatever sheet is open instead of leaving the site.
+  const backstack = (() => {
+    let closer = null;
+    addEventListener('popstate', () => { const c = closer; closer = null; if (c) c(true); });
+    return {
+      open(fn) { const had = !!closer; closer = fn; if (!had) try { history.pushState({ yowa: 1 }, ''); } catch (e) { } },  // a sheet opened from another one takes over its step
+      close() { if (!closer) return; closer = null; try { history.back(); } catch (e) { } },
+      drop() { closer = null; }
+    };
+  })();
 
   /* ── Motion clips: muted loops that play over their photo, only on screen, never with reduced motion or data saver ── */
   // Each clip ships as .mp4 (H.264, Safari) and a smaller .webm (VP9, Chrome, Firefox, Android) next to it.
@@ -783,44 +917,143 @@ const CELEBS = [
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     const loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = { R: gl.getUniformLocation(pr, 'R'), T: gl.getUniformLocation(pr, 'T'), M: gl.getUniformLocation(pr, 'M') };
-    const st = { speed: 1, t: 7.3, m: [.5, .5], mTo: [.5, .5], on: false, raf: 0, last: 0 };
+    const st = { speed: 1, boost: 0, t: 7.3, m: [.5, .5], mTo: [.5, .5], on: false, raf: 0, last: 0 };
     const resize = () => { const sc = Math.min(window.devicePixelRatio || 1, 1.5) * .5, w = Math.max(2, Math.round(innerWidth * sc)), h = Math.max(2, Math.round(innerHeight * sc)); if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); } };
     const draw = () => { resize(); gl.uniform2f(U.R, canvas.width, canvas.height); gl.uniform1f(U.T, st.t); gl.uniform2f(U.M, st.m[0], st.m[1]); gl.drawArrays(gl.TRIANGLES, 0, 3); };
-    function frame(now) { const dt = Math.min(.05, (now - st.last) / 1000 || 0); st.last = now; st.t += dt * .12 * st.speed; st.m[0] += (st.mTo[0] - st.m[0]) * .04; st.m[1] += (st.mTo[1] - st.m[1]) * .04; draw(); if (st.on) st.raf = requestAnimationFrame(frame); }
+    function frame(now) { const dt = Math.min(.05, (now - st.last) / 1000 || 0); st.last = now; st.t += dt * .12 * (st.speed + st.boost); st.boost *= .95; st.m[0] += (st.mTo[0] - st.m[0]) * .04; st.m[1] += (st.mTo[1] - st.m[1]) * .04; draw(); if (st.on) st.raf = requestAnimationFrame(frame); }
     return {
       start() { if (st.on) return; if (reduced()) { draw(); return; } st.on = true; st.last = performance.now(); st.raf = requestAnimationFrame(frame); },
       stop() { st.on = false; cancelAnimationFrame(st.raf); },
-      speed(v) { st.speed = v; }, pointer(x, y) { st.mTo = [x, y]; }, draw
+      speed(v) { st.speed = v; }, kick(v) { st.boost = Math.min(4, st.boost + v); }, pointer(x, y) { st.mTo = [x, y]; }, draw
     };
   }
   const swirl = createSwirl($('#swirl'));
   if (swirl) {
     swirl.start();
-    addEventListener('pointermove', e => swirl.pointer(e.clientX / innerWidth, 1 - e.clientY / innerHeight), { passive: true });
+    ['pointermove', 'pointerdown'].forEach(t => addEventListener(t, e => swirl.pointer(e.clientX / innerWidth, 1 - e.clientY / innerHeight), { passive: true }));
     document.addEventListener('visibilitychange', () => document.hidden ? swirl.stop() : swirl.start());
     addEventListener('resize', () => swirl.draw());
   }
 
-  /* ── Hero: lookbook slideshow with slow zoom, parallax and a caption per piece; a slide with a clip plays it ── */
-  const slidesEl = $('#slides'), capEl = $('#slide-cap'), dotsEl = $('#dots'); let si = 0, heroOn = true;
+  /* ── Glitch: a photo tears into slices, splits red and cyan, drops out for a frame and snaps back ── */
+  // Drawn as a short-lived layer over the photo: two colour copies that screen back into the original when lined up,
+  // torn strips of the photo (or of the photo it replaces), and scan lines. The layer is gone again in under half a second.
+  function glitchPic(host, o) {
+    o = o || {}; if (!host || !host.isConnected || reduced() || host.querySelector(':scope > .gx')) return false;
+    const img = host.querySelector('img'); if (!img || !img.complete || !img.naturalWidth || !img.offsetWidth) return false;
+    const src = img.currentSrc || img.src, pos = getComputedStyle(img).objectPosition || '50% 50%';
+    const from = o.from && o.from.complete && o.from.naturalWidth ? o.from.currentSrc || o.from.src : '';
+    const dur = o.dur || 440, k = clamp(img.offsetWidth / 420, .45, 1.5) * (o.power || 1), n = o.slices || 5;
+    const gx = document.createElement('span'); gx.className = 'gx'; gx.setAttribute('aria-hidden', 'true');
+    if (img.offsetParent === host && (img.offsetLeft || img.offsetTop || img.offsetWidth !== host.clientWidth || img.offsetHeight !== host.clientHeight))
+      Object.assign(gx.style, { right: 'auto', bottom: 'auto', left: img.offsetLeft + 'px', top: img.offsetTop + 'px', width: img.offsetWidth + 'px', height: img.offsetHeight + 'px' });
+    const layer = (cls, url) => { const i = document.createElement('i'); i.className = cls; if (url) { i.style.backgroundImage = 'url("' + url + '")'; i.style.backgroundPosition = pos; } gx.appendChild(i); return i; };
+    const F = [0, .07, .16, .27, .36, .48, .6, .74, .87, 1];
+    const run = (el, frames) => el.animate(frames.map((f, j) => Object.assign({ offset: F[j], easing: 'steps(1,end)' }, f)), { duration: dur, fill: 'both' });
+    const A = 7 * k * (Math.random() < .5 ? 1 : -1), J = 2.5 * k;
+    const split = [0, -A, A * 1.9, 0, A * .8, -A * 1.3, 0, A * .45, 0, 0], drop = [1, 1, 1, .1, 1, 1, 1, 1, 1, 1], skew = [0, 0, -7, 0, 4, 0, 0, 0, 0, 0];
+    const rgb = sg => split.map((x, j) => ({ transform: 'translate(' + (x * sg).toFixed(1) + 'px,' + (j === 2 ? -J : j === 4 ? J : 0).toFixed(1) + 'px) skewX(' + skew[j] + 'deg)', opacity: drop[j] }));
+    run(layer('r', src), rgb(1)); run(layer('c', src), rgb(-1));
+    if (from) run(layer('o', from), F.map((_, j) => ({ opacity: j < 2 || j === 3 ? 1 : 0, transform: j === 1 ? 'translateX(' + (-A * .6).toFixed(1) + 'px)' : 'none' })));
+    for (let q = 0; q < n; q++) {
+      const t = rnd(0, 90), h = rnd(3, 15), old = from && q % 2 === 0, on = [1, 2, 3, 4, 5, 7].filter(() => Math.random() < .55);
+      const el = layer(q === 1 ? 'neg' : 's', old ? from : src); el.style.clipPath = 'inset(' + t.toFixed(1) + '% 0 ' + Math.max(0, 100 - t - h).toFixed(1) + '% 0)';
+      run(el, F.map((_, j) => on.indexOf(j) >= 0 && !(old && j > 3) ? { opacity: 1, transform: 'translateX(' + (rnd(10, 46) * k * (Math.random() < .5 ? -1 : 1)).toFixed(1) + 'px)' } : { opacity: 0, transform: 'none' }));
+    }
+    run(layer('n'), [0, .7, 1, .9, .5, .7, 0, .35, 0, 0].map(v => ({ opacity: v })));
+    host.appendChild(gx); setTimeout(() => gx.remove(), dur + 40);
+    return true;
+  }
+  // Photos glitch once as they scroll into view; after that, every few seconds one on screen glitches out and comes straight back.
+  const onScreen = new Set(); let lastG = 0;
+  const gio = new IntersectionObserver(es => es.forEach(e => {
+    const el = e.target; if (!e.isIntersecting) { onScreen.delete(el); return; } onScreen.add(el);
+    if (el.dataset.gd) return; const now = performance.now(), wait = Math.max(0, lastG + 140 - now); if (wait > 700) return; lastG = now + wait; el.dataset.gd = '1';
+    const im = el.querySelector('img'), go = () => setTimeout(() => { if (onScreen.has(el)) glitchPic(el, { power: .75, dur: 380, slices: 4 }); }, wait + (el.classList.contains('lib-tile') ? 700 : 160));
+    if (im && im.complete && im.naturalWidth) go(); else if (im) im.addEventListener('load', go, { once: true });
+  }), { threshold: .4 });
+  const glitchable = el => { if (el && !reduced()) gio.observe(el); };
+  (function ghost() { setTimeout(() => { if (!document.hidden && onScreen.size) { const a = Array.from(onScreen).filter(el => el.isConnected); if (a.length) glitchPic(a[Math.floor(Math.random() * a.length)], { power: .65, dur: 360, slices: 4 }); } ghost(); }, rnd(2400, 5600)); })();
+
+  /* ── Hero: story-style slideshow. The bars fill while a photo is up; tap right for the next, left for the last, swipe, or hold to pause and see the fit ── */
+  const hero = $('#home'), heroMedia = $('#hero-media'), slidesEl = $('#slides'), capEl = $('#slide-cap'), barsEl = $('#bars'), wide = matchMedia('(min-width:960px)');
+  let si = 0, heroOn = true, held = false, elapsed = 0, lastT = 0, heroRaf = 0;
+  const slides = () => $$('.slide', slidesEl), holdOf = d => +(d && d.dataset.hold) || 6000;
   CONFIG.HERO_SLIDES.forEach((sl, i) => {
-    const d = document.createElement('div'); d.className = 'slide'; d.dataset.cap = sl.cap; if (sl.hold) d.dataset.hold = sl.hold;
-    const im = document.createElement('img'); im.alt = ''; im.decoding = 'async'; if (i > 2) im.loading = 'lazy';
-    im.onerror = () => { d.remove(); paintSlides(); }; im.src = sl.src; d.appendChild(im);
+    const d = document.createElement('div'); d.className = 'slide'; d.dataset.cap = sl.cap || ''; d.dataset.no = sl.no || ''; if (sl.hold) d.dataset.hold = sl.hold;
+    const im = document.createElement('img'); im.alt = ''; im.decoding = 'async'; if (i === 0) im.fetchPriority = 'high'; if (sl.pos) im.style.objectPosition = sl.pos;
+    im.onerror = () => { const cur = slides()[si], gone = cur === d; d.remove(); si = Math.max(0, slides().indexOf(cur)); paintBars(); if (gone) goSlide(si, true); };
+    im.src = sl.src; d.appendChild(im);
     if (sl.video && motionOK()) d.appendChild(clip(sl.video, d));
     slidesEl.appendChild(d);
   });
-  function paintSlides() {
-    const sl = $$('.slide', slidesEl); if (!sl.length) return; si = (si + sl.length) % sl.length;
-    // The clip restarts on its first frame, which is the photo, so the crossfade never jumps.
-    sl.forEach((d, i) => { d.classList.toggle('on', i === si); const v = d.querySelector('video'); if (!v) return; if (i === si && heroOn) { try { v.currentTime = 0; } catch (e) { } play(v); } else pause(v); });
-    capEl.textContent = sl[si].dataset.cap;
-    dotsEl.textContent = ''; sl.forEach((_, i) => { const t = document.createElement('i'); if (i === si) t.className = 'on'; dotsEl.appendChild(t); });
+  function paintBars() { barsEl.textContent = ''; slides().forEach(() => barsEl.appendChild(document.createElement('i')).appendChild(document.createElement('b'))); markBars(); }
+  function markBars() { $$('i', barsEl).forEach((b, i) => { b.className = i < si ? 'past' : i === si ? 'now' : ''; b.firstChild.style.transform = i === si && reduced() ? 'scaleX(1)' : ''; }); }
+  function goSlide(k, quiet) {
+    const sl = slides(); if (!sl.length) return;
+    const prev = sl.find(d => d.classList.contains('on')), next = sl[(k % sl.length + sl.length) % sl.length];
+    si = sl.indexOf(next); elapsed = 0;
+    sl.forEach(d => { if (d !== prev) d.classList.remove('was'); });
+    if (prev && prev !== next) { prev.classList.remove('on'); prev.classList.add('was'); setTimeout(() => { if (!prev.classList.contains('on')) prev.classList.remove('was'); }, 450); }
+    next.classList.add('on');
+    sl.forEach(d => { const v = d.querySelector('video'); if (!v) return; if (d === next && heroOn) { try { v.currentTime = 0; } catch (e) { } play(v); } else pause(v); });
+    capEl.textContent = ''; if (next.dataset.no) { const b = document.createElement('b'); b.textContent = next.dataset.no; capEl.append(b, next.dataset.cap); } else capEl.textContent = next.dataset.cap;
+    capEl.hidden = !capEl.textContent; markBars();
+    if (!quiet && prev && prev !== next) glitchPic(next, { from: prev.querySelector('img'), power: 1.1, dur: 460 });
   }
-  paintSlides();
-  if (!reduced()) (function cycle() { const cur = $$('.slide', slidesEl)[si]; setTimeout(() => { if (!document.hidden && heroOn) { si++; paintSlides(); } cycle(); }, +(cur && cur.dataset.hold) || 6000); })();
-  new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; const cur = $$('.slide', slidesEl)[si], v = cur && cur.querySelector('video'); if (heroOn) play(v); else pause(v); }).observe($('#home'));
-  if (!reduced()) addEventListener('pointermove', e => { slidesEl.style.setProperty('--px', ((e.clientX / innerWidth - .5) * -18).toFixed(1) + 'px'); slidesEl.style.setProperty('--py', ((e.clientY / innerHeight - .5) * -12).toFixed(1) + 'px'); }, { passive: true });
+  function heroFrame(now) {
+    heroRaf = 0; if (!heroOn || document.hidden) return;
+    const dt = lastT ? Math.min(100, now - lastT) : 0, cur = slides()[si]; lastT = now; if (!cur) return;
+    if (!held) elapsed += dt;
+    const bar = barsEl.children[si]; if (bar) bar.firstChild.style.transform = 'scaleX(' + Math.min(1, elapsed / holdOf(cur)).toFixed(4) + ')';
+    if (elapsed >= holdOf(cur)) goSlide(si + 1);
+    heroRaf = requestAnimationFrame(heroFrame);
+  }
+  const heroRun = () => { if (!heroRaf && heroOn && !document.hidden && !reduced()) { lastT = 0; heroRaf = requestAnimationFrame(heroFrame); } };
+  new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; const cur = slides()[si], v = cur && cur.querySelector('video'); if (heroOn) { play(v); heroRun(); } else pause(v); }).observe(hero);
+  document.addEventListener('visibilitychange', heroRun);
+  // Taps: anywhere on the photo (on a phone, anywhere on the hero but its buttons). The caption opens that photo in the Library.
+  const NOTAP = 'a,button,input,select,textarea,label', OWN = '.logo,.emo';   // the logo and the emojis keep their own tap, but swipes over them still count
+  let tp = null, holdT = 0;
+  function setHeld(on) { held = on; hero.classList.toggle('paused', on); document.documentElement.classList.toggle('hold', on && !wide.matches); }
+  hero.addEventListener('pointerdown', e => {
+    if (e.button > 0 || !e.isPrimary || e.target.closest(NOTAP) || (wide.matches && !heroMedia.contains(e.target))) return;
+    tp = { x: e.clientX, y: e.clientY, id: e.pointerId, own: !!e.target.closest(OWN) }; clearTimeout(holdT); holdT = setTimeout(() => { if (tp) setHeld(true); }, 220);
+  });
+  hero.addEventListener('pointermove', e => { if (tp && !held && e.pointerId === tp.id && Math.hypot(e.clientX - tp.x, e.clientY - tp.y) > 12) clearTimeout(holdT); }, { passive: true });
+  hero.addEventListener('pointerup', e => {
+    if (!tp || e.pointerId !== tp.id) return; clearTimeout(holdT);
+    const dx = e.clientX - tp.x, dy = e.clientY - tp.y, own = tp.own; tp = null;
+    if (held) { setHeld(false); return; }
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.3) { goSlide(si + (dx < 0 ? 1 : -1)); return; }
+    if (Math.hypot(dx, dy) > 12 || own) return;
+    const c = capEl.getBoundingClientRect(), cur = slides()[si];
+    if (!capEl.hidden && cur && cur.dataset.no && e.clientX > c.left - 10 && e.clientX < c.right + 10 && e.clientY > c.top - 10 && e.clientY < c.bottom + 10) { openCode(cur.dataset.no); return; }
+    const box = (wide.matches ? heroMedia : hero).getBoundingClientRect();
+    goSlide(si + (e.clientX - box.left < box.width * .3 ? -1 : 1));
+  });
+  hero.addEventListener('pointercancel', () => { clearTimeout(holdT); tp = null; if (held) setHeld(false); });
+  hero.addEventListener('contextmenu', e => { if (held || tp) e.preventDefault(); });
+  paintBars(); goSlide(0, true); heroRun();
+  // First photo glitches in once it's loaded, then now and then mid-photo it drops out and snaps back.
+  const firstImg = slides()[0] && slides()[0].querySelector('img');
+  if (firstImg) { const intro = () => setTimeout(() => { if (si === 0) glitchPic(slides()[0], { power: 1.3, dur: 560 }); }, 300); if (firstImg.complete) intro(); else firstImg.addEventListener('load', intro, { once: true }); }
+  (function idle() { setTimeout(() => { const cur = slides()[si]; if (heroOn && !held && !document.hidden && elapsed > 1300 && elapsed < holdOf(cur) - 1000) glitchPic(cur, { power: .85, dur: 360 }); idle(); }, rnd(2400, 5200)); })();
+  // The photo leans with the cursor, or with the phone as you tilt it (Android; iOS keeps motion sensors behind a prompt, so there it stays still).
+  const lean = (x, y) => { slidesEl.style.setProperty('--px', x.toFixed(1) + 'px'); slidesEl.style.setProperty('--py', y.toFixed(1) + 'px'); };
+  const eyes = [];
+  if (!reduced()) {
+    addEventListener('pointermove', e => { if (e.pointerType === 'mouse') lean((e.clientX / innerWidth - .5) * -18, (e.clientY / innerHeight - .5) * -12); }, { passive: true });
+    let bB = null, bG = 0;
+    addEventListener('deviceorientation', e => {
+      if (e.gamma == null || e.beta == null) return;
+      if (bB == null) { bB = e.beta; bG = e.gamma; }
+      bB += (e.beta - bB) * .01; bG += (e.gamma - bG) * .01;   // drifts back to centre, so it follows the tilt, not how you hold the phone
+      tilt.x = clamp((e.gamma - bG) / 18, -1, 1); tilt.y = clamp((e.beta - bB) / 18, -1, 1); tilt.at = performance.now();
+      if (heroOn) lean(tilt.x * -11, tilt.y * -14);
+      eyes.forEach(f => f());
+    }, { passive: true });
+  }
 
   /* ── Photo backgrounds drift with the scroll; one with a clip plays it while it's on screen ── */
   const pbs = $$('.photo-bg');
@@ -834,26 +1067,32 @@ const CELEBS = [
   /* ── Signature writes itself ── */
   const PEN = [.6, .524, .422, .325, .322, .61, .476, .427, .336, .228, .353, .615, .541, .715, .627, .698, .786, .718, .618, .701, .707, .692, .655, .587, .658, .684, .553, .533, .604, .635, .575, .553, .655, .652, .647, .632, .613, .59, .55, .484, .729, .729, .732, .658, .732, .818, .729, .721, .721].map((v, i, a) => (a[Math.max(0, i - 1)] + v + a[Math.min(a.length - 1, i + 1)]) / 3);
   function writeSig(box) {
-    const pen = box.querySelector('.pen'); if (reduced()) return;
+    const pen = box.querySelector('.pen'); if (reduced() || box.dataset.writing) return; box.dataset.writing = '1';
     const t0 = performance.now(), D = 1600, ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     (function step(now) {
       const p = Math.min(1, (now - t0) / D), e = ease(p), x = Math.min(1, Math.max(0, e * 1.1 - .05)), fi = x * (PEN.length - 1), i = Math.floor(fi);
       box.style.setProperty('--p', e.toFixed(4)); pen.style.left = x * 100 + '%';
       pen.style.top = (PEN[i] + ((PEN[Math.min(PEN.length - 1, i + 1)] - PEN[i]) * (fi - i))) * 100 + '%'; pen.style.opacity = p < 1 ? 1 : 0;
-      if (p < 1) requestAnimationFrame(step);
+      if (p < 1) requestAnimationFrame(step); else delete box.dataset.writing;
     })(t0);
   }
-  writeSig($('#sig'));
+  // Top left: the signature writes itself. Tap it to go back to the top and it writes again.
+  const brand = $('.brand'); writeSig(brand);
+  brand.addEventListener('click', () => setTimeout(() => writeSig(brand), 80));
 
-  /* ── The eye in the O ── */
+  /* ── The eye in the O: follows your finger or cursor, leans with the phone, looks around on its own when left alone ── */
   function makeEye(logo) {
-    const g = logo.querySelector('.pupil-g'); let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const g = logo.querySelector('.pupil-g'); let tx = 0, ty = 0, x = 0, y = 0, raf = 0, lastIn = 0;
     const loop = () => { x += (tx - x) * .18; y += (ty - y) * .18; g.setAttribute('transform', 'translate(' + x.toFixed(2) + ' ' + y.toFixed(2) + ')'); raf = (Math.abs(tx - x) > .1 || Math.abs(ty - y) > .1) ? requestAnimationFrame(loop) : 0; };
-    addEventListener('pointermove', e => {
-      if (reduced()) return; const r = logo.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
-      const s = r.width / 701, dx = e.clientX - (r.left + 235.5 * s), dy = e.clientY - (r.top + 89 * s), d = Math.hypot(dx, dy) || 1, k = Math.min(28, d / 9) / d;
-      tx = dx * k; ty = dy * k; if (!raf) raf = requestAnimationFrame(loop);
-    }, { passive: true });
+    const move = () => { if (!raf) raf = requestAnimationFrame(loop); };
+    const seen = () => { const r = logo.getBoundingClientRect(); return r.width && r.bottom > 0 && r.top < innerHeight ? r : null; };
+    const lookAt = (cx, cy) => { if (reduced()) return; const r = seen(); if (!r) return; const s = r.width / 701, dx = cx - (r.left + 235.5 * s), dy = cy - (r.top + 89 * s), d = Math.hypot(dx, dy) || 1, k = Math.min(28, d / 9) / d; tx = dx * k; ty = dy * k; lastIn = performance.now(); move(); };
+    const aim = (ax, ay) => { if (reduced() || !seen()) return; const m = Math.hypot(ax, ay), f = m > 1 ? 1 / m : 1; tx = ax * f * 26; ty = ay * f * 26; move(); };
+    addEventListener('pointermove', e => lookAt(e.clientX, e.clientY), { passive: true });
+    addEventListener('pointerdown', e => lookAt(e.clientX, e.clientY), { passive: true });
+    addEventListener('touchmove', e => { const t = e.touches[0]; if (t) lookAt(t.clientX, t.clientY); }, { passive: true });
+    eyes.push(() => { if (performance.now() - lastIn > 1800) aim(tilt.x, tilt.y); });
+    (function wander() { setTimeout(() => { const now = performance.now(); if (!document.hidden && now - lastIn > 2600 && now - tilt.at > 1500) { const a = rnd(0, Math.PI * 2), m = Math.random() < .3 ? 0 : rnd(.5, 1); aim(Math.cos(a) * m, Math.sin(a) * m * .75); } wander(); }, rnd(1100, 2600)); })();
     (function blink() { setTimeout(() => { if (!reduced() && !document.hidden) { logo.classList.remove('blink'); void logo.offsetWidth; logo.classList.add('blink'); } blink(); }, 3000 + Math.random() * 4000); })();
   }
   makeEye($('#logo')); makeEye($('#foot-logo'));
@@ -867,10 +1106,13 @@ const CELEBS = [
   }
   const heroLogo = $('#logo');
   heroLogo.addEventListener('pointerenter', () => glitch(heroLogo));
+  heroLogo.addEventListener('click', () => { glitch(heroLogo); heroLogo.classList.remove('blink'); void heroLogo.offsetWidth; heroLogo.classList.add('blink'); buzz(12); });
   setTimeout(() => glitch(heroLogo), 1700);
+  // Tap the three emojis after the mantra
+  const emo = $('.mantra .emo'); if (emo) emo.addEventListener('click', () => { burstFrom(emo); buzz(10); });
 
   /* ── Countdown / drop state ── */
-  const hero = $('#home'), U = { d: $('[data-u="d"]'), h: $('[data-u="h"]'), m: $('[data-u="m"]'), s: $('[data-u="s"]') };
+  const U = { d: $('[data-u="d"]'), h: $('[data-u="h"]'), m: $('[data-u="m"]'), s: $('[data-u="s"]') };
   const target = CONFIG.DROP_AT ? new Date(CONFIG.DROP_AT).getTime() : null; let wasLive = false;
   function tick() {
     if (!target) { $('#kick').textContent = CONFIG.DROP_NAME + ' · Loading'; $('#cd').hidden = true; return; }
@@ -882,21 +1124,81 @@ const CELEBS = [
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Tickers that listen to the scroll ── */
-  const tracks = $$('.tt'); const xs = tracks.map((_, i) => i % 2 ? -1 : 0); let tv = 0, ly = scrollY, lt = performance.now();
-  function tickers(now) {
-    const dt = Math.min(64, now - lt); lt = now; const y = scrollY; tv += ((y - ly) / Math.max(dt, 1) - tv) * .12; ly = y;
-    const sp = .045 + Math.min(3, Math.abs(tv)) * .5;
-    tracks.forEach((t, i) => { const w = t.firstElementChild.getBoundingClientRect().width || 1; xs[i] += (i % 2 ? .8 : -1) * sp * dt; while (xs[i] <= -w) xs[i] += w; while (xs[i] > 0) xs[i] -= w; t.style.transform = 'translate3d(' + xs[i].toFixed(1) + 'px,0,0) skewX(' + (Math.max(-7, Math.min(7, tv * 4)) * (i % 2 ? -1 : 1)).toFixed(2) + 'deg)'; });
-    requestAnimationFrame(tickers);
+  /* ── Dragons: serpent ribbons across the seams. The body slithers, the words ride its back, a fast scroll makes it thrash ── */
+  const dragons = $$('.dragon').map((el, n) => {
+    const id = 'dg' + n, ref = ' href="#' + id + 'p" xlink:href="#' + id + 'p"';
+    el.innerHTML = '<svg aria-hidden="true" focusable="false"><defs><path id="' + id + 'p"/><linearGradient id="' + id + 'g" gradientUnits="userSpaceOnUse" spreadMethod="reflect" x1="0" y1="0" x2="200" y2="0"><stop class="s0" offset="0"/><stop class="s1" offset="1"/></linearGradient></defs>' +
+      '<use class="d-glow"' + ref + '/><use class="d-edge"' + ref + '/><use class="d-body"' + ref + ' stroke="url(#' + id + 'g)"/><use class="d-scale"' + ref + '/>' +
+      '<text class="d-text d-m"></text><text class="d-text" dy=".36em"><textPath' + ref + '></textPath></text></svg>';
+    return { el, svg: el.firstChild, path: el.querySelector('path'), grad: el.querySelector('linearGradient'), tp: el.querySelector('textPath'), m: el.querySelector('.d-m'),
+      text: el.dataset.text || BYBD + ' · ', dir: n % 2 ? 1 : -1, ph: rnd(0, 6), seed: rnd(0, 6), off: 0, rep: 0, w: 0, h: 0, lam: 400, amp: 22, on: false };
+  });
+  // The body: a sine wave with a second, slower ripple on top, drawn through its points as one smooth curve.
+  function wave(d, ampK) {
+    const step = d.lam / 10, cy = d.h / 2, A = d.amp * ampK, K = Math.PI * 2 / d.lam, P = [];
+    for (let x = -d.lam; x <= d.w + d.lam + .1; x += step) P.push([x, cy + A * Math.sin(K * x + d.ph) + A * .3 * Math.sin(2 * K * x - d.ph * 1.6 + d.seed)]);
+    let s = 'M' + P[0][0].toFixed(1) + ' ' + P[0][1].toFixed(1);
+    for (let i = 0; i < P.length - 1; i++) {
+      const a = P[Math.max(0, i - 1)], b = P[i], c = P[i + 1], e = P[Math.min(P.length - 1, i + 2)];
+      s += 'C' + (b[0] + (c[0] - a[0]) / 6).toFixed(1) + ' ' + (b[1] + (c[1] - a[1]) / 6).toFixed(1) + ' ' + (c[0] - (e[0] - b[0]) / 6).toFixed(1) + ' ' + (c[1] - (e[1] - b[1]) / 6).toFixed(1) + ' ' + c[0].toFixed(1) + ' ' + c[1].toFixed(1);
+    }
+    return s;
   }
-  if (!reduced()) requestAnimationFrame(tickers);
+  function drawDragon(d, ampK) {
+    d.path.setAttribute('d', wave(d, ampK));
+    d.tp.setAttribute('startOffset', (d.off - d.rep).toFixed(1));
+    d.grad.setAttribute('gradientTransform', 'translate(' + (-d.ph / (Math.PI * 2) * d.lam).toFixed(1) + ' 0)');
+  }
+  function layoutDragon(d) {
+    const w = d.el.clientWidth, h = d.el.clientHeight; if (!w || !h) return;
+    d.w = w; d.h = h; d.svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    d.lam = clamp(w * .84, 300, 640); d.amp = w < 600 ? 21 : 27; d.grad.setAttribute('x2', (d.lam / 2).toFixed(0));
+    d.m.textContent = d.text; d.rep = d.m.getComputedTextLength() || 0;
+    d.path.setAttribute('d', wave(d, 1));
+    const len = d.path.getTotalLength ? d.path.getTotalLength() : w * 2;
+    d.tp.textContent = d.rep ? d.text.repeat(Math.ceil((len + d.rep) / d.rep) + 1) : d.text;
+    drawDragon(d, 1);
+  }
+  let dRaf = 0, dLast = 0, dY = scrollY, dV = 0;
+  function dragonFrame(now) {
+    dRaf = 0; const dt = dLast ? Math.min(50, now - dLast) : 16; dLast = now;
+    const y = scrollY; dV += (Math.abs(y - dY) / dt - dV) * .12; dY = y;   // scroll speed in px per ms, smoothed
+    const thr = Math.min(2.4, dV); let live = false;
+    dragons.forEach(d => {
+      if (!d.on || !d.rep) return; live = true;
+      d.ph += dt * .0011 * (1 + thr * 1.4);
+      d.off = ((d.off + d.dir * dt * (.04 + thr * .3)) % d.rep + d.rep) % d.rep;
+      drawDragon(d, 1 + thr * .22);
+    });
+    if (live) dRaf = requestAnimationFrame(dragonFrame); else dLast = 0;
+  }
+  const dio = new IntersectionObserver(es => {
+    es.forEach(e => { const d = dragons.find(x => x.el === e.target); if (d) d.on = e.isIntersecting; });
+    if (!reduced() && !dRaf && dragons.some(d => d.on)) { dY = scrollY; dRaf = requestAnimationFrame(dragonFrame); }
+  }, { rootMargin: '80px 0px' });
+  const layoutDragons = () => dragons.forEach(layoutDragon);
+  layoutDragons(); dragons.forEach(d => dio.observe(d.el));
+  if (document.fonts) { document.fonts.ready.then(layoutDragons); if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layoutDragons); }
+  let dRs = 0; addEventListener('resize', () => { clearTimeout(dRs); dRs = setTimeout(layoutDragons, 150); });
 
   /* ── Header state + menu ── */
-  const top = $('#top'); const onScroll = () => top.classList.toggle('stuck', scrollY > 40); addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  const menu = $('#menu'); $('#menu-open').addEventListener('click', () => { menu.hidden = false; $('#menu-open').setAttribute('aria-expanded', 'true'); });
-  const closeMenu = () => { menu.hidden = true; $('#menu-open').setAttribute('aria-expanded', 'false'); };
-  $('#menu-close').addEventListener('click', closeMenu); $$('#menu a').forEach(a => a.addEventListener('click', closeMenu));
+  // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
+  const top = $('#top'), fab = $('#chat-open'), prog = $('#progress'); let lastY = scrollY;
+  function onScroll() {
+    const y = scrollY, dy = y - lastY; lastY = y;
+    top.classList.toggle('stuck', y > 40);
+    if (y < innerHeight * .6 || dy < -4) top.classList.remove('away'); else if (dy > 4) top.classList.add('away');
+    fab.classList.toggle('mini', top.classList.contains('away'));
+    const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = 'scaleX(' + (max > 0 ? clamp(y / max, 0, 1) : 0).toFixed(4) + ')';
+    if (swirl && dy) swirl.kick(Math.min(.6, Math.abs(dy) * .008));
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  const menu = $('#menu'), menuBtn = $('#menu-open');
+  function closeMenu(viaBack) { if (menu.hidden) return; menu.hidden = true; document.body.style.overflow = ''; menuBtn.setAttribute('aria-expanded', 'false'); if (viaBack !== true) backstack.close(); }
+  menuBtn.addEventListener('click', () => { menu.hidden = false; document.body.style.overflow = 'hidden'; menuBtn.setAttribute('aria-expanded', 'true'); backstack.open(closeMenu); buzz(6); });
+  $('#menu-close').addEventListener('click', () => closeMenu());
+  // A link in the menu closes it and goes, without leaving an extra step in the back history.
+  $$('#menu a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
 
   /* ── Magnetic buttons ── */
   $$('[data-magnet]').forEach(b => {
@@ -910,8 +1212,8 @@ const CELEBS = [
   function paintLock() { dropBar.classList.toggle('unlocked', unlocked); $('#lock-text').textContent = unlocked ? 'Unlocked · welcome to the Circle' : 'Locked · the list gets the code first'; $('#gate').hidden = unlocked; }
   $('#gate').addEventListener('submit', e => {
     e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), msg = $('#gate-msg');
-    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); msg.classList.remove('bad'); msg.textContent = "You're in. Pick your pieces."; paintLock(); renderGrid(); glitch(heroLogo); }
-    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Join the list below and it comes to your inbox first."; if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
+    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); msg.classList.remove('bad'); msg.textContent = "You're in. Pick your pieces."; paintLock(); renderGrid(); glitch(heroLogo); buzz([12, 40, 12, 40, 30]); burstFrom($('.lockstate')); }
+    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Join the list below and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
   });
   const grid = $('#grid');
   function renderGrid() {
@@ -922,7 +1224,7 @@ const CELEBS = [
       b.innerHTML = '<div class="frame">' + frameHTML(p, tag) + '</div><div class="card-row"><span class="card-name"></span><span class="card-price"></span></div><div class="card-sub"></div>';
       b.querySelector('.card-name').textContent = p.name; b.querySelector('.card-price').textContent = p.price == null ? '₦ ——' : naira(p.price);
       b.querySelector('.card-sub').textContent = (p.colour ? p.colour + ' · ' : '') + (p.sizes.length > 1 ? p.sizes[0] + ' to ' + p.sizes[p.sizes.length - 1] : p.sizes[0]);
-      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b);
+      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b); glitchable(b.querySelector('.frame'));
     });
   }
   paintLock(); renderGrid();
@@ -940,19 +1242,28 @@ const CELEBS = [
     p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size'; b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
     const add = $('#pv-add'); $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
     if (p.price == null) add.textContent = 'Notify me when it drops'; else if (!unlocked) add.textContent = 'Enter the code to buy'; else add.textContent = 'Add to bag';
-    pview.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden';
-    if (!reduced()) $('.pview-in').animate([{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' });
+    pview.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
+    const sheet = matchMedia('(max-width:820px)').matches;
+    if (!reduced()) $('.pview-in').animate(sheet ? [{ transform: 'translateY(100%)' }, { transform: 'none' }] : [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: sheet ? 560 : 480, easing: 'cubic-bezier(.16,1,.3,1)' });
+    const pim = fr.querySelector('img'); if (pim) { const g = () => setTimeout(() => glitchPic(fr, { power: .9 }), sheet ? 420 : 220); if (pim.complete) g(); else pim.addEventListener('load', g, { once: true }); }
     $('#pv-close').focus({ preventScroll: true });
   }
-  function closeProduct() { pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (lastFocus) lastFocus.focus({ preventScroll: true }); }
+  function closeProduct(keep) { if (pview.hidden) return; pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (keep !== true) backstack.close(); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
   $('#pv-close').addEventListener('click', closeProduct);
+  const goTo = h => { closeProduct(true); backstack.drop(); location.replace(h); };
   $('#pv-add').addEventListener('click', () => {
     const p = current, msg = $('#pv-msg');
-    if (p.price == null) { closeProduct(); location.hash = '#list'; return; }
-    if (!unlocked) { closeProduct(); location.hash = '#drop'; $('#code').focus(); return; }
-    if (!size) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; return; }
-    addToBag(p, size); closeProduct(); openBag();
+    if (p.price == null) { goTo('#list'); return; }
+    if (!unlocked) { goTo('#drop'); setTimeout(() => $('#code').focus({ preventScroll: true }), 700); return; }
+    if (!size) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; buzz([20, 40, 20]); return; }
+    addToBag(p, size); buzz(14); closeProduct(true); openBag();
   });
+  // Phones: drag the sheet's handle down to put it away.
+  const grab = $('.pv-grab'), pin = $('.pview-in'); let gy = null, gdy = 0;
+  grab.addEventListener('pointerdown', e => { gy = e.clientY; gdy = 0; try { grab.setPointerCapture(e.pointerId); } catch (_) { } pin.style.transition = 'none'; });
+  grab.addEventListener('pointermove', e => { if (gy == null) return; gdy = Math.max(0, e.clientY - gy); pin.style.transform = 'translateY(' + gdy + 'px)'; });
+  const grabEnd = () => { if (gy == null) return; gy = null; pin.style.transition = 'transform .32s cubic-bezier(.16,1,.3,1)'; if (gdy > 110) { pin.style.transform = 'translateY(100%)'; setTimeout(() => { closeProduct(); pin.style.transition = ''; pin.style.transform = ''; }, 300); } else pin.style.transform = ''; };
+  grab.addEventListener('pointerup', grabEnd); grab.addEventListener('pointercancel', grabEnd);
 
   /* ── Bag ── */
   let bag = store.get('yowa-bag', []);
@@ -972,11 +1283,11 @@ const CELEBS = [
     });
     $('#dr-total').textContent = naira(total); $('#checkout').disabled = !bag.length;
   }
-  function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
-  function closeBag() { drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; $('#bag-open').focus({ preventScroll: true }); }
+  function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
+  function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
   $('#bag-open').addEventListener('click', openBag); $('#bag-close').addEventListener('click', closeBag);
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); });
-  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!$('#chat').hidden) toggleChat(false); });
+  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!$('#chat').hidden) toggleChat(false); else if (!menu.hidden) closeMenu(); });
   $('#checkout').addEventListener('click', () => {
     $('#dr-note').textContent = CONFIG.PAYSTACK_PUBLIC_KEY ? 'Opening Paystack…' : 'Checkout opens when prices and the Paystack key are in. Your bag is saved.';
     // Next step: POST the bag to /api/checkout; the server prices it from the catalogue, calls Paystack Initialize,
@@ -994,7 +1305,7 @@ const CELEBS = [
   /* ── Gallery: drag, throw and parallax on big screens; on phones a plain grid, so the page only scrolls up and down ── */
   const track = $('#rail-track'), rail = $('#rail'); const shots = GALLERY.map((g, i) => ({ src: g.src, cap: g.cap, i }));
   const stacked = matchMedia('(max-width:700px)');
-  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i></span><span>' + pad(s.i + 1) + '</span></div>'; b.querySelector('.cap span').append(s.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, s.i, b); }); track.appendChild(b); });
+  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i></span><span>' + pad(s.i + 1) + '</span></div>'; b.querySelector('.cap span').append(s.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, s.i, b); }); track.appendChild(b); glitchable(b); });
   let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null, railRaf = 0, railSeen = true;
   const maxX = () => Math.min(0, rail.clientWidth - track.scrollWidth);
   function railFrame() {
@@ -1016,38 +1327,58 @@ const CELEBS = [
   rail.addEventListener('pointercancel', () => { drag = false; rail.classList.remove('grabbing'); });
   rail.addEventListener('keydown', e => { if (stacked.matches) return; if (e.key === 'ArrowRight') gx -= 320; if (e.key === 'ArrowLeft') gx += 320; railStart(); });
 
-  /* ── Viewer: one lightbox for the gallery and the library. Arrows, swipe, tap to zoom, and a way into the shop ── */
+  /* ── Viewer: one lightbox for the gallery and the library. Swipe sideways for the next, pull down to close, tap to zoom, share any photo ── */
+  const slug = no => String(no || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');   // 'YW·010' → 'yw-010'
   function openLightbox(items, i, from) {
     const lb = document.createElement('div'); lb.className = 'lightbox'; lb.id = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Photo viewer');
-    lb.innerHTML = '<figure><div class="lb-media"></div><figcaption class="lb-foot"><span class="label lb-cap"></span><button class="btn lb-shop" type="button" hidden>Shop this piece →</button></figcaption></figure><button class="x lb-close" type="button">Close</button><button class="x lb-nav lb-prev" type="button" aria-label="Previous photo">←</button><button class="x lb-nav lb-next" type="button" aria-label="Next photo">→</button>';
+    lb.innerHTML = '<figure><div class="lb-media"></div><figcaption class="lb-foot"><span class="label lb-cap"></span><button class="btn lb-share" type="button">Share</button><button class="btn lb-shop" type="button" hidden>Shop this piece →</button></figcaption></figure><button class="x lb-close" type="button">Close</button><button class="x lb-nav lb-prev" type="button" aria-label="Previous photo">←</button><button class="x lb-nav lb-next" type="button" aria-label="Next photo">→</button>';
     document.body.appendChild(lb); document.body.style.overflow = 'hidden';
-    const media = lb.querySelector('.lb-media'), cap = lb.querySelector('.lb-cap'), shop = lb.querySelector('.lb-shop');
+    const media = lb.querySelector('.lb-media'), cap = lb.querySelector('.lb-cap'), shop = lb.querySelector('.lb-shop'); let closed = false;
     const show = k => {
       i = (k + items.length) % items.length; const it = items[i];
       media.classList.remove('zoom'); media.style.setProperty('--ar', it.w ? (it.w / it.h).toFixed(4) : '.75');
       media.innerHTML = it.no ? '' : '<div class="art">' + artFor(i) + '</div>';
       const im = document.createElement('img'); im.alt = it.cap || 'Photo ' + (i + 1); im.decoding = 'async';
-      im.onload = () => { if (!it.w && im.naturalWidth) media.style.setProperty('--ar', (im.naturalWidth / im.naturalHeight).toFixed(4)); };
+      im.onload = () => { if (!it.w && im.naturalWidth) media.style.setProperty('--ar', (im.naturalWidth / im.naturalHeight).toFixed(4)); setTimeout(() => glitchPic(media, { power: .9, dur: 420 }), 80); };
       im.onerror = () => im.remove(); im.src = it.src; media.appendChild(im);
       cap.textContent = [it.no, it.cap, pad(i + 1) + ' / ' + pad(items.length)].filter(Boolean).join(' · ');
       shop.hidden = !(it.product && PRODUCTS.some(p => p.id === it.product));
+      if (it.no) try { history.replaceState(history.state, '', '#' + slug(it.no)); } catch (e) { }   // the address bar always holds this photo's link
       [i + 1, i - 1].forEach(j => { const n = items[(j + items.length) % items.length]; if (n) new Image().src = n.src; });
       if (!reduced()) media.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
     };
-    const close = () => { lb.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', key); if (from && from.isConnected) from.focus({ preventScroll: true }); };
+    const close = keep => { if (closed) return; closed = true; lb.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', key); if (keep !== true) backstack.close(); if (from && from.isConnected) from.focus({ preventScroll: true }); };
     const key = e => { if (e.key === 'Escape') { e.stopPropagation(); close(); } if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); };
-    let sx = null, sy = 0, swiped = false;
-    media.addEventListener('pointerdown', e => { sx = media.classList.contains('zoom') ? null : e.clientX; sy = e.clientY; swiped = false; });
-    media.addEventListener('pointerup', e => { if (sx == null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null; if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) { swiped = true; show(i + (dx < 0 ? 1 : -1)); } });
+    // Drag with a finger: sideways the photo follows it to the next one, down pulls the viewer away.
+    let sx = null, sy = 0, dx = 0, dy = 0, axis = '', swiped = false;
+    const settle = () => { media.style.transition = 'transform .35s cubic-bezier(.16,1,.3,1)'; media.style.transform = ''; lb.style.backgroundColor = ''; };
+    media.addEventListener('pointerdown', e => { if (media.classList.contains('zoom') || !e.isPrimary) return; sx = e.clientX; sy = e.clientY; dx = dy = 0; axis = ''; swiped = false; });
+    media.addEventListener('pointermove', e => {
+      if (sx == null) return; dx = e.clientX - sx; dy = e.clientY - sy;
+      if (!axis && Math.hypot(dx, dy) > 10) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (!axis || e.pointerType === 'mouse') return;
+      media.style.transition = 'none';
+      if (axis === 'x') media.style.transform = 'translateX(' + dx.toFixed(0) + 'px) rotate(' + (dx / 40).toFixed(2) + 'deg)';
+      else { const d = Math.max(0, dy); media.style.transform = 'translateY(' + d.toFixed(0) + 'px) scale(' + (1 - Math.min(.2, d / 1400)).toFixed(3) + ')'; lb.style.backgroundColor = 'rgba(8,6,14,' + (.94 - Math.min(.55, d / 520)).toFixed(3) + ')'; }
+    });
+    media.addEventListener('pointerup', () => {
+      if (sx == null) return; sx = null; if (axis) swiped = true;
+      if (axis === 'x' && Math.abs(dx) > 50) { settle(); show(i + (dx < 0 ? 1 : -1)); return; }
+      if (axis === 'y' && dy > 90) { close(); return; }
+      settle();
+    });
+    media.addEventListener('pointercancel', () => { sx = null; settle(); });
     media.addEventListener('click', e => { if (swiped) { swiped = false; return; } const r = media.getBoundingClientRect(), img = media.querySelector('img'); if (img) img.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + '% ' + ((e.clientY - r.top) / r.height * 100) + '%'; media.classList.toggle('zoom'); });
-    shop.addEventListener('click', () => { const p = PRODUCTS.find(x => x.id === items[i].product); close(); if (p) openProduct(p); });
-    lb.querySelector('.lb-close').addEventListener('click', close); lb.querySelector('.lb-prev').addEventListener('click', () => show(i - 1)); lb.querySelector('.lb-next').addEventListener('click', () => show(i + 1));
-    lb.addEventListener('click', e => { if (e.target === lb) close(); }); document.addEventListener('keydown', key);
-    show(i); lb.querySelector('.lb-close').focus({ preventScroll: true });
+    shop.addEventListener('click', () => { const p = PRODUCTS.find(x => x.id === items[i].product); close(!!p); if (p) openProduct(p); });
+    lb.querySelector('.lb-share').addEventListener('click', () => { const it = items[i]; shareLink(SITE + (it.no ? '#' + slug(it.no) : '#gallery'), 'YOWA' + (it.no ? ' · ' + it.no : ''), (it.cap ? it.cap + ' · ' : '') + BYBD); });
+    lb.querySelector('.lb-close').addEventListener('click', () => close()); lb.querySelector('.lb-prev').addEventListener('click', () => show(i - 1)); lb.querySelector('.lb-next').addEventListener('click', () => show(i + 1));
+    const opened = performance.now();
+    lb.addEventListener('click', e => { if (e.target === lb && performance.now() - opened > 450) close(); }); document.addEventListener('keydown', key);
+    backstack.open(close); show(i); lb.querySelector('.lb-close').focus({ preventScroll: true });
   }
 
   /* ── Library: every photo on file, numbered. Masonry grid or an index, filtered by shelf, all opening in the viewer ── */
-  const LIB = LIBRARY.map((p, i) => ({ ...p, thumb: small(p.src), no: 'YW·' + String(i + 1).padStart(3, '0') }));
+  const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
   const SHELF_ORDER = ['Streets', 'Campaign', 'Caps', 'Skull caps', 'Crew'], PAGE = 18;
   const libBody = $('#lib-body'), libMore = $('#lib-more'), libCount = $('#lib-count'), peek = $('#lib-peek'), peekImg = $('#lib-peek img');
   let shelf = 'All', libView = store.get('yowa-lib-view', 'grid') === 'index' ? 'index' : 'grid', shown = PAGE, cols = 0, colH = [], colEls = [], list = [];
@@ -1075,7 +1406,7 @@ const CELEBS = [
     im.src = p.thumb;
     const no = document.createElement('span'); no.className = 'no'; no.textContent = p.no;
     const cp = document.createElement('span'); cp.className = 'cap'; cp.textContent = p.cap;
-    b.append(im, no, cp); b.addEventListener('click', () => openLightbox(list, idx, b));
+    b.append(im, no, cp); b.addEventListener('click', () => openLightbox(list, idx, b)); glitchable(b);
     return b;
   }
   const libIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); libIO.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
@@ -1137,20 +1468,26 @@ const CELEBS = [
   });
   libBody.addEventListener('pointerleave', hidePeek); addEventListener('scroll', hidePeek, { passive: true });
   paintShelves(); renderLib(true);
-  // Photos filed in yowa-library later (any folder but brand and inbox) join here on their own, numbered after the rest.
+  // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
+  function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
+  let pendingCode = '';
+  const deep = /^#yw-?(\d{1,4})$/i.exec(location.hash);
+  if (deep) { pendingCode = 'YW·' + deep[1].padStart(3, '0'); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } if (openCode(pendingCode)) pendingCode = ''; }
+  // Photos filed in yowa-library later (any folder but brand and inbox) join here on their own, numbered after the highest code.
+  let lastNo = LIB.reduce((m, p) => Math.max(m, parseInt(String(p.no).replace(/\D/g, ''), 10) || 0), 0);
   if (CONFIG.LIBRARY_FEED && !CONFIG.PREVIEW) fetch(CONFIG.LIBRARY_FEED).then(r => r.ok ? r.json() : null).then(d => {
     const https = u => typeof u === 'string' && u.indexOf('https://') === 0, name = u => String(u).split('/').pop(), have = new Set(LIB.map(p => name(p.src)));
     const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox)$/.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(name(p.path)));
     if (!fresh.length) return;
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
       const t = (Array.isArray(p.tags) ? p.tags : []).join(' ').toLowerCase();
-      LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(LIB.length + 1).padStart(3, '0'),
+      LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
         shelf: /skull/.test(t) ? 'Skull caps' : /\bcaps?\b/.test(t) ? 'Caps' : /campaign/.test(t) ? 'Campaign' : /crew/.test(t) ? 'Crew' : /street|editorial/.test(t) ? 'Streets' : 'New' });
     });
     const before = list.length; paintShelves(); list = libItems();
     if (libView === 'grid') addTiles(Math.min(before, shown), Math.min(shown, list.length), true); else renderLib(false);
-    paintMore();
+    paintMore(); if (pendingCode && openCode(pendingCode)) pendingCode = '';
   }).catch(() => { });
 
   /* ── Worn by ── */
@@ -1170,20 +1507,27 @@ const CELEBS = [
     const row = { name: f.name.value.trim(), email: f.email.value.trim(), size: f.size.value || null, instagram: f.instagram.value.trim() || null };
     if (!row.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(row.email)) { msg.textContent = 'Add your name and a real email so the code can reach you.'; return; }
     btn.disabled = true; btn.textContent = 'Adding you…'; msg.textContent = '';
-    if (CONFIG.PREVIEW) { f.hidden = true; $('#done').hidden = false; $('#done p').textContent = 'Preview only. On the live site this adds you to the YOWA list in Supabase.'; return; }
+    if (CONFIG.PREVIEW) { f.hidden = true; $('#done').hidden = false; $('#done p').textContent = 'Preview only. On the live site this adds you to the YOWA list in Supabase.'; burstFrom($('#done b')); return; }
     const sb = fetch(CONFIG.JOIN_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(row) });
     const fd = new FormData(f); const fsp = fetch(CONFIG.FORMSPREE, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
     Promise.allSettled([sb, fsp]).then(res => {
       const ok = res.some(r => r.status === 'fulfilled' && r.value.ok);
       if (!ok) { btn.disabled = false; btn.textContent = 'Try again'; msg.textContent = "That didn't go through. Check your connection and try again."; return; }
-      f.hidden = true; $('#done').hidden = false; store.set('yowa-joined', true);
+      f.hidden = true; $('#done').hidden = false; store.set('yowa-joined', true); buzz([10, 30, 10, 30, 60]); burstFrom($('#done b'));
     });
   });
 
   /* ── Ask YOWA: OpenRouter through /api/chat, with offline answers ── */
-  const chat = $('#chat'), cbody = $('#chat-body'); let history = [];
+  const chat = $('#chat'), cbody = $('#chat-body'); let convo = [];
   function say(who, text) { const m = document.createElement('div'); m.className = 'msg ' + who; m.textContent = text; cbody.appendChild(m); cbody.scrollTop = cbody.scrollHeight; return m; }
-  function toggleChat(open) { chat.hidden = !open; $('#chat-open').setAttribute('aria-expanded', String(open)); if (open) { if (!cbody.children.length) say('bot', "Hey, I'm YOWA's assistant. Ask me about the drop, sizes or your order."); $('#chat-in').focus({ preventScroll: true }); } }
+  function toggleChat(open, keep) {
+    if (chat.hidden === !open) return; chat.hidden = !open; $('#chat-open').setAttribute('aria-expanded', String(open));
+    if (open) {
+      backstack.open(() => toggleChat(false, true));
+      if (!cbody.children.length) say('bot', "Hey, I'm YOWA's assistant. Ask me about the drop, sizes or your order. " + BYBD);
+      if (!touchUI.matches) $('#chat-in').focus({ preventScroll: true });   // on a phone the keyboard waits until you tap the box
+    } else if (keep !== true) backstack.close();
+  }
   $('#chat-open').addEventListener('click', () => toggleChat(chat.hidden)); $('#chat-close').addEventListener('click', () => toggleChat(false));
   function offline(q) {
     q = q.toLowerCase();
@@ -1195,11 +1539,11 @@ const CELEBS = [
     return "Good question. A person from YOWA can help with that on Instagram @yowa_bybd while I learn more.";
   }
   async function ask(q) {
-    say('me', q); history.push({ role: 'user', content: q }); chat.classList.add('thinking'); const wait = say('bot', ''); wait.classList.add('typing'); wait.innerHTML = '<i></i><i></i><i></i>';
+    say('me', q); convo.push({ role: 'user', content: q }); chat.classList.add('thinking'); const wait = say('bot', ''); wait.classList.add('typing'); wait.innerHTML = '<i></i><i></i><i></i>';
     let reply = '';
-    try { const r = await fetch(CONFIG.CHAT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history.slice(-10) }) }); if (r.ok) { const d = await r.json(); reply = (d.reply || '').trim(); } } catch (e) { }
+    try { const r = await fetch(CONFIG.CHAT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: convo.slice(-10) }) }); if (r.ok) { const d = await r.json(); reply = (d.reply || '').trim(); } } catch (e) { }
     if (!reply) reply = offline(q);
-    chat.classList.remove('thinking'); wait.classList.remove('typing'); wait.textContent = reply; history.push({ role: 'assistant', content: reply });
+    chat.classList.remove('thinking'); wait.classList.remove('typing'); wait.textContent = reply; convo.push({ role: 'assistant', content: reply });
   }
   $('#chat-form').addEventListener('submit', e => { e.preventDefault(); const v = $('#chat-in').value.trim(); if (!v) return; $('#chat-in').value = ''; ask(v); });
   $$('#chat-chips button').forEach(b => b.addEventListener('click', () => ask(b.textContent)));
