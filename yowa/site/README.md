@@ -2,6 +2,12 @@
 
 Static site (HTML + two serverless functions), deploys on Vercel like the waitlist. Built for phones first: everything below works by touch, and the desktop layout is the same site with more room.
 
+## How it's laid out
+- **Home** is just YOWA over the photos. Nothing else, and it doesn't scroll.
+- **Menu:** the three lines top right. They turn into an X while the menu is open; tap the X to close it. The menu holds every page (Home, The drop, Message, Gallery, Library, Worn by, Get the code), Ask YOWA, the mantra, Instagram and the credit.
+- **Pages:** each section is its own page and only shows when it's picked in the menu (or in the header links on a computer). Links like `yowabybd.com/#library` open that page directly, and the back button goes back a page. Tapping the signature goes home.
+- A dragon closes every page. Its words are the `data-dragon` on that page's `<section>`; `data-void` gives it the dark body.
+
 ## Photos and their codes
 Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the last one is YW·054).
 
@@ -23,14 +29,14 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 - `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. A photo filed there in any folder except `brand` and `inbox` joins the Library on its own, numbered after the highest code. Leaving a photo in `inbox` keeps it off the site. Set the feed to `''` to turn this off.
 
 ## How it moves
-- **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear the text off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
-- **Glitch:** photos tear, split red and cyan, drop out for a frame and snap back. It happens when the hero changes photo, now and then mid-photo, when photos scroll into view and in the viewer.
-- **Dragons:** the three serpent ribbons between sections. Each one's words are its `data-text` in the HTML. They slither, and thrash when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
-- **Signature:** top left. It writes itself on load, and again when tapped (which also goes back to the top).
+- **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear YOWA off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
+- **Glitch:** only YOWA glitches, never the photos of people. The logo tears, splits purple and cyan, blinks out and snaps back: on every new photo, now and then on its own, when tapped, and when you come back home.
+- **Dragon:** the serpent ribbon at the end of each page. It slithers, and thrashes when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
+- **Signature:** top left. It writes itself on load, and again when tapped (which also takes you home).
 - Everything still and calm when the phone is set to reduce motion. Motion clips are skipped on data saver.
 
 ## Phone details
-- The back button closes the menu, a product, the bag, the chat or the viewer instead of leaving the site.
+- The back button closes the menu, a product, the bag, the chat or the viewer, and otherwise goes back a page, instead of leaving the site.
 - Products open as a bottom sheet. Drag its handle down to put it away.
 - The header slides away while you scroll down and comes back when you scroll up. The thin line on top shows how far down the page you are.
 - Vibration on unlock, a wrong code, add to bag and joining the list (Android).
@@ -38,7 +44,7 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 - "Be You Be Different" always carries 💜⚔️🐉, on the page and in Ask YOWA's replies.
 
 ## Edit at the top of the `<script>` in index.html
-- `CONFIG.DROP_AT`: drop date and time, starts the countdown (e.g. `'2026-10-17T18:00:00+01:00'`)
+- `CONFIG.DROP_AT`: drop date and time, starts the countdown on The drop page (e.g. `'2026-10-17T18:00:00+01:00'`)
 - `CONFIG.CODE`: the drop code the list receives
 - `PRODUCTS[].price`: naira prices (`null` shows "Price drops soon")
 - `CELEBS`: name, what they wore, IG post link, photo
