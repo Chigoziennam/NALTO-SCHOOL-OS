@@ -77,18 +77,29 @@ img{max-width:100%}
 .nav{display:flex;gap:4px;margin-left:auto}
 .nav a,.bag-btn,.menu-btn{font:700 8.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:11px 12px;border-radius:999px;border:1px solid transparent;background:none;cursor:pointer;white-space:nowrap}
 @media (hover:hover){.nav a:hover{border-color:var(--line)}}
+.nav a[aria-current="page"]{border-color:var(--line);color:var(--purple-l)}
 .bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
 .bag-btn b{color:var(--purple-l)}
-.menu-btn{display:none;border-color:var(--line)}
-@media (max-width:980px){.nav{display:none}.menu-btn{display:block;margin-left:auto}}
-.sheet-menu{position:fixed;inset:0;z-index:70;background:rgba(8,6,14,.96);display:grid;align-content:center;justify-items:center;gap:6px;padding:24px}
-.sheet-menu a{font:400 clamp(40px,12vw,64px)/1.05 var(--f-display);text-transform:uppercase;text-decoration:none}
-@media (hover:hover){.sheet-menu a:hover{color:var(--purple-l)}}
-.sheet-menu button{margin-top:18px}
+/* Menu: three lines that turn into an X while the menu is open */
+.menu-btn{display:none;position:relative;width:44px;height:44px;padding:0;border-color:var(--line);background:rgba(8,6,14,.4)}
+.menu-btn i{position:absolute;left:13px;right:13px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:#fff;transition:transform .45s var(--e-settle),opacity .25s}
+.menu-btn i:nth-child(1){transform:translateY(-6px)}
+.menu-btn i:nth-child(3){transform:translateY(6px)}
+.menu-btn[aria-expanded="true"] i:nth-child(1){transform:rotate(45deg)}
+.menu-btn[aria-expanded="true"] i:nth-child(2){opacity:0;transform:scaleX(0)}
+.menu-btn[aria-expanded="true"] i:nth-child(3){transform:rotate(-45deg)}
+@media (max-width:980px){.nav{display:none}.bag-btn{margin-left:auto;min-height:44px;padding-inline:16px}.menu-btn{display:block}}
+/* The menu opens under the header, so the same button closes it */
+.sheet-menu{position:fixed;inset:0;z-index:49;overflow-y:auto;overscroll-behavior:contain;background:rgba(8,6,14,.97);display:grid;align-content:center;justify-items:center;gap:4px;padding:calc(76px + env(safe-area-inset-top,0px)) 24px calc(28px + env(safe-area-inset-bottom,0px))}
+.sheet-menu .go{font:400 clamp(38px,11vw,60px)/1.06 var(--f-display);text-transform:uppercase;letter-spacing:.01em;text-decoration:none;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;transition:color .2s}
+.sheet-menu .go[aria-current="page"]{color:var(--purple-l)}
+@media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}}
 .sheet-menu .menu-sig{width:120px;height:auto;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(166,91,255,.7))}
 .sheet-menu .menu-bybd{margin:16px 0 0;font:400 15px/1.3 var(--f-mantra);color:var(--purple-l);text-align:center}
+.sheet-menu .menu-foot{margin:10px 0 0;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut);text-align:center}
+.sheet-menu .menu-foot a{color:var(--ink);text-decoration:none}
 .sheet-menu:not([hidden])>*{animation:menuin .7s var(--e-settle) both}
-.sheet-menu>:nth-child(2){animation-delay:45ms}.sheet-menu>:nth-child(3){animation-delay:90ms}.sheet-menu>:nth-child(4){animation-delay:135ms}.sheet-menu>:nth-child(5){animation-delay:180ms}.sheet-menu>:nth-child(6){animation-delay:225ms}.sheet-menu>:nth-child(7){animation-delay:270ms}.sheet-menu>:nth-child(8){animation-delay:315ms}.sheet-menu>:nth-child(9){animation-delay:360ms}.sheet-menu>:nth-child(10){animation-delay:405ms}
+.sheet-menu>:nth-child(2){animation-delay:40ms}.sheet-menu>:nth-child(3){animation-delay:80ms}.sheet-menu>:nth-child(4){animation-delay:120ms}.sheet-menu>:nth-child(5){animation-delay:160ms}.sheet-menu>:nth-child(6){animation-delay:200ms}.sheet-menu>:nth-child(7){animation-delay:240ms}.sheet-menu>:nth-child(8){animation-delay:280ms}.sheet-menu>:nth-child(9){animation-delay:320ms}.sheet-menu>:nth-child(10){animation-delay:360ms}.sheet-menu>:nth-child(11){animation-delay:400ms}.sheet-menu>:nth-child(12){animation-delay:440ms}
 @keyframes menuin{from{opacity:0;transform:translateY(28px) skewY(4deg)}}
 
 /* ── Hero ── */
@@ -96,9 +107,8 @@ img{max-width:100%}
 @media (hover:none){.hero{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}}
 .hero-media{position:absolute;inset:0;z-index:-1;overflow:hidden;background:#140E26;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .slides{position:absolute;inset:-3%;transform:translate3d(var(--px,0px),var(--py,0px),0);transition:transform .6s var(--e-settle);pointer-events:none}
-/* A new photo cuts in hard under a glitch; the old one stays underneath until it's covered. Crossfade with reduced motion. */
-.slide{position:absolute;inset:0;opacity:0;transition:opacity .3s ease}
-@media (prefers-reduced-motion:no-preference){.slide{transition:none}}
+/* Photos crossfade; the old one stays underneath until the new one has fully come in */
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
 .slide.on{opacity:1;z-index:2}
 .slide.was{opacity:1;z-index:1}
 .slide.on,.slide.was{animation:kb 9s ease-out both}
@@ -107,7 +117,7 @@ img{max-width:100%}
 .slide video{opacity:0;transition:opacity .5s ease}
 .slide.moving video{opacity:1}
 @keyframes kb{from{transform:scale(1.14)}to{transform:scale(1.02)}}
-.hero-media::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,6,14,.6) 0%,rgba(8,6,14,.1) 26%,rgba(8,6,14,.35) 52%,rgba(8,6,14,.94) 100%),radial-gradient(130% 90% at 50% 38%,transparent 45%,rgba(60,20,130,.55) 100%);transition:opacity .4s ease}
+.hero-media::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,6,14,.6) 0%,rgba(8,6,14,.1) 26%,rgba(8,6,14,.3) 55%,rgba(8,6,14,.82) 100%),radial-gradient(130% 90% at 50% 38%,transparent 45%,rgba(60,20,130,.55) 100%);transition:opacity .4s ease}
 .hero.paused .hero-media::after{opacity:.35}
 .slide-cap{position:absolute;right:12px;top:calc(80px + env(safe-area-inset-top,0px));z-index:3;display:flex;align-items:center;gap:7px;font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:8px 11px;border-radius:999px;background:rgba(8,6,14,.66);border:1px solid var(--line);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);cursor:pointer}
 .slide-cap b{color:var(--purple-l)}
@@ -117,13 +127,12 @@ img{max-width:100%}
 .bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.26)}
 .bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%;box-shadow:0 0 8px rgba(166,91,255,.8)}
 .bars i.past b{transform:scaleX(1)}
-.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:16px;padding:120px var(--gut) 78px;transition:opacity .35s ease}
+.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:16px;padding:120px var(--gut) calc(48px + env(safe-area-inset-bottom,0px));transition:opacity .35s ease}
 /* Holding a photo on a phone clears everything off it */
-@media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top,.hold .chat-fab,.hold .hero+.dragon{opacity:0;pointer-events:none}}
+@media (max-width:959px){.hero.paused .hero-in{opacity:0}.hold .top{opacity:0;pointer-events:none}}
 @media (min-width:960px){
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,min(42vw,600px))}
   .hero-in{grid-column:1;grid-row:1;justify-items:start;align-content:center;text-align:left;padding:120px 32px 40px var(--gut)}
-  .hero-in .cd,.hero-in .hero-cta{justify-content:flex-start}
   .hero-media{position:relative;inset:auto;z-index:0;grid-column:2;grid-row:1;margin:88px var(--gut) 26px 0;border-radius:16px;box-shadow:0 0 0 1px var(--line),0 30px 90px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.25)}
   .hero-media::after{background:linear-gradient(180deg,transparent 62%,rgba(8,6,14,.55) 100%),radial-gradient(140% 100% at 50% 40%,transparent 60%,rgba(60,20,130,.45) 100%)}
   .hero-media::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;z-index:3;background:repeating-linear-gradient(90deg,var(--purple-l) 0 22px,transparent 22px 44px)}
@@ -132,9 +141,6 @@ img{max-width:100%}
   .hero .logo{width:min(48vw,700px)}
 }
 .pen{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px var(--purple-l);opacity:0;pointer-events:none}
-.kick{display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;padding:10px 18px;border:1px solid rgba(166,91,255,.45);border-radius:999px;background:rgba(20,10,45,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.kick i{width:7px;height:7px;border-radius:50%;background:var(--purple-l);animation:pulse 1.6s ease infinite}
-.live .kick{border-color:var(--red)} .live .kick i{background:var(--red)}
 @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(166,91,255,0);opacity:.6}}
 .logo{position:relative;width:min(88vw,760px);line-height:0}
 .logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 34px var(--glow))}
@@ -145,19 +151,16 @@ img{max-width:100%}
 .live .logo .pupil{fill:var(--red)}
 .gl{position:absolute;inset:0;opacity:0;pointer-events:none;mix-blend-mode:screen;-webkit-mask:url(img/brand/yowa-logo-nodot.png) center/contain no-repeat;mask:url(img/brand/yowa-logo-nodot.png) center/contain no-repeat}
 .gl.a{background:var(--purple-l)} .gl.b{background:var(--cyan)}
-.mantra{margin:0;font:400 clamp(18px,3.4vw,32px)/1.2 var(--f-mantra)}
-.mantra i{font-style:normal;color:var(--purple-l);text-shadow:0 0 18px rgba(166,91,255,.55)}
-.mantra i:nth-child(2),.mantra i:nth-child(3){color:#fff;text-shadow:0 0 18px rgba(255,255,255,.45),0 0 34px rgba(166,91,255,.5)}
-.mantra .emo{display:inline-flex;gap:.12em;margin-left:.15em;vertical-align:-.04em;cursor:pointer}
-.mantra .emo span{display:inline-block;animation:emo 3s var(--e-settle) infinite;animation-delay:calc(var(--i) * .16s + 1.2s)}
+/* 💜⚔️🐉 that hop one after another (tap them) */
+.emo{display:inline-flex;gap:.12em;margin-left:.15em;vertical-align:-.04em;cursor:pointer}
+.emo span{display:inline-block;animation:emo 3s var(--e-settle) infinite;animation-delay:calc(var(--i) * .16s + 1.2s)}
 @keyframes emo{0%,62%,100%{transform:none}70%{transform:translateY(-.3em) scale(1.2) rotate(-8deg)}80%{transform:translateY(0) scale(.94)}88%{transform:scale(1.04)}}
 .cd{display:flex;gap:clamp(6px,1.4vw,12px)}
 .seg{min-width:clamp(62px,10vw,86px);padding:12px 6px 10px;border-radius:14px;background:rgba(20,14,34,.6);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .seg b{display:block;font:400 clamp(28px,6vw,48px)/1 var(--f-display);font-variant-numeric:tabular-nums}
 .seg span{display:block;margin-top:6px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
 .live .seg b{color:#FF6B5E}
-.hero-note{font-size:14px;color:rgba(239,234,247,.85);max-width:42ch}
-.hero-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.drop-cd{margin:0 0 22px}
 .btn{position:relative;display:inline-flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:16px 22px;border-radius:999px;border:1px solid rgba(166,91,255,.55);background:rgba(8,6,14,.4);color:#fff;cursor:pointer;transition:transform .35s var(--e-settle),border-color .2s,background .2s;overflow:hidden}
 @media (hover:hover){.btn:hover{border-color:var(--purple-l)}}
 .btn.solid{background:linear-gradient(100deg,var(--purple),var(--purple-l));border-color:transparent;box-shadow:0 12px 34px rgba(122,47,224,.45)}
@@ -165,8 +168,8 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: serpent ribbons that slither across the seams between sections, the words riding their back ── */
-.dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none;overflow:hidden;transition:opacity .35s ease}
+/* ── Dragon: the serpent ribbon that closes every page, the words riding its back ── */
+.dragon{position:relative;z-index:5;height:150px;margin-block:-36px calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none;overflow:hidden}
 .dragon svg{display:block;width:100%;height:100%}
 .d-glow,.d-edge,.d-body,.d-scale{fill:none;stroke-linecap:round;stroke-linejoin:round}
 .d-glow{stroke:rgba(166,91,255,.2);stroke-width:76px}
@@ -183,21 +186,12 @@ img{max-width:100%}
 .dragon.void .s1{stop-color:#21104A}
 .dragon.void .d-scale{stroke:rgba(166,91,255,.22)}
 .dragon.void .d-text{fill:var(--purple-l)}
-@media (min-width:960px){.dragon{height:172px;margin-block:-60px}.d-glow{stroke-width:88px}.d-edge{stroke-width:60px}.d-body{stroke-width:52px}.d-scale{stroke-width:42px;stroke-dasharray:1 30}.d-text{font-size:29px}}
-
-/* ── Glitch: a photo tears into slices, splits red and cyan, drops out for a frame and snaps back ── */
-.gx{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;isolation:isolate;background:#000}
-.gx i{position:absolute;inset:0;background-repeat:no-repeat;background-size:cover}
-.gx .r,.gx .c{mix-blend-mode:screen;background-blend-mode:multiply}
-.gx .r{background-color:#f00}
-.gx .c{background-color:#0ff}
-.gx .neg{filter:invert(1) hue-rotate(180deg)}
-.gx .n{background:repeating-linear-gradient(0deg,rgba(255,255,255,.14) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
-.frame .tag,.lib-tile .no,.lib-tile .cap,.shot .cap{z-index:2}
+@media (min-width:960px){.dragon{height:172px;margin-block:-44px 24px}.d-glow{stroke-width:88px}.d-edge{stroke-width:60px}.d-body{stroke-width:52px}.d-scale{stroke-width:42px;stroke-dasharray:1 30}.d-text{font-size:29px}}
 
 /* ── Sections ── */
 section{position:relative}
-.sec{padding-block:clamp(72px,11vw,140px)}
+.sec{padding-block:clamp(96px,12vw,150px) clamp(72px,11vw,140px);min-height:calc(100svh - 110px)}
+.home .chat-fab,.menu-open .chat-fab{display:none}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:clamp(28px,4vw,48px)}
 .sec-head h2{margin:0;font:400 clamp(52px,11vw,150px)/.85 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
 .sec-head p{max-width:44ch;color:rgba(239,234,247,.82);margin:0}
@@ -375,13 +369,6 @@ section{position:relative}
 .done b{font:400 40px/1 var(--f-display);text-transform:uppercase}
 .done p{margin:0;color:rgba(239,234,247,.85);max-width:32ch}
 
-/* ── Footer ── */
-.foot{padding-block:clamp(64px,10vw,120px) calc(96px + env(safe-area-inset-bottom,0px))}
-.foot .logo{width:100%;max-width:none;margin-bottom:34px}
-.foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 24px;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
-.foot-row a{text-decoration:none}
-@media (hover:hover){.foot-row a:hover{color:var(--purple-l)}}
-
 /* ── Product sheet + bag ── */
 .scrim{position:fixed;inset:0;z-index:74;background:rgba(8,6,14,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .pview{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:16px;pointer-events:none}
@@ -474,14 +461,11 @@ section{position:relative}
   .lib-tile:active{box-shadow:0 0 0 2px var(--purple-l)}
   .lib-row:active{background:rgba(122,47,224,.18)}
 }
-/* Section titles glitch in as they arrive */
-.js .sec-head.in h2{animation:tglitch .7s steps(1,end) .12s both}
-@keyframes tglitch{0%{transform:none;text-shadow:none;clip-path:none}12%{transform:translateX(4px) skewX(-8deg);text-shadow:-4px 0 #2BE8FF,4px 0 #A65BFF}24%{transform:translateX(-5px);text-shadow:3px 0 #E23A2E,-3px 0 #2BE8FF;clip-path:inset(0 0 46% 0)}36%{transform:translateX(7px);clip-path:inset(54% 0 0 0)}48%{transform:none;text-shadow:-2px 0 #2BE8FF,2px 0 #A65BFF;clip-path:none}62%{transform:translateX(-2px);text-shadow:none}74%,100%{transform:none;text-shadow:none;clip-path:none}}
 
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.js .sec-head.in h2,.mantra .emo span,.sheet-menu:not([hidden])>*{animation:none}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.sheet-menu:not([hidden])>*{animation:none}}
 </style>
 </head>
 <body>
@@ -497,51 +481,43 @@ section{position:relative}
     <nav class="nav" aria-label="Main">
       <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#library">Library</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
     </nav>
-    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false">Menu</button>
     <button class="bag-btn" type="button" id="bag-open">Bag (<b id="bag-count">0</b>)</button>
+    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><i></i><i></i><i></i></button>
   </div>
 </header>
 
 <div class="sheet-menu" id="menu" hidden>
   <img class="menu-sig" src="img/brand/yowa-signature.png" alt="" width="560" height="351">
-  <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#library">Library</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
-  <p class="menu-bybd">Be You Be Different 💜⚔️🐉</p>
-  <button class="x" type="button" id="menu-close">Close</button>
+  <a class="go" href="#home">Home</a><a class="go" href="#drop">The drop</a><a class="go" href="#message">Message</a><a class="go" href="#gallery">Gallery</a><a class="go" href="#library">Library</a><a class="go" href="#worn">Worn by</a><a class="go" href="#list">Get the code</a>
+  <button class="go" type="button" id="menu-chat">Ask YOWA</button>
+  <p class="menu-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
+  <p class="menu-foot"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a> · Built by Nalto</p>
 </div>
 
 <main>
   <section class="hero" id="home">
     <div class="hero-media" id="hero-media" aria-hidden="true"><div class="slides" id="slides"></div><span class="slide-cap" id="slide-cap"></span><span class="bars" id="bars"></span></div>
     <div class="hero-in">
-      <span class="kick"><i aria-hidden="true"></i><span id="kick">Drop 01 · Loading</span></span>
       <h1 class="sr">YOWA</h1>
       <div class="logo" id="logo" data-eye>
         <img src="img/brand/yowa-logo-nodot.png" alt="YOWA" width="701" height="178">
         <span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span>
         <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
       </div>
-      <p class="mantra"><i>Be</i> <i>You</i> <i>Be</i> <i>Different</i> <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
-      <div class="cd" id="cd" aria-label="Countdown to the drop">
-        <div class="seg"><b data-u="d">00</b><span>Days</span></div>
-        <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
-        <div class="seg"><b data-u="m">00</b><span>Mins</span></div>
-        <div class="seg"><b data-u="s">00</b><span>Secs</span></div>
-      </div>
-      <p class="hero-note" id="hero-note">The Liberty Raglan in blue, red, grey and black, the 042 cap and skull caps. Handmade, limited run. The code goes to the list first.</p>
-      <div class="hero-cta">
-        <a class="btn solid" href="#drop" data-magnet>Enter the drop</a>
-        <a class="btn" href="#list" data-magnet>Get the code</a>
-      </div>
     </div>
   </section>
 
-  <div class="dragon" aria-hidden="true" data-text="Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · Handmade Batch · Limited Run · "></div>
-
-  <section class="sec panel" id="drop" aria-labelledby="drop-t">
+  <section class="sec panel" id="drop" aria-labelledby="drop-t" data-dragon="Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · Handmade Batch · Limited Run · ">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 id="drop-t">Drop 01</h2>
         <p>The Liberty Raglan in blue, red, grey and black, the 042 cap and skull caps. Made by hand in small runs. Prices land with the drop. When the run is gone, it's gone.</p>
+      </div>
+      <div class="cd drop-cd" id="cd" aria-label="Countdown to the drop" hidden>
+        <div class="seg"><b data-u="d">00</b><span>Days</span></div>
+        <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
+        <div class="seg"><b data-u="m">00</b><span>Mins</span></div>
+        <div class="seg"><b data-u="s">00</b><span>Secs</span></div>
       </div>
       <div class="drop-bar" id="drop-bar">
         <span class="lockstate"><i aria-hidden="true"></i><span id="lock-text">Locked · the list gets the code first</span></span>
@@ -556,9 +532,7 @@ section{position:relative}
     </div>
   </section>
 
-  <div class="dragon void" aria-hidden="true" data-text="No rules · No limits · Just vision · Be You Be Different 💜⚔️🐉 · The mindset, not the trend · "></div>
-
-  <section class="sec" id="message" aria-labelledby="msg-t">
+  <section class="sec" id="message" aria-labelledby="msg-t" data-dragon="No rules · No limits · Just vision · Be You Be Different 💜⚔️🐉 · The mindset, not the trend · " data-void>
     <!-- Background: YW·010 (the crew on the rooftop), with its motion clip -->
     <div class="photo-bg" aria-hidden="true" data-video="img/motion/crew.mp4"><img src="img/library/yowa-9924.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
@@ -571,7 +545,7 @@ section{position:relative}
     </div>
   </section>
 
-  <section class="sec panel" id="gallery" aria-labelledby="gal-t">
+  <section class="sec panel" id="gallery" aria-labelledby="gal-t" data-dragon="Real pieces · Real people · Be You Be Different 💜⚔️🐉 · 042 · No renders · ">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 id="gal-t">In real life</h2>
@@ -584,7 +558,7 @@ section{position:relative}
     <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
   </section>
 
-  <section class="sec" id="library" aria-labelledby="lib-t">
+  <section class="sec" id="library" aria-labelledby="lib-t" data-dragon="Every photo on file · Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · ">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 id="lib-t">Library</h2>
@@ -606,9 +580,7 @@ section{position:relative}
     <div class="lib-peek" id="lib-peek" aria-hidden="true"><img alt=""></div>
   </section>
 
-  <div class="dragon" aria-hidden="true" data-text="042 · Made for the Circle · Be You Be Different 💜⚔️🐉 · Stay Woke · "></div>
-
-  <section class="sec" id="worn" aria-labelledby="worn-t">
+  <section class="sec" id="worn" aria-labelledby="worn-t" data-dragon="042 · Made for the Circle · Be You Be Different 💜⚔️🐉 · Stay Woke · ">
     <!-- Background: YW·042 (Red and black) -->
     <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1518.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
@@ -620,7 +592,7 @@ section{position:relative}
     </div>
   </section>
 
-  <section class="sec panel" id="list" aria-labelledby="list-t">
+  <section class="sec panel" id="list" aria-labelledby="list-t" data-dragon="Get the code first · The Circle · Be You Be Different 💜⚔️🐉 · 042 · " data-void>
     <!-- Background: YW·033 (Liberty Raglan · Black, full fit) -->
     <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1524.jpg" alt="" loading="lazy"></div>
     <div class="wrap join">
@@ -645,22 +617,9 @@ section{position:relative}
       </div>
     </div>
   </section>
-</main>
 
-<footer class="foot">
-  <div class="wrap">
-    <div class="logo" id="foot-logo">
-      <img src="img/brand/yowa-logo-nodot.png" alt="YOWA" width="701" height="178" loading="lazy">
-      <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
-    </div>
-    <div class="foot-row">
-      <span>Be You Be Different 💜⚔️🐉 · 042</span>
-      <a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a>
-      <span>Limited runs · no spam, just the drop</span>
-      <span>Built by Nalto</span>
-    </div>
-  </div>
-</footer>
+  <div class="dragon" id="dragon" aria-hidden="true" data-text="Be You Be Different 💜⚔️🐉 · 042 · "></div>
+</main>
 
 <div class="scrim" id="scrim" hidden></div>
 <div class="pview" id="pview" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
@@ -936,46 +895,6 @@ const CELEBS = [
     addEventListener('resize', () => swirl.draw());
   }
 
-  /* ── Glitch: a photo tears into slices, splits red and cyan, drops out for a frame and snaps back ── */
-  // Drawn as a short-lived layer over the photo: two colour copies that screen back into the original when lined up,
-  // torn strips of the photo (or of the photo it replaces), and scan lines. The layer is gone again in under half a second.
-  function glitchPic(host, o) {
-    o = o || {}; if (!host || !host.isConnected || reduced() || host.querySelector(':scope > .gx')) return false;
-    const img = host.querySelector('img'); if (!img || !img.complete || !img.naturalWidth || !img.offsetWidth) return false;
-    const src = img.currentSrc || img.src, pos = getComputedStyle(img).objectPosition || '50% 50%';
-    const from = o.from && o.from.complete && o.from.naturalWidth ? o.from.currentSrc || o.from.src : '';
-    const dur = o.dur || 440, k = clamp(img.offsetWidth / 420, .45, 1.5) * (o.power || 1), n = o.slices || 5;
-    const gx = document.createElement('span'); gx.className = 'gx'; gx.setAttribute('aria-hidden', 'true');
-    if (img.offsetParent === host && (img.offsetLeft || img.offsetTop || img.offsetWidth !== host.clientWidth || img.offsetHeight !== host.clientHeight))
-      Object.assign(gx.style, { right: 'auto', bottom: 'auto', left: img.offsetLeft + 'px', top: img.offsetTop + 'px', width: img.offsetWidth + 'px', height: img.offsetHeight + 'px' });
-    const layer = (cls, url) => { const i = document.createElement('i'); i.className = cls; if (url) { i.style.backgroundImage = 'url("' + url + '")'; i.style.backgroundPosition = pos; } gx.appendChild(i); return i; };
-    const F = [0, .07, .16, .27, .36, .48, .6, .74, .87, 1];
-    const run = (el, frames) => el.animate(frames.map((f, j) => Object.assign({ offset: F[j], easing: 'steps(1,end)' }, f)), { duration: dur, fill: 'both' });
-    const A = 7 * k * (Math.random() < .5 ? 1 : -1), J = 2.5 * k;
-    const split = [0, -A, A * 1.9, 0, A * .8, -A * 1.3, 0, A * .45, 0, 0], drop = [1, 1, 1, .1, 1, 1, 1, 1, 1, 1], skew = [0, 0, -7, 0, 4, 0, 0, 0, 0, 0];
-    const rgb = sg => split.map((x, j) => ({ transform: 'translate(' + (x * sg).toFixed(1) + 'px,' + (j === 2 ? -J : j === 4 ? J : 0).toFixed(1) + 'px) skewX(' + skew[j] + 'deg)', opacity: drop[j] }));
-    run(layer('r', src), rgb(1)); run(layer('c', src), rgb(-1));
-    if (from) run(layer('o', from), F.map((_, j) => ({ opacity: j < 2 || j === 3 ? 1 : 0, transform: j === 1 ? 'translateX(' + (-A * .6).toFixed(1) + 'px)' : 'none' })));
-    for (let q = 0; q < n; q++) {
-      const t = rnd(0, 90), h = rnd(3, 15), old = from && q % 2 === 0, on = [1, 2, 3, 4, 5, 7].filter(() => Math.random() < .55);
-      const el = layer(q === 1 ? 'neg' : 's', old ? from : src); el.style.clipPath = 'inset(' + t.toFixed(1) + '% 0 ' + Math.max(0, 100 - t - h).toFixed(1) + '% 0)';
-      run(el, F.map((_, j) => on.indexOf(j) >= 0 && !(old && j > 3) ? { opacity: 1, transform: 'translateX(' + (rnd(10, 46) * k * (Math.random() < .5 ? -1 : 1)).toFixed(1) + 'px)' } : { opacity: 0, transform: 'none' }));
-    }
-    run(layer('n'), [0, .7, 1, .9, .5, .7, 0, .35, 0, 0].map(v => ({ opacity: v })));
-    host.appendChild(gx); setTimeout(() => gx.remove(), dur + 40);
-    return true;
-  }
-  // Photos glitch once as they scroll into view; after that, every few seconds one on screen glitches out and comes straight back.
-  const onScreen = new Set(); let lastG = 0;
-  const gio = new IntersectionObserver(es => es.forEach(e => {
-    const el = e.target; if (!e.isIntersecting) { onScreen.delete(el); return; } onScreen.add(el);
-    if (el.dataset.gd) return; const now = performance.now(), wait = Math.max(0, lastG + 140 - now); if (wait > 700) return; lastG = now + wait; el.dataset.gd = '1';
-    const im = el.querySelector('img'), go = () => setTimeout(() => { if (onScreen.has(el)) glitchPic(el, { power: .75, dur: 380, slices: 4 }); }, wait + (el.classList.contains('lib-tile') ? 700 : 160));
-    if (im && im.complete && im.naturalWidth) go(); else if (im) im.addEventListener('load', go, { once: true });
-  }), { threshold: .4 });
-  const glitchable = el => { if (el && !reduced()) gio.observe(el); };
-  (function ghost() { setTimeout(() => { if (!document.hidden && onScreen.size) { const a = Array.from(onScreen).filter(el => el.isConnected); if (a.length) glitchPic(a[Math.floor(Math.random() * a.length)], { power: .65, dur: 360, slices: 4 }); } ghost(); }, rnd(2400, 5600)); })();
-
   /* ── Hero: story-style slideshow. The bars fill while a photo is up; tap right for the next, left for the last, swipe, or hold to pause and see the fit ── */
   const hero = $('#home'), heroMedia = $('#hero-media'), slidesEl = $('#slides'), capEl = $('#slide-cap'), barsEl = $('#bars'), wide = matchMedia('(min-width:960px)');
   let si = 0, heroOn = true, held = false, elapsed = 0, lastT = 0, heroRaf = 0;
@@ -995,12 +914,12 @@ const CELEBS = [
     const prev = sl.find(d => d.classList.contains('on')), next = sl[(k % sl.length + sl.length) % sl.length];
     si = sl.indexOf(next); elapsed = 0;
     sl.forEach(d => { if (d !== prev) d.classList.remove('was'); });
-    if (prev && prev !== next) { prev.classList.remove('on'); prev.classList.add('was'); setTimeout(() => { if (!prev.classList.contains('on')) prev.classList.remove('was'); }, 450); }
+    if (prev && prev !== next) { prev.classList.remove('on'); prev.classList.add('was'); setTimeout(() => { if (!prev.classList.contains('on')) prev.classList.remove('was'); }, 900); }
     next.classList.add('on');
     sl.forEach(d => { const v = d.querySelector('video'); if (!v) return; if (d === next && heroOn) { try { v.currentTime = 0; } catch (e) { } play(v); } else pause(v); });
     capEl.textContent = ''; if (next.dataset.no) { const b = document.createElement('b'); b.textContent = next.dataset.no; capEl.append(b, next.dataset.cap); } else capEl.textContent = next.dataset.cap;
     capEl.hidden = !capEl.textContent; markBars();
-    if (!quiet && prev && prev !== next) glitchPic(next, { from: prev.querySelector('img'), power: 1.1, dur: 460 });
+    if (!quiet && prev && prev !== next) glitch(heroLogo, 1.15);   // the photo changes, YOWA glitches
   }
   function heroFrame(now) {
     heroRaf = 0; if (!heroOn || document.hidden) return;
@@ -1014,7 +933,7 @@ const CELEBS = [
   new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; const cur = slides()[si], v = cur && cur.querySelector('video'); if (heroOn) { play(v); heroRun(); } else pause(v); }).observe(hero);
   document.addEventListener('visibilitychange', heroRun);
   // Taps: anywhere on the photo (on a phone, anywhere on the hero but its buttons). The caption opens that photo in the Library.
-  const NOTAP = 'a,button,input,select,textarea,label', OWN = '.logo,.emo';   // the logo and the emojis keep their own tap, but swipes over them still count
+  const NOTAP = 'a,button,input,select,textarea,label', OWN = '.logo';   // the logo keeps its own tap, but swipes over it still count
   let tp = null, holdT = 0;
   function setHeld(on) { held = on; hero.classList.toggle('paused', on); document.documentElement.classList.toggle('hold', on && !wide.matches); }
   hero.addEventListener('pointerdown', e => {
@@ -1036,10 +955,6 @@ const CELEBS = [
   hero.addEventListener('pointercancel', () => { clearTimeout(holdT); tp = null; if (held) setHeld(false); });
   hero.addEventListener('contextmenu', e => { if (held || tp) e.preventDefault(); });
   paintBars(); goSlide(0, true); heroRun();
-  // First photo glitches in once it's loaded, then now and then mid-photo it drops out and snaps back.
-  const firstImg = slides()[0] && slides()[0].querySelector('img');
-  if (firstImg) { const intro = () => setTimeout(() => { if (si === 0) glitchPic(slides()[0], { power: 1.3, dur: 560 }); }, 300); if (firstImg.complete) intro(); else firstImg.addEventListener('load', intro, { once: true }); }
-  (function idle() { setTimeout(() => { const cur = slides()[si]; if (heroOn && !held && !document.hidden && elapsed > 1300 && elapsed < holdOf(cur) - 1000) glitchPic(cur, { power: .85, dur: 360 }); idle(); }, rnd(2400, 5200)); })();
   // The photo leans with the cursor, or with the phone as you tilt it (Android; iOS keeps motion sensors behind a prompt, so there it stays still).
   const lean = (x, y) => { slidesEl.style.setProperty('--px', x.toFixed(1) + 'px'); slidesEl.style.setProperty('--py', y.toFixed(1) + 'px'); };
   const eyes = [];
@@ -1096,36 +1011,40 @@ const CELEBS = [
     (function wander() { setTimeout(() => { const now = performance.now(); if (!document.hidden && now - lastIn > 2600 && now - tilt.at > 1500) { const a = rnd(0, Math.PI * 2), m = Math.random() < .3 ? 0 : rnd(.5, 1); aim(Math.cos(a) * m, Math.sin(a) * m * .75); } wander(); }, rnd(1100, 2600)); })();
     (function blink() { setTimeout(() => { if (!reduced() && !document.hidden) { logo.classList.remove('blink'); void logo.offsetWidth; logo.classList.add('blink'); } blink(); }, 3000 + Math.random() * 4000); })();
   }
-  makeEye($('#logo')); makeEye($('#foot-logo'));
+  makeEye($('#logo'));
 
-  /* ── Glitch: on events only ── */
-  function glitch(logo) {
-    if (reduced()) return; const img = logo.querySelector('img'), L = $$('.gl', logo);
-    const kf = a => [{ opacity: 0, transform: 'translate(0,0)' }, { opacity: .9, transform: 'translate(' + (-9 * a) + 'px,' + (2 * a) + 'px)', offset: .2 }, { opacity: .85, transform: 'translate(' + (6 * a) + 'px,' + (-3 * a) + 'px)', offset: .45 }, { opacity: 0, transform: 'translate(0,0)' }];
+  /* ── Glitch: only on YOWA. It tears, splits purple and cyan, blinks out and snaps straight back ── */
+  function glitch(logo, k) {
+    if (reduced()) return; k = k || 1; const img = logo.querySelector('img'), svg = logo.querySelector('svg'), L = $$('.gl', logo);
+    const kf = a => [{ opacity: 0, transform: 'translate(0,0)' }, { opacity: .9, transform: 'translate(' + (-9 * a * k).toFixed(1) + 'px,' + (2 * a) + 'px)', offset: .2 }, { opacity: .85, transform: 'translate(' + (6 * a * k).toFixed(1) + 'px,' + (-3 * a) + 'px)', offset: .45 }, { opacity: 0, transform: 'translate(0,0)' }];
     L[0] && L[0].animate(kf(1), { duration: 520, easing: 'steps(6,end)' }); L[1] && L[1].animate(kf(-1), { duration: 520, delay: 40, easing: 'steps(6,end)' });
-    img.animate([{ transform: 'none', clipPath: 'inset(0 0 0 0)' }, { transform: 'translate(-7px) skewX(-5deg)', clipPath: 'inset(12% 0 58% 0)', offset: .25 }, { transform: 'translate(8px) skewX(4deg)', clipPath: 'inset(62% 0 8% 0)', offset: .5 }, { transform: 'none', clipPath: 'inset(0 0 0 0)' }], { duration: 520, easing: 'steps(6,end)' });
+    const tear = [{ transform: 'none', clipPath: 'inset(0 0 0 0)', opacity: 1 }, { transform: 'translate(' + (-7 * k).toFixed(1) + 'px) skewX(-5deg)', clipPath: 'inset(12% 0 58% 0)', opacity: 1, offset: .25 }, { transform: 'translate(' + (-3 * k).toFixed(1) + 'px)', clipPath: 'inset(0 0 0 0)', opacity: .15, offset: .37 }, { transform: 'translate(' + (8 * k).toFixed(1) + 'px) skewX(4deg)', clipPath: 'inset(62% 0 8% 0)', opacity: 1, offset: .5 }, { transform: 'none', clipPath: 'inset(0 0 0 0)', opacity: 1 }];
+    img.animate(tear, { duration: 520, easing: 'steps(6,end)' });
+    if (svg) svg.animate(tear.map(f => ({ transform: f.transform, opacity: f.opacity, offset: f.offset })), { duration: 520, easing: 'steps(6,end)' });
   }
   const heroLogo = $('#logo');
   heroLogo.addEventListener('pointerenter', () => glitch(heroLogo));
-  heroLogo.addEventListener('click', () => { glitch(heroLogo); heroLogo.classList.remove('blink'); void heroLogo.offsetWidth; heroLogo.classList.add('blink'); buzz(12); });
-  setTimeout(() => glitch(heroLogo), 1700);
-  // Tap the three emojis after the mantra
-  const emo = $('.mantra .emo'); if (emo) emo.addEventListener('click', () => { burstFrom(emo); buzz(10); });
+  heroLogo.addEventListener('click', () => { glitch(heroLogo, 1.3); heroLogo.classList.remove('blink'); void heroLogo.offsetWidth; heroLogo.classList.add('blink'); buzz(12); });
+  setTimeout(() => glitch(heroLogo, 1.2), 1200);
+  // Now and then YOWA drops out for a split second and snaps back
+  (function idle() { setTimeout(() => { if (heroOn && !held && !document.hidden) glitch(heroLogo, rnd(.8, 1.3)); idle(); }, rnd(2600, 5600)); })();
+  // Tap the three emojis in the menu
+  const emo = $('.menu-bybd .emo'); if (emo) emo.addEventListener('click', () => { burstFrom(emo); buzz(10); });
 
   /* ── Countdown / drop state ── */
   const U = { d: $('[data-u="d"]'), h: $('[data-u="h"]'), m: $('[data-u="m"]'), s: $('[data-u="s"]') };
   const target = CONFIG.DROP_AT ? new Date(CONFIG.DROP_AT).getTime() : null; let wasLive = false;
   function tick() {
-    if (!target) { $('#kick').textContent = CONFIG.DROP_NAME + ' · Loading'; $('#cd').hidden = true; return; }
+    if (!target) { $('#cd').hidden = true; return; }
     const ms = target - Date.now(), live = ms <= 0, s = Math.max(0, Math.floor(ms / 1000));
     U.d.textContent = pad(Math.min(99, Math.floor(s / 86400))); U.h.textContent = pad(Math.floor(s % 86400 / 3600)); U.m.textContent = pad(Math.floor(s % 3600 / 60)); U.s.textContent = pad(s % 60);
-    hero.classList.toggle('live', live); $('#kick').textContent = live ? CONFIG.DROP_NAME + ' · Live now' : CONFIG.DROP_NAME + ' · Loading';
-    if (live && !wasLive) glitch(heroLogo); wasLive = live;
+    $('#cd').hidden = false; document.documentElement.classList.toggle('live', live);
+    if (live && !wasLive) glitch(heroLogo, 1.5); wasLive = live;
     if (swirl) swirl.speed(live ? 3 : .5 + 2.3 * Math.pow(1 - Math.min(1, s / (14 * 86400)), 3));
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Dragons: serpent ribbons across the seams. The body slithers, the words ride its back, a fast scroll makes it thrash ── */
+  /* ── Dragon: the serpent ribbon at the end of every page. The body slithers, the words ride its back, a fast scroll makes it thrash ── */
   const dragons = $$('.dragon').map((el, n) => {
     const id = 'dg' + n, ref = ' href="#' + id + 'p" xlink:href="#' + id + 'p"';
     el.innerHTML = '<svg aria-hidden="true" focusable="false"><defs><path id="' + id + 'p"/><linearGradient id="' + id + 'g" gradientUnits="userSpaceOnUse" spreadMethod="reflect" x1="0" y1="0" x2="200" y2="0"><stop class="s0" offset="0"/><stop class="s1" offset="1"/></linearGradient></defs>' +
@@ -1181,6 +1100,8 @@ const CELEBS = [
   layoutDragons(); dragons.forEach(d => dio.observe(d.el));
   if (document.fonts) { document.fonts.ready.then(layoutDragons); if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layoutDragons); }
   let dRs = 0; addEventListener('resize', () => { clearTimeout(dRs); dRs = setTimeout(layoutDragons, 150); });
+  // Each page gives the dragon its own words (and a dark body on some)
+  function dressDragon(text, dark) { const d = dragons[0]; if (!d) return; d.el.classList.toggle('void', !!dark); if (d.text !== text) { d.text = text; d.off = 0; } layoutDragon(d); }
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
@@ -1194,18 +1115,18 @@ const CELEBS = [
     if (swirl && dy) swirl.kick(Math.min(.6, Math.abs(dy) * .008));
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  const menu = $('#menu'), menuBtn = $('#menu-open');
-  function closeMenu(viaBack) { if (menu.hidden) return; menu.hidden = true; document.body.style.overflow = ''; menuBtn.setAttribute('aria-expanded', 'false'); if (viaBack !== true) backstack.close(); }
-  menuBtn.addEventListener('click', () => { menu.hidden = false; document.body.style.overflow = 'hidden'; menuBtn.setAttribute('aria-expanded', 'true'); backstack.open(closeMenu); buzz(6); });
-  $('#menu-close').addEventListener('click', () => closeMenu());
-  // A link in the menu closes it and goes, without leaving an extra step in the back history.
-  $$('#menu a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
-
-  /* ── Magnetic buttons ── */
-  $$('[data-magnet]').forEach(b => {
-    b.addEventListener('pointermove', e => { if (reduced() || e.pointerType !== 'mouse') return; const r = b.getBoundingClientRect(); b.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px)'; });
-    b.addEventListener('pointerleave', () => { b.style.transform = ''; });
-  });
+  // The three lines open the menu and turn into an X that closes it.
+  const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement;
+  function openMenu() { if (!menu.hidden) return; menu.hidden = false; document.body.style.overflow = 'hidden'; rootEl.classList.add('menu-open'); top.classList.remove('away'); menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Close menu'); backstack.open(closeMenu); buzz(6); }
+  function closeMenu(keep) { if (menu.hidden) return; menu.hidden = true; document.body.style.overflow = ''; rootEl.classList.remove('menu-open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close(); }
+  menuBtn.addEventListener('click', () => { if (menu.hidden) openMenu(); else closeMenu(); });
+  // A page in the menu: close it and go, without leaving an extra step in the back history.
+  $$('#menu a.go').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); const h = a.getAttribute('href');
+    if (h === '#' + view) { closeMenu(); jumpTop(); return; }
+    closeMenu(true); backstack.drop(); location.replace(h);
+  }));
+  $('#menu-chat').addEventListener('click', () => { closeMenu(true); toggleChat(true); });   // the chat takes over the menu's back step
 
   /* ── The drop: gate + grid ── */
   let unlocked = store.get('yowa-unlocked', false);
@@ -1214,7 +1135,7 @@ const CELEBS = [
   $('#gate').addEventListener('submit', e => {
     e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), msg = $('#gate-msg');
     if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); msg.classList.remove('bad'); msg.textContent = "You're in. Pick your pieces."; paintLock(); renderGrid(); glitch(heroLogo); buzz([12, 40, 12, 40, 30]); burstFrom($('.lockstate')); }
-    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Join the list below and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
+    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Get on the list (Get the code, in the menu) and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
   });
   const grid = $('#grid');
   function renderGrid() {
@@ -1225,7 +1146,7 @@ const CELEBS = [
       b.innerHTML = '<div class="frame">' + frameHTML(p, tag) + '</div><div class="card-row"><span class="card-name"></span><span class="card-price"></span></div><div class="card-sub"></div>';
       b.querySelector('.card-name').textContent = p.name; b.querySelector('.card-price').textContent = p.price == null ? '₦ ——' : naira(p.price);
       b.querySelector('.card-sub').textContent = (p.colour ? p.colour + ' · ' : '') + (p.sizes.length > 1 ? p.sizes[0] + ' to ' + p.sizes[p.sizes.length - 1] : p.sizes[0]);
-      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b); glitchable(b.querySelector('.frame'));
+      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b);
     });
   }
   paintLock(); renderGrid();
@@ -1246,7 +1167,6 @@ const CELEBS = [
     pview.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
     const sheet = matchMedia('(max-width:820px)').matches;
     if (!reduced()) $('.pview-in').animate(sheet ? [{ transform: 'translateY(100%)' }, { transform: 'none' }] : [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: sheet ? 560 : 480, easing: 'cubic-bezier(.16,1,.3,1)' });
-    const pim = fr.querySelector('img'); if (pim) { const g = () => setTimeout(() => glitchPic(fr, { power: .9 }), sheet ? 420 : 220); if (pim.complete) g(); else pim.addEventListener('load', g, { once: true }); }
     $('#pv-close').focus({ preventScroll: true });
   }
   function closeProduct(keep) { if (pview.hidden) return; pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (keep !== true) backstack.close(); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
@@ -1286,7 +1206,7 @@ const CELEBS = [
   }
   function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
   function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
-  $('#bag-open').addEventListener('click', openBag); $('#bag-close').addEventListener('click', closeBag);
+  $('#bag-open').addEventListener('click', () => { if (!menu.hidden) closeMenu(true); openBag(); });   // the bag takes over the menu's back step $('#bag-close').addEventListener('click', closeBag);
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); });
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!$('#chat').hidden) toggleChat(false); else if (!menu.hidden) closeMenu(); });
   $('#checkout').addEventListener('click', () => {
@@ -1306,7 +1226,7 @@ const CELEBS = [
   /* ── Gallery: drag, throw and parallax on big screens; on phones a plain grid, so the page only scrolls up and down ── */
   const track = $('#rail-track'), rail = $('#rail'); const shots = GALLERY.map((g, i) => ({ src: g.src, cap: g.cap, i }));
   const stacked = matchMedia('(max-width:700px)');
-  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i></span><span>' + pad(s.i + 1) + '</span></div>'; b.querySelector('.cap span').append(s.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, s.i, b); }); track.appendChild(b); glitchable(b); });
+  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i></span><span>' + pad(s.i + 1) + '</span></div>'; b.querySelector('.cap span').append(s.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, s.i, b); }); track.appendChild(b); });
   let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null, railRaf = 0, railSeen = true;
   const maxX = () => Math.min(0, rail.clientWidth - track.scrollWidth);
   function railFrame() {
@@ -1340,7 +1260,7 @@ const CELEBS = [
       media.classList.remove('zoom'); media.style.setProperty('--ar', it.w ? (it.w / it.h).toFixed(4) : '.75');
       media.innerHTML = it.no ? '' : '<div class="art">' + artFor(i) + '</div>';
       const im = document.createElement('img'); im.alt = it.cap || 'Photo ' + (i + 1); im.decoding = 'async';
-      im.onload = () => { if (!it.w && im.naturalWidth) media.style.setProperty('--ar', (im.naturalWidth / im.naturalHeight).toFixed(4)); setTimeout(() => glitchPic(media, { power: .9, dur: 420 }), 80); };
+      im.onload = () => { if (!it.w && im.naturalWidth) media.style.setProperty('--ar', (im.naturalWidth / im.naturalHeight).toFixed(4)); };
       im.onerror = () => im.remove(); im.src = it.src; media.appendChild(im);
       cap.textContent = [it.no, it.cap, pad(i + 1) + ' / ' + pad(items.length)].filter(Boolean).join(' · ');
       shop.hidden = !(it.product && PRODUCTS.some(p => p.id === it.product));
@@ -1407,7 +1327,7 @@ const CELEBS = [
     im.src = p.thumb;
     const no = document.createElement('span'); no.className = 'no'; no.textContent = p.no;
     const cp = document.createElement('span'); cp.className = 'cap'; cp.textContent = p.cap;
-    b.append(im, no, cp); b.addEventListener('click', () => openLightbox(list, idx, b)); glitchable(b);
+    b.append(im, no, cp); b.addEventListener('click', () => openLightbox(list, idx, b));
     return b;
   }
   const libIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); libIO.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
@@ -1469,11 +1389,9 @@ const CELEBS = [
   });
   libBody.addEventListener('pointerleave', hidePeek); addEventListener('scroll', hidePeek, { passive: true });
   paintShelves(); renderLib(true);
-  // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
+  // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010 (see the pages below).
   function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
   let pendingCode = '';
-  const deep = /^#yw-?(\d{1,4})$/i.exec(location.hash);
-  if (deep) { pendingCode = 'YW·' + deep[1].padStart(3, '0'); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } if (openCode(pendingCode)) pendingCode = ''; }
   // Photos filed in yowa-library later (any folder but brand and inbox) join here on their own, numbered after the highest code.
   let lastNo = LIB.reduce((m, p) => Math.max(m, parseInt(String(p.no).replace(/\D/g, ''), 10) || 0), 0);
   if (CONFIG.LIBRARY_FEED && !CONFIG.PREVIEW) fetch(CONFIG.LIBRARY_FEED).then(r => r.ok ? r.json() : null).then(d => {
@@ -1552,6 +1470,34 @@ const CELEBS = [
   /* ── Reveal on scroll ── */
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
   $$('.rv').forEach(el => io.observe(el));
+
+  /* ── Pages: home is just YOWA and the photos. Every section is its own page, opened from the menu ── */
+  const PAGES = ['drop', 'message', 'gallery', 'library', 'worn', 'list'], TITLES = { drop: 'The drop', message: 'Message', gallery: 'Gallery', library: 'Library', worn: 'Worn by', list: 'Get the code' };
+  const pageOf = id => document.getElementById(id), dragonEl = $('#dragon');
+  let view = '';
+  function jumpTop() { const sb = rootEl.style.scrollBehavior; rootEl.style.scrollBehavior = 'auto'; scrollTo(0, 0); rootEl.style.scrollBehavior = sb; }
+  function route() {
+    const h = location.hash.slice(1), yw = /^yw-?(\d{1,4})$/i.exec(h);
+    if (yw) try { history.replaceState(history.state, '', '#library'); } catch (e) { }   // a photo link opens over the Library
+    const next = yw ? 'library' : PAGES.indexOf(h) >= 0 ? h : 'home';
+    if (next !== view) {
+      const first = !view; view = next;
+      hero.hidden = view !== 'home'; PAGES.forEach(id => { pageOf(id).hidden = id !== view; }); dragonEl.hidden = view === 'home';
+      rootEl.classList.toggle('home', view === 'home');
+      $$('.nav a, #menu a.go').forEach(a => { if (a.getAttribute('href') === '#' + view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+      document.title = view === 'home' ? 'YOWA' : 'YOWA · ' + TITLES[view];
+      jumpTop();
+      if (view === 'home') { if (!first) glitch(heroLogo, 1.2); }
+      else {
+        const sec = pageOf(view); dressDragon(sec.dataset.dragon || BYBD + ' · 042 · ', sec.hasAttribute('data-void'));
+        if (!first && !reduced()) sec.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }
+      onScroll(); drift(); lightWords(); railStart();
+    }
+    if (yw) { const no = 'YW·' + yw[1].padStart(3, '0'); if (!$('#lightbox') && !openCode(no)) pendingCode = no; }
+  }
+  addEventListener('hashchange', route);
+  route();
 })();
 </script>
 </body>
