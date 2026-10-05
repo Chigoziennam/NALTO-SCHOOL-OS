@@ -1,0 +1,16 @@
+{
+  "name": "YOWA · Be You Be Different 💜⚔️🐉",
+  "short_name": "YOWA",
+  "description": "Handmade, limited runs. Get the code before the drop.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#08060E",
+  "theme_color": "#08060E",
+  "icons": [
+    { "src": "img/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/brand/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
