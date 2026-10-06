@@ -173,7 +173,7 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: serpent ribbons that slither across the seams between sections, the words riding their back ── */
+/* ── Dragons: serpent ribbons that slither across every seam, before and after each section, the words riding their back ── */
 .dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none;overflow:hidden;transition:opacity .35s ease}
 .dragon svg{display:block;width:100%;height:100%}
 .d-glow,.d-edge,.d-body,.d-scale{fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -200,6 +200,7 @@ section{position:relative}
 /* The first one sits in the opening screen, its whole body under Be You Be Different, instead of peeking up from the seam */
 .hero+.dragon{margin:-142px 0 -8px}
 .hero+.dragon+.sec{padding-top:clamp(48px,6vw,96px)}
+main>.dragon:last-child{margin-bottom:0}
 @media (min-width:960px){.hero+.dragon{margin:-160px 0 -10px}}
 .sec:has(+.dragon){padding-bottom:clamp(64px,7vw,110px)}
 .home .chat-fab,.menu-open .chat-fab{display:none}
@@ -576,6 +577,8 @@ section{position:relative}
     </div>
   </section>
 
+  <div class="dragon" aria-hidden="true" data-text="Worn by the ones who stand out · Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · "></div>
+
   <section class="sec panel" id="gallery" aria-labelledby="gal-t">
     <div class="wrap">
       <div class="sec-head rv">
@@ -588,6 +591,8 @@ section{position:relative}
     </div>
     <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
   </section>
+
+  <div class="dragon void" aria-hidden="true" data-text="Real pieces · Real people · Every photo numbered · Be You Be Different 💜⚔️🐉 · "></div>
 
   <section class="sec" id="library" aria-labelledby="lib-t">
     <div class="wrap">
@@ -626,6 +631,8 @@ section{position:relative}
     </div>
   </section>
 
+  <div class="dragon void" aria-hidden="true" data-text="When it's gone, it's gone · Handmade in small runs · Be You Be Different 💜⚔️🐉 · "></div>
+
   <section class="sec panel" id="list" aria-labelledby="list-t">
     <!-- Background: YW·033 (Liberty Raglan · Black, full fit) -->
     <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1524.jpg" alt="" loading="lazy"></div>
@@ -651,6 +658,8 @@ section{position:relative}
       </div>
     </div>
   </section>
+
+  <div class="dragon" aria-hidden="true" data-text="Get the code first · Waitlist members are already in · Be You Be Different 💜⚔️🐉 · 042 · "></div>
 </main>
 
 <footer class="foot">

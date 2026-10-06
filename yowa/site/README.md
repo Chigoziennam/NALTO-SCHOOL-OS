@@ -33,7 +33,7 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 ## How it moves
 - **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear YOWA off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
 - **Glitch:** only YOWA glitches, never the photos of people or the mantra. The logo tears, splits purple and cyan, blinks out and snaps back: on every new photo, now and then on its own, when tapped, and when you come back home.
-- **Dragons:** the three serpent ribbons on the seams between sections. Each one's words are its `data-text` in the HTML. They slither, and thrash when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
+- **Dragons:** seven serpent ribbons, one before and after every section, like barriers between them. They alternate purple and dark. The first sits on the opening screen, right under Be You Be Different 💜⚔️🐉. Each one's words are its `data-text` in the HTML. They slither, and thrash when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
 - **Signature:** top left. It writes itself on load, and again when tapped (which also takes you back to the top).
 - Everything still and calm when the phone is set to reduce motion. Motion clips are skipped on data saver.
 
