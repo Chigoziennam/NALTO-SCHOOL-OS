@@ -5,7 +5,7 @@ Static site (HTML + two serverless functions), deploys on Vercel like the waitli
 ## How it's laid out
 - One short scrolling page: about six phone screens from top to bottom.
 - **Top:** just YOWA over the photos.
-- **Then:** The drop (lock and products, three across on a phone), Message, Gallery (six photos), Library (nine square photos at a time, Show more for the rest), Worn by, Get the code and a one-line footer.
+- **Then:** The drop (the lock, then the products in a clean shop grid: two across on a phone, three on a computer, with the name // colour and the price centred under each photo), Message, Gallery (six photos), Library (nine square photos at a time, Show more for the rest), Worn by, Get the code and a one-line footer.
 - **Menu:** the three lines top right. They turn into an X while the menu is open; tap the X to close it. Picking a section glides to it, and the menu lights up the one on screen. It also holds Ask YOWA, the mantra, Instagram and the credit.
 
 ## Photos and their codes
