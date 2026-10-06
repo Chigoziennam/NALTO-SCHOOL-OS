@@ -26,8 +26,8 @@
 <link rel="preload" as="image" href="img/library/yowa-skate.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&display=swap"></noscript>
 <style>
 /* YOWA main site. Night mode throughout; the live swirl sits behind the whole page and the photos move on top of it. */
 :root{
@@ -39,6 +39,7 @@
   --f-body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
   --f-label:"Syncopate","Arial Black",Arial,sans-serif;
   --f-mantra:"Bungee","Arial Black",Impact,sans-serif;
+  --f-mono:"Space Mono","Courier New",ui-monospace,monospace;
   --e-settle:cubic-bezier(.16,1,.3,1); --e-pull:cubic-bezier(.65,0,.35,1);
   --gut:clamp(16px,4vw,48px);
   color-scheme:dark;
@@ -95,6 +96,8 @@ img{max-width:100%}
 .sheet-menu .go[aria-current="page"]{color:var(--purple-l)}
 @media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}}
 .sheet-menu .menu-sig{width:120px;height:auto;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(166,91,255,.7))}
+.sheet-menu .ask{display:inline-flex;align-items:center;gap:10px;margin-top:16px;padding:8px 20px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9));box-shadow:0 12px 34px rgba(122,47,224,.4);color:#fff;cursor:pointer;font:700 9.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;transition:transform .35s var(--e-settle)}
+.sheet-menu .ask .ey{width:34px;height:34px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
 .sheet-menu .menu-bybd{margin:16px 0 0;font:400 15px/1.3 var(--f-mantra);color:var(--purple-l);text-align:center}
 .sheet-menu .menu-foot{margin:10px 0 0;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut);text-align:center}
 .sheet-menu .menu-foot a{color:var(--ink);text-decoration:none}
@@ -127,7 +130,9 @@ img{max-width:100%}
 .bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.26)}
 .bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%;box-shadow:0 0 8px rgba(166,91,255,.8)}
 .bars i.past b{transform:scaleX(1)}
-.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:16px;padding:120px var(--gut) 78px;transition:opacity .35s ease}
+.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:14px;padding:120px var(--gut) 112px;padding-bottom:max(112px,14svh);transition:opacity .35s ease}
+.hero-bybd{margin:0;font:400 clamp(14px,4.3vw,22px)/1.2 var(--f-mantra);letter-spacing:.03em;color:var(--ink);text-shadow:0 0 18px rgba(166,91,255,.9),0 2px 12px rgba(8,6,14,.75);animation:bybdin 1.1s var(--e-settle) .45s both}
+@keyframes bybdin{from{opacity:0;transform:translateY(12px)}}
 /* Holding a photo on a phone clears everything off it */
 @media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top,.hold .hero+.dragon{opacity:0;pointer-events:none}}
 @media (min-width:960px){
@@ -138,11 +143,11 @@ img{max-width:100%}
   .hero-media::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;z-index:3;background:repeating-linear-gradient(90deg,var(--purple-l) 0 22px,transparent 22px 44px)}
   .slide-cap{top:28px}
   .bars{top:14px;left:14px;right:14px}
-  .hero .logo{width:min(48vw,700px)}
+  .hero .logo{width:min(42vw,610px)}
 }
 .pen{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px var(--purple-l);opacity:0;pointer-events:none}
 @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(166,91,255,0);opacity:.6}}
-.logo{position:relative;width:min(88vw,760px);line-height:0}
+.logo{position:relative;width:min(76vw,660px);line-height:0}
 .logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 34px var(--glow))}
 .logo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .pupil{fill:#fff;transform-box:fill-box;transform-origin:center;transition:fill .3s}
@@ -201,26 +206,27 @@ section{position:relative}
 .panel::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:rgba(8,6,14,.82);-webkit-mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent);mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent)}
 
 /* ── The drop (Corteiz-plain grid) ── */
-.drop-bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
-.lockstate{display:flex;align-items:center;gap:10px;font:700 9px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase}
-.lockstate i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(226,58,46,.2)}
-.unlocked .lockstate i{background:#3ADB7A;box-shadow:0 0 0 4px rgba(58,219,122,.2)}
-.gate{display:flex;gap:8px}
-.gate input{width:min(180px,40vw);background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:999px;padding:12px 16px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#fff}
-.gate input::placeholder{color:var(--mut);letter-spacing:.14em}
-.gate input:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.2)}
+/* The drop code: asked for on the piece, when someone goes to buy it */
+.pv-unlock{display:grid;gap:10px}
+.pv-code{display:flex;gap:8px}
+.pv-code input{flex:1;min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:999px;padding:13px 18px;font-size:16px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#fff}
+.pv-code input::placeholder{color:var(--mut);letter-spacing:.14em}
+.pv-code input:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.2)}
+.pv-code-hint{margin:0;font-size:13px;color:var(--mut)}
+.pv-code-hint a{color:var(--purple-l)}
 .gate-msg{font-size:13px;color:var(--mut);min-height:1.4em;margin:0}
 .gate-msg.bad{color:#FF8A7E}
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.4vw,18px)}
-@media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:540px){.card-name{font-size:19px}.card-price{font-size:12px}}
+/* Shop grid: the photo, then the name and price centred underneath, with plenty of air between pieces */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(34px,4.4vw,60px) clamp(14px,2.6vw,40px);max-width:1080px;margin-inline:auto}
+@media (max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 14px}}
 .photo-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent,#000 140px,#000 calc(100% - 140px),transparent);mask-image:linear-gradient(180deg,transparent,#000 140px,#000 calc(100% - 140px),transparent)}
 .photo-bg img,.photo-bg video{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;object-position:center 30%;opacity:.34;filter:grayscale(1) contrast(1.2);transform:translate3d(0,var(--py,0px),0) scale(1.04);will-change:transform}
 .photo-bg video{opacity:0;transition:opacity 1.2s ease}
 .photo-bg.moving video{opacity:.34}
 .photo-bg::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(122,47,224,.42),rgba(74,26,148,.2) 50%,rgba(226,58,46,.12));mix-blend-mode:color}
 .photo-bg::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,var(--void) 0%,rgba(8,6,14,.35) 22%,rgba(8,6,14,.35) 78%,var(--void) 100%)}
-.card{display:grid;gap:12px;text-align:left;border:0;background:none;padding:0;cursor:pointer;color:inherit}
+.card{display:grid;gap:14px;justify-items:center;text-align:center;border:0;background:none;padding:0;cursor:pointer;color:inherit}
+.card .frame{width:100%;aspect-ratio:1;border-radius:2px}
 .frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate;transition:transform .3s var(--e-settle)}
 .frame::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.55)}
 .frame .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
@@ -230,12 +236,9 @@ section{position:relative}
 @media (hover:hover){.card:hover .frame img:first-of-type{transform:scale(1.06)}.card:hover .frame img+img{opacity:1}.card:hover .sheen{animation:shine 1.1s var(--e-pull)}}
 .frame .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(166,91,255,.35) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
 @keyframes shine{to{transform:translateX(120%)}}
-.frame .tag{position:absolute;left:10px;top:10px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:7px 8px;border-radius:999px;background:rgba(8,6,14,.7);border:1px solid var(--line)}
-.frame .tag.red{border-color:var(--red);color:#FF8A7E}
-.card-row{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
-.card-name{font:400 clamp(18px,1.8vw,26px)/1 var(--f-display);text-transform:uppercase}
-.card-price{font:600 14px/1 var(--f-body);white-space:nowrap}
-.card-sub{font-size:13px;color:var(--mut);margin-top:-6px}
+.card-name{font:400 14px/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.card-name span{white-space:nowrap}   /* when it wraps, it breaks after the // */
+.card-price{margin-top:-6px;font:500 12.5px/1.3 var(--f-body);letter-spacing:.02em;color:rgba(239,234,247,.72)}
 .flat{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
 .flat .seam{stroke-width:1.6;stroke-dasharray:5 5}
 
@@ -403,7 +406,7 @@ section{position:relative}
 .size{min-width:46px;padding:11px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600;font-size:13px}
 .size[aria-pressed="true"]{background:#fff;color:var(--void)}
 .pv-close{position:absolute;top:12px;right:12px;z-index:4}
-.drawer{position:fixed;top:0;right:0;bottom:0;z-index:76;width:min(420px,100%);background:var(--cream);color:#140F1F;display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(0,0,0,.4)}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:76;width:min(420px,100%);touch-action:pan-y;background:var(--cream);color:#140F1F;display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(0,0,0,.4)}
 .dr-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid rgba(20,15,31,.12)}
 .dr-head b{font:400 30px/1 var(--f-display);text-transform:uppercase}
 .dr-body{overflow:auto;padding:12px 22px;display:grid;gap:12px;align-content:start}
@@ -426,8 +429,8 @@ section{position:relative}
 .chat-fab.mini .t{max-width:0;opacity:0}
 @media (hover:hover){.chat-fab:hover{box-shadow:0 14px 44px rgba(122,47,224,.7),0 0 0 1px rgba(166,91,255,.6);transform:translateY(-2px)}}
 .chat-fab .ey{width:34px;height:34px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
-.chat-fab .ey i,.chat-head .ey i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #fff;display:grid;place-items:center}
-.chat-fab .ey i::after,.chat-head .ey i::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.chat-fab .ey i,.chat-head .ey i,.sheet-menu .ask .ey i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #fff;display:grid;place-items:center}
+.chat-fab .ey i::after,.chat-head .ey i::after,.sheet-menu .ask .ey i::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
 .chat{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:66;width:min(380px,calc(100vw - 32px));height:min(520px,calc(100svh - 120px));display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:#1C0B42;color:#fff;border:1px solid rgba(166,91,255,.45);border-radius:18px;overflow:hidden;isolation:isolate;box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.35)}
 .chat::before{content:"";position:absolute;inset:-25%;z-index:-2;background:url(img/brand/bg-swirl.jpg) center/cover;animation:chatswirl 36s ease-in-out infinite alternate}
 .chat::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(90,34,180,.4) 0%,rgba(28,11,66,.7) 45%,rgba(12,6,28,.9) 100%)}
@@ -459,15 +462,6 @@ section{position:relative}
 
 /* ── Phones: every section kept, made short ── */
 @media (max-width:700px){
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .card{gap:7px}
-  .frame{aspect-ratio:1}
-  .frame .tag{left:6px;top:6px;font-size:6.5px;letter-spacing:.1em;padding:5px 6px}
-  .card-row{flex-direction:column;align-items:flex-start;gap:3px}
-  .card-name{font-size:15px;line-height:.95}
-  .card-price{font-size:11px}
-  .card-sub{font-size:11px;margin-top:0}
-  .drop-bar{padding:10px 0;margin-bottom:12px}
   .rail-track{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
   .shot,.shot:first-child,.shot:last-child:nth-child(even){grid-column:auto;aspect-ratio:1;border-radius:6px}
   .shot:nth-child(n+7),.shot .cap{display:none}
@@ -497,7 +491,7 @@ section{position:relative}
 /* Touch screens: a press shows, since there's no hover */
 .shot{transition:transform .3s var(--e-settle)}
 @media (hover:none){
-  .btn:active,.pill:active,.x:active,.bag-btn:active,.menu-btn:active,.size:active,.chips button:active,.chat-fab:active{transform:scale(.95)}
+  .btn:active,.pill:active,.x:active,.sheet-menu .ask:active,.bag-btn:active,.menu-btn:active,.size:active,.chips button:active,.chat-fab:active{transform:scale(.95)}
   .card:active .frame,.shot:active{transform:scale(.97)}
   .lib-tile:active{box-shadow:0 0 0 2px var(--purple-l)}
   .lib-row:active{background:rgba(122,47,224,.18)}
@@ -506,7 +500,7 @@ section{position:relative}
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.sheet-menu:not([hidden])>*{animation:none}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd,.sheet-menu:not([hidden])>*{animation:none}}
 </style>
 </head>
 <body>
@@ -520,7 +514,7 @@ section{position:relative}
   <div class="top-in wrap">
     <a class="brand" href="#home" aria-label="YOWA home"><img src="img/brand/yowa-signature.png" alt="" width="560" height="351"><span class="pen" aria-hidden="true"></span></a>
     <nav class="nav" aria-label="Main">
-      <a href="#drop">The drop</a><a href="#message">Message</a><a href="#gallery">Gallery</a><a href="#library">Library</a><a href="#worn">Worn by</a><a href="#list">Get the code</a>
+      <a href="#drop">Shop</a><a href="#worn">Worn by</a><a href="#gallery">Gallery</a><a href="#message">Message</a><a href="#list">Get the code</a>
     </nav>
     <button class="bag-btn" type="button" id="bag-open">Bag (<b id="bag-count">0</b>)</button>
     <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><i></i><i></i><i></i></button>
@@ -529,8 +523,8 @@ section{position:relative}
 
 <div class="sheet-menu" id="menu" hidden>
   <img class="menu-sig" src="img/brand/yowa-signature.png" alt="" width="560" height="351">
-  <a class="go" href="#home">Home</a><a class="go" href="#drop">The drop</a><a class="go" href="#message">Message</a><a class="go" href="#gallery">Gallery</a><a class="go" href="#library">Library</a><a class="go" href="#worn">Worn by</a><a class="go" href="#list">Get the code</a>
-  <button class="go" type="button" id="menu-chat">Ask YOWA</button>
+  <a class="go" href="#home">Home</a><a class="go" href="#drop">Shop</a><a class="go" href="#worn">Worn by</a><a class="go" href="#gallery">Gallery</a><a class="go" href="#message">Message</a><a class="go" href="#list">Get the code</a>
+  <button class="ask" type="button" id="menu-chat"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
   <p class="menu-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
   <p class="menu-foot"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a> · Built by Nalto</p>
 </div>
@@ -545,6 +539,7 @@ section{position:relative}
         <span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span>
         <svg viewBox="0 0 701 178" aria-hidden="true"><g class="pupil-g"><circle class="pupil" cx="235.5" cy="89" r="16.8"/></g></svg>
       </div>
+      <p class="hero-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
     </div>
   </section>
 
@@ -552,38 +547,28 @@ section{position:relative}
 
   <section class="sec panel" id="drop" aria-labelledby="drop-t">
     <div class="wrap">
-      <h2 class="sr" id="drop-t">Drop 01</h2>
+      <h2 class="sr" id="drop-t">Shop · Drop 01</h2>
       <div class="cd drop-cd" id="cd" aria-label="Countdown to the drop" hidden>
         <div class="seg"><b data-u="d">00</b><span>Days</span></div>
         <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
         <div class="seg"><b data-u="m">00</b><span>Mins</span></div>
         <div class="seg"><b data-u="s">00</b><span>Secs</span></div>
       </div>
-      <div class="drop-bar" id="drop-bar">
-        <span class="lockstate"><i aria-hidden="true"></i><span id="lock-text">Locked · the list gets the code first</span></span>
-        <form class="gate" id="gate" novalidate>
-          <label class="sr" for="code">Drop code</label>
-          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="Code">
-          <button class="btn" type="submit">Enter</button>
-        </form>
-      </div>
-      <p class="gate-msg" id="gate-msg" role="status"></p>
       <div class="grid" id="grid"></div>
     </div>
   </section>
 
   <div class="dragon void" aria-hidden="true" data-text="No rules · No limits · Just vision · Be You Be Different 💜⚔️🐉 · The mindset, not the trend · "></div>
 
-  <section class="sec" id="message" aria-labelledby="msg-t">
-    <!-- Background: YW·010 (the crew on the rooftop), with its motion clip -->
-    <div class="photo-bg" aria-hidden="true" data-video="img/motion/crew.mp4"><img src="img/library/yowa-9924.jpg" alt="" loading="lazy"></div>
+  <section class="sec" id="worn" aria-labelledby="worn-t">
+    <!-- Background: YW·042 (Red and black) -->
+    <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1518.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
-      <span class="label rv">To every YOWA fan</span>
-      <h2 class="sr" id="msg-t">A message to YOWA fans</h2>
-      <div class="mani" id="mani">
-        <p>They told you to blend in. You didn't. No rules. No limits. Just vision. Every piece is made by hand, in small runs, for the ones who would rather stand out than fit in. It represents the mindset, not the trend. When it's gone, it's gone. Be You. Be Different. 💜⚔️🐉 Stay woke.</p>
+      <div class="sec-head rv">
+        <h2 id="worn-t">Worn by</h2>
+        <p>The ones who wore it first. Tap a name to see the post.</p>
       </div>
-      <div class="mani-sign rv"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span>042 · Made for the Circle</span></div>
+      <div class="worn" id="worn-grid"></div>
     </div>
   </section>
 
@@ -624,15 +609,16 @@ section{position:relative}
 
   <div class="dragon" aria-hidden="true" data-text="042 · Made for the Circle · Be You Be Different 💜⚔️🐉 · Stay Woke · "></div>
 
-  <section class="sec" id="worn" aria-labelledby="worn-t">
-    <!-- Background: YW·042 (Red and black) -->
-    <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1518.jpg" alt="" loading="lazy"></div>
+  <section class="sec" id="message" aria-labelledby="msg-t">
+    <!-- Background: YW·010 (the crew on the rooftop), with its motion clip -->
+    <div class="photo-bg" aria-hidden="true" data-video="img/motion/crew.mp4"><img src="img/library/yowa-9924.jpg" alt="" loading="lazy"></div>
     <div class="wrap">
-      <div class="sec-head rv">
-        <h2 id="worn-t">Worn by</h2>
-        <p>The ones who wore it first. Tap a name to see the post.</p>
+      <span class="label rv">To every YOWA fan</span>
+      <h2 class="sr" id="msg-t">A message to YOWA fans</h2>
+      <div class="mani" id="mani">
+        <p>They told you to blend in. You didn't. No rules. No limits. Just vision. Every piece is made by hand, in small runs, for the ones who would rather stand out than fit in. It represents the mindset, not the trend. When it's gone, it's gone. Be You. Be Different. 💜⚔️🐉 Stay woke.</p>
       </div>
-      <div class="worn" id="worn-grid"></div>
+      <div class="mani-sign rv"><img src="img/brand/yowa-signature.png" alt="YOWA signature" width="560" height="351"><span>042 · Made for the Circle</span></div>
     </div>
   </section>
 
@@ -682,6 +668,14 @@ section{position:relative}
       <p class="pv-desc" id="pv-desc"></p>
       <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
       <button class="btn solid" type="button" id="pv-add">Add to bag</button>
+      <div class="pv-unlock" id="pv-unlock" hidden>
+        <form class="pv-code" id="pv-code" novalidate>
+          <label class="sr" for="code">Drop code</label>
+          <input id="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" placeholder="Drop code">
+          <button class="btn" type="submit">Unlock</button>
+        </form>
+        <p class="pv-code-hint">No code yet? <a href="#list" id="pv-getcode">Get on the list</a> and it lands in your inbox first.</p>
+      </div>
       <p class="gate-msg" id="pv-msg" role="status"></p>
     </div>
   </div>
@@ -757,63 +751,64 @@ const GALLERY = [
 ];
 // Library: every photo on file. Each carries its own code (no), written here and never worked out from the order,
 // so YW·010 is always the same photo. Add new photos at the end with the next free code.
-// src is the full photo, the grid loads the small copy in img/library/t/. shelf groups the filters; product links "Shop this piece".
+// src is the full photo, the grid loads the small copy in img/library/t/. shelves: what's in the photo (Raglan shirts, Plain tees,
+// Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
 // Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
 const LIBRARY = [
-  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelf: 'Streets', product: 'liberty-red' },
-  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelf: 'Campaign', product: 'liberty-blue' },
-  { no: 'YW·003', src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·005', src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelf: 'Streets', product: 'liberty-blue' },
-  { no: 'YW·007', src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·008', src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelf: 'Campaign' },
-  { no: 'YW·009', src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelf: 'Streets' },
-  { no: 'YW·010', src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelf: 'Crew' },
-  { no: 'YW·011', src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·013', src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Campaign', product: 'liberty-red' },
-  { no: 'YW·015', src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
-  { no: 'YW·016', src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·018', src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelf: 'Campaign' },
-  { no: 'YW·019', src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·021', src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelf: 'Crew', product: 'cap-042' },
-  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·023', src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·025', src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelf: 'Campaign' },
-  { no: 'YW·026', src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelf: 'Streets', product: 'liberty-red' },
-  { no: 'YW·028', src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·030', src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·032', src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelf: 'Crew', product: 'cap-042' },
-  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·034', src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·035', src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·036', src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
-  { no: 'YW·037', src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelf: 'Streets', product: 'liberty-grey' },
-  { no: 'YW·039', src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·040', src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelf: 'Streets' },
-  { no: 'YW·041', src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·042', src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelf: 'Streets' },
-  { no: 'YW·043', src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·045', src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelf: 'Streets', product: 'liberty-black' },
-  { no: 'YW·047', src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·048', src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·049', src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·050', src: 'img/library/yowa-1408.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelf: 'Skull caps', product: 'skull-cap' },
-  { no: 'YW·051', src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·052', src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·053', src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelf: 'Caps', product: 'cap-042' },
-  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelf: 'Streets', product: 'liberty-blue' }
+  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelves: ['Raglan shirts'], product: 'liberty-red' },
+  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-blue' },
+  { no: 'YW·003', src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·005', src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelves: ['Raglan shirts'], product: 'liberty-blue' },
+  { no: 'YW·007', src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·008', src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelves: ['Raglan shirts', 'Skull caps'] },
+  { no: 'YW·009', src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelves: ['Raglan shirts'] },
+  { no: 'YW·010', src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelves: ['Plain tees', 'Caps'] },
+  { no: 'YW·011', src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·013', src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-red' },
+  { no: 'YW·015', src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
+  { no: 'YW·016', src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·018', src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelves: ['Raglan shirts', 'Skull caps'] },
+  { no: 'YW·019', src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·021', src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·023', src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·025', src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelves: ['Raglan shirts', 'Skull caps'] },
+  { no: 'YW·026', src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts'], product: 'liberty-red' },
+  { no: 'YW·028', src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·030', src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·032', src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelves: ['Plain tees', 'Caps'], product: 'cap-042' },
+  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·034', src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·035', src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelves: ['Skull caps', 'Caps'], product: 'cap-042' },
+  { no: 'YW·036', src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts', 'Caps', 'Joggers'] },
+  { no: 'YW·037', src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-grey' },
+  { no: 'YW·039', src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·040', src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts'] },
+  { no: 'YW·041', src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·042', src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
+  { no: 'YW·043', src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·045', src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·047', src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·048', src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·049', src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·050', src: 'img/library/yowa-1408.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
+  { no: 'YW·051', src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·052', src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·053', src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
+  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-blue' }
 ];
 const CELEBS = [
   { name: '', wore: '', ig: '', photo: '' }, { name: '', wore: '', ig: '', photo: '' },
@@ -983,7 +978,7 @@ const CELEBS = [
   new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; const cur = slides()[si], v = cur && cur.querySelector('video'); if (heroOn) { play(v); heroRun(); } else pause(v); }).observe(hero);
   document.addEventListener('visibilitychange', heroRun);
   // Taps: anywhere on the photo (on a phone, anywhere on the hero but its buttons). The caption opens that photo in the Library.
-  const NOTAP = 'a,button,input,select,textarea,label', OWN = '.logo';   // the logo keeps its own tap, but swipes over it still count
+  const NOTAP = 'a,button,input,select,textarea,label', OWN = '.logo,.hero-bybd';   // the logo and the mantra keep their own tap, but swipes over them still count
   let tp = null, holdT = 0;
   function setHeld(on) { held = on; hero.classList.toggle('paused', on); document.documentElement.classList.toggle('hold', on && !wide.matches); }
   hero.addEventListener('pointerdown', e => {
@@ -1078,8 +1073,8 @@ const CELEBS = [
   setTimeout(() => glitch(heroLogo, 1.2), 1200);
   // Now and then YOWA drops out for a split second and snaps back
   (function idle() { setTimeout(() => { if (heroOn && !held && !document.hidden) glitch(heroLogo, rnd(.8, 1.3)); idle(); }, rnd(2600, 5600)); })();
-  // Tap the three emojis in the menu
-  const emo = $('.menu-bybd .emo'); if (emo) emo.addEventListener('click', () => { burstFrom(emo); buzz(10); });
+  // Tap the three emojis, under YOWA or in the menu
+  $$('.menu-bybd .emo, .hero-bybd .emo').forEach(emo => emo.addEventListener('click', () => { burstFrom(emo); buzz(10); }));
 
   /* ── Countdown / drop state ── */
   const U = { d: $('[data-u="d"]'), h: $('[data-u="h"]'), m: $('[data-u="m"]'), s: $('[data-u="s"]') };
@@ -1172,28 +1167,28 @@ const CELEBS = [
   $$('#menu a.go').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
   $('#menu-chat').addEventListener('click', () => { closeMenu(true); toggleChat(true); });   // the chat takes over the menu's back step
 
-  /* ── The drop: gate + grid ── */
+  /* ── The drop: the grid goes straight to the pieces. Buying one asks for the code, inside the product view ── */
   let unlocked = store.get('yowa-unlocked', false);
-  const dropBar = $('#drop-bar');
-  function paintLock() { dropBar.classList.toggle('unlocked', unlocked); $('#lock-text').textContent = unlocked ? 'Unlocked · welcome to the Circle' : 'Locked · the list gets the code first'; $('#gate').hidden = unlocked; }
-  $('#gate').addEventListener('submit', e => {
-    e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), msg = $('#gate-msg');
-    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); msg.classList.remove('bad'); msg.textContent = "You're in. Pick your pieces."; paintLock(); renderGrid(); glitch(heroLogo); buzz([12, 40, 12, 40, 30]); burstFrom($('.lockstate')); }
-    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Get on the list (Get the code, in the menu) and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) $('#gate').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
+  const unlockBox = $('#pv-unlock'), codeForm = $('#pv-code');
+  codeForm.addEventListener('submit', e => {
+    e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), msg = $('#pv-msg');
+    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); unlockBox.hidden = true; msg.classList.remove('bad'); msg.textContent = current && current.sizes.length > 1 ? "You're in. Pick your size." : "You're in."; $('#pv-add').textContent = 'Add to bag'; buzz([12, 40, 12, 40, 30]); burstFrom($('#pv-add')); }
+    else { msg.classList.add('bad'); msg.textContent = "That code isn't right. Get on the list and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) codeForm.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
   });
   const grid = $('#grid');
   function renderGrid() {
     grid.textContent = '';
     PRODUCTS.forEach(p => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'card rv in';
-      const tag = p.price == null ? '<span class="tag">Price drops soon</span>' : (!unlocked ? '<span class="tag red">Locked</span>' : '<span class="tag">Limited run</span>');
-      b.innerHTML = '<div class="frame">' + frameHTML(p, tag) + '</div><div class="card-row"><span class="card-name"></span><span class="card-price"></span></div><div class="card-sub"></div>';
-      b.querySelector('.card-name').textContent = p.name; b.querySelector('.card-price').textContent = p.price == null ? '₦ ——' : naira(p.price);
-      b.querySelector('.card-sub').textContent = (p.colour ? p.colour + ' · ' : '') + (p.sizes.length > 1 ? p.sizes[0] + ' to ' + p.sizes[p.sizes.length - 1] : p.sizes[0]);
+      // Shop style: the photo, the name // colour, then the price (or what's holding it back)
+      b.innerHTML = '<div class="frame">' + frameHTML(p) + '</div><span class="card-name"></span><span class="card-price"></span>';
+      const nm = b.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
+      if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
+      b.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
       b.addEventListener('click', () => openProduct(p)); grid.appendChild(b);
     });
   }
-  paintLock(); renderGrid();
+  renderGrid();
 
   /* ── Product view ── */
   const pview = $('#pview'), scrim = $('#scrim'); let current = null, size = null, lastFocus = null;
@@ -1206,7 +1201,7 @@ const CELEBS = [
     p.images.forEach((src, i) => { const t = document.createElement('button'); t.type = 'button'; t.hidden = true; t.setAttribute('aria-label', 'Photo ' + (i + 1)); t.setAttribute('aria-pressed', String(i === 0)); t.addEventListener('click', () => { fr.innerHTML = frameHTML({ ...p, images: [src] }, '', true); $$('button', th).forEach(x => x.setAttribute('aria-pressed', String(x === t))); }); th.appendChild(t); const probeImg = new Image(); probeImg.onload = () => { t.style.backgroundImage = 'url("' + small(src) + '")'; t.hidden = false; }; probeImg.src = small(src); });
     const sz = $('#pv-sizes'); sz.textContent = '';
     p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size'; b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
-    const add = $('#pv-add'); $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
+    const add = $('#pv-add'); $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad'); unlockBox.hidden = true; $('#code').value = '';
     if (p.price == null) add.textContent = 'Notify me when it drops'; else if (!unlocked) add.textContent = 'Enter the code to buy'; else add.textContent = 'Add to bag';
     pview.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
     const sheet = matchMedia('(max-width:820px)').matches;
@@ -1216,10 +1211,11 @@ const CELEBS = [
   function closeProduct(keep) { if (pview.hidden) return; pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (keep !== true) backstack.close(); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
   $('#pv-close').addEventListener('click', closeProduct);
   const goTo = h => { closeProduct(true); backstack.drop(); location.replace(h); };
+  $('#pv-getcode').addEventListener('click', e => { e.preventDefault(); goTo('#list'); });
   $('#pv-add').addEventListener('click', () => {
     const p = current, msg = $('#pv-msg');
     if (p.price == null) { goTo('#list'); return; }
-    if (!unlocked) { goTo('#drop'); setTimeout(() => $('#code').focus({ preventScroll: true }), 700); return; }
+    if (!unlocked) { unlockBox.hidden = false; msg.classList.remove('bad'); msg.textContent = 'The list gets the code first. Pop it in to buy.'; $('#code').focus({ preventScroll: true }); unlockBox.scrollIntoView({ block: 'nearest', behavior: reduced() ? 'auto' : 'smooth' }); return; }
     if (!size) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; buzz([20, 40, 20]); return; }
     addToBag(p, size); buzz(14); closeProduct(true); openBag();
   });
@@ -1250,7 +1246,22 @@ const CELEBS = [
   }
   function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
   function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
-  $('#bag-open').addEventListener('click', () => { if (!menu.hidden) closeMenu(true); openBag(); });   // the bag takes over the menu's back step $('#bag-close').addEventListener('click', closeBag);
+  $('#bag-open').addEventListener('click', () => { if (!menu.hidden) closeMenu(true); openBag(); });   // the bag takes over the menu's back step
+  $('#bag-close').addEventListener('click', () => closeBag());
+  // Phones: swipe the bag to the right to put it away.
+  let bx = null, bdx = 0, bid = null;
+  const bagSettle = () => { drawer.style.transition = 'transform .3s cubic-bezier(.16,1,.3,1)'; };
+  drawer.addEventListener('pointerdown', e => { if (!e.isPrimary || e.button > 0 || e.target.closest('button,a,input')) return; bx = e.clientX; bdx = 0; bid = e.pointerId; });
+  drawer.addEventListener('pointermove', e => {
+    if (bx == null || e.pointerId !== bid) return; bdx = Math.max(0, e.clientX - bx);
+    if (bdx > 8) { if (!drawer.hasPointerCapture(bid)) try { drawer.setPointerCapture(bid); } catch (_) { } drawer.style.transition = 'none'; drawer.style.transform = 'translateX(' + bdx + 'px)'; }
+  });
+  drawer.addEventListener('pointerup', e => {
+    if (bx == null || e.pointerId !== bid) return; bx = null; if (bdx <= 8) return; bagSettle();
+    if (bdx > 90) { drawer.style.transform = 'translateX(100%)'; setTimeout(() => { closeBag(); drawer.style.transition = ''; drawer.style.transform = ''; }, 280); }
+    else { drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); }
+  });
+  drawer.addEventListener('pointercancel', () => { if (bx == null) return; bx = null; bagSettle(); drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); });
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); });
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!$('#chat').hidden) toggleChat(false); else if (!menu.hidden) closeMenu(); });
   $('#checkout').addEventListener('click', () => {
@@ -1344,16 +1355,16 @@ const CELEBS = [
 
   /* ── Library: every photo on file, numbered. Masonry grid or an index, filtered by shelf, all opening in the viewer ── */
   const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
-  const SHELF_ORDER = ['Streets', 'Campaign', 'Caps', 'Skull caps', 'Crew'];
+  const SHELF_ORDER = ['Raglan shirts', 'Plain tees', 'Skull caps', 'Caps', 'Joggers'];
   const libBody = $('#lib-body'), libMore = $('#lib-more'), libCount = $('#lib-count'), peek = $('#lib-peek'), peekImg = $('#lib-peek img');
   let shelf = 'All', libView = store.get('yowa-lib-view', 'grid') === 'index' ? 'index' : 'grid', cols = 0, colH = [], colEls = [], list = [], rowsEl = null;
   const pk = { x: 0, y: 0, tx: 0, ty: 0, on: false, raf: 0 };
   const colsFor = () => innerWidth >= 1100 ? 6 : innerWidth >= 700 ? 4 : 3;
   const pageSize = () => colsFor() * (innerWidth >= 700 ? 2 : 3);   // square tiles: two rows at a time on a computer, three on a phone
   let shown = pageSize();
-  const libItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => p.shelf === shelf);
+  const libItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => (p.shelves || []).indexOf(shelf) >= 0);
   function paintShelves() {
-    const n = {}; LIB.forEach(p => { n[p.shelf] = (n[p.shelf] || 0) + 1; });
+    const n = {}; LIB.forEach(p => (p.shelves || []).forEach(x => { n[x] = (n[x] || 0) + 1; }));
     const names = ['All'].concat(SHELF_ORDER.filter(s => n[s]), Object.keys(n).filter(s => SHELF_ORDER.indexOf(s) < 0));
     const box = $('#lib-shelves'); box.textContent = '';
     names.forEach(name => {
@@ -1404,7 +1415,7 @@ const CELEBS = [
       const p = list[i], li = document.createElement('li'); if (reveal && !reduced()) li.style.setProperty('--d', Math.min(i - from, 14) * 30 + 'ms'); else li.style.animation = 'none';
       const b = document.createElement('button'); b.type = 'button'; b.className = 'lib-row'; b.dataset.i = i;
       b.innerHTML = '<img class="th" alt="" loading="lazy" decoding="async"><span class="no"></span><span class="nm"></span><span class="sh"></span><span class="go" aria-hidden="true">→</span>';
-      b.querySelector('.th').src = p.thumb; b.querySelector('.no').textContent = p.no; b.querySelector('.nm').textContent = p.cap; b.querySelector('.sh').textContent = p.shelf;
+      b.querySelector('.th').src = p.thumb; b.querySelector('.no').textContent = p.no; b.querySelector('.nm').textContent = p.cap; b.querySelector('.sh').textContent = (p.shelves || []).join(' · ');
       b.addEventListener('click', () => openLightbox(list, i, b)); li.appendChild(b); rowsEl.appendChild(li); first = first || b;
     }
     return first;
@@ -1454,10 +1465,10 @@ const CELEBS = [
     const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox)$/.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(name(p.path)));
     if (!fresh.length) return;
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
-      const t = (Array.isArray(p.tags) ? p.tags : []).join(' ').toLowerCase();
+      const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.folder || '')).toLowerCase();
       LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
-        shelf: /skull/.test(t) ? 'Skull caps' : /\bcaps?\b/.test(t) ? 'Caps' : /campaign/.test(t) ? 'Campaign' : /crew/.test(t) ? 'Crew' : /street|editorial/.test(t) ? 'Streets' : 'New' });
+        shelves: [/raglan/.test(t) && 'Raglan shirts', /\btees?\b|t-?shirt/.test(t) && 'Plain tees', /skull/.test(t) && 'Skull caps', /\bcaps?\b/.test(t.replace(/skull[\s_-]*caps?/g, '')) && 'Caps', /jogger/.test(t) && 'Joggers'].filter(Boolean) });
     });
     const before = list.length; paintShelves(); list = libItems();
     if (libView === 'grid') addTiles(Math.min(before, shown), Math.min(shown, list.length), true); else renderLib(false);
@@ -1470,7 +1481,7 @@ const CELEBS = [
     const filled = !!c.name; const el = document.createElement(filled && c.ig ? 'a' : 'div'); el.className = 'celeb rv' + (filled ? ' filled' : '');
     if (filled && c.ig) { el.href = c.ig; el.target = '_blank'; el.rel = 'noopener'; }
     el.innerHTML = '<span class="label">' + (filled ? 'Worn by' : 'Coming soon') + '</span><span class="eye" aria-hidden="true"></span><span class="who"><b></b><span></span></span>';
-    el.querySelector('b').textContent = filled ? c.name : 'Name here'; el.querySelector('.who span').textContent = filled ? (c.wore || 'YOWA') + ' · see the post' : 'Photo and IG post drop soon';
+    el.querySelector('b').textContent = filled ? c.name : "Who's next?"; el.querySelector('.who span').textContent = filled ? (c.wore || 'YOWA') + ' · see the post' : 'Photo and IG post drop soon';
     if (c.photo) { const im = document.createElement('img'); im.src = c.photo; im.alt = c.name; im.loading = 'lazy'; im.onerror = () => im.remove(); el.appendChild(im); }
     wg.appendChild(el);
   });
