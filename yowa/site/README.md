@@ -4,9 +4,10 @@ Static site (HTML + two serverless functions), deploys on Vercel like the waitli
 
 ## How it's laid out
 - One short scrolling page: about six phone screens from top to bottom.
-- **Top:** just YOWA over the photos.
-- **Then:** The drop (the lock, then the products in a clean shop grid: two across on a phone, three on a computer, with the name // colour and the price centred under each photo), Message, Gallery (six photos), Library (nine square photos at a time, Show more for the rest), Worn by, Get the code and a one-line footer.
-- **Menu:** the three lines top right. They turn into an X while the menu is open; tap the X to close it. Picking a section glides to it, and the menu lights up the one on screen. It also holds Ask YOWA, the mantra, Instagram and the credit.
+- **Top:** YOWA over the photos, with Be You Be Different 💜⚔️🐉 under it.
+- **Then, in the menu's order:** Shop (straight to the products in a clean shop grid: two across on a phone, three on a computer, with the name // colour and the price centred under each photo), Worn by, Gallery (six photos) and the Library (nine square photos at a time, Show more for the rest), Message, Get the code and a one-line footer.
+- **Menu:** the three lines top right. They turn into an X while the menu is open; tap the X to close it. Six sections (Home, Shop, Worn by, Gallery, Message, Get the code) and the Ask YOWA button. Picking a section glides to it, and the menu lights up the one on screen. The computer's top bar has the same sections.
+- **The drop code:** nothing about it sits on the shop. Once a piece has a price, its Buy button asks for the code right there in the product view, with a link to the list for anyone who doesn't have it yet.
 
 ## Photos and their codes
 Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the last one is YW·054).
@@ -24,19 +25,21 @@ Every photo has a fixed code, written next to it in `LIBRARY` at the top of the 
 The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (the short caption), `pos` (which part of the photo stays in frame on a phone). Optional: `hold` (ms on screen), `video` (a looping clip over the photo).
 
 ## Library
-- `LIBRARY` lists every photo: code, file, size, caption, shelf (Streets, Campaign, Caps, Skull caps, Crew) and the product it shows (adds "Shop this piece" in the viewer).
+- `LIBRARY` lists every photo: code, file, size, caption, `shelves` (what's in the photo: Raglan shirts, Plain tees, Skull caps, Caps, Joggers) and the product it shows (adds "Shop this piece" in the viewer).
+- The shelves are the filters above the photos. A photo with a raglan and joggers in it sits on both.
 - Any photo can be shared with its own link, like `yowabybd.com/#yw-010`. It opens straight in the viewer, and the Share button in the viewer sends that link.
-- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. A photo filed there in any folder except `brand` and `inbox` joins the Library on its own, numbered after the highest code. Leaving a photo in `inbox` keeps it off the site. Set the feed to `''` to turn this off.
+- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. A photo filed there in any folder except `brand` and `inbox` joins the Library on its own, numbered after the highest code. Its tags and folder name pick its shelves (raglan, tee, skull cap, cap, jogger). Leaving a photo in `inbox` keeps it off the site. Set the feed to `''` to turn this off.
 
 ## How it moves
 - **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear YOWA off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
-- **Glitch:** only YOWA glitches, never the photos of people. The logo tears, splits purple and cyan, blinks out and snaps back: on every new photo, now and then on its own, when tapped, and when you come back home.
+- **Glitch:** only YOWA glitches, never the photos of people or the mantra. The logo tears, splits purple and cyan, blinks out and snaps back: on every new photo, now and then on its own, when tapped, and when you come back home.
 - **Dragons:** the three serpent ribbons on the seams between sections. Each one's words are its `data-text` in the HTML. They slither, and thrash when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
 - **Signature:** top left. It writes itself on load, and again when tapped (which also takes you back to the top).
 - Everything still and calm when the phone is set to reduce motion. Motion clips are skipped on data saver.
 
 ## Phone details
 - The back button closes the menu, a product, the bag, the chat or the viewer instead of leaving the site.
+- The bag closes with its Close button, a swipe to the right, or the back button.
 - Products open as a bottom sheet. Drag its handle down to put it away.
 - The header slides away while you scroll down and comes back when you scroll up. The thin line on top shows how far down the page you are.
 - Vibration on unlock, a wrong code, add to bag and joining the list (Android).
@@ -45,7 +48,7 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 
 ## Edit at the top of the `<script>` in index.html
 - `CONFIG.DROP_AT`: drop date and time, starts the countdown on The drop page (e.g. `'2026-10-17T18:00:00+01:00'`)
-- `CONFIG.CODE`: the drop code the list receives
+- `CONFIG.CODE`: the drop code the list receives (asked for in the product view when someone buys)
 - `PRODUCTS[].price`: naira prices (`null` shows "Price drops soon")
 - `CELEBS`: name, what they wore, IG post link, photo
 
