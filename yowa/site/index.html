@@ -71,9 +71,12 @@
 [data-theme="light"] .pv-desc{color:var(--ink)}
 [data-theme="light"] .fld input,[data-theme="light"] .fld select,[data-theme="light"] .pv-code input{background:#fff;color:var(--ink)}
 [data-theme="light"] .qs-head .x,[data-theme="light"] .chat-head .x{color:var(--ink)}
-[data-theme="light"] .pv-media:not(.cut) .pv-close{color:#fff}
+[data-theme="light"] .pv-media .pv-close{color:#fff}
+[data-theme="light"] .pv-media.cut .pv-close{color:var(--ink)}
+[data-theme="light"] .pv-media.cut .pv-bars i{background:rgba(20,15,31,.16)}
+[data-theme="light"] .pv-media.cut .pv-bars b{background:var(--ink)}
+[data-theme="light"] .frame.cut img{filter:drop-shadow(0 16px 18px rgba(60,20,130,.22))}
 [data-theme="light"] .lib-tile,[data-theme="light"] .shot{box-shadow:0 10px 26px rgba(74,26,148,.16)}
-[data-theme="light"] .dragon .d-glow{stroke:rgba(122,47,224,.16)}
 [data-theme="light"] .sec-head p,[data-theme="light"] .done p,[data-theme="light"] .join p{color:var(--ink)!important}
 [data-theme="light"] .form{background:rgba(255,255,255,.78)}
 [data-theme="light"] .hero-bybd{color:#EFEAF7}
@@ -250,31 +253,11 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: a purple dragon slithers across every seam, its head leading the way ── */
-.dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none;overflow:hidden;transition:opacity .35s ease}
-.dragon svg{display:block;width:100%;height:100%;overflow:hidden}
-.dragon use{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.d-glow{stroke:rgba(166,91,255,.24);stroke-width:80px}
-.d-spine{stroke:none}
-.d-spike{fill:#2B0B6A;stroke:#B98CFF;stroke-width:1.2px;stroke-linejoin:round}
-.d-edge{stroke:#170538;stroke-width:52px}
-.d-body{stroke-width:44px}
-.d-belly{stroke:rgba(236,220,255,.62);stroke-width:13px;stroke-dasharray:8 3;stroke-linecap:butt!important}
-.d-scale{stroke:rgba(24,4,60,.5);stroke-width:6px;stroke-dasharray:0 11}
-.d-scale.b{stroke-dashoffset:5.5;stroke:rgba(24,4,60,.4)}
-.d-rim{stroke:rgba(255,255,255,.28);stroke-width:2.5px}
-.dragon .s0{stop-color:#3A0E86}
-.dragon .s1{stop-color:#9A52FF}
-.dragon .s2{stop-color:#5B22B8}
-.d-head path,.d-head ellipse,.d-head circle{stroke:#170538;stroke-width:2px;stroke-linejoin:round}
-.d-head .d-horn{fill:#EADCFF}
-.d-head .d-jaw,.d-head .d-frill{fill:#4E159F}
-.d-head .d-brow{fill:none;stroke:#2B0B6A;stroke-width:3.2px}
-.d-head .d-eye{fill:#FFD36B;filter:drop-shadow(0 0 4px #FFD36B)}
-.d-head .d-pupil,.d-head .d-nose{fill:#12051F;stroke:none}
-.d-head .d-teeth{fill:none;stroke:#F6EEFF;stroke-width:1.6px}
-.d-head .d-whisker{fill:none;stroke:#C9A2FF;stroke-width:2px}
-@media (min-width:960px){.dragon{height:172px;margin-block:-60px}.d-glow{stroke-width:94px}.d-edge{stroke-width:60px}.d-body{stroke-width:52px}.d-belly{stroke-width:15px}}
+/* ── Dragons: each seam is a lane; a real 3D dragon flies through it on one see-through canvas over the page ── */
+.dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none}
+@media (min-width:960px){.dragon{height:172px;margin-block:-60px}}
+.dragon-sky{position:fixed;inset:0;width:100vw;height:100vh;z-index:6;pointer-events:none;filter:drop-shadow(0 0 14px rgba(166,91,255,.55))}
+.hold .dragon-sky{opacity:0;transition:opacity .35s}
 
 /* ── Sections ── */
 section{position:relative}
@@ -322,9 +305,9 @@ main>.dragon:last-child{margin-bottom:0}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--e-settle),opacity .5s}
 .frame img+img{opacity:0}
 @media (hover:hover){.card:hover .frame img:first-of-type{transform:scale(1.06)}.card:hover .frame img+img{opacity:1}.card:hover .sheen{animation:shine 1.1s var(--e-pull)}}
-.frame.cut{background:radial-gradient(120% 95% at 50% 38%,#F7F5FA,#DEDAE6)}
+.frame.cut{background:none}
 .frame.cut::before{display:none}
-.frame.cut img{object-fit:contain;padding:7%;filter:drop-shadow(0 14px 16px rgba(20,10,40,.2))}
+.frame.cut img{object-fit:contain;padding:5%;filter:drop-shadow(0 18px 22px rgba(0,0,0,.45)) drop-shadow(0 0 18px rgba(166,91,255,.18))}
 .frame.cut .art{display:none}
 .frame .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(166,91,255,.35) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
 @keyframes shine{to{transform:translateX(120%)}}
@@ -490,17 +473,13 @@ main>.dragon:last-child{margin-bottom:0}
 .pv-slide.on{opacity:1}
 .pv-slide img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 3.4s linear}
 .pv-slide.on img{transform:none}
-.pv-media.cut{background:radial-gradient(120% 95% at 50% 38%,#F7F5FA,#DEDAE6)}
-.pv-media.cut .pv-slide img{object-fit:contain;padding:9%;transform:none;filter:drop-shadow(0 16px 18px rgba(20,10,40,.22))}
+.pv-media.cut{background:var(--void-2)}
+.pv-media.cut .pv-slide img{object-fit:contain;padding:8%;transform:none;filter:drop-shadow(0 20px 24px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(166,91,255,.2))}
 .pv-bars{position:absolute;left:14px;right:96px;top:16px;z-index:3;display:flex;gap:4px;pointer-events:none}
 .pv-bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.35)}
 .pv-bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%}
 .pv-bars i.past b{transform:scaleX(1)}
-.pv-media.cut .pv-bars i{background:rgba(20,15,31,.16)}
-.pv-media.cut .pv-bars b{background:#140F1F}
 .pv-close{color:#fff}
-.pv-media.cut .pv-close{color:#140F1F}
-.pv-media.cut .pv-grab::after{background:rgba(20,15,31,.5);box-shadow:none}
 .qty{display:inline-flex;align-items:center;margin-top:10px;border:1px solid var(--line);border-radius:999px}
 .qty button{width:46px;height:46px;border:0;background:none;color:inherit;font-size:20px;line-height:1;cursor:pointer;border-radius:999px}
 .qty button:disabled{opacity:.3;cursor:default}
@@ -521,7 +500,7 @@ main>.dragon:last-child{margin-bottom:0}
 .dr-body{overflow:auto;padding:12px 22px;display:grid;gap:12px;align-content:start}
 .dr-item{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding-bottom:12px;border-bottom:1px dashed rgba(20,15,31,.15)}
 .dr-item .th{width:64px;height:80px;border-radius:6px;background:#2A1860 url(img/brand/bg-swirl.jpg) center/cover}
-.dr-item .th.cut{background-color:#ECEAF0;background-size:contain;background-repeat:no-repeat}
+.dr-item .th.cut{background-color:transparent;background-size:contain;background-repeat:no-repeat}
 .dr-note.bad{color:#C0392B}
 .drawer .pv-code input{background:#fff;color:#140F1F;border-color:rgba(20,15,31,.25)}
 .drawer .pv-code .btn{width:auto;flex:none;color:#140F1F;border-color:#140F1F;background:none;box-shadow:none}
@@ -1267,72 +1246,11 @@ const LIBRARY = [
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Dragons: a purple dragon slithers across every seam. Spines down its back, plates on its belly, its head leading; a fast scroll makes it thrash ── */
-  const HEAD = '<path class="d-horn" d="M12,-15 C0,-33 -16,-43 -36,-47 C-20,-37 -8,-27 1,-13 Z"/><path class="d-horn" d="M27,-18 C21,-31 12,-39 1,-45 C11,-33 16,-25 17,-15 Z"/><path class="d-frill" d="M6,17 C0,29 -8,36 -18,41 C-10,30 -8,23 -6,16 Z"/><path class="d-jaw" d="M28,9 C44,7 64,7 84,8 C87,12 83,16 75,17 C59,19 43,20 28,18 Z"/><path class="d-skull" d="M-9,-22 C9,-27 30,-27 46,-20 C60,-15 74,-12 88,-9 C96,-7 98,0 92,3 L60,6 C47,8 39,10 33,14 C21,22 7,24 -9,22 Z"/><path class="d-brow" d="M30,-19 C40,-24 52,-21 59,-14"/><ellipse class="d-eye" cx="47" cy="-12" rx="6.2" ry="3.7"/><ellipse class="d-pupil" cx="48" cy="-12" rx="1.3" ry="3.3"/><circle class="d-nose" cx="86" cy="-5" r="1.9"/><path class="d-teeth" d="M56,6 L58,11 L60,6 M66,6 L68,11 L70,6 M76,6 L78,10 L80,6"/><path class="d-whisker" d="M83,4 C97,14 104,30 95,44"/>';
-  const dragons = $$('.dragon').map((el, n) => {
-    const id = 'dg' + n, ref = ' href="#' + id + 'p" xlink:href="#' + id + 'p"', left = n % 2 === 1;   // every other one faces the other way
-    el.innerHTML = '<svg aria-hidden="true" focusable="false"><defs><path id="' + id + 'p"/>' +
-      '<linearGradient id="' + id + 'g" gradientUnits="userSpaceOnUse" spreadMethod="reflect" x1="0" y1="0" x2="200" y2="0"><stop class="s0" offset="0"/><stop class="s1" offset=".55"/><stop class="s2" offset="1"/></linearGradient>' +
-      '<linearGradient id="' + id + 'h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B98CFF"/><stop offset=".5" stop-color="#8139EC"/><stop offset="1" stop-color="#3A0E86"/></linearGradient>' +
-      '<marker id="' + id + 's" markerUnits="userSpaceOnUse" orient="auto" markerWidth="1" markerHeight="1" overflow="visible"><path class="d-spike" d="' + (left ? 'M-7,-22 L13,-39 L5,-22 Z' : 'M7,-22 L-13,-39 L-5,-22 Z') + '"/></marker></defs>' +
-      '<use class="d-glow"' + ref + '/><use class="d-spine"' + ref + ' style="marker-mid:url(#' + id + 's)"/><use class="d-edge"' + ref + '/><use class="d-body"' + ref + ' stroke="url(#' + id + 'g)"/>' +
-      '<use class="d-belly"' + ref + ' transform="translate(0 12)"/><use class="d-scale"' + ref + ' transform="translate(0 -9)"/><use class="d-scale b"' + ref + ' transform="translate(0 1)"/><use class="d-rim"' + ref + ' transform="translate(0 -15)"/>' +
-      '<g class="d-head" fill="url(#' + id + 'h)">' + HEAD + '</g></svg>';
-    return { el, svg: el.firstChild, path: el.querySelector('path'), grad: el.querySelector('linearGradient'), head: el.querySelector('.d-head'), left,
-      ph: rnd(0, 6), seed: rnd(0, 6), w: 0, h: 0, lam: 400, amp: 22, hx: 0, k: 1, on: false };
-  });
-  // The body: a sine wave with a second, slower ripple on top, drawn through its points as one smooth curve.
-  const dragonY = (d, x, A) => { const K = Math.PI * 2 / d.lam; return d.h / 2 + A * Math.sin(K * x + d.ph) + A * .3 * Math.sin(2 * K * x - d.ph * 1.6 + d.seed); };
-  const dSlope = (d, x, A) => { const K = Math.PI * 2 / d.lam; return A * K * Math.cos(K * x + d.ph) + .6 * A * K * Math.cos(2 * K * x - d.ph * 1.6 + d.seed); };
-  function wave(d, ampK) {
-    // From off screen to the neck: the tail trails off one edge, the head sits near the other
-    const step = d.lam / 10, A = d.amp * ampK, P = [], x0 = d.left ? d.hx : -d.lam, x1 = d.left ? d.w + d.lam : d.hx;
-    for (let x = x0; x < x1; x += step) P.push([x, dragonY(d, x, A)]);
-    P.push([x1, dragonY(d, x1, A)]);
-    if (d.left) P.reverse();   // the path always runs toward the head, so the spines sweep back from it
-    let s = 'M' + P[0][0].toFixed(1) + ' ' + P[0][1].toFixed(1);
-    for (let i = 0; i < P.length - 1; i++) {
-      const a = P[Math.max(0, i - 1)], b = P[i], c = P[i + 1], e = P[Math.min(P.length - 1, i + 2)];
-      s += 'C' + (b[0] + (c[0] - a[0]) / 6).toFixed(1) + ' ' + (b[1] + (c[1] - a[1]) / 6).toFixed(1) + ' ' + (c[0] - (e[0] - b[0]) / 6).toFixed(1) + ' ' + (c[1] - (e[1] - b[1]) / 6).toFixed(1) + ' ' + c[0].toFixed(1) + ' ' + c[1].toFixed(1);
-    }
-    return s;
-  }
-  function drawDragon(d, ampK) {
-    d.path.setAttribute('d', wave(d, ampK));
-    const A = d.amp * ampK, y = dragonY(d, d.hx, A), m = dSlope(d, d.hx, A);
-    // The head follows the neck: along the curve, facing away from the tail
-    const ang = Math.atan(m) * 180 / Math.PI + (d.left ? 180 : 0);
-    d.head.setAttribute('transform', 'translate(' + d.hx.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + d.k + (d.left ? ' ' + (-d.k) : '') + ')');
-    d.grad.setAttribute('gradientTransform', 'translate(' + (-d.ph / (Math.PI * 2) * d.lam).toFixed(1) + ' 0)');
-  }
-  function layoutDragon(d) {
-    const w = d.el.clientWidth, h = d.el.clientHeight; if (!w || !h) return;
-    d.w = w; d.h = h; d.svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    d.lam = clamp(w * .84, 300, 640); d.amp = w < 600 ? 21 : 27; d.grad.setAttribute('x2', (d.lam / 2).toFixed(0));
-    d.k = w >= 960 ? 1.18 : 1;   // the head grows with the body
-    const reach = 100 * d.k;     // neck to the tip of the snout
-    d.hx = d.left ? reach + 6 : w - reach - 6;
-    drawDragon(d, 1);
-  }
-  let dRaf = 0, dLast = 0, dY = scrollY, dV = 0;
-  function dragonFrame(now) {
-    dRaf = 0; const dt = dLast ? Math.min(50, now - dLast) : 16; dLast = now;
-    const y = scrollY; dV += (Math.abs(y - dY) / dt - dV) * .12; dY = y;   // scroll speed in px per ms, smoothed
-    const thr = Math.min(2.4, dV); let live = false;
-    dragons.forEach(d => {
-      if (!d.on || !d.w) return; live = true;
-      d.ph += dt * .0011 * (1 + thr * 1.4);
-      drawDragon(d, 1 + thr * .22);
-    });
-    if (live) dRaf = requestAnimationFrame(dragonFrame); else dLast = 0;
-  }
-  const dio = new IntersectionObserver(es => {
-    es.forEach(e => { const d = dragons.find(x => x.el === e.target); if (d) d.on = e.isIntersecting; });
-    if (!reduced() && !dRaf && dragons.some(d => d.on)) { dY = scrollY; dRaf = requestAnimationFrame(dragonFrame); }
-  }, { rootMargin: '80px 0px' });
-  const layoutDragons = () => dragons.forEach(layoutDragon);
-  layoutDragons(); dragons.forEach(d => dio.observe(d.el));
-  let dRs = 0; addEventListener('resize', () => { clearTimeout(dRs); dRs = setTimeout(layoutDragons, 150); });
+  /* ── Dragons: a real 3D purple dragon flies through every seam, head first, and round again (js/dragons.js) ── */
+  const lanes = $$('.dragon');
+  const startDragons = () => import('./js/dragons.js').then(m => m.start({ lanes, reduced, isHeld: () => rootEl0.classList.contains('hold'), isCovered: () => ['pview', 'menu', 'drawer', 'qshop', 'lightbox'].some(id => { const e = document.getElementById(id); return e && !e.hidden; }) })).catch(() => { });
+  const rootEl0 = document.documentElement;
+  if (lanes.length) { if (document.readyState === 'complete') setTimeout(startDragons, 300); else addEventListener('load', () => setTimeout(startDragons, 300), { once: true }); }
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
@@ -1407,7 +1325,7 @@ const LIBRARY = [
     $$('i', pvBars).forEach((b, k) => { b.classList.toggle('past', k < pvI); b.firstChild.style.transform = k < pvI ? 'scaleX(1)' : 'scaleX(0)'; });
   }
   function pvFrame(now) {
-    pvRaf = 0; if (pview.hidden) return; const dt = pvLast ? Math.min(60, now - pvLast) : 16; pvLast = now;
+    pvRaf = 0; if (pview.hidden) return; const dt = pvLast ? Math.min(250, now - pvLast) : 16; pvLast = now;   // real time, so a slow phone doesn't slow the slideshow
     if (!pvHeld && pvN > 1 && !reduced()) { pvEl += dt; const b = $$('i', pvBars)[pvI]; if (b) b.firstChild.style.transform = 'scaleX(' + Math.min(1, pvEl / PV_HOLD).toFixed(3) + ')'; if (pvEl >= PV_HOLD) pvShow(pvI + 1); }
     pvRaf = requestAnimationFrame(pvFrame);
   }
