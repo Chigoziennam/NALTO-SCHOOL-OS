@@ -130,7 +130,7 @@ img{max-width:100%}
 .bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.26)}
 .bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%;box-shadow:0 0 8px rgba(166,91,255,.8)}
 .bars i.past b{transform:scaleX(1)}
-.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:14px;padding:120px var(--gut) 112px;padding-bottom:max(112px,14svh);transition:opacity .35s ease}
+.hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:14px;padding:120px var(--gut) 146px;transition:opacity .35s ease}
 .hero-bybd{margin:0;font:400 clamp(14px,4.3vw,22px)/1.2 var(--f-mantra);letter-spacing:.03em;color:var(--ink);text-shadow:0 0 18px rgba(166,91,255,.9),0 2px 12px rgba(8,6,14,.75);animation:bybdin 1.1s var(--e-settle) .45s both}
 @keyframes bybdin{from{opacity:0;transform:translateY(12px)}}
 /* Holding a photo on a phone clears everything off it */
@@ -138,7 +138,7 @@ img{max-width:100%}
 @media (min-width:960px){
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,min(42vw,600px))}
   .hero-in{grid-column:1;grid-row:1;justify-items:start;align-content:center;text-align:left;padding:120px 32px 40px var(--gut)}
-  .hero-media{position:relative;inset:auto;z-index:0;grid-column:2;grid-row:1;margin:88px var(--gut) 26px 0;border-radius:16px;box-shadow:0 0 0 1px var(--line),0 30px 90px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.25)}
+  .hero-media{position:relative;inset:auto;z-index:0;grid-column:2;grid-row:1;margin:88px var(--gut) 158px 0;border-radius:16px;box-shadow:0 0 0 1px var(--line),0 30px 90px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.25)}
   .hero-media::after{background:linear-gradient(180deg,transparent 62%,rgba(8,6,14,.55) 100%),radial-gradient(140% 100% at 50% 40%,transparent 60%,rgba(60,20,130,.45) 100%)}
   .hero-media::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;z-index:3;background:repeating-linear-gradient(90deg,var(--purple-l) 0 22px,transparent 22px 44px)}
   .slide-cap{top:28px}
@@ -173,7 +173,7 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: serpent ribbons that slither across the seams between sections, the words riding their back ── */
+/* ── Dragons: serpent ribbons that slither across every seam, before and after each section, the words riding their back ── */
 .dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none;overflow:hidden;transition:opacity .35s ease}
 .dragon svg{display:block;width:100%;height:100%}
 .d-glow,.d-edge,.d-body,.d-scale{fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -197,6 +197,11 @@ img{max-width:100%}
 section{position:relative}
 .sec{padding-block:clamp(44px,6vw,96px)}
 .dragon+.sec{padding-top:clamp(84px,8vw,124px)}
+/* The first one sits in the opening screen, its whole body under Be You Be Different, instead of peeking up from the seam */
+.hero+.dragon{margin:-142px 0 -8px}
+.hero+.dragon+.sec{padding-top:clamp(48px,6vw,96px)}
+main>.dragon:last-child{margin-bottom:0}
+@media (min-width:960px){.hero+.dragon{margin:-160px 0 -10px}}
 .sec:has(+.dragon){padding-bottom:clamp(64px,7vw,110px)}
 .home .chat-fab,.menu-open .chat-fab{display:none}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 32px;margin-bottom:clamp(16px,2.4vw,32px)}
@@ -572,6 +577,8 @@ section{position:relative}
     </div>
   </section>
 
+  <div class="dragon" aria-hidden="true" data-text="Worn by the ones who stand out · Be You Be Different 💜⚔️🐉 · 042 · Stay Woke · "></div>
+
   <section class="sec panel" id="gallery" aria-labelledby="gal-t">
     <div class="wrap">
       <div class="sec-head rv">
@@ -584,6 +591,8 @@ section{position:relative}
     </div>
     <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
   </section>
+
+  <div class="dragon void" aria-hidden="true" data-text="Real pieces · Real people · Every photo numbered · Be You Be Different 💜⚔️🐉 · "></div>
 
   <section class="sec" id="library" aria-labelledby="lib-t">
     <div class="wrap">
@@ -622,6 +631,8 @@ section{position:relative}
     </div>
   </section>
 
+  <div class="dragon void" aria-hidden="true" data-text="When it's gone, it's gone · Handmade in small runs · Be You Be Different 💜⚔️🐉 · "></div>
+
   <section class="sec panel" id="list" aria-labelledby="list-t">
     <!-- Background: YW·033 (Liberty Raglan · Black, full fit) -->
     <div class="photo-bg" aria-hidden="true"><img src="img/library/yowa-1524.jpg" alt="" loading="lazy"></div>
@@ -647,6 +658,8 @@ section{position:relative}
       </div>
     </div>
   </section>
+
+  <div class="dragon" aria-hidden="true" data-text="Get the code first · Waitlist members are already in · Be You Be Different 💜⚔️🐉 · 042 · "></div>
 </main>
 
 <footer class="foot">
