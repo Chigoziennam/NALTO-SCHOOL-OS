@@ -24,7 +24,7 @@ export async function start({ lanes, reduced, isHeld, isCovered = () => false })
   const rim = new THREE.DirectionalLight(0xA65BFF, 3.2); rim.position.set(-500, -200, -400); scene.add(rim);
   const cam = new THREE.PerspectiveCamera(35, 1, 1, 6000);
 
-  const gltf = await new GLTFLoader().loadAsync(new URL('../img/dragon/dragon.glb', import.meta.url).href);
+  const gltf = await new GLTFLoader().loadAsync(new URL('../img/dragon/dragon.json', import.meta.url).href);
   const base = gltf.scene;
   // a touch of inner glow on the purple skin
   base.traverse(o => { if (o.isMesh) { o.frustumCulled = false; const m = o.material; if (m && m.emissive) { m.emissive = new THREE.Color(0x3A0E86); m.emissiveIntensity = .35; } } });
