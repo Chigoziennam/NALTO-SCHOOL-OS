@@ -24,7 +24,10 @@ export async function start({ lanes, reduced, isHeld, isCovered = () => false })
   const rim = new THREE.DirectionalLight(0xA65BFF, 3.2); rim.position.set(-500, -200, -400); scene.add(rim);
   const cam = new THREE.PerspectiveCamera(35, 1, 1, 6000);
 
-  const gltf = await new GLTFLoader().loadAsync(new URL('../img/dragon/dragon.json', import.meta.url).href);
+  // The model ships inside a script (js/dragon-model.js), so it loads anywhere scripts load, no separate download to block
+  const b64 = (await import('./dragon-model.js')).default, raw = atob(b64), buf = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+  const gltf = await new GLTFLoader().parseAsync(buf.buffer, '');
   const base = gltf.scene;
   // a touch of inner glow on the purple skin
   base.traverse(o => { if (o.isMesh) { o.frustumCulled = false; const m = o.material; if (m && m.emissive) { m.emissive = new THREE.Color(0x3A0E86); m.emissiveIntensity = .35; } } });
@@ -40,7 +43,7 @@ export async function start({ lanes, reduced, isHeld, isCovered = () => false })
   size(); addEventListener('resize', size);
 
   // One dragon per lane, made when the lane first comes near the screen
-  const flyers = lanes.map((el, i) => ({ el, i, dir: i % 2 ? -1 : 1, obj: null, bones: [], rest: [], legs: [], jaw: null, t: Math.random() * 10, on: false }));
+  const flyers = lanes.map((el, i) => ({ el, i, dir: i % 2 ? -1 : 1, obj: null, bones: [], rest: [], legs: [], jaw: null, t: 1.4 + i * 1.7, on: false }));
   function make(f) {
     const obj = SkeletonUtils.clone(base); scene.add(obj);
     obj.traverse(o => { if (o.isBone) { f.bones.push(o); f.rest.push(o.quaternion.clone()); } });

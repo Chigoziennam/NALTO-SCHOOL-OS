@@ -256,7 +256,7 @@ img{max-width:100%}
 /* ── Dragons: each seam is a lane; a real 3D dragon flies through it on one see-through canvas over the page ── */
 .dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none}
 @media (min-width:960px){.dragon{height:172px;margin-block:-60px}}
-.dragon-sky{position:fixed;inset:0;width:100vw;height:100vh;z-index:6;pointer-events:none;filter:drop-shadow(0 0 14px rgba(166,91,255,.55))}
+.dragon-sky{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:6;pointer-events:none}
 .hold .dragon-sky{opacity:0;transition:opacity .35s}
 
 /* ── Sections ── */
@@ -1250,7 +1250,7 @@ const LIBRARY = [
   const lanes = $$('.dragon');
   const startDragons = () => import('./js/dragons.js').then(m => m.start({ lanes, reduced, isHeld: () => rootEl0.classList.contains('hold'), isCovered: () => ['pview', 'menu', 'drawer', 'qshop', 'lightbox'].some(id => { const e = document.getElementById(id); return e && !e.hidden; }) })).catch(() => { });
   const rootEl0 = document.documentElement;
-  if (lanes.length) { if (document.readyState === 'complete') setTimeout(startDragons, 300); else addEventListener('load', () => setTimeout(startDragons, 300), { once: true }); }
+  if (lanes.length) setTimeout(startDragons, 400);   // just after the first screen is up
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.

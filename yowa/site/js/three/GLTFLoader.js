@@ -2587,7 +2587,7 @@ class GLTFParser {
 
 		}
 
-		if ( typeof createImageBitmap === 'undefined' || ( isSafari && safariVersion < 17 ) || ( isFirefox && firefoxVersion < 98 ) ) {
+		if ( true ) { // YOWA: always load textures through <img>, which works where fetch is blocked
 
 			this.textureLoader = new TextureLoader( this.options.manager );
 
