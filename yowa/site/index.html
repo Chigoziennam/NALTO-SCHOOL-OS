@@ -53,13 +53,15 @@
 [data-theme="light"] .veil{background:radial-gradient(120% 90% at 50% 20%,rgba(166,91,255,.14),transparent 70%)}
 [data-theme="light"] .grain{opacity:.035}
 [data-theme="light"] .top.stuck{background:rgba(246,241,255,.86)}
-[data-theme="light"] .top.stuck .brand img,[data-theme="light"] .sheet-menu .menu-sig,[data-theme="light"] .mani-sign img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
+[data-theme="light"] .top.stuck .brand img,[data-theme="light"] .mani-sign img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
 [data-theme="light"] .top.stuck .bag-btn,[data-theme="light"] .top.stuck .theme-btn{background:rgba(255,255,255,.8);color:var(--ink)}
-[data-theme="light"] .top.stuck .menu-btn{background:rgba(255,255,255,.85)}
-[data-theme="light"] .top.stuck .mx::before,[data-theme="light"] .top.stuck .mx::after,[data-theme="light"] .menu-open .mx::before,[data-theme="light"] .menu-open .mx::after{background:var(--purple)}
-[data-theme="light"] .menu-open .menu-btn,[data-theme="light"] .menu-open .bag-btn,[data-theme="light"] .menu-open .theme-btn{background:rgba(255,255,255,.85);color:var(--ink)}
-[data-theme="light"] .menu-open .brand img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75)}
-[data-theme="light"] .sheet-menu{background:rgba(246,241,255,.97)}
+[data-theme="light"] .menu-open .bag-btn,[data-theme="light"] .menu-open .theme-btn{background:rgba(255,255,255,.85);color:var(--ink)}
+[data-theme="light"] .menu-open .top .brand img{filter:drop-shadow(0 0 10px rgba(166,91,255,.7))}
+[data-theme="light"] .sheet-menu{background:radial-gradient(120% 60% at 70% 0%,#E7DAFF,#F3EEFF 62%)}
+[data-theme="light"] .sheet-menu .m-art::after{background:radial-gradient(90% 80% at 50% 45%,transparent 45%,rgba(8,6,14,.4))}
+[data-theme="light"] .sheet-menu .m-grid button{background:rgba(255,255,255,.75)}
+[data-theme="light"] .sheet-menu .m-eye{color:var(--purple)}
+[data-theme="light"] .sheet-menu .go .ar,[data-theme="light"] .sheet-menu .go .pl{background:rgba(255,255,255,.6)}
 [data-theme="light"] .panel::before{background:rgba(255,255,255,.62)}
 [data-theme="light"] .photo-bg img,[data-theme="light"] .photo-bg video{opacity:.22}
 [data-theme="light"] .photo-bg::after{background:linear-gradient(180deg,var(--void) 0%,rgba(243,238,255,.6) 22%,rgba(243,238,255,.6) 78%,var(--void) 100%)}
@@ -119,71 +121,106 @@ img{max-width:100%}
 .nav a[aria-current="page"]{border-color:var(--line);color:var(--purple-l)}
 .bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
 .bag-btn b{color:var(--purple-l)}
-/* Menu: three lines that turn into an X while the menu is open */
-.menu-btn{display:none;position:relative;width:48px;height:48px;padding:0;border-color:rgba(166,91,255,.55);background:rgba(8,6,14,.45);overflow:visible;box-shadow:0 0 18px rgba(166,91,255,.45),inset 0 0 12px rgba(166,91,255,.25)}
-.dg-ico{position:absolute;left:4px;top:4px;width:40px;height:40px;overflow:visible;filter:drop-shadow(0 0 5px #A65BFF) drop-shadow(0 0 12px rgba(166,91,255,.7));animation:dgbreathe 3.4s ease-in-out infinite;transform-origin:60% 55%}
-.dg-head path{stroke:#2B0B6A;stroke-width:1.3;stroke-linejoin:round}
-.dg-head .h{fill:#EADCFF}
-.dg-head .j{fill:none;stroke:#2B0B6A;stroke-width:1.2}
-.dg-head .eye{fill:#FFD36B;animation:dgblink 5s infinite}
-.dg-flame{transform-origin:13px 23px;transform:scaleX(0);opacity:0;pointer-events:none}
-.menu-btn.fire .dg-flame{animation:dgfire .75s ease-out}
-.menu-btn.spark .dg-flame{animation:dgspark .5s ease-out}
-.mx{position:absolute;inset:0;opacity:0;pointer-events:none}
-.mx::before,.mx::after{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:#fff;box-shadow:0 0 8px #A65BFF}
-.mx::before{transform:rotate(45deg)}.mx::after{transform:rotate(-45deg)}
-.menu-btn[aria-expanded="true"] .dg-ico{animation:dgout .5s .35s var(--e-pull) both}
-.menu-btn[aria-expanded="true"] .mx{animation:xin .45s .55s var(--e-settle) both}
-.menu-btn.back .dg-ico{animation:dgin .6s var(--e-settle) both}
-.menu-btn.back .mx{animation:xout .3s ease-in both}
-.puff{position:absolute;inset:6px;border-radius:50%;pointer-events:none;opacity:0}
+/* Menu: the YOWA dragon avatar in a turning purple halo. It roars purple fire as the menu opens and an X takes its place */
+.menu-btn{display:none;position:relative;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;isolation:isolate;-webkit-tap-highlight-color:transparent}
+.menu-btn .halo{position:absolute;inset:-2.5px;border-radius:50%;z-index:-1;background:conic-gradient(#F1E6FF,#A65BFF 20%,#2B0B6A 44%,#7A2FE0 62%,#E6CFFF 80%,#A65BFF 92%,#F1E6FF);animation:halo 5s linear infinite}
+.menu-btn .glow{position:absolute;inset:-13px;border-radius:50%;z-index:-2;background:radial-gradient(closest-side,rgba(166,91,255,.62),rgba(166,91,255,0));animation:aura 3.2s ease-in-out infinite;pointer-events:none}
+.menu-btn .av{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#12051F;box-shadow:0 0 0 1.5px #08060E;transition:transform .55s var(--e-settle),opacity .35s}
+.menu-btn .av img{display:block;width:100%;height:100%;object-fit:cover;transform-origin:30% 72%}
+.menu-btn.fire .av img{animation:roar .75s var(--e-settle)}
+.menu-btn .mx{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#2E1360,#0E0A1A 75%);box-shadow:0 0 0 1.5px #08060E;opacity:0;transform:scale(.55) rotate(-90deg);transition:opacity .25s,transform .4s var(--e-pull)}
+.menu-btn .mx::before,.menu-btn .mx::after{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:#fff;box-shadow:0 0 8px #A65BFF}
+.menu-btn .mx::before{transform:rotate(45deg)}.menu-btn .mx::after{transform:rotate(-45deg)}
+.menu-btn[aria-expanded="true"] .av{transform:scale(.35) rotate(28deg);opacity:0;transition:transform .45s var(--e-pull) .3s,opacity .3s .38s}
+.menu-btn[aria-expanded="true"] .mx{opacity:1;transform:none;transition:opacity .3s .42s,transform .7s var(--e-settle) .42s}
+.menu-btn.back .av{animation:avback .65s var(--e-settle)}
+.puff{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
 .menu-btn.back .puff{animation:puff .6s ease-out}
-@keyframes dgbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-@keyframes dgblink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
-.dg-head .eye{transform-box:fill-box;transform-origin:center}
-@keyframes dgfire{0%{transform:scaleX(0);opacity:1}35%{transform:scaleX(1.15);opacity:1}100%{transform:scaleX(1.5) scaleY(1.3);opacity:0}}
-@keyframes dgspark{0%{transform:scaleX(0);opacity:.9}50%{transform:scaleX(.45);opacity:.9}100%{transform:scaleX(.6);opacity:0}}
-@keyframes dgout{to{transform:translate(14px,-18px) rotate(35deg) scale(.3);opacity:0}}
-@keyframes dgin{from{transform:translate(-16px,14px) rotate(-30deg) scale(.3);opacity:0}}
-@keyframes xin{from{transform:rotate(-90deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
-@keyframes xout{from{opacity:1}to{transform:rotate(90deg) scale(.3);opacity:0}}
+@keyframes halo{to{transform:rotate(1turn)}}
+@keyframes aura{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.06)}}
+@keyframes roar{0%{transform:none}28%{transform:scale(1.16) rotate(-7deg)}100%{transform:none}}
+@keyframes avback{from{transform:scale(.4) rotate(-30deg);opacity:0}}
 @keyframes puff{0%{opacity:.9;box-shadow:0 0 0 0 rgba(166,91,255,.9)}100%{opacity:0;box-shadow:0 0 0 18px rgba(166,91,255,0)}}
+/* the fire itself: drawn for a moment on a see-through canvas over everything */
+.breath{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:58;pointer-events:none}
 .theme-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(8,6,14,.45);color:var(--purple-l);cursor:pointer;transition:transform .5s var(--e-settle)}
 .theme-btn svg{width:20px;height:20px}
 .theme-btn circle{fill:none;stroke:currentColor;stroke-width:2}
 .theme-btn path{fill:currentColor}
 .theme-btn[aria-pressed="true"]{transform:rotate(180deg)}
-@media (prefers-reduced-motion:reduce){.dg-ico,.dg-head .eye{animation:none!important}.menu-btn .dg-flame{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.menu-btn .halo,.menu-btn .glow,.menu-btn.fire .av img,.menu-btn.back .av{animation:none!important}}
 @media (max-width:980px){.nav{display:none}.bag-btn{margin-left:auto;min-height:44px;padding-inline:16px}.menu-btn{display:block}}
 @media (max-width:380px){.top-in{gap:10px}.bag-btn{padding-inline:12px}}
-/* The menu opens under the header, so the same button closes it */
-.sheet-menu{position:fixed;inset:0;z-index:49;overflow-y:auto;overscroll-behavior:contain;background:rgba(8,6,14,.97);display:grid;align-content:center;justify-items:center;gap:4px;padding:calc(76px + env(safe-area-inset-top,0px)) 24px calc(28px + env(safe-area-inset-bottom,0px))}
-.sheet-menu .go{font:400 clamp(38px,11vw,60px)/1.06 var(--f-display);text-transform:uppercase;letter-spacing:.01em;text-decoration:none;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;transition:color .2s}
-.sheet-menu .go[aria-current="page"]{color:var(--purple-l)}
-@media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}}
-.sheet-menu .menu-sig{width:120px;height:auto;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(166,91,255,.7))}
-.sheet-menu .m-shop{display:grid;justify-items:center}
-.sheet-menu .m-toggle{display:inline-flex;align-items:center;gap:12px}
-.sheet-menu .mk{width:30px;height:30px;flex:none;filter:drop-shadow(0 0 6px #A65BFF);transition:transform .45s var(--e-settle),opacity .3s}
-.sheet-menu .m-toggle .mk{transform:rotate(-90deg)}
+/* The menu grows out of the dragon in a circle, under the header, so the same button closes it.
+   The dragon art heads it; under that the five places in big type, numbered, each on its own hairline. */
+.sheet-menu{position:fixed;inset:0;z-index:49;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;background:radial-gradient(120% 60% at 70% 0%,#1F0F43,#08060E 62%);clip-path:circle(0 at var(--mx,calc(100% - 40px)) var(--my,40px));transition:clip-path .5s var(--e-pull);-webkit-tap-highlight-color:transparent}
+.sheet-menu.on{clip-path:circle(var(--mr,160vmax) at var(--mx,calc(100% - 40px)) var(--my,40px));transition:clip-path .85s var(--e-pull)}
+.sheet-menu:not(.on){pointer-events:none}
+.menu-open .top,.menu-open .top.stuck{background:none;border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.m-art{position:relative;flex:none;height:clamp(190px,36svh,360px);overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 52%,transparent);mask-image:linear-gradient(180deg,#000 52%,transparent)}
+.m-art .kb{position:absolute;inset:0;animation:kb 16s ease-in-out infinite alternate}
+.m-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:0;transform:scale(1.18);transition:opacity .3s,transform .5s var(--e-pull)}
+.sheet-menu.on .m-art img{opacity:1;transform:none;transition:opacity .9s ease .05s,transform 1.8s var(--e-settle)}
+.m-art::before{content:"";position:absolute;inset:0 0 auto;height:120px;z-index:1;background:linear-gradient(rgba(8,6,14,.72),rgba(8,6,14,0))}
+.m-art::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 80% at 50% 45%,transparent 42%,rgba(8,6,14,.6))}
+@keyframes kb{to{transform:scale(1.07) translate3d(-1.5%,1%,0)}}
+.m-in{position:relative;flex:1 0 auto;display:flex;flex-direction:column;margin-top:-70px;padding:0 var(--gut) calc(20px + env(safe-area-inset-bottom,0px))}
+.m-eye{display:flex;align-items:center;gap:12px;margin:0 0 4px;font:700 8.5px/1 var(--f-label);letter-spacing:.26em;text-transform:uppercase;color:var(--purple-l);opacity:0;transition:opacity .3s}
+.m-eye i{flex:1;height:1px;background:linear-gradient(90deg,var(--purple-l),rgba(166,91,255,0));transform:scaleX(0);transform-origin:0 50%;transition:transform .4s}
+.m-eye span:last-child{color:var(--mut)}
+.sheet-menu.on .m-eye{opacity:1;transition:opacity .6s ease .25s}
+.sheet-menu.on .m-eye i{transform:none;transition:transform 1.2s var(--e-settle) .3s}
+.m-list{display:flex;flex-direction:column}
+.sheet-menu .go{position:relative;display:flex;align-items:center;gap:14px;width:100%;margin:0;padding:13px 0 11px;border:0;background:none;color:var(--ink);text-decoration:none;text-align:left;cursor:pointer;font:400 clamp(40px,12.2vw,72px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.005em;transition:color .25s}
+.sheet-menu .go::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s}
+.sheet-menu .go .n{align-self:flex-start;flex:none;width:22px;margin-top:.42em;font:400 10px/1 var(--f-mono);letter-spacing:.04em;color:var(--mut);opacity:0;transition:color .25s,opacity .2s}
+.sheet-menu .go .t{display:block;flex:1;min-width:0;overflow:hidden;padding:.06em 0 .02em}
+.sheet-menu .go .t>span{display:inline-block;transform:translate3d(0,110%,0);transition:transform .4s var(--e-pull)}
+.sheet-menu .go .ar,.sheet-menu .go .pl{position:relative;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(20,14,38,.5);color:var(--ink);display:grid;place-items:center;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s,background .25s,border-color .25s,color .25s}
+.sheet-menu .ar svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .45s var(--e-settle)}
+.sheet-menu .go .pl::before,.sheet-menu .go .pl::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.7px;margin:-.85px 0 0 -6px;border-radius:2px;background:currentColor;transition:transform .5s var(--e-settle)}
+.sheet-menu .go .pl::after{transform:rotate(90deg)}
 .sheet-menu .m-toggle[aria-expanded="true"]{color:var(--purple-l)}
-.sheet-menu .m-toggle[aria-expanded="true"] .mk{transform:rotate(0) scale(1.1)}
-.sheet-menu .m-cats{display:grid;justify-items:center;gap:2px;margin:6px 0 10px;padding:6px 0;border-block:1px solid var(--line);min-width:220px}
-.sheet-menu .m-cats[hidden]{display:none}
-.sheet-menu .m-cats button{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:var(--ink);cursor:pointer;padding:6px 14px;font:700 11px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase;animation:menuin .5s var(--e-settle) both}
-.sheet-menu .m-cats button:nth-child(2){animation-delay:30ms}.sheet-menu .m-cats button:nth-child(3){animation-delay:60ms}.sheet-menu .m-cats button:nth-child(4){animation-delay:90ms}.sheet-menu .m-cats button:nth-child(5){animation-delay:120ms}.sheet-menu .m-cats button:nth-child(6){animation-delay:150ms}.sheet-menu .m-cats button:nth-child(7){animation-delay:180ms}
-.sheet-menu .m-cats .mk{width:20px;height:20px;opacity:0;transform:translateX(-8px) scale(.6)}
-.sheet-menu .m-cats button:active .mk,.sheet-menu .m-cats button:focus-visible .mk{opacity:1;transform:none}
-@media (hover:hover){.sheet-menu .m-cats button:hover{color:var(--purple-l)}.sheet-menu .m-cats button:hover .mk{opacity:1;transform:none}}
-.sheet-menu .go[aria-current="page"]{text-shadow:0 0 18px rgba(166,91,255,.8)}
-.sheet-menu .ask{display:inline-flex;align-items:center;gap:10px;margin-top:16px;padding:8px 20px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9));box-shadow:0 12px 34px rgba(122,47,224,.4);color:#fff;cursor:pointer;font:700 9.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;transition:transform .35s var(--e-settle)}
-.sheet-menu .ask .ey{width:34px;height:34px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
-.sheet-menu .menu-bybd{margin:16px 0 0;font:400 15px/1.3 var(--f-mantra);color:var(--purple-l);text-align:center}
-.sheet-menu .menu-foot{margin:10px 0 0;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut);text-align:center}
+.sheet-menu .m-toggle[aria-expanded="true"] .pl{background:var(--purple);border-color:var(--purple);color:#fff}
+.sheet-menu .m-toggle[aria-expanded="true"] .pl::after{transform:rotate(0)}
+.sheet-menu.on .go .t>span{transform:none;transition:transform 1s var(--e-settle) calc(var(--d,0) * 70ms + 200ms)}
+.sheet-menu.on .go::after{transform:none;transition:transform 1.2s var(--e-settle) calc(var(--d,0) * 70ms + 240ms)}
+.sheet-menu.on .go .n,.sheet-menu.on .go .ar,.sheet-menu.on .go .pl{opacity:1;transform:none;transition:opacity .6s ease calc(var(--d,0) * 70ms + 380ms),transform .8s var(--e-settle) calc(var(--d,0) * 70ms + 380ms),background .25s,border-color .25s,color .25s}
+.sheet-menu .go[aria-current="page"]{color:var(--purple-l)}
+.sheet-menu .go[aria-current="page"] .n{color:var(--purple-l)}
+.sheet-menu .go:active{color:var(--purple-l)}
+.sheet-menu a.go:active .ar{background:var(--purple);border-color:var(--purple);color:#fff}
+.sheet-menu a.go:active .ar svg{transform:rotate(45deg)}
+@media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}.sheet-menu a.go:hover .ar{background:var(--purple);border-color:var(--purple);color:#fff}.sheet-menu a.go:hover .ar svg{transform:rotate(45deg)}}
+/* Shop opens in place: its categories slide down as round-thumbnail pills, each with how many pieces it has */
+.sheet-menu .m-cats{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .45s var(--e-pull),visibility 0s linear .45s}
+.sheet-menu .m-shop.open .m-cats{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .7s var(--e-settle)}
+.sheet-menu .m-cats-in{min-height:0;overflow:hidden}
+.sheet-menu .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 0 16px}
+.sheet-menu .m-grid button{display:flex;align-items:center;gap:10px;min-width:0;padding:6px 12px 6px 6px;border-radius:999px;border:1px solid var(--line);background:rgba(20,14,38,.62);color:var(--ink);text-align:left;cursor:pointer;opacity:0;transform:translateY(12px);transition:opacity .2s,transform .3s,border-color .25s,background .25s}
+.sheet-menu .m-shop.open .m-grid button{opacity:1;transform:none;transition:opacity .5s ease calc(var(--i) * 40ms + 140ms),transform .8s var(--e-settle) calc(var(--i) * 40ms + 140ms),border-color .25s,background .25s}
+.sheet-menu .m-grid .th{flex:none;width:40px;height:40px;border-radius:50%;overflow:hidden;background:#1B1233;box-shadow:0 0 0 1px rgba(166,91,255,.45),0 0 14px rgba(166,91,255,.25)}
+.sheet-menu .m-grid .th img{display:block;width:100%;height:100%;object-fit:cover}
+.sheet-menu .m-grid .th.cut{background:radial-gradient(circle at 50% 35%,#fff,#E4DAF5)}
+.sheet-menu .m-grid .th.cut img{object-fit:contain;padding:3px}
+.sheet-menu .m-grid .tx{display:block;min-width:0}
+.sheet-menu .m-grid b{display:block;font:600 13px/1.15 var(--f-shop);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet-menu .m-grid small{display:block;margin-top:3px;font:400 9.5px/1 var(--f-mono);letter-spacing:.04em;color:var(--mut)}
+.sheet-menu .m-grid button:active{border-color:var(--purple-l);background:rgba(122,47,224,.32)}
+@media (hover:hover){.sheet-menu .m-grid button:hover{border-color:var(--purple-l)}}
+/* The foot: Ask YOWA, the mantra and where to find us */
+.m-foot{display:grid;gap:16px;margin-top:auto;padding-top:28px;opacity:0;transform:translateY(18px);transition:opacity .2s,transform .3s}
+.sheet-menu.on .m-foot{opacity:1;transform:none;transition:opacity .7s ease .55s,transform 1s var(--e-settle) .55s}
+.sheet-menu .ask{display:flex;align-items:center;gap:12px;width:100%;padding:8px 8px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(100deg,rgba(122,47,224,.96),rgba(74,26,148,.94));box-shadow:0 14px 40px rgba(122,47,224,.38),inset 0 1px 0 rgba(255,255,255,.2);color:#fff;text-align:left;cursor:pointer;transition:transform .35s var(--e-settle)}
+.sheet-menu .ask .ey{flex:none;width:42px;height:42px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
+.sheet-menu .ask .tx{flex:1;display:grid;gap:5px;min-width:0}
+.sheet-menu .ask b{font:700 10px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase}
+.sheet-menu .ask small{font:400 12.5px/1.2 var(--f-body);color:rgba(255,255,255,.76)}
+.sheet-menu .ask .ar{flex:none;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--purple-d);display:grid;place-items:center}
+.sheet-menu .m-meta{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
+.sheet-menu .menu-bybd{margin:0;font:400 13.5px/1.3 var(--f-mantra);color:var(--purple-l)}
+.sheet-menu .menu-foot{display:flex;gap:8px;margin:0;font:700 8px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 .sheet-menu .menu-foot a{color:var(--ink);text-decoration:none}
-.sheet-menu:not([hidden])>*{animation:menuin .7s var(--e-settle) both}
-.sheet-menu>:nth-child(2){animation-delay:40ms}.sheet-menu>:nth-child(3){animation-delay:80ms}.sheet-menu>:nth-child(4){animation-delay:120ms}.sheet-menu>:nth-child(5){animation-delay:160ms}.sheet-menu>:nth-child(6){animation-delay:200ms}.sheet-menu>:nth-child(7){animation-delay:240ms}.sheet-menu>:nth-child(8){animation-delay:280ms}.sheet-menu>:nth-child(9){animation-delay:320ms}.sheet-menu>:nth-child(10){animation-delay:360ms}.sheet-menu>:nth-child(11){animation-delay:400ms}.sheet-menu>:nth-child(12){animation-delay:440ms}
-@keyframes menuin{from{opacity:0;transform:translateY(28px) skewY(4deg)}}
 
 /* ── Hero ── */
 .hero{position:relative;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden;isolation:isolate;-webkit-tap-highlight-color:transparent;touch-action:pan-y pinch-zoom}
@@ -253,21 +290,21 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: each seam is a lane; a real 3D dragon flies through it on one see-through canvas over the page ── */
-.dragon{position:relative;z-index:5;height:150px;margin-block:-52px;pointer-events:none}
-@media (min-width:960px){.dragon{height:172px;margin-block:-60px}}
-.dragon-sky{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:6;pointer-events:none}
-.hold .dragon-sky{opacity:0;transition:opacity .35s}
+/* ── Dragons: each seam is a lane; a rendered CGI dragon flies through it, head first. It sits in the page, so it scrolls with it, steady ── */
+.dragon{position:relative;z-index:5;pointer-events:none;aspect-ratio:12/5;margin-block:-13vw}
+.dragon .dg-media{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.dragon.flip .dg-media{transform:scaleX(-1)}
+@media (min-width:700px){.dragon{aspect-ratio:24/5;margin-block:-7vw}}
 
 /* ── Sections ── */
 section{position:relative}
 .sec{padding-block:clamp(44px,6vw,96px)}
 .dragon+.sec{padding-top:clamp(84px,8vw,124px)}
 /* The first one sits in the opening screen, its whole body under Be You Be Different, instead of peeking up from the seam */
-.hero+.dragon{margin:-142px 0 -8px}
+.hero+.dragon{margin:-36vw 0 -5.6vw}
 .hero+.dragon+.sec{padding-top:clamp(48px,6vw,96px)}
 main>.dragon:last-child{margin-bottom:0}
-@media (min-width:960px){.hero+.dragon{margin:-160px 0 -10px}}
+@media (min-width:700px){.hero+.dragon{margin:-18vw 0 -3vw}}
 .sec:has(+.dragon){padding-bottom:clamp(64px,7vw,110px)}
 .home .chat-fab,.menu-open .chat-fab{display:none}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 32px;margin-bottom:clamp(16px,2.4vw,32px)}
@@ -458,7 +495,8 @@ main>.dragon:last-child{margin-bottom:0}
 .scrim{position:fixed;inset:0;z-index:74;background:rgba(8,6,14,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .pview{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:16px;pointer-events:none}
 .pview-in{pointer-events:auto;width:min(1040px,100%);max-height:calc(100svh - 32px);overflow:auto;background:var(--void-2);border:1px solid var(--line);border-radius:18px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
-@media (max-width:820px){.pview-in{grid-template-columns:1fr}}
+/* Phones stack it plainly, photo then words, so the photo can never sit over the words (iPhone Safari mis-sizes a square photo box in a grid) */
+@media (max-width:820px){.pview-in{display:block}}
 .pv-grab{display:none}
 /* Phones: the product opens as a bottom sheet. Drag the handle down to put it away. */
 @media (max-width:820px){
@@ -484,7 +522,7 @@ main>.dragon:last-child{margin-bottom:0}
 .qty button{width:46px;height:46px;border:0;background:none;color:inherit;font-size:20px;line-height:1;cursor:pointer;border-radius:999px}
 .qty button:disabled{opacity:.3;cursor:default}
 .qty output{min-width:30px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
-@media (max-width:820px){.pv-media{min-height:0;aspect-ratio:1/1}}
+@media (max-width:820px){.pv-media{min-height:0;height:min(100vw,60svh)}}
 .pv-info{padding:clamp(20px,3vw,36px);display:grid;gap:16px;align-content:start}
 .pv-info h3{margin:0;font:400 clamp(38px,5vw,60px)/.9 var(--f-display);text-transform:uppercase}
 .pv-price{font:500 20px/1 var(--f-shop);letter-spacing:.02em}
@@ -632,16 +670,11 @@ main>.dragon:last-child{margin-bottom:0}
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd,.sheet-menu:not([hidden])>*{animation:none}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd,.m-art .kb{animation:none}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}}
 </style>
 </head>
 <body>
 <canvas id="swirl" aria-hidden="true"></canvas>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-  <linearGradient id="dg-skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9C2FF"/><stop offset=".5" stop-color="#9A52FF"/><stop offset="1" stop-color="#5B22B8"/></linearGradient>
-  <radialGradient id="dg-fire" cx="1" cy=".5" r="1.1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".3" stop-color="#E6CFFF"/><stop offset=".65" stop-color="#A65BFF"/><stop offset="1" stop-color="#7A2FE0" stop-opacity="0"/></radialGradient>
-  <symbol id="dg-mark" viewBox="0 0 40 40"><path d="M30,10 C28,5 25,3 20,1.5 C23,5 24,8 24,11 Z" fill="#E9DCFF"/><path d="M34,14 C37,21 35,29 28,33 C24,35 20,34 18,30 L12,26 C10,25 10,23 12,22.5 L20,20 L13,19 C10,18.5 10,15.5 13,14.5 C18,12.5 24,10.5 28,11 C31,11.5 33,12.5 34,14 Z" fill="url(#dg-skin)" stroke="#2B0B6A" stroke-width="1.4"/><circle cx="24" cy="16" r="1.9" fill="#FFD36B"/></symbol>
-</defs></svg>
 <div class="veil" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
@@ -655,23 +688,32 @@ main>.dragon:last-child{margin-bottom:0}
     </nav>
     <button class="bag-btn" type="button" id="bag-open">Cart (<b id="bag-count">0</b>)</button>
     <button class="theme-btn" type="button" id="theme" aria-label="Light mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
-    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><svg class="dg-ico" viewBox="0 0 40 40" aria-hidden="true"><g class="dg-flame"><path d="M13,21.5 C6,17 1,21 -16,18 C-5,23 -8,27 -22,30 C-4,31 6,28 13,25 Z" fill="url(#dg-fire)"/><path d="M13,22.5 C8,21 4,22.5 -5,22 C1,24.5 4,25.5 13,24.5 Z" fill="#fff" opacity=".85"/></g><g class="dg-head"><path class="h" d="M30,10 C28,5 25,3 20,1.5 C23,5 24,8 24,11 Z"/><path class="h" d="M35,13 C35,9 33,6 30,4 C31,8 31,10 30,12 Z"/><path d="M34,14 C37,21 35,29 28,33 C24,35 20,34 18,30 L12,26 C10,25 10,23 12,22.5 L20,20 L13,19 C10,18.5 10,15.5 13,14.5 C18,12.5 24,10.5 28,11 C31,11.5 33,12.5 34,14 Z" fill="url(#dg-skin)"/><path class="j" d="M20,24.5 L15,25.5"/><circle class="eye" cx="24" cy="16" r="1.9"/><circle cx="14" cy="16.6" r=".9" fill="#12051F"/></g></svg><span class="mx" aria-hidden="true"></span><span class="puff" aria-hidden="true"></span></button>
+    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="glow" aria-hidden="true"></span><span class="halo" aria-hidden="true"></span><span class="av" aria-hidden="true"><img src="img/dragon/avatar.webp" alt="" width="192" height="192" decoding="async"></span><span class="mx" aria-hidden="true"></span><span class="puff" aria-hidden="true"></span></button>
   </div>
 </header>
 
 <div class="sheet-menu" id="menu" hidden>
-  <img class="menu-sig" src="img/brand/yowa-signature.png" alt="" width="560" height="351">
-  <a class="go" href="#home">Home</a>
-  <div class="m-shop">
-    <button class="go m-toggle" type="button" id="m-shop" aria-expanded="false" aria-controls="m-cats">Shop<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button>
-    <div class="m-cats" id="m-cats" hidden>
-      <button type="button" data-cat="new">New<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="all">All<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="raglan">Raglan shirts<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="tee">Tees<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="cap">Caps<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="skull">Skull caps<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button><button type="button" data-cat="jogger">Joggers<svg class="mk" aria-hidden="true"><use href="#dg-mark"/></svg></button>
+  <div class="m-art" aria-hidden="true"><div class="kb"><img src="img/dragon/avatar-full.webp" srcset="img/dragon/avatar-560.webp 560w, img/dragon/avatar-full.webp 852w" sizes="100vw" alt="" width="852" height="984" decoding="async"></div></div>
+  <div class="m-in">
+    <p class="m-eye" aria-hidden="true"><span>Menu</span><i></i><span>Drop 01</span></p>
+    <nav class="m-list" aria-label="Menu">
+      <a class="go" href="#home" style="--d:0"><span class="n">01</span><span class="t"><span>Home</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+      <div class="m-shop">
+        <button class="go m-toggle" type="button" id="m-shop" aria-expanded="false" aria-controls="m-cats" style="--d:1"><span class="n">02</span><span class="t"><span>Shop</span></span><span class="pl" aria-hidden="true"></span></button>
+        <div class="m-cats" id="m-cats"><div class="m-cats-in"><div class="m-grid" id="m-grid"></div></div></div>
+      </div>
+      <a class="go" href="#gallery" style="--d:2"><span class="n">03</span><span class="t"><span>Gallery</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+      <a class="go" href="#message" style="--d:3"><span class="n">04</span><span class="t"><span>Message</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+      <a class="go" href="#list" style="--d:4"><span class="n">05</span><span class="t"><span>Get the code</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+    </nav>
+    <div class="m-foot">
+      <button class="ask" type="button" id="menu-chat"><span class="ey" aria-hidden="true"><i></i></span><span class="tx"><b>Ask YOWA</b><small>Sizes, the drop, anything</small></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></button>
+      <div class="m-meta">
+        <p class="menu-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
+        <p class="menu-foot"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">@yowa_bybd</a><span aria-hidden="true">·</span><span>Built by Nalto</span></p>
+      </div>
     </div>
   </div>
-  <a class="go" href="#gallery">Gallery</a><a class="go" href="#message">Message</a><a class="go" href="#list">Get the code</a>
-  <button class="ask" type="button" id="menu-chat"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
-  <p class="menu-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
-  <p class="menu-foot"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a> · Built by Nalto</p>
 </div>
 
 <main>
@@ -1246,11 +1288,40 @@ const LIBRARY = [
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Dragons: a real 3D purple dragon flies through every seam, head first, and round again (js/dragons.js) ── */
-  const lanes = $$('.dragon');
-  const startDragons = () => import('./js/dragons.js').then(m => m.start({ lanes, reduced, isHeld: () => rootEl0.classList.contains('hold'), isCovered: () => ['pview', 'menu', 'drawer', 'qshop', 'lightbox'].some(id => { const e = document.getElementById(id); return e && !e.hidden; }) })).catch(() => { });
-  const rootEl0 = document.documentElement;
-  if (lanes.length) setTimeout(startDragons, 400);   // just after the first screen is up
+  /* ── Dragons: a rendered CGI dragon flies through every seam, head first, and round again ──
+     Rendered ahead of time in Blender on a see-through background (Flying Dragon by peaznchips, CC0, made purple) and placed
+     in the page itself, so it scrolls with the page, rock steady. Chrome, Android and Firefox play a see-through WebM;
+     Safari and every iPhone browser (all WebKit, which can't show WebM's see-through) get the same flight as an animated WebP. */
+  const lanes = $$('.dragon'), ua = navigator.userAgent;
+  const webkitOnly = /AppleWebKit/.test(ua) && !/Chrome\/|Chromium|Edg\/|Android/.test(ua);
+  const laneKind = () => innerWidth >= 700 ? 'wide' : 'phone';
+  function fillLane(el) {
+    const kind = laneKind(), still = reduced(), key = kind + (still ? '-still' : '');
+    if (el.dataset.kind === key && el.firstChild) return el.firstChild;
+    el.textContent = ''; el.dataset.kind = key;
+    let m;
+    if (still || webkitOnly) { m = new Image(); m.alt = ''; m.decoding = 'async'; m.src = 'img/dragon/' + (still ? 'still-' : 'fly-') + kind + '.webp'; }
+    else {
+      m = document.createElement('video'); m.muted = m.defaultMuted = m.loop = m.playsInline = true; m.disablePictureInPicture = true;
+      m.setAttribute('muted', ''); m.setAttribute('playsinline', ''); m.preload = 'auto'; m.src = 'img/dragon/fly-' + kind + '.webm';
+    }
+    m.className = 'dg-media'; el.appendChild(m); return m;
+  }
+  // Each lane plays only while it's near the screen. Back after a while away, the dragon starts its flight again from the edge
+  const laneIO = new IntersectionObserver(es => es.forEach(e => {
+    const el = e.target;
+    if (e.isIntersecting) {
+      const m = fillLane(el);
+      if (m.tagName === 'VIDEO') { if (Date.now() - (+el.dataset.left || 0) > 1500) try { m.currentTime = 0; } catch (x) { } m.play().catch(() => { }); }
+    } else if (el.firstChild) {
+      el.dataset.left = Date.now();
+      if (el.firstChild.tagName === 'VIDEO') el.firstChild.pause(); else { el.textContent = ''; delete el.dataset.kind; }
+    }
+  }), { rootMargin: '160px 0px' });
+  lanes.forEach((el, i) => el.classList.toggle('flip', i % 2 === 1));   // every other one flies the other way
+  setTimeout(() => lanes.forEach(el => laneIO.observe(el)), 350);   // just after the first screen is up
+  let laneWide = innerWidth >= 700;
+  addEventListener('resize', () => { if ((innerWidth >= 700) === laneWide) return; laneWide = !laneWide; lanes.forEach(el => { if (el.firstChild) { const m = fillLane(el); if (m.play) m.play().catch(() => { }); } }); });
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
@@ -1264,25 +1335,86 @@ const LIBRARY = [
     if (swirl && dy) swirl.kick(Math.min(.6, Math.abs(dy) * .008));
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  // The three lines open the menu and turn into an X that closes it.
-  const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement;
-  function openMenu() { if (!menu.hidden) return; menu.hidden = false; if ($('#m-shop')) { $('#m-shop').setAttribute('aria-expanded', 'false'); $('#m-cats').hidden = true; } document.body.style.overflow = 'hidden'; rootEl.classList.add('menu-open'); top.classList.remove('away'); menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Close menu'); backstack.open(closeMenu); buzz(6); }
-  function closeMenu(keep) { if (menu.hidden) return; menu.hidden = true; flash('back', 650); document.body.style.overflow = ''; rootEl.classList.remove('menu-open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close(); }
-  // The dragon: breathes fire as the menu opens and flies off for the X; comes back with a puff when it closes
-  const flash = (c, ms) => { menuBtn.classList.remove('fire', 'spark', 'back'); void menuBtn.offsetWidth; menuBtn.classList.add(c); setTimeout(() => menuBtn.classList.remove(c), ms); };
+  // The dragon avatar opens the menu: it roars purple fire, the menu grows out of it in a circle, and an X takes its place.
+  const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement, mShop = $('#m-shop'), mShopBox = mShop.parentElement;
+  let menuT = 0;
+  const menuOn = () => menu.classList.contains('on');
+  const setShop = on => { mShop.setAttribute('aria-expanded', String(on)); mShopBox.classList.toggle('open', on); };
+  function openMenu() {
+    if (menuOn()) return; clearTimeout(menuT);
+    const r = menuBtn.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    menu.style.setProperty('--mx', cx + 'px'); menu.style.setProperty('--my', cy + 'px');
+    menu.style.setProperty('--mr', Math.ceil(Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)) + 24) + 'px');
+    setShop(false); menu.hidden = false; menu.scrollTop = 0; void menu.offsetWidth; menu.classList.add('on');
+    document.body.style.overflow = 'hidden'; rootEl.classList.add('menu-open'); top.classList.remove('away');
+    menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Close menu'); backstack.open(closeMenu); buzz(6);
+  }
+  function closeMenu(keep) {
+    if (!menuOn()) return; menu.classList.remove('on'); flash('back', 650);
+    clearTimeout(menuT); menuT = setTimeout(() => { if (!menuOn()) menu.hidden = true; }, reduced() ? 0 : 520);   // the circle closes back into the dragon first
+    document.body.style.overflow = ''; rootEl.classList.remove('menu-open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close();
+  }
+  // Purple fire: soft glowing puffs that pour out of the dragon's mouth, white hot at first, then lavender, purple, gone
+  const breath = (() => {
+    let cv, g, ps = [], raf = 0, last = 0, dpr = 1;
+    const sprite = (a, b) => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), r = x.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, a); r.addColorStop(.38, b); r.addColorStop(1, 'rgba(60,10,140,0)'); x.fillStyle = r; x.fillRect(0, 0, 64, 64); return c; };
+    let S;
+    function frame(now) {
+      const dt = Math.min(.05, last ? (now - last) / 1000 : .016); last = now;
+      g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalCompositeOperation = 'lighter';
+      ps = ps.filter(p => (p.age += dt) < p.life);
+      for (const p of ps) {
+        if (p.age < 0) continue;
+        const k = p.age / p.life, d = Math.exp(-p.drag * dt);
+        p.vx *= d; p.vy = p.vy * d - p.lift * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+        const r = p.r0 + (p.r1 - p.r0) * Math.pow(k, .6);
+        g.globalAlpha = p.a * (1 - k) * Math.min(1, k * 14);
+        const st = k * p.heat; g.drawImage(S[st < .1 ? 0 : st < .34 ? 1 : st < .66 ? 2 : 3], p.x - r, p.y - r, r * 2, r * 2);
+      }
+      if (ps.length) raf = requestAnimationFrame(frame); else { raf = 0; last = 0; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+    }
+    return (x, y, power) => {
+      if (reduced() || document.hidden) return;
+      if (!cv) { cv = document.createElement('canvas'); cv.className = 'breath'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv); g = cv.getContext('2d'); S = [sprite('rgba(255,255,255,1)', 'rgba(244,234,255,.75)'), sprite('rgba(236,220,255,1)', 'rgba(196,150,255,.6)'), sprite('rgba(170,96,255,.95)', 'rgba(122,47,224,.45)'), sprite('rgba(96,34,190,.7)', 'rgba(58,14,134,.3)')]; }
+      dpr = Math.min(devicePixelRatio || 1, 2); const w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+      cv.hidden = false;
+      const n = Math.round(56 * power), far = Math.min(1.15, innerWidth / 400);
+      for (let i = 0; i < n; i++) {
+        const a = Math.PI * (.83 + (Math.random() - .5) * .22), v = rnd(520, 1050) * power ** .5 * far;
+        ps.push({ x: x + rnd(-2, 2), y: y + rnd(-2, 2), vx: Math.cos(a) * v, vy: Math.sin(a) * v, drag: rnd(1.9, 2.6), lift: rnd(30, 90), age: -Math.random() * .4 * power, life: rnd(.6, 1.05), r0: rnd(4, 8), r1: rnd(26, 64) * (.5 + power * .5), a: rnd(.3, .55), heat: rnd(.85, 1.2) });
+      }
+      for (let i = 0; i < Math.round(16 * power); i++) {   // embers that fly on and drift up
+        const a = Math.PI * (.84 + (Math.random() - .5) * .34), v = rnd(260, 620) * power ** .5;
+        ps.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, drag: rnd(1, 1.6), lift: rnd(90, 170), age: -Math.random() * .5 * power, life: rnd(.9, 1.5), r0: rnd(1.6, 3), r1: rnd(1, 2), a: 1, heat: .3 });
+      }
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+  })();
+  const mouth = () => { const r = menuBtn.getBoundingClientRect(); return [r.left + r.width * .3, r.top + r.height * .72]; };
+  const flash = (c, ms) => { menuBtn.classList.remove('fire', 'back'); void menuBtn.offsetWidth; menuBtn.classList.add(c); setTimeout(() => menuBtn.classList.remove(c), ms); };
   // Light or dark, both purple. Remembered on this phone
   const themeBtn = $('#theme');
   const paintTheme = () => { const l = rootEl.dataset.theme === 'light'; themeBtn.setAttribute('aria-pressed', String(l)); themeBtn.setAttribute('aria-label', l ? 'Dark mode' : 'Light mode'); const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', l ? '#F3EEFF' : '#08060E'); };
   themeBtn.addEventListener('click', () => { if (rootEl.dataset.theme === 'light') delete rootEl.dataset.theme; else rootEl.dataset.theme = 'light'; store.set('yowa-theme', rootEl.dataset.theme === 'light' ? 'light' : 'dark'); paintTheme(); buzz(8); });
   paintTheme();
-  menuBtn.addEventListener('click', () => { if (menu.hidden) { flash('fire', 800); openMenu(); } else closeMenu(); });
-  (function sparks() { setTimeout(() => { if (menu.hidden && !reduced() && !document.hidden && !top.classList.contains('away')) flash('spark', 550); sparks(); }, rnd(6000, 11000)); })();
+  menuBtn.addEventListener('click', () => { if (menuOn()) return closeMenu(); flash('fire', 800); breath(...mouth(), 1); openMenu(); });
+  // now and then, a little smoke and embers from the mouth while it waits
+  (function idle() { setTimeout(() => { if (!menuOn() && !top.classList.contains('away') && getComputedStyle(menuBtn).display !== 'none') breath(...mouth(), .22); idle(); }, rnd(7000, 13000)); })();
   // A section in the menu: close it and glide there, without leaving an extra step in the back history.
   $$('#menu a.go').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
-  // Shop opens its categories in place, like a dropdown; picking one slides in the side shop
-  const mShop = $('#m-shop'), mCats = $('#m-cats');
-  mShop.addEventListener('click', () => { const on = mShop.getAttribute('aria-expanded') !== 'true'; mShop.setAttribute('aria-expanded', String(on)); mCats.hidden = !on; buzz(5); });
-  $$('#m-cats button').forEach(b => b.addEventListener('click', () => { closeMenu(true); openShop(b.dataset.cat); }));   // the side shop takes over the menu's back step
+  // Shop opens its categories in place: a round thumbnail and how many pieces each has. Picking one slides in the side shop
+  const thumbOf = { all: 'liberty-blue', raglan: 'liberty-red', tee: 'yowa-long-sleeve' };
+  CATS.forEach(([id, label], i) => {
+    const items = PRODUCTS.filter(p => id === 'all' || (id === 'new' ? !!p.isNew : p.cat === id)); if (!items.length) return;
+    const p = PRODUCTS.find(q => q.id === thumbOf[id]) || items[0], b = document.createElement('button');
+    b.type = 'button'; b.dataset.cat = id; b.style.setProperty('--i', i);
+    b.innerHTML = '<span class="th' + (p.cut ? ' cut' : '') + '"><img src="' + p.images[0] + '" alt="" loading="lazy" decoding="async"></span><span class="tx"><b></b><small></small></span>';
+    b.querySelector('b').textContent = label; b.querySelector('small').textContent = String(items.length).padStart(2, '0') + (items.length === 1 ? ' piece' : ' pieces');
+    b.addEventListener('click', () => { closeMenu(true); openShop(id); });   // the side shop takes over the menu's back step
+    $('#m-grid').appendChild(b);
+  });
+  mShop.addEventListener('click', () => { setShop(mShop.getAttribute('aria-expanded') !== 'true'); buzz(5); });
   $('#menu-chat').addEventListener('click', () => { closeMenu(true); toggleChat(true); });   // the chat takes over the menu's back step
 
   /* ── The drop: the grid goes straight to the pieces. The code is asked for at checkout ── */
@@ -1358,7 +1490,7 @@ const LIBRARY = [
     const sz = $('#pv-sizes'); sz.textContent = '';
     p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size' + (s.length > 3 ? ' wide' : ''); b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
     $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
-    pview.hidden = false; pvBuild(p); scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
+    pview.hidden = false; $('.pview-in').scrollTop = 0; pvBuild(p); scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
     const sheet = matchMedia('(max-width:820px)').matches;
     if (!reduced()) $('.pview-in').animate(sheet ? [{ transform: 'translateY(100%)' }, { transform: 'none' }] : [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: sheet ? 560 : 480, easing: 'cubic-bezier(.16,1,.3,1)' });
     $('#pv-close').focus({ preventScroll: true });
@@ -1441,7 +1573,7 @@ const LIBRARY = [
   }
   function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
   function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
-  $('#bag-open').addEventListener('click', () => { if (!menu.hidden) closeMenu(true); openBag(); });   // the bag takes over the menu's back step
+  $('#bag-open').addEventListener('click', () => { if (menuOn()) closeMenu(true); openBag(); });   // the bag takes over the menu's back step
   $('#bag-close').addEventListener('click', () => closeBag());
   // Phones: swipe the bag to the right to put it away.
   let bx = null, bdx = 0, bid = null;
@@ -1458,7 +1590,7 @@ const LIBRARY = [
   });
   drawer.addEventListener('pointercancel', () => { if (bx == null) return; bx = null; bagSettle(); drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); });
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); if (!qshop.hidden) closeShop(); });
-  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (!menu.hidden) closeMenu(); });
+  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
   $('#pv-getcode').addEventListener('click', e => { e.preventDefault(); closeBag(true); backstack.drop(); location.replace('#list'); });
   $('#checkout').addEventListener('click', () => {
     const note = $('#dr-note'); note.classList.remove('bad');
