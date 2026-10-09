@@ -120,37 +120,32 @@ img{max-width:100%}
 .nav a[aria-current="page"]{border-color:var(--line);color:var(--purple-l)}
 .bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
 .bag-btn b{color:var(--purple-l)}
-/* Menu: the crystal dragon in a turning purple halo. Tap it and it shines, the menu grows out of it and an X takes its place */
-.menu-btn{display:none;position:relative;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;isolation:isolate;-webkit-tap-highlight-color:transparent}
-.menu-btn .halo{position:absolute;inset:-2.5px;border-radius:50%;z-index:-1;background:conic-gradient(#F1E6FF,#A65BFF 20%,#2B0B6A 44%,#7A2FE0 62%,#E6CFFF 80%,#A65BFF 92%,#F1E6FF);animation:halo 5s linear infinite}
-.menu-btn .glow{position:absolute;inset:-13px;border-radius:50%;z-index:-2;background:radial-gradient(closest-side,rgba(166,91,255,.62),rgba(166,91,255,0));animation:aura 3.2s ease-in-out infinite;pointer-events:none}
-.menu-btn .av{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#06040C;box-shadow:0 0 0 1.5px #08060E;transition:transform .5s var(--e-settle),opacity .3s}
-.menu-btn .av img{display:block;width:100%;height:100%;object-fit:cover}
-.menu-btn .av::after{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 30%,rgba(255,255,255,.92) 47%,rgba(236,214,255,.45) 53%,transparent 68%);transform:translate3d(-130%,0,0)}
-.menu-btn.shine .av::after{animation:glint .7s cubic-bezier(.3,.6,.2,1)}
-.menu-btn.shine .av img{animation:pop .6s var(--e-settle)}
-.menu-btn.shine .glow{animation:flare .75s ease-out}
-.menu-btn .mx{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#2E1360,#0E0A1A 75%);box-shadow:0 0 0 1.5px #08060E;opacity:0;transform:scale(.55) rotate(-90deg);transition:opacity .2s,transform .35s var(--e-pull)}
-.menu-btn .mx::before,.menu-btn .mx::after{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:#fff;box-shadow:0 0 8px #A65BFF}
+/* Menu: the crystal dragon itself, no frame. It floats; tap it and a shine runs over it (only over the dragon),
+   the menu grows out of it and an X takes its place */
+.menu-btn{display:none;position:relative;width:50px;height:48px;padding:0;border:0;border-radius:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.menu-btn .av{position:absolute;inset:-2px -3px;transition:transform .5s var(--e-settle),opacity .3s}
+.menu-btn .fl{position:absolute;inset:0;animation:avfloat 3.6s ease-in-out infinite}
+.menu-btn .fl img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 6px rgba(166,91,255,.8)) drop-shadow(0 2px 5px rgba(8,6,14,.55))}
+.menu-btn .gl{position:absolute;inset:0;background:linear-gradient(118deg,transparent 35%,rgba(255,255,255,.95) 48%,rgba(236,214,255,.5) 54%,transparent 66%) no-repeat;background-size:320% 100%;background-position:100% 0;-webkit-mask:url(img/dragon/btn-crystal.webp) center/contain no-repeat;mask:url(img/dragon/btn-crystal.webp) center/contain no-repeat;opacity:0}
+.menu-btn.shine .gl{animation:glint .5s cubic-bezier(.3,.6,.2,1)}
+.menu-btn.shine .fl img{animation:pop .6s var(--e-settle)}
+.menu-btn .mx{position:absolute;inset:0;opacity:0;transform:scale(.55) rotate(-90deg);transition:opacity .2s,transform .35s var(--e-pull)}
+.menu-btn .mx::before,.menu-btn .mx::after{content:"";position:absolute;left:12px;right:12px;top:50%;height:2.5px;margin-top:-1.25px;border-radius:2px;background:#fff;box-shadow:0 0 10px #A65BFF,0 0 2px #A65BFF}
 .menu-btn .mx::before{transform:rotate(45deg)}.menu-btn .mx::after{transform:rotate(-45deg)}
-.menu-btn[aria-expanded="true"] .av{transform:scale(.4) rotate(24deg);opacity:0;transition:transform .4s var(--e-pull) .2s,opacity .25s .28s}
-.menu-btn[aria-expanded="true"] .mx{opacity:1;transform:none;transition:opacity .25s .3s,transform .6s var(--e-settle) .3s}
+[data-theme="light"] .menu-btn .mx::before,[data-theme="light"] .menu-btn .mx::after{background:var(--purple);box-shadow:0 0 8px rgba(166,91,255,.6)}
+.menu-btn[aria-expanded="true"] .av{transform:scale(.4) rotate(24deg);opacity:0;transition:transform .4s var(--e-pull) .38s,opacity .22s .46s}
+.menu-btn[aria-expanded="true"] .mx{opacity:1;transform:none;transition:opacity .25s .5s,transform .6s var(--e-settle) .5s}
 .menu-btn.back .av{animation:avback .6s var(--e-settle)}
-.puff{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
-.menu-btn.back .puff{animation:puff .6s ease-out}
-@keyframes halo{to{transform:rotate(1turn)}}
-@keyframes aura{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes glint{to{transform:translate3d(130%,0,0)}}
-@keyframes pop{0%{transform:none}30%{transform:scale(1.12)}100%{transform:none}}
-@keyframes flare{0%{opacity:.6;transform:scale(.9)}35%{opacity:1;transform:scale(1.75)}100%{opacity:.5;transform:scale(1)}}
+@keyframes avfloat{0%,100%{transform:translate3d(0,1.5px,0) rotate(-1.5deg)}50%{transform:translate3d(0,-2px,0) rotate(1.5deg)}}
+@keyframes glint{0%{opacity:1;background-position:100% 0}100%{opacity:1;background-position:0 0}}
+@keyframes pop{0%{transform:none}30%{transform:scale(1.14)}100%{transform:none}}
 @keyframes avback{from{transform:scale(.4) rotate(-30deg);opacity:0}}
-@keyframes puff{0%{opacity:.9;box-shadow:0 0 0 0 rgba(166,91,255,.9)}100%{opacity:0;box-shadow:0 0 0 18px rgba(166,91,255,0)}}
 .theme-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(8,6,14,.45);color:var(--purple-l);cursor:pointer;transition:transform .5s var(--e-settle)}
 .theme-btn svg{width:20px;height:20px}
 .theme-btn circle{fill:none;stroke:currentColor;stroke-width:2}
 .theme-btn path{fill:currentColor}
 .theme-btn[aria-pressed="true"]{transform:rotate(180deg)}
-@media (prefers-reduced-motion:reduce){.menu-btn .halo,.menu-btn .glow,.menu-btn.shine .av img,.menu-btn.shine .av::after,.menu-btn.back .av{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.menu-btn .fl,.menu-btn.shine .fl img,.menu-btn.shine .gl,.menu-btn.back .av{animation:none!important}}
 @media (max-width:980px){.nav{display:none}.bag-btn{margin-left:auto;min-height:44px;padding-inline:16px}.menu-btn{display:block}}
 @media (max-width:380px){.top-in{gap:10px}.bag-btn{padding-inline:12px}}
 /* The menu grows out of the dragon as a circle of night, under the header, so the same button closes it.
@@ -246,7 +241,7 @@ img{max-width:100%}
 .hero-bybd{margin:0;font:400 clamp(14px,4.3vw,22px)/1.2 var(--f-mantra);letter-spacing:.03em;color:var(--ink);text-shadow:0 0 18px rgba(166,91,255,.9),0 2px 12px rgba(8,6,14,.75);animation:bybdin 1.1s var(--e-settle) .45s both}
 @keyframes bybdin{from{opacity:0;transform:translateY(12px)}}
 /* Holding a photo on a phone clears everything off it */
-@media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top,.hold .hero+.dragon{opacity:0;pointer-events:none}}
+@media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top{opacity:0;pointer-events:none}}
 @media (min-width:960px){
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,min(42vw,600px))}
   .hero-in{grid-column:1;grid-row:1;justify-items:start;align-content:center;text-align:left;padding:120px 32px 40px var(--gut)}
@@ -285,34 +280,10 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: each seam is a lane, and a winged dragon flies across it, wings beating. The lane sits in the page and the
-   dragon glides on the GPU (a transform), so it scrolls with the page and never shakes ── */
-.dragon{--lh:56vw;--dur:5.4s;position:relative;z-index:5;height:var(--lh);margin-block:calc(var(--lh) * -.36);pointer-events:none;overflow:hidden}
-.dragon .dg-fly{position:absolute;left:0;top:50%;height:calc(var(--lh) * .9);aspect-ratio:320/471;margin-top:calc(var(--lh) * -.45);transform:translate3d(100vw,0,0)}
-.dragon .dg-bob{position:absolute;inset:0}
-.dragon .dg-media{display:block;width:100%;height:100%}
-.dragon.flip .dg-media{transform:scaleX(-1)}
-.dragon.on .dg-fly{animation:dgfly var(--dur) linear infinite}
-.dragon.on.flip .dg-fly{animation-name:dgfly-r}
-.dragon.on .dg-bob{animation:dgbob 2.9s ease-in-out infinite alternate}
-.dragon.still .dg-fly{transform:translate3d(calc(62vw - 50%),0,0)}
-.dragon.still.flip .dg-fly{transform:translate3d(calc(38vw - 50%),0,0)}
-.menu-open .dragon .dg-fly,.menu-open .dragon .dg-bob{animation-play-state:paused}
-@keyframes dgfly{0%{transform:translate3d(100vw,0,0)}86%,100%{transform:translate3d(-100%,0,0)}}
-@keyframes dgfly-r{0%{transform:translate3d(-100%,0,0)}86%,100%{transform:translate3d(100vw,0,0)}}
-@keyframes dgbob{from{transform:translate3d(0,-4%,0)}to{transform:translate3d(0,4%,0)}}
-@media (min-width:700px){.dragon{--lh:25vw;--dur:7.6s}}
 
 /* ── Sections ── */
 section{position:relative}
 .sec{padding-block:clamp(44px,6vw,96px)}
-.dragon+.sec{padding-top:clamp(84px,9vw,140px)}
-/* The first one sits in the opening screen, its whole body under Be You Be Different, instead of peeking up from the seam */
-.hero+.dragon{--lh:37vw;margin:-37vw 0 0}
-.hero+.dragon+.sec{padding-top:clamp(48px,6vw,96px)}
-main>.dragon:last-child{margin-bottom:0}
-@media (min-width:700px){.hero+.dragon{--lh:17vw;margin:-15vw 0 -2vw}}
-.sec:has(+.dragon){padding-bottom:clamp(64px,8.5vw,130px)}
 .home .chat-fab,.menu-open .chat-fab{display:none}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 32px;margin-bottom:clamp(16px,2.4vw,32px)}
 .sec-head h2{margin:0;font:400 clamp(40px,8vw,112px)/.85 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
@@ -677,7 +648,7 @@ main>.dragon:last-child{margin-bottom:0}
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd{animation:none}.m-dr,.m-dr .burst{animation:none!important}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}.dragon .dg-fly,.dragon .dg-bob{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd{animation:none}.m-dr,.m-dr .burst{animation:none!important}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}}
 </style>
 </head>
 <body>
@@ -695,7 +666,7 @@ main>.dragon:last-child{margin-bottom:0}
     </nav>
     <button class="bag-btn" type="button" id="bag-open">Cart (<b id="bag-count">0</b>)</button>
     <button class="theme-btn" type="button" id="theme" aria-label="Light mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
-    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="glow" aria-hidden="true"></span><span class="halo" aria-hidden="true"></span><span class="av" aria-hidden="true"><img src="img/dragon/avatar-crystal.webp" alt="" width="192" height="192" decoding="async"></span><span class="mx" aria-hidden="true"></span><span class="puff" aria-hidden="true"></span></button>
+    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="av" aria-hidden="true"><span class="fl"><img src="img/dragon/btn-crystal.webp" alt="" width="154" height="168" decoding="async"><span class="gl"></span></span></span><span class="mx" aria-hidden="true"></span></button>
   </div>
 </header>
 
@@ -734,7 +705,6 @@ main>.dragon:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 
   <section class="sec panel" id="drop" aria-labelledby="drop-t">
     <div class="wrap">
@@ -750,7 +720,6 @@ main>.dragon:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 
 
   <section class="sec panel" id="gallery" aria-labelledby="gal-t">
@@ -766,7 +735,6 @@ main>.dragon:last-child{margin-bottom:0}
     <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 
   <section class="sec" id="library" aria-labelledby="lib-t">
     <div class="wrap">
@@ -790,7 +758,6 @@ main>.dragon:last-child{margin-bottom:0}
     <div class="lib-peek" id="lib-peek" aria-hidden="true"><img alt=""></div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 
   <section class="sec" id="message" aria-labelledby="msg-t">
     <!-- Background: YW·010 (the crew on the rooftop), with its motion clip -->
@@ -805,7 +772,6 @@ main>.dragon:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 
   <section class="sec panel" id="list" aria-labelledby="list-t">
     <!-- Background: YW·033 (Liberty Raglan · Black, full fit) -->
@@ -833,7 +799,6 @@ main>.dragon:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <div class="dragon" aria-hidden="true"></div>
 </main>
 
 <footer class="foot">
@@ -1292,35 +1257,6 @@ const LIBRARY = [
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Dragons: the two winged YOWA dragons take turns flying through the seams, wings beating ──
-     Each wing beat is a short see-through loop (a WebM on Chrome, Android and Firefox; an animated WebP on Safari and every
-     iPhone browser, which can't show a see-through WebM); the page itself glides it across the lane, so it moves at the
-     screen's full frame rate and scrolls with the page. Reduced motion: the dragon holds still in its lane. */
-  const lanes = $$('.dragon'), ua = navigator.userAgent;
-  const webkitOnly = /AppleWebKit/.test(ua) && !/Chrome\/|Chromium|Edg\/|Android/.test(ua);
-  function fillLane(el) {
-    if (el.firstChild) return el.querySelector('.dg-media');
-    const who = el.dataset.dragon, still = reduced();
-    const fly = document.createElement('div'), bob = document.createElement('div'); fly.className = 'dg-fly'; bob.className = 'dg-bob';
-    let m;
-    if (still || webkitOnly) { m = new Image(); m.alt = ''; m.decoding = 'async'; m.src = 'img/dragon/wing-' + who + (still ? '-still' : '') + '.webp'; }
-    else {
-      m = document.createElement('video'); m.muted = m.defaultMuted = m.loop = m.playsInline = true; m.disablePictureInPicture = true;
-      m.setAttribute('muted', ''); m.setAttribute('playsinline', ''); m.preload = 'auto'; m.src = 'img/dragon/wing-' + who + '.webm';
-    }
-    m.className = 'dg-media'; bob.appendChild(m); fly.appendChild(bob); el.appendChild(fly); el.classList.toggle('still', still); return m;
-  }
-  const covered = () => rootEl0.classList.contains('menu-open');
-  const rootEl0 = document.documentElement;
-  const lanePlay = (el, on) => { const m = el.querySelector('video'); if (m) { if (on && !covered()) m.play().catch(() => { }); else m.pause(); } };
-  // A lane flies only while it's near the screen; each time you come back to it, the dragon sets off again from the edge
-  const laneIO = new IntersectionObserver(es => es.forEach(e => {
-    const el = e.target;
-    if (e.isIntersecting) { fillLane(el); el.classList.add('on'); lanePlay(el, true); }
-    else { el.classList.remove('on'); lanePlay(el, false); }
-  }), { rootMargin: '120px 0px' });
-  lanes.forEach((el, i) => { el.dataset.dragon = i % 2 ? 'fire' : 'crystal'; el.classList.toggle('flip', i % 2 === 1); });   // they take turns, and fly opposite ways
-  setTimeout(() => lanes.forEach(el => laneIO.observe(el)), 350);   // just after the first screen is up
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
@@ -1335,12 +1271,12 @@ const LIBRARY = [
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
   // The crystal dragon opens the menu: it shines, the menu grows out of it as a circle, and an X takes its place.
-  // While the menu covers the page, everything behind it (the live swirl, the flying dragons) rests, so the menu stays smooth.
+  // While the menu covers the page, the live swirl behind it rests, so the menu stays smooth.
   const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement, mShop = $('#m-shop'), mShopBox = mShop.parentElement, mScroll = $('#menu .m-scroll');
   let menuT = 0, restT = 0;
   const menuOn = () => menu.classList.contains('on');
   const setShop = on => { mShop.setAttribute('aria-expanded', String(on)); mShopBox.classList.toggle('open', on); };
-  const rest = on => { clearTimeout(restT); if (on) restT = setTimeout(() => { if (swirl) swirl.stop(); lanes.forEach(el => lanePlay(el, false)); }, 650); else { if (swirl && !document.hidden) swirl.start(); lanes.forEach(el => { if (el.classList.contains('on')) lanePlay(el, true); }); } };
+  const rest = on => { clearTimeout(restT); if (on) restT = setTimeout(() => { if (swirl) swirl.stop(); }, 650); else if (swirl && !document.hidden) swirl.start(); };
   function openMenu() {
     if (menuOn()) return; clearTimeout(menuT);
     const r = menuBtn.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
