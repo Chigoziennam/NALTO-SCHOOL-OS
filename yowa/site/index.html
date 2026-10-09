@@ -5,7 +5,7 @@
 <script>try{if(localStorage.getItem("yowa-theme")==="\"light\"")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>YOWA</title>
-<meta name="description" content="YOWA. Be You Be Different 💜⚔️🐉. The Liberty Raglan in red and blue, the 042 cap and skull caps. Handmade, limited runs. When it's gone, it's gone.">
+<meta name="description" content="YOWA. Be You Be Different 💜⚔️🐉. The Liberty Raglan in four colours, tees, joggers, jorts, the 042 cap and skull caps. Handmade, limited runs. When it's gone, it's gone.">
 <link rel="canonical" href="https://yowabybd.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yowabybd.com/">
@@ -52,15 +52,15 @@
 [data-theme="light"] #swirl{opacity:0}
 [data-theme="light"] .veil{background:radial-gradient(120% 90% at 50% 20%,rgba(166,91,255,.14),transparent 70%)}
 [data-theme="light"] .grain{opacity:.035}
-[data-theme="light"] .top.stuck{background:rgba(246,241,255,.86)}
+[data-theme="light"] .top.stuck{background:rgba(246,241,255,.95)}
 [data-theme="light"] .top.stuck .brand img,[data-theme="light"] .sheet-menu .menu-sig,[data-theme="light"] .mani-sign img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
-[data-theme="light"] .top.stuck .bag-btn,[data-theme="light"] .top.stuck .theme-btn{background:rgba(255,255,255,.8);color:var(--ink)}
-[data-theme="light"].menu-open .bag-btn,[data-theme="light"].menu-open .theme-btn{background:rgba(255,255,255,.85);color:var(--ink)}
+[data-theme="light"] .top.stuck .ico-btn,[data-theme="light"].menu-open .ico-btn{color:var(--ink)}
 [data-theme="light"].menu-open .top .brand img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
 [data-theme="light"] .sheet-menu{--m-bg:#F3EEFF}
 [data-theme="light"] .m-glow{background:radial-gradient(110% 55% at 70% 10%,rgba(166,91,255,.28),transparent 70%)}
 [data-theme="light"] .sheet-menu .m-grid button{background:rgba(255,255,255,.75)}
-[data-theme="light"] .m-dr{--dr-op:.13}
+[data-theme="light"] .m-back .m-sl{opacity:.5}
+[data-theme="light"] .m-back::after{background:radial-gradient(120% 90% at 50% 40%,rgba(243,238,255,.55),rgba(243,238,255,.88))}
 [data-theme="light"] .panel::before{background:rgba(255,255,255,.62)}
 [data-theme="light"] .photo-bg img,[data-theme="light"] .photo-bg video{opacity:.22}
 [data-theme="light"] .photo-bg::after{background:linear-gradient(180deg,var(--void) 0%,rgba(243,238,255,.6) 22%,rgba(243,238,255,.6) 78%,var(--void) 100%)}
@@ -81,8 +81,6 @@
 [data-theme="light"] .sec-head p,[data-theme="light"] .done p,[data-theme="light"] .join p{color:var(--ink)!important}
 [data-theme="light"] .form{background:rgba(255,255,255,.78)}
 [data-theme="light"] .hero-bybd{color:#EFEAF7}
-[data-theme="light"] .top:not(.stuck) .bag-btn{color:#EFEAF7}
-[data-theme="light"].menu-open .top .bag-btn{color:var(--ink)}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -108,21 +106,21 @@ img{max-width:100%}
 /* ── Header ── */
 .top{position:fixed;left:0;right:0;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .35s,border-color .35s,transform .45s var(--e-settle),opacity .3s;border-bottom:1px solid transparent}
 .top.away{transform:translateY(-100%)}
-.top.stuck{background:rgba(8,6,14,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
-.top-in{display:flex;align-items:center;gap:18px;height:62px}
-.brand{position:relative;display:block;width:80px;height:50px;flex:none;line-height:0;-webkit-tap-highlight-color:transparent}
-.brand img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 10px rgba(166,91,255,.7));-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,1)*110% - 10%),transparent calc(var(--p,1)*110%))}
-.brand .pen{width:6px;height:6px;margin:-3px 0 0 -3px}
-@media (min-width:960px){.brand{width:92px;height:58px}}
-.nav{display:flex;gap:4px;margin-left:auto}
-.nav a,.bag-btn,.menu-btn{font:700 8.5px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:11px 12px;border-radius:999px;border:1px solid transparent;background:none;cursor:pointer;white-space:nowrap}
-@media (hover:hover){.nav a:hover{border-color:var(--line)}}
-.nav a[aria-current="page"]{border-color:var(--line);color:var(--purple-l)}
-.bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
-.bag-btn b{color:var(--purple-l)}
-/* Menu: the crystal dragon itself, no frame. It floats; tap it and a shine runs over it (only over the dragon),
+.top.stuck{background:rgba(8,6,14,.92);border-color:var(--line)}   /* solid, no blur: a blurred bar re-blurs every frame you scroll */
+.top-in{position:relative;display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;padding:8px 10px;line-height:0;-webkit-tap-highlight-color:transparent}
+.brand img{display:block;height:22px;width:auto;filter:drop-shadow(0 0 10px rgba(166,91,255,.7))}
+@media (min-width:960px){.top-in{height:72px}.brand img{height:28px}}
+.top-r{display:flex;align-items:center;gap:2px;margin-right:-8px}
+.ico-btn{position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .3s}
+.ico-btn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 4px rgba(8,6,14,.45))}
+.bag-btn circle{fill:currentColor;stroke:none}
+.bag-btn .badge{position:absolute;top:5px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--purple-l);color:#fff;font:700 10.5px/18px var(--f-shop);text-align:center;box-shadow:0 0 10px rgba(166,91,255,.8);transition:transform .35s var(--e-settle)}
+.bag-btn[data-n="0"] .badge{transform:scale(0)}
+.bag-btn.bump .badge{animation:bump .5s var(--e-settle)}
+@keyframes bump{40%{transform:scale(1.45)}}/* Menu: the crystal dragon itself, no frame. It floats; tap it and a shine runs over it (only over the dragon),
    the menu grows out of it and an X takes its place */
-.menu-btn{display:none;position:relative;width:50px;height:48px;padding:0;border:0;border-radius:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.menu-btn{display:block;position:relative;width:54px;height:52px;margin-left:-4px;padding:0;border:0;border-radius:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .menu-btn .av{position:absolute;inset:-2px -3px;transition:transform .5s var(--e-settle),opacity .3s}
 .menu-btn .fl{position:absolute;inset:0;animation:avfloat 3.6s ease-in-out infinite}
 .menu-btn .fl img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 6px rgba(166,91,255,.8)) drop-shadow(0 2px 5px rgba(8,6,14,.55))}
@@ -140,15 +138,12 @@ img{max-width:100%}
 @keyframes glint{0%{opacity:1;background-position:100% 0}100%{opacity:1;background-position:0 0}}
 @keyframes pop{0%{transform:none}30%{transform:scale(1.14)}100%{transform:none}}
 @keyframes avback{from{transform:scale(.4) rotate(-30deg);opacity:0}}
-.theme-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(8,6,14,.45);color:var(--purple-l);cursor:pointer;transition:transform .5s var(--e-settle)}
-.theme-btn svg{width:20px;height:20px}
-.theme-btn circle{fill:none;stroke:currentColor;stroke-width:2}
-.theme-btn path{fill:currentColor}
-.theme-btn[aria-pressed="true"]{transform:rotate(180deg)}
-@media (prefers-reduced-motion:reduce){.menu-btn .fl,.menu-btn.shine .fl img,.menu-btn.shine .gl,.menu-btn.back .av{animation:none!important}}
-@media (max-width:980px){.nav{display:none}.bag-btn{margin-left:auto;min-height:44px;padding-inline:16px}.menu-btn{display:block}}
-@media (max-width:380px){.top-in{gap:10px}.bag-btn{padding-inline:12px}}
-/* The menu grows out of the dragon as a circle of night, under the header, so the same button closes it.
+/* Light / dark: the sun turns into the moon and back, and the page flips in a circle from the button */
+.theme-btn svg{position:absolute;left:10px;top:10px;transition:transform .55s var(--e-settle),opacity .3s}
+.theme-btn .ic-moon{fill:currentColor;stroke:none;opacity:0;transform:rotate(-90deg) scale(.4)}
+.theme-btn[aria-pressed="true"] .ic-sun{opacity:0;transform:rotate(90deg) scale(.4)}
+.theme-btn[aria-pressed="true"] .ic-moon{opacity:1;transform:none}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}/* The menu grows out of the dragon as a circle of night, under the header, so the same button closes it.
    The circle is one solid layer that scales (the phone's GPU does it, so it never stutters); the content fades in on top.
    The fire dragon flares up behind as it opens, then rests faintly behind the links. Everything is centred:
    the signature, the five places in big type, Ask YOWA, the mantra and where to find us. */
@@ -161,16 +156,12 @@ img{max-width:100%}
 .menu-open .top,.menu-open .top.stuck{background:none;border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
 /* the fire dragon behind: it flashes in with a burst of light at its mouth and a shine across, then settles faint */
 .m-back{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.m-dr{--dr-op:.2;position:absolute;left:50%;top:50%;width:min(150vw,880px);aspect-ratio:1024/1100;transform:translate3d(-50%,-50%,0) scale(1.06);opacity:0;transition:opacity .2s,transform .3s}
-.sheet-menu.on .m-dr{opacity:var(--dr-op);transform:translate3d(-50%,-50%,0);animation:drflash 1.5s ease-out .1s both;transition:transform 1.4s var(--e-settle) .1s}
-@keyframes drflash{0%{opacity:0}28%{opacity:.75}100%{opacity:var(--dr-op)}}
-.m-dr img{display:block;width:100%;height:100%}
-.m-dr .burst{position:absolute;left:38.3%;top:44.9%;width:60%;aspect-ratio:1;margin:-30% 0 0 -30%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,206,140,.85),rgba(236,120,255,.45) 45%,rgba(122,47,224,0));opacity:0}
-.sheet-menu.on .m-dr .burst{animation:burst 1.3s cubic-bezier(.2,.7,.3,1) .2s both}
-@keyframes burst{0%{opacity:0;transform:scale(.3)}25%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
-.m-back .sh{position:absolute;inset:0;background:linear-gradient(105deg,transparent 34%,rgba(255,240,255,.16) 48%,rgba(255,255,255,0) 60%);transform:translate3d(-110%,0,0)}
-.sheet-menu.on .m-back .sh{transform:translate3d(110%,0,0);transition:transform 1.2s cubic-bezier(.3,.6,.2,1) .28s}
-.m-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;opacity:0;transition:opacity .16s ease}
+.m-back .m-sl{position:absolute;inset:-6%;background:#1a1036 url(img/brand/bg-swirl-full.jpg) center/cover;opacity:0;transform:scale(1.1);transition:opacity .2s,transform .3s}
+.sheet-menu.on .m-back .m-sl{opacity:1;transform:none;transition:opacity .6s ease .1s,transform 1.6s var(--e-settle) .05s;animation:mslime 26s ease-in-out 1.6s infinite alternate}
+@keyframes mslime{to{transform:scale(1.12) rotate(4deg)}}
+.m-back::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 42%,rgba(8,6,14,.5),rgba(8,6,14,.12) 70%),linear-gradient(rgba(8,6,14,.25),rgba(8,6,14,0) 30%,rgba(8,6,14,0) 70%,rgba(8,6,14,.4))}
+.m-back .sh{position:absolute;inset:0;z-index:1;background:linear-gradient(105deg,transparent 34%,rgba(255,240,255,.16) 48%,rgba(255,255,255,0) 60%);transform:translate3d(-110%,0,0)}
+.sheet-menu.on .m-back .sh{transform:translate3d(110%,0,0);transition:transform 1.2s cubic-bezier(.3,.6,.2,1) .28s}.m-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;opacity:0;transition:opacity .16s ease}
 .sheet-menu.on .m-scroll{opacity:1;transition:opacity .3s ease .12s}
 .m-in{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(74px + env(safe-area-inset-top,0px)) var(--gut) calc(24px + env(safe-area-inset-bottom,0px))}
 .m-up{opacity:0;transform:translate3d(0,14px,0);transition:opacity .2s,transform .3s}
@@ -311,8 +302,23 @@ section{position:relative}
 .photo-bg.moving video{opacity:.34}
 .photo-bg::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(122,47,224,.42),rgba(74,26,148,.2) 50%,rgba(226,58,46,.12));mix-blend-mode:color}
 .photo-bg::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,var(--void) 0%,rgba(8,6,14,.35) 22%,rgba(8,6,14,.35) 78%,var(--void) 100%)}
-.card{display:grid;gap:14px;justify-items:center;text-align:center;border:0;background:none;padding:0;cursor:pointer;color:inherit}
-.card .frame{width:100%;aspect-ratio:1;border-radius:2px}
+.card{position:relative;display:grid;gap:12px;justify-items:center;text-align:center;color:inherit}
+.card .frame{width:100%;aspect-ratio:1;border-radius:2px;border:0;padding:0;cursor:pointer;color:inherit}
+.card-media{position:relative;width:100%}
+/* the eye (see it) and the bag (add it), by the side of every piece */
+.card-acts{position:absolute;top:8px;right:8px;z-index:3;display:grid;gap:8px}
+.ca{display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid rgba(166,91,255,.45);background:rgba(8,6,14,.62);color:#fff;cursor:pointer;box-shadow:0 0 14px rgba(122,47,224,.35);transition:transform .3s var(--e-settle),background .25s,border-color .25s}
+.ca svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ca circle{fill:currentColor;stroke:none}
+.ca:active{transform:scale(.9);background:var(--purple);border-color:var(--purple)}
+@media (hover:hover){.ca:hover{background:var(--purple);border-color:var(--purple)}}
+[data-theme="light"] .ca{background:rgba(255,255,255,.85);color:var(--ink);border-color:rgba(122,47,224,.3)}
+.card-sw{display:flex;gap:7px;justify-content:center;margin-top:-4px}
+.card-sw .sw{width:18px;height:18px}
+/* round colour swatches, gocrazy style */
+.sw{position:relative;width:34px;height:34px;padding:0;border-radius:50%;border:0;background:var(--c,#333);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 0 0 1px var(--line);transition:box-shadow .25s,transform .25s var(--e-settle)}
+.sw[aria-checked="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 0 0 2px var(--void-2),0 0 0 4px var(--purple-l),0 0 14px rgba(166,91,255,.6)}
+.sw:active{transform:scale(.9)}
 .frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate;transition:transform .3s var(--e-settle)}
 .frame::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.55)}
 .frame .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
@@ -320,9 +326,9 @@ section{position:relative}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--e-settle),opacity .5s}
 .frame img+img{opacity:0}
 @media (hover:hover){.card:hover .frame img:first-of-type{transform:scale(1.06)}.card:hover .frame img+img{opacity:1}.card:hover .sheen{animation:shine 1.1s var(--e-pull)}}
-.frame.cut{background:none}
 .frame.cut::before{display:none}
-.frame.cut img{object-fit:contain;padding:5%;filter:drop-shadow(0 18px 22px rgba(0,0,0,.45)) drop-shadow(0 0 18px rgba(166,91,255,.18))}
+.frame.cut{background:radial-gradient(60% 55% at 50% 50%,rgba(122,47,224,.34),rgba(122,47,224,0) 72%)}
+.frame.cut img{object-fit:contain;padding:7%;filter:drop-shadow(0 0 10px rgba(190,140,255,.55)) drop-shadow(0 0 26px rgba(122,47,224,.45)) drop-shadow(0 16px 18px rgba(0,0,0,.4))}
 .frame.cut .art{display:none}
 .frame .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(166,91,255,.35) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none}
 @keyframes shine{to{transform:translateX(120%)}}
@@ -489,8 +495,7 @@ section{position:relative}
 .pv-slide.on{opacity:1}
 .pv-slide img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 3.4s linear}
 .pv-slide.on img{transform:none}
-.pv-media.cut{background:var(--void-2)}
-.pv-media.cut .pv-slide img{object-fit:contain;padding:8%;transform:none;filter:drop-shadow(0 20px 24px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(166,91,255,.2))}
+.pv-media.cut .pv-slide img{object-fit:contain;padding:8%;transform:none;filter:drop-shadow(0 0 12px rgba(190,140,255,.5)) drop-shadow(0 0 30px rgba(122,47,224,.4)) drop-shadow(0 20px 24px rgba(0,0,0,.4))}
 .pv-bars{position:absolute;left:14px;right:96px;top:16px;z-index:3;display:flex;gap:4px;pointer-events:none}
 .pv-bars i{position:relative;flex:1;height:2.5px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.35)}
 .pv-bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%}
@@ -503,6 +508,13 @@ section{position:relative}
 @media (max-width:820px){.pv-media{min-height:0;height:min(100vw,60svh)}}
 .pv-info{padding:clamp(20px,3vw,36px);display:grid;gap:16px;align-content:start}
 .pv-info h3{margin:0;font:400 clamp(38px,5vw,60px)/.9 var(--f-display);text-transform:uppercase}
+.pv-opts{display:grid;gap:16px}
+.opt-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.opt .label b{color:var(--ink);font-weight:700}
+.opt .pill .dot{display:inline-block;flex:none;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+.pv-info.pick .pv-opts,.pv-info.pick #pv-sizes{animation:pickme 1.2s var(--e-settle)}
+@keyframes pickme{25%{filter:drop-shadow(0 0 12px rgba(166,91,255,.9))}}
+.pv-media.cut{background:radial-gradient(60% 55% at 50% 45%,rgba(122,47,224,.3),rgba(122,47,224,0) 72%),var(--void-2)}
 .pv-price{font:500 20px/1 var(--f-shop);letter-spacing:.02em}
 .pv-desc{color:rgba(239,234,247,.82);margin:0}
 .sizes{display:flex;flex-wrap:wrap;gap:6px}
@@ -529,33 +541,21 @@ section{position:relative}
 .dr-foot .btn{justify-content:center;width:100%;color:#fff}
 .dr-note{font-size:12.5px;color:#655C73;margin:0}
 .dr-empty{color:#655C73;padding:30px 0;text-align:center}
+.x.xi{display:grid;place-items:center;width:40px;height:40px;padding:0;font-size:0}
+.x.xi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 .x{font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;cursor:pointer;opacity:.85}
 
 /* ── Ask YOWA: the same purple swirl as the page, moving slowly behind the messages ── */
 /* Side shop: a category's pieces in a panel, each with its size, quantity and Add to cart */
-.qshop{position:fixed;top:0;left:0;bottom:0;z-index:76;width:min(440px,100%);background:var(--void-2);border-right:1px solid var(--line);display:grid;grid-template-rows:auto auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:20px 0 60px rgba(0,0,0,.45);touch-action:pan-y}
+.qshop{position:fixed;top:0;left:0;bottom:0;z-index:76;width:min(440px,100%);background:var(--void-2);border-right:1px solid var(--line);display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;padding-top:env(safe-area-inset-top,0px);box-shadow:20px 0 60px rgba(0,0,0,.45);touch-action:pan-y}
 .qs-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 12px}
 .qs-head b{font:400 34px/1 var(--f-display);text-transform:uppercase}
 .qs-head .x{color:#fff}
 .qs-cats{display:flex;gap:6px;overflow-x:auto;padding:0 20px 12px;scrollbar-width:none;border-bottom:1px solid var(--line)}
 .qs-cats::-webkit-scrollbar{display:none}
-.qs-body{overflow:auto;overscroll-behavior:contain;padding:14px 20px;display:grid;gap:18px;align-content:start}
-.qs-item{display:grid;grid-template-columns:104px minmax(0,1fr);gap:14px;align-items:start;padding-bottom:18px;border-bottom:1px dashed var(--line)}
-.qs-item .frame{width:104px;aspect-ratio:1;border-radius:6px;border:0;padding:0;cursor:pointer}
-.qs-item .nm{display:block;font:600 14px/1.3 var(--f-shop);letter-spacing:.05em;text-transform:uppercase;border:0;background:none;color:inherit;padding:0;text-align:left;cursor:pointer}
-.qs-item .pr{display:block;margin-top:4px;font:400 13.5px/1.3 var(--f-shop);color:var(--mut)}
-.qs-item .sizes{margin-top:10px;gap:5px}
-.qs-item .size{width:38px;height:38px;font-size:12px}
-.qs-item .size.wide{width:auto;padding:0 14px}
-.qs-item .row{display:flex;gap:8px;align-items:center;margin-top:10px}
-.qs-item .qty{margin-top:0}
-.qs-item .qty button{width:36px;height:38px;font-size:17px}
-.qs-item .qty output{min-width:22px}
-.qs-item .btn{padding:13px 14px;font-size:8.5px}
-.qs-item .msg{display:block;min-height:1.2em;margin-top:6px;font-size:12px;color:var(--mut)}
-.qs-item .msg.bad{color:#FF8A7E}
-.qs-empty{color:var(--mut);margin:0}
-.qs-foot{padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.qs-body{overflow:auto;overscroll-behavior:contain;padding:16px 20px;display:grid;gap:28px;align-content:start}
+.qs-body .card .frame{border-radius:8px}
+.qs-empty{color:var(--mut);margin:0}.qs-foot{padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
 .qs-foot .btn{width:100%;justify-content:center}
 .shop-bar,.qs-bar{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .shop-bar{max-width:1080px;margin:0 auto 22px}
@@ -567,25 +567,24 @@ section{position:relative}
 .grid.one{grid-template-columns:minmax(0,1fr)!important;max-width:560px}
 @media (min-width:701px){.grid.one{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:820px}}
 .qs-body.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
-.qs-body.two .qs-item{grid-template-columns:1fr;gap:8px;padding-bottom:0;border-bottom:0}
-.qs-body.two .qs-item .frame{width:100%}
-.qs-body.two .qs-item .sizes,.qs-body.two .qs-item .row,.qs-body.two .qs-item .msg{display:none}
-.qs-body.two .qs-item .nm,.qs-body.two .qs-item .pr{text-align:center}
-.chat-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9)),#2A1060 url(img/brand/bg-swirl.jpg) center/cover;box-shadow:0 12px 34px rgba(122,47,224,.45);color:#fff;cursor:pointer;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;transition:box-shadow .3s,transform .35s var(--e-settle),opacity .3s,padding .4s var(--e-settle),gap .4s var(--e-settle)}
+.qs-body.two .ca{width:34px;height:34px}
+.qs-body.two .card-name{font-size:12.5px}.chat-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(100deg,rgba(122,47,224,.94),rgba(74,26,148,.9)),#2A1060 url(img/brand/bg-swirl.jpg) center/cover;box-shadow:0 12px 34px rgba(122,47,224,.45);color:#fff;cursor:pointer;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;transition:box-shadow .3s,transform .35s var(--e-settle),opacity .3s,padding .4s var(--e-settle),gap .4s var(--e-settle)}
 .chat-fab .t{display:block;max-width:96px;overflow:hidden;white-space:nowrap;transition:max-width .4s var(--e-settle),opacity .3s}
 .chat-fab.mini{padding-right:8px;gap:0}
 .chat-fab.mini .t{max-width:0;opacity:0}
 @media (hover:hover){.chat-fab:hover{box-shadow:0 14px 44px rgba(122,47,224,.7),0 0 0 1px rgba(166,91,255,.6);transform:translateY(-2px)}}
 .chat-fab .ey{width:34px;height:34px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
+.chat-fab .ey img,.chat-head .ey img,.sheet-menu .ask .ey img{width:122%;height:122%;max-width:none;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,170,90,.55))}
 .chat-fab .ey i,.chat-head .ey i,.sheet-menu .ask .ey i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 3.5px #fff;display:grid;place-items:center}
 .chat-fab .ey i::after,.chat-head .ey i::after,.sheet-menu .ask .ey i::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
 .chat{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:66;width:min(380px,calc(100vw - 32px));height:min(520px,calc(100svh - 120px));display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:#1C0B42;color:#fff;border:1px solid rgba(166,91,255,.45);border-radius:18px;overflow:hidden;isolation:isolate;box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 60px rgba(122,47,224,.35)}
-.chat::before{content:"";position:absolute;inset:-25%;z-index:-2;background:url(img/brand/bg-swirl.jpg) center/cover;animation:chatswirl 36s ease-in-out infinite alternate}
-.chat::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(90,34,180,.4) 0%,rgba(28,11,66,.7) 45%,rgba(12,6,28,.9) 100%)}
-@keyframes chatswirl{from{transform:rotate(0deg) scale(1)}to{transform:rotate(14deg) scale(1.18)}}
+.chat::before{content:"";position:absolute;inset:-6% -30% 0 -10%;z-index:-2;background:url(img/dragon/menu-fire-640.webp) 50% 18%/cover no-repeat;opacity:.55;animation:chatswirl 30s ease-in-out infinite alternate}
+.chat::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(40,14,90,.35) 0%,rgba(24,9,56,.72) 45%,rgba(12,6,28,.92) 100%)}
+@keyframes chatswirl{from{transform:scale(1)}to{transform:scale(1.08) translate3d(-2%,1%,0)}}
 .chat-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.14);background:rgba(8,6,14,.22)}
 .chat-head .ey{width:32px;height:32px;border-radius:50%;background:var(--purple);box-shadow:0 0 18px rgba(166,91,255,.6);display:grid;place-items:center}
-.chat.thinking .chat-head .ey i::after{animation:blink .7s ease-in-out infinite}
+.chat.thinking .chat-head .ey img{animation:roarb .9s ease-in-out infinite}
+@keyframes roarb{50%{transform:scale(1.12) rotate(-6deg)}}
 .chat-head b{font:600 14px/1.2 var(--f-body)}
 .chat-head span{display:block;font-size:11.5px;color:rgba(239,234,247,.7)}
 .chat-head .x{margin-left:auto;color:#fff}
@@ -648,7 +647,7 @@ section{position:relative}
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd{animation:none}.m-dr,.m-dr .burst{animation:none!important}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd{animation:none}.m-back .m-sl{animation:none!important}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}}
 </style>
 </head>
 <body>
@@ -660,19 +659,18 @@ section{position:relative}
 
 <header class="top" id="top">
   <div class="top-in wrap">
-    <a class="brand" href="#home" aria-label="YOWA home"><img src="img/brand/yowa-signature.png" alt="" width="560" height="351"><span class="pen" aria-hidden="true"></span></a>
-    <nav class="nav" aria-label="Main">
-      <a href="#drop">Shop</a><a href="#gallery">Gallery</a><a href="#message">Message</a><a href="#list">Get the code</a>
-    </nav>
-    <button class="bag-btn" type="button" id="bag-open">Cart (<b id="bag-count">0</b>)</button>
-    <button class="theme-btn" type="button" id="theme" aria-label="Light mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
     <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="av" aria-hidden="true"><span class="fl"><img src="img/dragon/btn-crystal.webp" alt="" width="154" height="168" decoding="async"><span class="gl"></span></span></span><span class="mx" aria-hidden="true"></span></button>
+    <a class="brand" href="#home" aria-label="YOWA home"><img src="img/brand/yowa-logo.png" alt="YOWA" width="701" height="178"></a>
+    <div class="top-r">
+      <button class="ico-btn theme-btn" type="button" id="theme" aria-label="Light mode" aria-pressed="false"><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.2v2.3M12 19.5v2.3M2.2 12h2.3M19.5 12h2.3M5.1 5.1l1.6 1.6M17.3 17.3l1.6 1.6M5.1 18.9l1.6-1.6M17.3 6.7l1.6-1.6"/></svg><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 14.6A8.6 8.6 0 0 1 9.4 3.4a8.6 8.6 0 1 0 11.2 11.2z"/></svg></button>
+      <button class="ico-btn bag-btn" type="button" id="bag-open" aria-label="Cart" data-n="0"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 3.5h2.4l2.3 10.6a1.7 1.7 0 0 0 1.7 1.4h8.4a1.7 1.7 0 0 0 1.7-1.3l1.8-7.2H6"/><circle cx="9.6" cy="19.7" r="1.7"/><circle cx="17.1" cy="19.7" r="1.7"/></svg><b class="badge" id="bag-count">0</b></button>
+    </div>
   </div>
 </header>
 
 <div class="sheet-menu" id="menu" hidden>
   <span class="m-bg" aria-hidden="true"></span><span class="m-glow" aria-hidden="true"></span>
-  <div class="m-back" aria-hidden="true"><div class="m-dr"><span class="burst"></span><img src="img/dragon/menu-fire-640.webp" srcset="img/dragon/menu-fire-640.webp 640w, img/dragon/menu-fire.webp 1024w" sizes="(max-width:586px) 150vw, 880px" alt="" width="1024" height="1100" decoding="async"></div><span class="sh"></span></div>
+  <div class="m-back" aria-hidden="true"><span class="m-sl"></span><span class="sh"></span></div>
   <div class="m-scroll"><div class="m-in">
     <img class="menu-sig m-up" src="img/brand/yowa-signature.png" alt="" width="560" height="351" style="--d:0">
     <nav class="m-list" aria-label="Menu">
@@ -685,7 +683,7 @@ section{position:relative}
       <a class="go" href="#message" style="--d:4"><span class="t"><span>Message</span></span></a>
       <a class="go" href="#list" style="--d:5"><span class="t"><span>Get the code</span></span></a>
     </nav>
-    <button class="ask m-up" type="button" id="menu-chat" style="--d:7"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
+    <button class="ask m-up" type="button" id="menu-chat" style="--d:7"><span class="ey" aria-hidden="true"><img src="img/dragon/ai-fire.webp" alt="" width="120" height="120"></span>Ask YOWA</button>
     <p class="menu-bybd m-up" style="--d:8">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
     <p class="menu-foot m-up" style="--d:9"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a> · Built by Nalto</p>
   </div></div>
@@ -788,7 +786,7 @@ section{position:relative}
           <div class="fld"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" placeholder="What do we call you?" required></div>
           <div class="fld" style="margin-top:14px"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required></div>
           <div class="frow" style="margin-top:14px">
-            <div class="fld"><label for="f-size">Usual size</label><select id="f-size" name="size"><option value="">Prefer not to say</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
+            <div class="fld"><label for="f-size">Usual size</label><select id="f-size" name="size"><option value="">Prefer not to say</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
             <div class="fld"><label for="f-ig">IG handle</label><input id="f-ig" name="instagram" type="text" placeholder="@yourname"></div>
           </div>
           <button class="btn solid" type="submit" style="margin-top:18px">Get on the list</button>
@@ -812,12 +810,13 @@ section{position:relative}
 <div class="scrim" id="scrim" hidden></div>
 <div class="pview" id="pview" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
   <div class="pview-in">
-    <div class="pv-media" id="pv-media"><div class="pv-slides" id="pv-slides" aria-live="polite"></div><span class="pv-bars" id="pv-bars" aria-hidden="true"></span><span class="pv-grab" aria-hidden="true"></span><button class="x pv-close" type="button" id="pv-close">Close</button></div>
+    <div class="pv-media" id="pv-media"><div class="pv-slides" id="pv-slides" aria-live="polite"></div><span class="pv-bars" id="pv-bars" aria-hidden="true"></span><span class="pv-grab" aria-hidden="true"></span><button class="x xi pv-close" type="button" id="pv-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="pv-info">
       <span class="label" id="pv-line">Drop 01</span>
       <h3 id="pv-title">Piece</h3>
       <div class="pv-price" id="pv-price"></div>
       <p class="pv-desc" id="pv-desc"></p>
+      <div class="pv-opts" id="pv-opts"></div>
       <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
       <div><span class="label">Quantity</span><div class="qty" id="pv-qty" role="group" aria-label="Quantity"><button type="button" data-d="-1" aria-label="One less">−</button><output id="pv-qn">1</output><button type="button" data-d="1" aria-label="One more">+</button></div></div>
       <button class="btn solid" type="button" id="pv-add">Add to cart</button>
@@ -827,7 +826,7 @@ section{position:relative}
 </div>
 
 <aside class="drawer" id="drawer" hidden aria-label="Cart">
-  <div class="dr-head"><b>Cart</b><button class="x" type="button" id="bag-close">Close</button></div>
+  <div class="dr-head"><b>Cart</b><button class="x xi" type="button" id="bag-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="dr-body" id="dr-body"></div>
   <div class="dr-foot">
     <div class="row"><span>Subtotal</span><span id="dr-total">₦0</span></div>
@@ -845,16 +844,16 @@ section{position:relative}
 </aside>
 
 <aside class="qshop" id="qshop" hidden aria-label="Shop">
-  <div class="qs-head"><b id="qs-title">Shop</b><button class="x" type="button" id="qs-close">Close</button></div>
+  <div class="qs-head"><b id="qs-title">Shop</b><button class="x xi" type="button" id="qs-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="qs-cats" id="qs-cats" role="group" aria-label="Category"></div>
   <div class="qs-bar"><span class="label" id="qs-count-n"></span><div class="views" id="qs-views" role="group" aria-label="Layout"><button type="button" data-cols="2" aria-label="Two across" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg></button><button type="button" data-cols="1" aria-label="One across" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="2" width="14" height="16" rx="2"/></svg></button></div></div>
   <div class="qs-body" id="qs-body"></div>
   <div class="qs-foot"><button class="btn solid" type="button" id="qs-cart">View cart (<b id="qs-count">0</b>)</button></div>
 </aside>
 
-<button class="chat-fab" type="button" id="chat-open" aria-expanded="false"><span class="ey" aria-hidden="true"><i></i></span><span class="t">Ask YOWA</span></button>
+<button class="chat-fab" type="button" id="chat-open" aria-expanded="false"><span class="ey" aria-hidden="true"><img src="img/dragon/ai-fire.webp" alt="" width="120" height="120"></span><span class="t">Ask YOWA</span></button>
 <div class="chat" id="chat" hidden role="dialog" aria-label="Ask YOWA">
-  <div class="chat-head"><span class="ey" aria-hidden="true"><i></i></span><div><b>Ask YOWA</b><span>Sizes, the drop, your order</span></div><button class="x" type="button" id="chat-close">Close</button></div>
+  <div class="chat-head"><span class="ey" aria-hidden="true"><img src="img/dragon/ai-fire.webp" alt="" width="120" height="120"></span><div><b>Ask YOWA</b><span>Sizes, the drop, your order</span></div><button class="x xi" type="button" id="chat-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="chat-body" id="chat-body" aria-live="polite"></div>
   <div class="chips" id="chat-chips"><button type="button">When is the drop?</button><button type="button">How do I get the code?</button><button type="button">What sizes?</button></div>
   <form class="chat-form" id="chat-form"><label class="sr" for="chat-in">Message</label><input id="chat-in" type="text" autocomplete="off" placeholder="Type a message"><button type="submit">Send</button></form>
@@ -881,35 +880,57 @@ const CONFIG = {
   LIBRARY_FEED: 'https://yowa-library.vercel.app/api/photos', // photos filed in yowa-library join the Library on their own; '' turns it off
   PREVIEW: false                 // true only in the design preview link (no network there)
 };
-// Prices in naira. null = "Price drops soon". cat: its category in the shop. cut: photos with the background removed (shown on the light studio backdrop).
+// The shop. Prices in naira; null = "Price drops soon". cat: tops, caps or bottoms. cut: the photos have no background (they glow on the dark).
+// opts: what the buyer picks before Add to cart; the first value starts picked. sw: the swatch colour.
+// looks: the photos for each pick; the first look whose `when` matches what's picked is shown (no `when` keys = always).
+const SIZES = ['M', 'L', 'XL', 'XXL'];
+const BEADS = { name: 'Beads', values: [{ v: 'With beads' }, { v: 'Without beads' }] };
+const SKULL_BEADS = { name: 'Beads', values: [{ v: 'No beads' }, { v: 'Black beads', sw: '#121212' }, { v: 'White beads', sw: '#F4F1EA' }] };
+const CAMO = 'conic-gradient(from 40deg,#2a2a2c 0 22%,#8b8b8f 0 41%,#4b4b4f 0 63%,#b3b3b6 0 78%,#2a2a2c 0)';
 const PRODUCTS = [
-  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', line: 'Drop 01', cat: 'tee', isNew: true, cut: true, price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  { id: 'liberty-raglan', name: 'Liberty Raglan', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
+    looks: [{ when: { Colour: 'Black' }, images: ['img/products/raglan-black-front.webp', 'img/products/raglan-black-back.webp'] }, { when: { Colour: 'Red' }, images: ['img/products/raglan-red-front.webp', 'img/products/raglan-red-back.webp'] },
+      { when: { Colour: 'Blue' }, images: ['img/products/raglan-blue-front.webp', 'img/products/raglan-blue-back.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/raglan-grey-front.webp', 'img/products/raglan-grey-back.webp'] }],
+    desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
+  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
     images: ['img/products/ringer-front.webp', 'img/products/ringer-back.webp'],
     desc: 'White tee with a black ringer collar and cuffs, the signature on the chest, 💜⚔️🐉 on the back of the neck and snaps along the hem. Handmade, limited run.' },
-  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', line: 'Drop 01', cat: 'tee', isNew: true, cut: true, price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
     images: ['img/products/longsleeve-front.webp', 'img/products/longsleeve-back.webp'],
     desc: 'Boxy white long sleeve with YOWA across the chest, 💜⚔️🐉 on the back of the neck and snaps on the cuffs and hem. Handmade, limited run.' },
-  { id: 'liberty-blue', name: 'Liberty Raglan', colour: 'Blue', line: 'Drop 01', cat: 'raglan', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['img/raglan-blue-1.jpg', 'img/raglan-blue-2.jpg', 'img/detail-script.jpg', 'img/detail-studs.jpg'],
-    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
-  { id: 'liberty-red', name: 'Liberty Raglan', colour: 'Red', line: 'Drop 01', cat: 'raglan', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['img/raglan-red-1.jpg', 'img/raglan-red-2.jpg', 'img/detail-print.jpg'],
-    desc: 'Black body with the Liberty print and YOWA across the chest. Studded raglan seams, flared cuffs and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
-  { id: 'liberty-grey', name: 'Liberty Raglan', colour: 'Grey', line: 'Drop 01', cat: 'raglan', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['img/library/yowa-1477.jpg', 'img/library/yowa-1458.jpg'],
-    desc: 'Grey studded sleeves on a black body, the Liberty print and YOWA across the chest, the heart, sword and dragon on the back. Handmade, limited run.' },
-  { id: 'liberty-black', name: 'Liberty Raglan', colour: 'Black', line: 'Drop 01', cat: 'raglan', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['img/library/yowa-1522.jpg', 'img/library/yowa-1427.jpg', 'img/library/yowa-1523.jpg'],
-    desc: 'All black, studs down both sleeves, the Liberty print and Be You Be Different 💜⚔️🐉 written down the sleeve. Handmade, limited run.' },
-  { id: 'cap-042', name: '042 Cap', colour: 'Black patch', line: 'Drop 01', cat: 'cap', price: null, art: 'cap', sizes: ['One size'],
-    images: ['img/library/yowa-1002.jpg', 'img/library/yowa-0997.jpg', 'img/library/yowa-1360.jpg'], desc: 'Black cap covered in patches: 042, the YOWA wordmark, the heart and the signature down the side. Studded crown. One size.' },
-  { id: 'skull-cap', name: 'Skull Cap', colour: 'Camo or black', line: 'Drop 01', cat: 'skull', price: null, art: 'beanie', sizes: ['One size'],
-    images: ['img/library/yowa-1403.jpg', 'img/library/yowa-1398.jpg', 'img/library/yowa-1407.jpg'], desc: 'Skull cap in camo or black with studs and stitched seams. One size.' },
-  { id: 'joggers', name: 'Track Joggers', colour: 'Black', line: 'Drop 01', cat: 'jogger', price: null, art: 'raglan', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['img/library/yowa-1488.jpg', 'img/library/yowa-1428.jpg', 'img/library/yowa-1511.jpg'], desc: 'Black track joggers with the white stripe down the leg. Relaxed through the leg. Handmade, limited run.' }
+  { id: 'bybd-tee', name: 'Be Different Tee', colour: 'Black', line: 'Drop 01', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: ['img/products/bybd-tee-back.webp', 'img/products/bybd-tee-front.webp'],
+    desc: 'Black tee with YOWA small on the chest and Be You Be Different stamped big across the back, 💜⚔️🐉 at the neck. Handmade, limited run.' },
+  { id: 'logo-tee', name: 'YOWA Logo Tee', colour: 'Black', line: 'Drop 01', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: ['img/products/logo-tee-front.webp'],
+    desc: 'Black tee with the YOWA wordmark big across the chest. Handmade, limited run.' },
+  { id: 'joggers', name: 'Joggers', line: 'Drop 01', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
+    looks: [{ when: { Colour: 'Black', Beads: 'With beads' }, images: ['img/products/joggers-black-beads.webp', 'img/products/joggers-black-red.webp'] }, { when: { Colour: 'Black' }, images: ['img/products/joggers-black.webp'] },
+      { when: { Colour: 'Grey', Beads: 'With beads' }, images: ['img/products/joggers-grey-beads.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/joggers-grey.webp'] }],
+    desc: 'Wide-leg joggers with the signature on the hip. Beads down the side or keep them plain. Handmade, limited run.' },
+  { id: 'jorts', name: 'Jorts', line: 'Drop 01', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
+    looks: [{ when: { Colour: 'Black' }, images: ['img/products/jorts-black.webp'] }, { when: { Colour: 'Purple' }, images: ['img/products/jorts-purple.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/jorts-grey.webp'] }],
+    desc: 'Long jorts with the signature on the front and beads down both sides, or without. Handmade, limited run.' },
+  { id: 'skull-cap', name: 'Skull Cap', line: 'Drop 01', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
+    opts: [{ name: 'Colour', values: [{ v: 'Camo', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
+    looks: [{ when: { Colour: 'Black', Beads: 'White beads' }, images: ['img/products/skull-black-white-beads.webp', 'img/products/skull-black-black-beads.webp'] }, { when: { Colour: 'Black' }, images: ['img/products/skull-black-black-beads.webp', 'img/products/skull-black-white-beads.webp'] },
+      { when: { Colour: 'Camo' }, images: ['img/products/skull-camo.webp', 'img/products/skull-camo-sig.webp'] }],
+    desc: 'Skull cap with stitched seams, in camo or black. Add beads in black or white, or keep it clean. One size.' },
+  { id: 'cap-042', name: '042 Cap', line: 'Drop 01', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }] }],
+    looks: [{ when: {  }, images: ['img/products/cap-042.webp'] }],
+    desc: 'Black cap covered in patches: 042, the YOWA wordmark, the heart and the signature down the side. Studded crown. One size. More colours coming.' }
 ];
 // Categories for the menu's Shop list and the side shop
-const CATS = [['new', 'New'], ['all', 'All'], ['raglan', 'Raglan shirts'], ['tee', 'Tees'], ['cap', 'Caps'], ['skull', 'Skull caps'], ['jogger', 'Joggers']];
+const CATS = [['new', 'New'], ['all', 'All'], ['tops', 'Tops'], ['caps', 'Caps'], ['bottoms', 'Bottoms']];
+// What's picked to start, the photos for a pick, and the pick in words
+const optDefaults = p => { const c = {}; (p.opts || []).forEach(o => { c[o.name] = o.values[0].v; }); return c; };
+const imagesFor = (p, c) => { const l = (p.looks || []).find(l => Object.keys(l.when).every(k => c && c[k] === l.when[k])); return l ? l.images : p.images; };
+const optText = (p, c) => (p.opts || []).filter(o => o.values.length > 1).map(o => c && c[o.name]).filter(Boolean).join(' · ');
+PRODUCTS.forEach(p => { p.opts = p.opts || []; if (!p.images) p.images = imagesFor(p, optDefaults(p)); });
 const GALLERY = [
   { src: 'img/look-4.jpg', cap: 'Liberty Raglan · Blue' },
   { src: 'img/detail-print.jpg', cap: 'The Liberty print' },
@@ -926,52 +947,52 @@ const GALLERY = [
 // Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
 // Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
 const LIBRARY = [
-  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelves: ['Raglan shirts'], product: 'liberty-red' },
-  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-blue' },
+  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
+  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Blue' } },
   { no: 'YW·003', src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·005', src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelves: ['Raglan shirts'], product: 'liberty-blue' },
+  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Blue' } },
   { no: 'YW·007', src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelves: ['Skull caps'], product: 'skull-cap' },
   { no: 'YW·008', src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelves: ['Raglan shirts', 'Skull caps'] },
   { no: 'YW·009', src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelves: ['Raglan shirts'] },
   { no: 'YW·010', src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelves: ['Plain tees', 'Caps'] },
   { no: 'YW·011', src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·013', src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-red' },
+  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
   { no: 'YW·015', src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
   { no: 'YW·016', src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·018', src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelves: ['Raglan shirts', 'Skull caps'] },
   { no: 'YW·019', src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·021', src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·023', src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·025', src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelves: ['Raglan shirts', 'Skull caps'] },
   { no: 'YW·026', src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts'], product: 'liberty-red' },
+  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
   { no: 'YW·028', src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·030', src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts'], product: 'liberty-black' },
+  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·032', src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelves: ['Plain tees', 'Caps'], product: 'cap-042' },
-  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·034', src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelves: ['Skull caps'], product: 'skull-cap' },
   { no: 'YW·035', src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelves: ['Skull caps', 'Caps'], product: 'cap-042' },
   { no: 'YW·036', src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts', 'Caps', 'Joggers'] },
   { no: 'YW·037', src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-grey' },
+  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Grey' } },
   { no: 'YW·039', src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelves: ['Skull caps'], product: 'skull-cap' },
   { no: 'YW·040', src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts'] },
   { no: 'YW·041', src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
   { no: 'YW·042', src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
   { no: 'YW·043', src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-black' },
+  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·045', src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-black' },
+  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
   { no: 'YW·047', src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
   { no: 'YW·048', src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelves: ['Caps'], product: 'cap-042' },
   { no: 'YW·049', src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
@@ -979,7 +1000,7 @@ const LIBRARY = [
   { no: 'YW·051', src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelves: ['Caps'], product: 'cap-042' },
   { no: 'YW·052', src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
   { no: 'YW·053', src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-blue' }
+  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Blue' } }
 ];
 /* ═══════════════════════════════════════════ */
 
@@ -1059,9 +1080,9 @@ const LIBRARY = [
   };
   const artFor = i => ART[['raglan', 'cap', 'beanie'][i % 3]];
   const frameCls = p => 'frame' + (p.cut ? ' cut' : '');
+  const frameImgs = (p, list, full) => list.slice(0, 2).map((s, i) => '<img src="' + (full ? s : small(s)) + '" alt="' + (i ? '' : p.name) + '" loading="lazy" decoding="async" onerror="this.remove()">').join('');
   function frameHTML(p, extra, full) {
-    const imgs = p.images.slice(0, 2).map((s, i) => '<img src="' + (full ? s : small(s)) + '" alt="' + (i ? '' : p.name) + '" loading="lazy" onerror="this.remove()">').join('');
-    return '<div class="art">' + ART[p.art] + '</div>' + imgs + '<span class="sheen" aria-hidden="true"></span>' + (extra || '');
+    return '<div class="art">' + ART[p.art] + '</div><span class="sheen" aria-hidden="true"></span>' + frameImgs(p, p.images, full) + (extra || '');
   }
 
   /* ── Live swirl background (WebGL), photo fallback ── */
@@ -1091,11 +1112,11 @@ const LIBRARY = [
     const loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = { R: gl.getUniformLocation(pr, 'R'), T: gl.getUniformLocation(pr, 'T'), M: gl.getUniformLocation(pr, 'M') };
     const st = { speed: 1, boost: 0, t: 7.3, m: [.5, .5], mTo: [.5, .5], on: false, raf: 0, last: 0 };
-    const resize = () => { const sc = Math.min(window.devicePixelRatio || 1, 1.5) * .5, w = Math.max(2, Math.round(innerWidth * sc)), h = Math.max(2, Math.round(innerHeight * sc)); if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); } };
+    const resize = () => { const sc = Math.min(window.devicePixelRatio || 1, 1.5) * .4, w = Math.max(2, Math.round(innerWidth * sc)), h = Math.max(2, Math.round(innerHeight * sc)); if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); } };
     const draw = () => { resize(); gl.uniform2f(U.R, canvas.width, canvas.height); gl.uniform1f(U.T, st.t); gl.uniform2f(U.M, st.m[0], st.m[1]); gl.drawArrays(gl.TRIANGLES, 0, 3); };
-    function frame(now) { const dt = Math.min(.05, (now - st.last) / 1000 || 0); st.last = now; st.t += dt * .12 * (st.speed + st.boost); st.boost *= .95; st.m[0] += (st.mTo[0] - st.m[0]) * .04; st.m[1] += (st.mTo[1] - st.m[1]) * .04; draw(); if (st.on) st.raf = requestAnimationFrame(frame); }
+    function frame(now) { if (st.on) st.raf = requestAnimationFrame(frame); if (now - st.last < 31) return; const dt = Math.min(.08, (now - st.last) / 1000 || 0); st.last = now; st.t += dt * .12 * (st.speed + st.boost); st.boost *= .95; st.m[0] += (st.mTo[0] - st.m[0]) * .04; st.m[1] += (st.mTo[1] - st.m[1]) * .08; draw(); }
     return {
-      start() { if (st.on) return; if (reduced()) { draw(); return; } st.on = true; st.last = performance.now(); st.raf = requestAnimationFrame(frame); },
+      start() { if (st.on) return; if (reduced()) { draw(); return; } st.on = true; st.last = performance.now() - 40; st.raf = requestAnimationFrame(frame); },
       stop() { st.on = false; cancelAnimationFrame(st.raf); },
       speed(v) { st.speed = v; }, kick(v) { st.boost = Math.min(4, st.boost + v); }, pointer(x, y) { st.mTo = [x, y]; }, draw
     };
@@ -1205,9 +1226,6 @@ const LIBRARY = [
       if (p < 1) requestAnimationFrame(step); else delete box.dataset.writing;
     })(t0);
   }
-  // Top left: the signature writes itself. Tap it to go back to the top and it writes again.
-  const brand = $('.brand'); writeSig(brand);
-  brand.addEventListener('click', () => setTimeout(() => writeSig(brand), 80));
 
   /* ── The eye in the O: follows your finger or cursor, leans with the phone, looks around on its own when left alone ── */
   function makeEye(logo) {
@@ -1293,12 +1311,17 @@ const LIBRARY = [
     menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close();
   }
   const flash = (c, ms) => { menuBtn.classList.remove('shine', 'back'); void menuBtn.offsetWidth; menuBtn.classList.add(c); setTimeout(() => menuBtn.classList.remove(c), ms); };
-  // have the menu's dragon ready before the first tap, so the menu never waits on it
-  setTimeout(() => { const i = $('#menu .m-dr img'); if (i && i.decode) i.decode().catch(() => { }); }, 1800);
   // Light or dark, both purple. Remembered on this phone
   const themeBtn = $('#theme');
   const paintTheme = () => { const l = rootEl.dataset.theme === 'light'; themeBtn.setAttribute('aria-pressed', String(l)); themeBtn.setAttribute('aria-label', l ? 'Dark mode' : 'Light mode'); const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', l ? '#F3EEFF' : '#08060E'); };
-  themeBtn.addEventListener('click', () => { if (rootEl.dataset.theme === 'light') delete rootEl.dataset.theme; else rootEl.dataset.theme = 'light'; store.set('yowa-theme', rootEl.dataset.theme === 'light' ? 'light' : 'dark'); paintTheme(); buzz(8); });
+  const flipTheme = () => { if (rootEl.dataset.theme === 'light') delete rootEl.dataset.theme; else rootEl.dataset.theme = 'light'; store.set('yowa-theme', rootEl.dataset.theme === 'light' ? 'light' : 'dark'); paintTheme(); };
+  themeBtn.addEventListener('click', () => {
+    buzz(8);
+    if (!document.startViewTransition || reduced()) return flipTheme();
+    const r = themeBtn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const vt = document.startViewTransition(flipTheme);
+    vt.ready.then(() => rootEl.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + R + 'px at ' + x + 'px ' + y + 'px)'] }, { duration: 560, easing: 'cubic-bezier(.4,0,.2,1)', pseudoElement: '::view-transition-new(root)' })).catch(() => { });
+  });
   paintTheme();
   menuBtn.addEventListener('click', () => { if (menuOn()) return closeMenu(); flash('shine', 800); openMenu(); });
   // now and then a glint runs across the dragon while it waits
@@ -1306,7 +1329,7 @@ const LIBRARY = [
   // A section in the menu: close it and glide there, without leaving an extra step in the back history.
   $$('#menu a.go').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
   // Shop opens its categories in place: a round thumbnail and how many pieces each has. Picking one slides in the side shop
-  const thumbOf = { all: 'liberty-blue', raglan: 'liberty-red', tee: 'yowa-long-sleeve' };
+  const thumbOf = { new: 'jorts', all: 'liberty-raglan', tops: 'bybd-tee', caps: 'skull-cap', bottoms: 'joggers' };
   CATS.forEach(([id, label], i) => {
     const items = PRODUCTS.filter(p => id === 'all' || (id === 'new' ? !!p.isNew : p.cat === id)); if (!items.length) return;
     const p = PRODUCTS.find(q => q.id === thumbOf[id]) || items[0], b = document.createElement('button');
@@ -1327,21 +1350,31 @@ const LIBRARY = [
     if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); unlockBox.hidden = true; note.classList.remove('bad'); note.textContent = "You're in. " + (CONFIG.PAYSTACK_PUBLIC_KEY ? 'Tap checkout to pay.' : 'Checkout opens when prices and the Paystack key are in. Your cart is saved.'); buzz([12, 40, 12, 40, 30]); burstFrom($('#checkout')); }
     else { note.classList.add('bad'); note.textContent = "That code isn't right. Get on the list and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) codeForm.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
   });
-  const grid = $('#grid');
-  function renderGrid() {
-    grid.textContent = '';
-    PRODUCTS.forEach(p => {
-      const b = document.createElement('button'); b.type = 'button'; b.className = 'card rv in';
-      // Shop style: the photo, the name // colour, then the price (or what's holding it back)
-      b.innerHTML = '<div class="' + frameCls(p) + '">' + frameHTML(p) + '</div><span class="card-name"></span><span class="card-price"></span>';
-      const nm = b.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
-      if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
-      b.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
-      b.addEventListener('click', () => openProduct(p)); grid.appendChild(b);
-    });
+  const ICO = { eye: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3"/></svg>', bag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 8.2h13l-1 12a1.6 1.6 0 0 1-1.6 1.4H8.1a1.6 1.6 0 0 1-1.6-1.4z"/><path d="M9 8.2V6.6a3 3 0 0 1 6 0v1.6"/></svg>' };
+  // A piece in the shop: its photo (tap to see it), the eye and the bag by its side, the name, the price and its colours
+  function makeCard(p, open) {
+    let ch = optDefaults(p);
+    const el = document.createElement('div'); el.className = 'card rv in';
+    const col = p.opts.find(o => o.name === 'Colour' && o.values.length > 1);
+    el.innerHTML = '<div class="card-media"><button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="Add to cart">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
+    const nm = el.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
+    if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
+    el.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
+    const paint = () => { const f = el.querySelector('.frame'); $$('img', f).forEach(i => i.remove()); f.insertAdjacentHTML('beforeend', frameImgs(p, imagesFor(p, ch))); };
+    if (col) col.values.forEach(v => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', v.v); b.setAttribute('aria-checked', String(ch.Colour === v.v)); b.addEventListener('click', () => { ch = Object.assign({}, ch, { Colour: v.v }); $$('.sw', el).forEach(x => x.setAttribute('aria-checked', String(x === b))); paint(); buzz(4); }); el.querySelector('.card-sw').appendChild(b); });
+    el.querySelector('.frame').addEventListener('click', () => open(p, { choice: ch }));
+    el.querySelector('[data-a="view"]').addEventListener('click', () => open(p, { choice: ch }));
+    el.querySelector('[data-a="add"]').addEventListener('click', e => quickAdd(p, ch, e.currentTarget, open));
+    return el;
   }
-  renderGrid();
-  $('#shop-count').textContent = PRODUCTS.length + ' products';
+  // The bag on a card: a piece with nothing to choose goes straight in; anything else opens on its choices
+  function quickAdd(p, ch, btn, open) {
+    if (p.sizes.length === 1 && p.opts.every(o => o.values.length === 1)) { addToBag(p, p.sizes[0], 1, ch); buzz(14); burstFrom(btn); bumpBag(); return; }
+    open(p, { choice: ch, pick: true });
+  }
+  const grid = $('#grid');
+  function renderGrid() { grid.textContent = ''; PRODUCTS.forEach(p => grid.appendChild(makeCard(p, openProduct))); }
+  renderGrid();  $('#shop-count').textContent = PRODUCTS.length + ' pieces';
   // One or two across: the catalog switch, remembered on this phone
   function setCols(box, n, apply) { $$('button', box).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.cols === n))); apply(n); }
   const applyShopCols = n => grid.classList.toggle('one', n === 1);
@@ -1349,7 +1382,7 @@ const LIBRARY = [
   $$('#shop-views button').forEach(b => b.addEventListener('click', () => { shopCols = +b.dataset.cols; store.set('yowa-shop-cols', shopCols); setCols($('#shop-views'), shopCols, applyShopCols); buzz(5); }));
 
   /* ── Product view ── */
-  const pview = $('#pview'), scrim = $('#scrim'); let current = null, size = null, qty = 1, lastFocus = null;
+  const pview = $('#pview'), scrim = $('#scrim'); let current = null, size = null, qty = 1, lastFocus = null, choice = {};
   // The photos play like the opening slideshow: bars fill, it moves on by itself, tap right or left, swipe, or hold to pause.
   const pvMedia = $('#pv-media'), pvSlides = $('#pv-slides'), pvBars = $('#pv-bars'), PV_HOLD = 3200;
   let pvI = 0, pvN = 0, pvEl = 0, pvLast = 0, pvRaf = 0, pvHeld = false;
@@ -1363,13 +1396,14 @@ const LIBRARY = [
     if (!pvHeld && pvN > 1 && !reduced()) { pvEl += dt; const b = $$('i', pvBars)[pvI]; if (b) b.firstChild.style.transform = 'scaleX(' + Math.min(1, pvEl / PV_HOLD).toFixed(3) + ')'; if (pvEl >= PV_HOLD) pvShow(pvI + 1); }
     pvRaf = requestAnimationFrame(pvFrame);
   }
-  function pvBuild(p) {
+  function pvBuild(p, list) {
+    list = list || p.images;
     pvMedia.classList.toggle('cut', !!p.cut); pvSlides.textContent = ''; pvBars.textContent = '';
-    p.images.forEach((src, i) => {
+    list.forEach((src, i) => {
       const f = document.createElement('figure'); f.className = 'pv-slide'; const im = document.createElement('img'); im.src = src; im.alt = i ? '' : p.name + (p.colour ? ', ' + p.colour : ''); im.decoding = 'async'; im.onerror = () => { f.remove(); const bs = $$('i', pvBars); if (bs.length > $$('.pv-slide', pvSlides).length) bs[bs.length - 1].remove(); pvShow(Math.min(pvI, $$('.pv-slide', pvSlides).length - 1)); };
       f.appendChild(im); pvSlides.appendChild(f); const bar = document.createElement('i'); bar.appendChild(document.createElement('b')); pvBars.appendChild(bar);
     });
-    pvBars.hidden = p.images.length < 2; pvShow(0); pvLast = 0; if (!pvRaf) pvRaf = requestAnimationFrame(pvFrame);
+    pvBars.hidden = list.length < 2; pvShow(0); pvLast = 0; if (!pvRaf) pvRaf = requestAnimationFrame(pvFrame);
   }
   let pvTp = null, pvHoldT = 0;
   pvSlides.addEventListener('pointerdown', e => { if (!e.isPrimary || e.button > 0) return; pvTp = { x: e.clientX, y: e.clientY, id: e.pointerId }; clearTimeout(pvHoldT); pvHoldT = setTimeout(() => { if (pvTp) pvHeld = true; }, 220); });
@@ -1384,25 +1418,53 @@ const LIBRARY = [
   pvSlides.addEventListener('contextmenu', e => { if (pvHeld || pvTp) e.preventDefault(); });
   function paintQty() { $('#pv-qn').textContent = qty; $('#pv-qty [data-d="-1"]').disabled = qty <= 1; $('#pv-qty [data-d="1"]').disabled = qty >= 10; }
   $$('#pv-qty button').forEach(b => b.addEventListener('click', () => { qty = clamp(qty + +b.dataset.d, 1, 10); paintQty(); buzz(5); }));
-  function openProduct(p) {
-    current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
-    $('#pv-title').textContent = p.name; $('#pv-line').textContent = p.line + (p.colour ? ' · ' + p.colour : ''); $('#pv-desc').textContent = p.desc;
+  // The choices: colours as round swatches, the rest (beads) as pills; the photos follow the colour and beads you pick
+  function paintOpts(p) {
+    const box = $('#pv-opts'); box.textContent = '';
+    p.opts.forEach(o => {
+      const wrap = document.createElement('div'); wrap.className = 'opt';
+      wrap.innerHTML = '<span class="label"></span><div class="opt-row" role="radiogroup"></div>';
+      const lab = wrap.querySelector('.label'), chips = wrap.querySelector('.opt-row'); chips.setAttribute('aria-label', o.name);
+      const say = () => { lab.textContent = o.name + ' · '; const b = document.createElement('b'); b.textContent = choice[o.name]; lab.appendChild(b); };
+      o.values.forEach(v => {
+        const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(choice[o.name] === v.v));
+        if (o.name === 'Colour') { b.className = 'sw'; b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('aria-label', v.v); }
+        else { b.className = 'pill'; b.setAttribute('aria-pressed', String(choice[o.name] === v.v)); if (v.sw) { const d = document.createElement('i'); d.className = 'dot'; d.style.setProperty('--c', v.sw); b.appendChild(d); } b.append(v.v); }
+        b.addEventListener('click', () => {
+          const before = imagesFor(p, choice).join(); choice = Object.assign({}, choice, { [o.name]: v.v });
+          $$('button', chips).forEach(x => { x.setAttribute('aria-checked', String(x === b)); if (x.classList.contains('pill')) x.setAttribute('aria-pressed', String(x === b)); });
+          say(); paintLine(p); if (imagesFor(p, choice).join() !== before) pvBuild(p, imagesFor(p, choice)); buzz(5);
+        });
+        chips.appendChild(b);
+      });
+      say(); box.appendChild(wrap);
+    });
+    box.hidden = !p.opts.length;
+  }
+  const paintLine = p => { const t = optText(p, choice) || p.colour; $('#pv-line').textContent = p.line + (t ? ' · ' + t : ''); };
+  function openProduct(p, o) {
+    o = o || {}; current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
+    choice = Object.assign(optDefaults(p), o.choice || {});
+    $('#pv-title').textContent = p.name; paintLine(p); $('#pv-desc').textContent = p.desc; paintOpts(p);
     $('#pv-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
     qty = 1; paintQty();
     const sz = $('#pv-sizes'); sz.textContent = '';
     p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size' + (s.length > 3 ? ' wide' : ''); b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
     $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
-    pview.hidden = false; $('.pview-in').scrollTop = 0; pvBuild(p); scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
+    pview.hidden = false; $('.pview-in').scrollTop = 0; pvBuild(p, imagesFor(p, choice)); scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
     const sheet = matchMedia('(max-width:820px)').matches;
     if (!reduced()) $('.pview-in').animate(sheet ? [{ transform: 'translateY(100%)' }, { transform: 'none' }] : [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: sheet ? 560 : 480, easing: 'cubic-bezier(.16,1,.3,1)' });
     $('#pv-close').focus({ preventScroll: true });
+    // from the bag on a card: go straight to the choices
+    const info = $('.pv-info'); info.classList.remove('pick');
+    if (o.pick) setTimeout(() => { const t = (p.opts.length ? $('#pv-opts') : $('#pv-sizes')).getBoundingClientRect().top - $('.pview-in').getBoundingClientRect().top + $('.pview-in').scrollTop - 70; $('.pview-in').scrollTo({ top: Math.max(0, t), behavior: reduced() ? 'auto' : 'smooth' }); void info.offsetWidth; info.classList.add('pick'); }, reduced() ? 0 : 380);
   }
   function closeProduct(keep) { if (pview.hidden) return; pview.hidden = true; if ($('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (keep !== true) backstack.close(); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
   $('#pv-close').addEventListener('click', closeProduct);
   $('#pv-add').addEventListener('click', () => {
     const p = current, msg = $('#pv-msg');
     if (!size) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; buzz([20, 40, 20]); if (!reduced()) $('#pv-sizes').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 320 }); return; }
-    addToBag(p, size, qty); buzz(14); closeProduct(true); openBag();
+    addToBag(p, size, qty, choice); buzz(14); closeProduct(true); openBag();
   });
   // Phones: drag the sheet's handle down to put it away.
   const grab = $('.pv-grab'), pin = $('.pview-in'); let gy = null, gdy = 0;
@@ -1423,24 +1485,7 @@ const LIBRARY = [
     const list = PRODUCTS.filter(p => inCat(p, qsCat));
     $('#qs-count-n').textContent = list.length + (list.length === 1 ? ' product' : ' products');
     if (!list.length) { const e = document.createElement('p'); e.className = 'qs-empty'; e.textContent = 'Nothing here yet. It lands with the next drop.'; qsBody.appendChild(e); }
-    list.forEach(p => {
-      let sz = p.sizes.length === 1 ? p.sizes[0] : null, q = 1;
-      const it = document.createElement('div'); it.className = 'qs-item';
-      it.innerHTML = '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div><button type="button" class="nm"></button><span class="pr"></span><div class="sizes" role="group" aria-label="Size"></div><div class="row"><div class="qty" role="group" aria-label="Quantity"><button type="button" data-d="-1" aria-label="One less">−</button><output>1</output><button type="button" data-d="1" aria-label="One more">+</button></div><button type="button" class="btn solid add">Add to cart</button></div><span class="msg" role="status"></span></div>';
-      it.querySelector('.nm').textContent = p.name + (p.colour ? ' // ' + p.colour : '');
-      it.querySelector('.pr').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
-      const szBox = it.querySelector('.sizes'), msg = it.querySelector('.msg'), out = it.querySelector('output'), less = it.querySelector('[data-d="-1"]'), more = it.querySelector('[data-d="1"]');
-      p.sizes.forEach(v => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size' + (v.length > 3 ? ' wide' : ''); b.textContent = v; b.setAttribute('aria-pressed', String(v === sz)); b.addEventListener('click', () => { sz = v; $$('.size', szBox).forEach(x => x.setAttribute('aria-pressed', String(x === b))); msg.textContent = ''; msg.classList.remove('bad'); }); szBox.appendChild(b); });
-      const pq = () => { out.textContent = q; less.disabled = q <= 1; more.disabled = q >= 10; }; pq();
-      less.addEventListener('click', () => { q = Math.max(1, q - 1); pq(); }); more.addEventListener('click', () => { q = Math.min(10, q + 1); pq(); });
-      it.querySelector('.add').addEventListener('click', e => {
-        if (!sz) { msg.classList.add('bad'); msg.textContent = 'Pick a size first.'; buzz([20, 40, 20]); return; }
-        addToBag(p, sz, q); buzz(14); msg.classList.remove('bad'); msg.textContent = 'Added ' + q + ' to your cart.'; burstFrom(e.currentTarget); q = 1; pq();
-      });
-      const see = () => { closeShop(true); openProduct(p); };   // the product view takes over the side shop's back step
-      it.querySelector('.frame').addEventListener('click', see); it.querySelector('.nm').addEventListener('click', see);
-      qsBody.appendChild(it);
-    });
+    list.forEach(p => qsBody.appendChild(makeCard(p, (q, o) => { closeShop(true); openProduct(q, o); })));   // the product view takes over the side shop's back step
   }
   function openShop(cat) {
     qsCat = cat || 'all'; paintShop(); qshop.hidden = false; scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeShop);
@@ -1450,15 +1495,17 @@ const LIBRARY = [
   function closeShop(keep) { if (qshop.hidden) return; qshop.hidden = true; if (pview.hidden && $('#drawer').hidden && $('#chat').hidden) scrim.hidden = true; document.body.style.overflow = ''; if (keep !== true) backstack.close(); }
   $('#qs-close').addEventListener('click', () => closeShop());
   const applyQsCols = n => qsBody.classList.toggle('two', n === 2);
-  let qsCols = store.get('yowa-qs-cols', 1) === 2 ? 2 : 1; setCols($('#qs-views'), qsCols, applyQsCols);
+  let qsCols = store.get('yowa-qs-cols', 2) === 1 ? 1 : 2; setCols($('#qs-views'), qsCols, applyQsCols);
   $$('#qs-views button').forEach(b => b.addEventListener('click', () => { qsCols = +b.dataset.cols; store.set('yowa-qs-cols', qsCols); setCols($('#qs-views'), qsCols, applyQsCols); buzz(5); }));
   $('#qs-cart').addEventListener('click', () => { closeShop(true); openBag(); });   // the cart takes over the side shop's back step
 
   /* ── Bag ── */
-  let bag = store.get('yowa-bag', []);
+  // a saved cart only keeps pieces and sizes the shop still has
+  let bag = store.get('yowa-bag', []).filter(i => { const p = PRODUCTS.find(x => x.id === i.id); return p && p.sizes.indexOf(i.size) >= 0 && i.qty > 0; });
   const drawer = $('#drawer');
-  function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; const qc = $('#qs-count'); if (qc) qc.textContent = n; }
-  function addToBag(p, s, q) { q = Math.max(1, q || 1); const hit = bag.find(i => i.id === p.id && i.size === s); if (hit) hit.qty = Math.min(20, hit.qty + q); else bag.push({ id: p.id, size: s, qty: q }); saveBag(); }
+  function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; $('#bag-open').dataset.n = n; $('#bag-open').setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items')); const qc = $('#qs-count'); if (qc) qc.textContent = n; }
+  const bumpBag = () => { const b = $('#bag-open'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
+  function addToBag(p, s, q, ch) { q = Math.max(1, q || 1); ch = ch || {}; const key = JSON.stringify(ch); const hit = bag.find(i => i.id === p.id && i.size === s && JSON.stringify(i.opts || {}) === key); if (hit) hit.qty = Math.min(20, hit.qty + q); else bag.push({ id: p.id, size: s, qty: q, opts: ch }); saveBag(); }
   function renderBag() {
     const body = $('#dr-body'); body.textContent = ''; let total = 0;
     if (!bag.length) { const e = document.createElement('p'); e.className = 'dr-empty'; e.textContent = 'Your cart is empty. The drop is where the good stuff is.'; body.appendChild(e); }
@@ -1466,8 +1513,9 @@ const LIBRARY = [
       const p = PRODUCTS.find(x => x.id === it.id); if (!p) return; total += (p.price || 0) * it.qty;
       const row = document.createElement('div'); row.className = 'dr-item';
       row.innerHTML = '<div class="th"></div><div><b></b><span></span></div><button type="button">Remove</button>';
-      row.querySelector('b').textContent = p.name + (p.colour ? ' · ' + p.colour : ''); row.querySelector('span').textContent = it.size + ' · ' + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
-      const t = new Image(); t.onload = () => { const th = row.querySelector('.th'); th.style.backgroundImage = 'url("' + small(p.images[0]) + '")'; if (p.cut) th.classList.add('cut'); }; t.src = small(p.images[0]);
+      const pick = optText(p, it.opts) || p.colour, src = small(imagesFor(p, it.opts || {})[0]);
+      row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : ''); row.querySelector('span').textContent = it.size + ' · ' + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
+      const t = new Image(); t.onload = () => { const th = row.querySelector('.th'); th.style.backgroundImage = 'url("' + src + '")'; if (p.cut) th.classList.add('cut'); }; t.src = src;
       row.querySelector('button').addEventListener('click', () => { bag.splice(idx, 1); saveBag(); renderBag(); }); body.appendChild(row);
     });
     const tbc = bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.price == null; });
@@ -1577,7 +1625,7 @@ const LIBRARY = [
     });
     media.addEventListener('pointercancel', () => { sx = null; settle(); });
     media.addEventListener('click', e => { if (swiped) { swiped = false; return; } const r = media.getBoundingClientRect(), img = media.querySelector('img'); if (img) img.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + '% ' + ((e.clientY - r.top) / r.height * 100) + '%'; media.classList.toggle('zoom'); });
-    shop.addEventListener('click', () => { const p = PRODUCTS.find(x => x.id === items[i].product); close(!!p); if (p) openProduct(p); });
+    shop.addEventListener('click', () => { const p = PRODUCTS.find(x => x.id === items[i].product); close(!!p); if (p) openProduct(p, { choice: items[i].pick }); });
     lb.querySelector('.lb-share').addEventListener('click', () => { const it = items[i]; shareLink(SITE + (it.no ? '#' + slug(it.no) : '#gallery'), 'YOWA' + (it.no ? ' · ' + it.no : ''), (it.cap ? it.cap + ' · ' : '') + BYBD); });
     lb.querySelector('.lb-close').addEventListener('click', () => close()); lb.querySelector('.lb-prev').addEventListener('click', () => show(i - 1)); lb.querySelector('.lb-next').addEventListener('click', () => show(i + 1));
     const opened = performance.now();
@@ -1739,7 +1787,7 @@ const LIBRARY = [
     q = q.toLowerCase();
     if (/code|password|early|access/.test(q)) return "The code goes to the list first. Join with your email in the Get the code section and it lands in your inbox before the shop opens.";
     if (/when|date|drop|time/.test(q)) return CONFIG.DROP_AT ? 'The drop opens ' + new Date(CONFIG.DROP_AT).toLocaleString() + '. The list gets the code first.' : "The date drops soon. Join the list and you'll hear first.";
-    if (/size|fit|small|large/.test(q)) return 'Raglan long sleeves come in XS to XXL with a relaxed body. Caps and skull caps are one size. Tell me your height and usual size and I will suggest one.';
+    if (/size|fit|small|large/.test(q)) return 'Raglans, tees, joggers and jorts come in M to XXL with a relaxed fit. Caps and skull caps are one size. Tell me your height and usual size and I will suggest one.';
     if (/price|cost|how much|₦|naira/.test(q)) return 'Prices land with the drop. Join the list to see them first.';
     if (/order|deliver|ship|track/.test(q)) return 'Once orders open you can track yours with your order number and email. For anything urgent a person will reply on WhatsApp.';
     return "Good question. A person from YOWA can help with that on Instagram @yowa_bybd while I learn more.";
