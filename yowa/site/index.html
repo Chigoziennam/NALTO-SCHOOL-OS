@@ -53,15 +53,14 @@
 [data-theme="light"] .veil{background:radial-gradient(120% 90% at 50% 20%,rgba(166,91,255,.14),transparent 70%)}
 [data-theme="light"] .grain{opacity:.035}
 [data-theme="light"] .top.stuck{background:rgba(246,241,255,.86)}
-[data-theme="light"] .top.stuck .brand img,[data-theme="light"] .mani-sign img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
+[data-theme="light"] .top.stuck .brand img,[data-theme="light"] .sheet-menu .menu-sig,[data-theme="light"] .mani-sign img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
 [data-theme="light"] .top.stuck .bag-btn,[data-theme="light"] .top.stuck .theme-btn{background:rgba(255,255,255,.8);color:var(--ink)}
-[data-theme="light"] .menu-open .bag-btn,[data-theme="light"] .menu-open .theme-btn{background:rgba(255,255,255,.85);color:var(--ink)}
-[data-theme="light"] .menu-open .top .brand img{filter:drop-shadow(0 0 10px rgba(166,91,255,.7))}
-[data-theme="light"] .sheet-menu{background:radial-gradient(120% 60% at 70% 0%,#E7DAFF,#F3EEFF 62%)}
-[data-theme="light"] .sheet-menu .m-art::after{background:radial-gradient(90% 80% at 50% 45%,transparent 45%,rgba(8,6,14,.4))}
+[data-theme="light"].menu-open .bag-btn,[data-theme="light"].menu-open .theme-btn{background:rgba(255,255,255,.85);color:var(--ink)}
+[data-theme="light"].menu-open .top .brand img{filter:brightness(0) saturate(100%) invert(14%) sepia(90%) saturate(4000%) hue-rotate(262deg) brightness(.75) drop-shadow(0 0 8px rgba(166,91,255,.5))}
+[data-theme="light"] .sheet-menu{--m-bg:#F3EEFF}
+[data-theme="light"] .m-glow{background:radial-gradient(110% 55% at 70% 10%,rgba(166,91,255,.28),transparent 70%)}
 [data-theme="light"] .sheet-menu .m-grid button{background:rgba(255,255,255,.75)}
-[data-theme="light"] .sheet-menu .m-eye{color:var(--purple)}
-[data-theme="light"] .sheet-menu .go .ar,[data-theme="light"] .sheet-menu .go .pl{background:rgba(255,255,255,.6)}
+[data-theme="light"] .m-dr{--dr-op:.13}
 [data-theme="light"] .panel::before{background:rgba(255,255,255,.62)}
 [data-theme="light"] .photo-bg img,[data-theme="light"] .photo-bg video{opacity:.22}
 [data-theme="light"] .photo-bg::after{background:linear-gradient(180deg,var(--void) 0%,rgba(243,238,255,.6) 22%,rgba(243,238,255,.6) 78%,var(--void) 100%)}
@@ -83,7 +82,7 @@
 [data-theme="light"] .form{background:rgba(255,255,255,.78)}
 [data-theme="light"] .hero-bybd{color:#EFEAF7}
 [data-theme="light"] .top:not(.stuck) .bag-btn{color:#EFEAF7}
-[data-theme="light"] .menu-open .top .bag-btn{color:var(--ink)}
+[data-theme="light"].menu-open .top .bag-btn{color:var(--ink)}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -121,82 +120,85 @@ img{max-width:100%}
 .nav a[aria-current="page"]{border-color:var(--line);color:var(--purple-l)}
 .bag-btn{border-color:var(--line);background:rgba(8,6,14,.4)}
 .bag-btn b{color:var(--purple-l)}
-/* Menu: the YOWA dragon avatar in a turning purple halo. It roars purple fire as the menu opens and an X takes its place */
+/* Menu: the crystal dragon in a turning purple halo. Tap it and it shines, the menu grows out of it and an X takes its place */
 .menu-btn{display:none;position:relative;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;isolation:isolate;-webkit-tap-highlight-color:transparent}
 .menu-btn .halo{position:absolute;inset:-2.5px;border-radius:50%;z-index:-1;background:conic-gradient(#F1E6FF,#A65BFF 20%,#2B0B6A 44%,#7A2FE0 62%,#E6CFFF 80%,#A65BFF 92%,#F1E6FF);animation:halo 5s linear infinite}
 .menu-btn .glow{position:absolute;inset:-13px;border-radius:50%;z-index:-2;background:radial-gradient(closest-side,rgba(166,91,255,.62),rgba(166,91,255,0));animation:aura 3.2s ease-in-out infinite;pointer-events:none}
-.menu-btn .av{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#12051F;box-shadow:0 0 0 1.5px #08060E;transition:transform .55s var(--e-settle),opacity .35s}
-.menu-btn .av img{display:block;width:100%;height:100%;object-fit:cover;transform-origin:30% 72%}
-.menu-btn.fire .av img{animation:roar .75s var(--e-settle)}
-.menu-btn .mx{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#2E1360,#0E0A1A 75%);box-shadow:0 0 0 1.5px #08060E;opacity:0;transform:scale(.55) rotate(-90deg);transition:opacity .25s,transform .4s var(--e-pull)}
+.menu-btn .av{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#06040C;box-shadow:0 0 0 1.5px #08060E;transition:transform .5s var(--e-settle),opacity .3s}
+.menu-btn .av img{display:block;width:100%;height:100%;object-fit:cover}
+.menu-btn .av::after{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 30%,rgba(255,255,255,.92) 47%,rgba(236,214,255,.45) 53%,transparent 68%);transform:translate3d(-130%,0,0)}
+.menu-btn.shine .av::after{animation:glint .7s cubic-bezier(.3,.6,.2,1)}
+.menu-btn.shine .av img{animation:pop .6s var(--e-settle)}
+.menu-btn.shine .glow{animation:flare .75s ease-out}
+.menu-btn .mx{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#2E1360,#0E0A1A 75%);box-shadow:0 0 0 1.5px #08060E;opacity:0;transform:scale(.55) rotate(-90deg);transition:opacity .2s,transform .35s var(--e-pull)}
 .menu-btn .mx::before,.menu-btn .mx::after{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:#fff;box-shadow:0 0 8px #A65BFF}
 .menu-btn .mx::before{transform:rotate(45deg)}.menu-btn .mx::after{transform:rotate(-45deg)}
-.menu-btn[aria-expanded="true"] .av{transform:scale(.35) rotate(28deg);opacity:0;transition:transform .45s var(--e-pull) .3s,opacity .3s .38s}
-.menu-btn[aria-expanded="true"] .mx{opacity:1;transform:none;transition:opacity .3s .42s,transform .7s var(--e-settle) .42s}
-.menu-btn.back .av{animation:avback .65s var(--e-settle)}
+.menu-btn[aria-expanded="true"] .av{transform:scale(.4) rotate(24deg);opacity:0;transition:transform .4s var(--e-pull) .2s,opacity .25s .28s}
+.menu-btn[aria-expanded="true"] .mx{opacity:1;transform:none;transition:opacity .25s .3s,transform .6s var(--e-settle) .3s}
+.menu-btn.back .av{animation:avback .6s var(--e-settle)}
 .puff{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
 .menu-btn.back .puff{animation:puff .6s ease-out}
 @keyframes halo{to{transform:rotate(1turn)}}
 @keyframes aura{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes roar{0%{transform:none}28%{transform:scale(1.16) rotate(-7deg)}100%{transform:none}}
+@keyframes glint{to{transform:translate3d(130%,0,0)}}
+@keyframes pop{0%{transform:none}30%{transform:scale(1.12)}100%{transform:none}}
+@keyframes flare{0%{opacity:.6;transform:scale(.9)}35%{opacity:1;transform:scale(1.75)}100%{opacity:.5;transform:scale(1)}}
 @keyframes avback{from{transform:scale(.4) rotate(-30deg);opacity:0}}
 @keyframes puff{0%{opacity:.9;box-shadow:0 0 0 0 rgba(166,91,255,.9)}100%{opacity:0;box-shadow:0 0 0 18px rgba(166,91,255,0)}}
-/* the fire itself: drawn for a moment on a see-through canvas over everything */
-.breath{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:58;pointer-events:none}
 .theme-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(8,6,14,.45);color:var(--purple-l);cursor:pointer;transition:transform .5s var(--e-settle)}
 .theme-btn svg{width:20px;height:20px}
 .theme-btn circle{fill:none;stroke:currentColor;stroke-width:2}
 .theme-btn path{fill:currentColor}
 .theme-btn[aria-pressed="true"]{transform:rotate(180deg)}
-@media (prefers-reduced-motion:reduce){.menu-btn .halo,.menu-btn .glow,.menu-btn.fire .av img,.menu-btn.back .av{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.menu-btn .halo,.menu-btn .glow,.menu-btn.shine .av img,.menu-btn.shine .av::after,.menu-btn.back .av{animation:none!important}}
 @media (max-width:980px){.nav{display:none}.bag-btn{margin-left:auto;min-height:44px;padding-inline:16px}.menu-btn{display:block}}
 @media (max-width:380px){.top-in{gap:10px}.bag-btn{padding-inline:12px}}
-/* The menu grows out of the dragon in a circle, under the header, so the same button closes it.
-   The dragon art heads it; under that the five places in big type, numbered, each on its own hairline. */
-.sheet-menu{position:fixed;inset:0;z-index:49;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;background:radial-gradient(120% 60% at 70% 0%,#1F0F43,#08060E 62%);clip-path:circle(0 at var(--mx,calc(100% - 40px)) var(--my,40px));transition:clip-path .5s var(--e-pull);-webkit-tap-highlight-color:transparent}
-.sheet-menu.on{clip-path:circle(var(--mr,160vmax) at var(--mx,calc(100% - 40px)) var(--my,40px));transition:clip-path .85s var(--e-pull)}
-.sheet-menu:not(.on){pointer-events:none}
+/* The menu grows out of the dragon as a circle of night, under the header, so the same button closes it.
+   The circle is one solid layer that scales (the phone's GPU does it, so it never stutters); the content fades in on top.
+   The fire dragon flares up behind as it opens, then rests faintly behind the links. Everything is centred:
+   the signature, the five places in big type, Ask YOWA, the mantra and where to find us. */
+.sheet-menu{position:fixed;inset:0;z-index:49;overflow:hidden;pointer-events:none;-webkit-tap-highlight-color:transparent;--m-bg:#0B0716}
+.sheet-menu.on{pointer-events:auto}
+.m-bg{position:absolute;left:var(--mx,calc(100% - 40px));top:var(--my,40px);width:calc(var(--mr,1400px) * 2);height:calc(var(--mr,1400px) * 2);margin:calc(var(--mr,1400px) * -1) 0 0 calc(var(--mr,1400px) * -1);border-radius:50%;background:var(--m-bg);transform:scale(.02);opacity:0;transition:transform .42s cubic-bezier(.6,0,.85,.35) .06s,opacity .15s linear .4s;will-change:transform}
+.sheet-menu.on .m-bg{transform:none;opacity:1;transition:transform .62s cubic-bezier(.2,.8,.2,1),opacity .06s linear}
+.m-glow{position:absolute;inset:0;background:radial-gradient(90% 60% at 50% 45%,rgba(122,47,224,.34),transparent 72%);opacity:0;transition:opacity .2s}
+.sheet-menu.on .m-glow{opacity:1;transition:opacity .6s ease .15s}
 .menu-open .top,.menu-open .top.stuck{background:none;border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
-.m-art{position:relative;flex:none;height:clamp(190px,36svh,360px);overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 52%,transparent);mask-image:linear-gradient(180deg,#000 52%,transparent)}
-.m-art .kb{position:absolute;inset:0;animation:kb 16s ease-in-out infinite alternate}
-.m-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:0;transform:scale(1.18);transition:opacity .3s,transform .5s var(--e-pull)}
-.sheet-menu.on .m-art img{opacity:1;transform:none;transition:opacity .9s ease .05s,transform 1.8s var(--e-settle)}
-.m-art::before{content:"";position:absolute;inset:0 0 auto;height:120px;z-index:1;background:linear-gradient(rgba(8,6,14,.72),rgba(8,6,14,0))}
-.m-art::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 80% at 50% 45%,transparent 42%,rgba(8,6,14,.6))}
-@keyframes kb{to{transform:scale(1.07) translate3d(-1.5%,1%,0)}}
-.m-in{position:relative;flex:1 0 auto;display:flex;flex-direction:column;margin-top:-70px;padding:0 var(--gut) calc(20px + env(safe-area-inset-bottom,0px))}
-.m-eye{display:flex;align-items:center;gap:12px;margin:0 0 4px;font:700 8.5px/1 var(--f-label);letter-spacing:.26em;text-transform:uppercase;color:var(--purple-l);opacity:0;transition:opacity .3s}
-.m-eye i{flex:1;height:1px;background:linear-gradient(90deg,var(--purple-l),rgba(166,91,255,0));transform:scaleX(0);transform-origin:0 50%;transition:transform .4s}
-.m-eye span:last-child{color:var(--mut)}
-.sheet-menu.on .m-eye{opacity:1;transition:opacity .6s ease .25s}
-.sheet-menu.on .m-eye i{transform:none;transition:transform 1.2s var(--e-settle) .3s}
-.m-list{display:flex;flex-direction:column}
-.sheet-menu .go{position:relative;display:flex;align-items:center;gap:14px;width:100%;margin:0;padding:13px 0 11px;border:0;background:none;color:var(--ink);text-decoration:none;text-align:left;cursor:pointer;font:400 clamp(40px,12.2vw,72px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.005em;transition:color .25s}
-.sheet-menu .go::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s}
-.sheet-menu .go .n{align-self:flex-start;flex:none;width:22px;margin-top:.42em;font:400 10px/1 var(--f-mono);letter-spacing:.04em;color:var(--mut);opacity:0;transition:color .25s,opacity .2s}
-.sheet-menu .go .t{display:block;flex:1;min-width:0;overflow:hidden;padding:.06em 0 .02em}
-.sheet-menu .go .t>span{display:inline-block;transform:translate3d(0,110%,0);transition:transform .4s var(--e-pull)}
-.sheet-menu .go .ar,.sheet-menu .go .pl{position:relative;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(20,14,38,.5);color:var(--ink);display:grid;place-items:center;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s,background .25s,border-color .25s,color .25s}
-.sheet-menu .ar svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .45s var(--e-settle)}
-.sheet-menu .go .pl::before,.sheet-menu .go .pl::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.7px;margin:-.85px 0 0 -6px;border-radius:2px;background:currentColor;transition:transform .5s var(--e-settle)}
-.sheet-menu .go .pl::after{transform:rotate(90deg)}
-.sheet-menu .m-toggle[aria-expanded="true"]{color:var(--purple-l)}
-.sheet-menu .m-toggle[aria-expanded="true"] .pl{background:var(--purple);border-color:var(--purple);color:#fff}
-.sheet-menu .m-toggle[aria-expanded="true"] .pl::after{transform:rotate(0)}
-.sheet-menu.on .go .t>span{transform:none;transition:transform 1s var(--e-settle) calc(var(--d,0) * 70ms + 200ms)}
-.sheet-menu.on .go::after{transform:none;transition:transform 1.2s var(--e-settle) calc(var(--d,0) * 70ms + 240ms)}
-.sheet-menu.on .go .n,.sheet-menu.on .go .ar,.sheet-menu.on .go .pl{opacity:1;transform:none;transition:opacity .6s ease calc(var(--d,0) * 70ms + 380ms),transform .8s var(--e-settle) calc(var(--d,0) * 70ms + 380ms),background .25s,border-color .25s,color .25s}
+/* the fire dragon behind: it flashes in with a burst of light at its mouth and a shine across, then settles faint */
+.m-back{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.m-dr{--dr-op:.2;position:absolute;left:50%;top:50%;width:min(150vw,880px);aspect-ratio:1024/1100;transform:translate3d(-50%,-50%,0) scale(1.06);opacity:0;transition:opacity .2s,transform .3s}
+.sheet-menu.on .m-dr{opacity:var(--dr-op);transform:translate3d(-50%,-50%,0);animation:drflash 1.5s ease-out .1s both;transition:transform 1.4s var(--e-settle) .1s}
+@keyframes drflash{0%{opacity:0}28%{opacity:.75}100%{opacity:var(--dr-op)}}
+.m-dr img{display:block;width:100%;height:100%}
+.m-dr .burst{position:absolute;left:38.3%;top:44.9%;width:60%;aspect-ratio:1;margin:-30% 0 0 -30%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,206,140,.85),rgba(236,120,255,.45) 45%,rgba(122,47,224,0));opacity:0}
+.sheet-menu.on .m-dr .burst{animation:burst 1.3s cubic-bezier(.2,.7,.3,1) .2s both}
+@keyframes burst{0%{opacity:0;transform:scale(.3)}25%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+.m-back .sh{position:absolute;inset:0;background:linear-gradient(105deg,transparent 34%,rgba(255,240,255,.16) 48%,rgba(255,255,255,0) 60%);transform:translate3d(-110%,0,0)}
+.sheet-menu.on .m-back .sh{transform:translate3d(110%,0,0);transition:transform 1.2s cubic-bezier(.3,.6,.2,1) .28s}
+.m-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;opacity:0;transition:opacity .16s ease}
+.sheet-menu.on .m-scroll{opacity:1;transition:opacity .3s ease .12s}
+.m-in{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(74px + env(safe-area-inset-top,0px)) var(--gut) calc(24px + env(safe-area-inset-bottom,0px))}
+.m-up{opacity:0;transform:translate3d(0,14px,0);transition:opacity .2s,transform .3s}
+.sheet-menu.on .m-up{opacity:1;transform:none;transition:opacity .6s ease calc(var(--d,0) * 55ms + 170ms),transform .9s var(--e-settle) calc(var(--d,0) * 55ms + 170ms)}
+.sheet-menu .menu-sig{width:118px;height:auto;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(166,91,255,.7))}
+.m-list{display:flex;flex-direction:column;align-items:center}
+.sheet-menu .go{display:block;margin:0;padding:0;border:0;background:none;color:var(--ink);text-decoration:none;cursor:pointer;font:400 clamp(44px,13.2vw,76px)/1.04 var(--f-display);text-transform:uppercase;letter-spacing:.005em;transition:color .25s}
+.sheet-menu .go .t{display:block;overflow:hidden;padding:.05em .12em 0}
+.sheet-menu .go .t>span{display:inline-flex;align-items:center;gap:.14em;transform:translate3d(0,112%,0);transition:transform .4s var(--e-pull)}
+.sheet-menu.on .go .t>span{transform:none;transition:transform .85s var(--e-settle) calc(var(--d,0) * 55ms + 170ms)}
 .sheet-menu .go[aria-current="page"]{color:var(--purple-l)}
-.sheet-menu .go[aria-current="page"] .n{color:var(--purple-l)}
 .sheet-menu .go:active{color:var(--purple-l)}
-.sheet-menu a.go:active .ar{background:var(--purple);border-color:var(--purple);color:#fff}
-.sheet-menu a.go:active .ar svg{transform:rotate(45deg)}
-@media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}.sheet-menu a.go:hover .ar{background:var(--purple);border-color:var(--purple);color:#fff}.sheet-menu a.go:hover .ar svg{transform:rotate(45deg)}}
+@media (hover:hover){.sheet-menu .go:hover{color:var(--purple-l)}}
+/* the crystal dragon beside SHOP, beating its wings; it rears up when the categories open */
+.sheet-menu .mk{height:.8em;width:auto;margin-top:-.08em;filter:drop-shadow(0 0 7px rgba(166,91,255,.85));transition:transform .5s var(--e-settle)}
+.sheet-menu .m-toggle[aria-expanded="true"]{color:var(--purple-l)}
+.sheet-menu .m-toggle[aria-expanded="true"] .mk{transform:scale(1.2) rotate(-8deg)}
 /* Shop opens in place: its categories slide down as round-thumbnail pills, each with how many pieces it has */
-.sheet-menu .m-cats{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .45s var(--e-pull),visibility 0s linear .45s}
+.sheet-menu .m-shop{display:flex;flex-direction:column;align-items:center;width:100%}
+.sheet-menu .m-cats{display:grid;grid-template-rows:0fr;width:min(100%,440px);visibility:hidden;transition:grid-template-rows .45s var(--e-pull),visibility 0s linear .45s}
 .sheet-menu .m-shop.open .m-cats{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .7s var(--e-settle)}
 .sheet-menu .m-cats-in{min-height:0;overflow:hidden}
-.sheet-menu .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 0 16px}
+.sheet-menu .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0 14px}
 .sheet-menu .m-grid button{display:flex;align-items:center;gap:10px;min-width:0;padding:6px 12px 6px 6px;border-radius:999px;border:1px solid var(--line);background:rgba(20,14,38,.62);color:var(--ink);text-align:left;cursor:pointer;opacity:0;transform:translateY(12px);transition:opacity .2s,transform .3s,border-color .25s,background .25s}
 .sheet-menu .m-shop.open .m-grid button{opacity:1;transform:none;transition:opacity .5s ease calc(var(--i) * 40ms + 140ms),transform .8s var(--e-settle) calc(var(--i) * 40ms + 140ms),border-color .25s,background .25s}
 .sheet-menu .m-grid .th{flex:none;width:40px;height:40px;border-radius:50%;overflow:hidden;background:#1B1233;box-shadow:0 0 0 1px rgba(166,91,255,.45),0 0 14px rgba(166,91,255,.25)}
@@ -208,18 +210,11 @@ img{max-width:100%}
 .sheet-menu .m-grid small{display:block;margin-top:3px;font:400 9.5px/1 var(--f-mono);letter-spacing:.04em;color:var(--mut)}
 .sheet-menu .m-grid button:active{border-color:var(--purple-l);background:rgba(122,47,224,.32)}
 @media (hover:hover){.sheet-menu .m-grid button:hover{border-color:var(--purple-l)}}
-/* The foot: Ask YOWA, the mantra and where to find us */
-.m-foot{display:grid;gap:16px;margin-top:auto;padding-top:28px;opacity:0;transform:translateY(18px);transition:opacity .2s,transform .3s}
-.sheet-menu.on .m-foot{opacity:1;transform:none;transition:opacity .7s ease .55s,transform 1s var(--e-settle) .55s}
-.sheet-menu .ask{display:flex;align-items:center;gap:12px;width:100%;padding:8px 8px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(100deg,rgba(122,47,224,.96),rgba(74,26,148,.94));box-shadow:0 14px 40px rgba(122,47,224,.38),inset 0 1px 0 rgba(255,255,255,.2);color:#fff;text-align:left;cursor:pointer;transition:transform .35s var(--e-settle)}
-.sheet-menu .ask .ey{flex:none;width:42px;height:42px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
-.sheet-menu .ask .tx{flex:1;display:grid;gap:5px;min-width:0}
-.sheet-menu .ask b{font:700 10px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase}
-.sheet-menu .ask small{font:400 12.5px/1.2 var(--f-body);color:rgba(255,255,255,.76)}
-.sheet-menu .ask .ar{flex:none;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--purple-d);display:grid;place-items:center}
-.sheet-menu .m-meta{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
-.sheet-menu .menu-bybd{margin:0;font:400 13.5px/1.3 var(--f-mantra);color:var(--purple-l)}
-.sheet-menu .menu-foot{display:flex;gap:8px;margin:0;font:700 8px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+/* Ask YOWA, the mantra and where to find us */
+.sheet-menu .ask{display:inline-flex;align-items:center;gap:12px;margin-top:22px;padding:8px 26px 8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:linear-gradient(100deg,rgba(122,47,224,.96),rgba(74,26,148,.94));box-shadow:0 14px 40px rgba(122,47,224,.38),inset 0 1px 0 rgba(255,255,255,.2);color:#fff;cursor:pointer;font:700 10px/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase}
+.sheet-menu .ask .ey{flex:none;width:38px;height:38px;border-radius:50%;background:rgba(8,6,14,.5);display:grid;place-items:center}
+.sheet-menu .menu-bybd{margin:20px 0 0;font:400 15px/1.3 var(--f-mantra);color:var(--purple-l)}
+.sheet-menu .menu-foot{margin:10px 0 0;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 .sheet-menu .menu-foot a{color:var(--ink);text-decoration:none}
 
 /* ── Hero ── */
@@ -290,22 +285,34 @@ img{max-width:100%}
 @keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 
-/* ── Dragons: each seam is a lane; a rendered CGI dragon flies through it, head first. It sits in the page, so it scrolls with it, steady ── */
-.dragon{position:relative;z-index:5;pointer-events:none;aspect-ratio:12/5;margin-block:-13vw}
-.dragon .dg-media{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+/* ── Dragons: each seam is a lane, and a winged dragon flies across it, wings beating. The lane sits in the page and the
+   dragon glides on the GPU (a transform), so it scrolls with the page and never shakes ── */
+.dragon{--lh:56vw;--dur:5.4s;position:relative;z-index:5;height:var(--lh);margin-block:calc(var(--lh) * -.36);pointer-events:none;overflow:hidden}
+.dragon .dg-fly{position:absolute;left:0;top:50%;height:calc(var(--lh) * .9);aspect-ratio:320/471;margin-top:calc(var(--lh) * -.45);transform:translate3d(100vw,0,0)}
+.dragon .dg-bob{position:absolute;inset:0}
+.dragon .dg-media{display:block;width:100%;height:100%}
 .dragon.flip .dg-media{transform:scaleX(-1)}
-@media (min-width:700px){.dragon{aspect-ratio:24/5;margin-block:-7vw}}
+.dragon.on .dg-fly{animation:dgfly var(--dur) linear infinite}
+.dragon.on.flip .dg-fly{animation-name:dgfly-r}
+.dragon.on .dg-bob{animation:dgbob 2.9s ease-in-out infinite alternate}
+.dragon.still .dg-fly{transform:translate3d(calc(62vw - 50%),0,0)}
+.dragon.still.flip .dg-fly{transform:translate3d(calc(38vw - 50%),0,0)}
+.menu-open .dragon .dg-fly,.menu-open .dragon .dg-bob{animation-play-state:paused}
+@keyframes dgfly{0%{transform:translate3d(100vw,0,0)}86%,100%{transform:translate3d(-100%,0,0)}}
+@keyframes dgfly-r{0%{transform:translate3d(-100%,0,0)}86%,100%{transform:translate3d(100vw,0,0)}}
+@keyframes dgbob{from{transform:translate3d(0,-4%,0)}to{transform:translate3d(0,4%,0)}}
+@media (min-width:700px){.dragon{--lh:25vw;--dur:7.6s}}
 
 /* ── Sections ── */
 section{position:relative}
 .sec{padding-block:clamp(44px,6vw,96px)}
-.dragon+.sec{padding-top:clamp(84px,8vw,124px)}
+.dragon+.sec{padding-top:clamp(84px,9vw,140px)}
 /* The first one sits in the opening screen, its whole body under Be You Be Different, instead of peeking up from the seam */
-.hero+.dragon{margin:-36vw 0 -5.6vw}
+.hero+.dragon{--lh:37vw;margin:-37vw 0 0}
 .hero+.dragon+.sec{padding-top:clamp(48px,6vw,96px)}
 main>.dragon:last-child{margin-bottom:0}
-@media (min-width:700px){.hero+.dragon{margin:-18vw 0 -3vw}}
-.sec:has(+.dragon){padding-bottom:clamp(64px,7vw,110px)}
+@media (min-width:700px){.hero+.dragon{--lh:17vw;margin:-15vw 0 -2vw}}
+.sec:has(+.dragon){padding-bottom:clamp(64px,8.5vw,130px)}
 .home .chat-fab,.menu-open .chat-fab{display:none}
 .sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 32px;margin-bottom:clamp(16px,2.4vw,32px)}
 .sec-head h2{margin:0;font:400 clamp(40px,8vw,112px)/.85 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
@@ -670,7 +677,7 @@ main>.dragon:last-child{margin-bottom:0}
 /* ── Reveal on scroll (content stays visible without JS) ── */
 .js .rv{transform:translateY(26px);opacity:.001;transition:transform .9s var(--e-settle),opacity .9s var(--e-settle)}
 .js .rv.in{transform:none;opacity:1}
-@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd,.m-art .kb{animation:none}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}}
+@media (prefers-reduced-motion:reduce){.js .rv{transform:none;opacity:1}.btn.solid::after{animation:none}.emo span,.hero-bybd{animation:none}.m-dr,.m-dr .burst{animation:none!important}.sheet-menu,.sheet-menu *{transition-duration:0s!important;transition-delay:0s!important}.dragon .dg-fly,.dragon .dg-bob{animation:none!important}}
 </style>
 </head>
 <body>
@@ -688,32 +695,29 @@ main>.dragon:last-child{margin-bottom:0}
     </nav>
     <button class="bag-btn" type="button" id="bag-open">Cart (<b id="bag-count">0</b>)</button>
     <button class="theme-btn" type="button" id="theme" aria-label="Light mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
-    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="glow" aria-hidden="true"></span><span class="halo" aria-hidden="true"></span><span class="av" aria-hidden="true"><img src="img/dragon/avatar.webp" alt="" width="192" height="192" decoding="async"></span><span class="mx" aria-hidden="true"></span><span class="puff" aria-hidden="true"></span></button>
+    <button class="menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span class="glow" aria-hidden="true"></span><span class="halo" aria-hidden="true"></span><span class="av" aria-hidden="true"><img src="img/dragon/avatar-crystal.webp" alt="" width="192" height="192" decoding="async"></span><span class="mx" aria-hidden="true"></span><span class="puff" aria-hidden="true"></span></button>
   </div>
 </header>
 
 <div class="sheet-menu" id="menu" hidden>
-  <div class="m-art" aria-hidden="true"><div class="kb"><img src="img/dragon/avatar-full.webp" srcset="img/dragon/avatar-560.webp 560w, img/dragon/avatar-full.webp 852w" sizes="100vw" alt="" width="852" height="984" decoding="async"></div></div>
-  <div class="m-in">
-    <p class="m-eye" aria-hidden="true"><span>Menu</span><i></i><span>Drop 01</span></p>
+  <span class="m-bg" aria-hidden="true"></span><span class="m-glow" aria-hidden="true"></span>
+  <div class="m-back" aria-hidden="true"><div class="m-dr"><span class="burst"></span><img src="img/dragon/menu-fire-640.webp" srcset="img/dragon/menu-fire-640.webp 640w, img/dragon/menu-fire.webp 1024w" sizes="(max-width:586px) 150vw, 880px" alt="" width="1024" height="1100" decoding="async"></div><span class="sh"></span></div>
+  <div class="m-scroll"><div class="m-in">
+    <img class="menu-sig m-up" src="img/brand/yowa-signature.png" alt="" width="560" height="351" style="--d:0">
     <nav class="m-list" aria-label="Menu">
-      <a class="go" href="#home" style="--d:0"><span class="n">01</span><span class="t"><span>Home</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+      <a class="go" href="#home" style="--d:1"><span class="t"><span>Home</span></span></a>
       <div class="m-shop">
-        <button class="go m-toggle" type="button" id="m-shop" aria-expanded="false" aria-controls="m-cats" style="--d:1"><span class="n">02</span><span class="t"><span>Shop</span></span><span class="pl" aria-hidden="true"></span></button>
+        <button class="go m-toggle" type="button" id="m-shop" aria-expanded="false" aria-controls="m-cats" style="--d:2"><span class="t"><span>Shop<img class="mk" src="img/dragon/icon-crystal.webp" alt="" width="71" height="104" decoding="async"></span></span></button>
         <div class="m-cats" id="m-cats"><div class="m-cats-in"><div class="m-grid" id="m-grid"></div></div></div>
       </div>
-      <a class="go" href="#gallery" style="--d:2"><span class="n">03</span><span class="t"><span>Gallery</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
-      <a class="go" href="#message" style="--d:3"><span class="n">04</span><span class="t"><span>Message</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
-      <a class="go" href="#list" style="--d:4"><span class="n">05</span><span class="t"><span>Get the code</span></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></a>
+      <a class="go" href="#gallery" style="--d:3"><span class="t"><span>Gallery</span></span></a>
+      <a class="go" href="#message" style="--d:4"><span class="t"><span>Message</span></span></a>
+      <a class="go" href="#list" style="--d:5"><span class="t"><span>Get the code</span></span></a>
     </nav>
-    <div class="m-foot">
-      <button class="ask" type="button" id="menu-chat"><span class="ey" aria-hidden="true"><i></i></span><span class="tx"><b>Ask YOWA</b><small>Sizes, the drop, anything</small></span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"/></svg></span></button>
-      <div class="m-meta">
-        <p class="menu-bybd">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
-        <p class="menu-foot"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">@yowa_bybd</a><span aria-hidden="true">·</span><span>Built by Nalto</span></p>
-      </div>
-    </div>
-  </div>
+    <button class="ask m-up" type="button" id="menu-chat" style="--d:7"><span class="ey" aria-hidden="true"><i></i></span>Ask YOWA</button>
+    <p class="menu-bybd m-up" style="--d:8">Be You Be Different <span class="emo"><span style="--i:0">💜</span><span style="--i:1">⚔️</span><span style="--i:2">🐉</span></span></p>
+    <p class="menu-foot m-up" style="--d:9"><a href="https://instagram.com/yowa_bybd" target="_blank" rel="noopener">Instagram @yowa_bybd</a> · Built by Nalto</p>
+  </div></div>
 </div>
 
 <main>
@@ -1135,7 +1139,7 @@ const LIBRARY = [
   if (swirl) {
     swirl.start();
     ['pointermove', 'pointerdown'].forEach(t => addEventListener(t, e => swirl.pointer(e.clientX / innerWidth, 1 - e.clientY / innerHeight), { passive: true }));
-    document.addEventListener('visibilitychange', () => document.hidden ? swirl.stop() : swirl.start());
+    document.addEventListener('visibilitychange', () => document.hidden || document.documentElement.classList.contains('menu-open') ? swirl.stop() : swirl.start());
     addEventListener('resize', () => swirl.draw());
   }
 
@@ -1288,40 +1292,35 @@ const LIBRARY = [
   }
   tick(); setInterval(tick, 1000);
 
-  /* ── Dragons: a rendered CGI dragon flies through every seam, head first, and round again ──
-     Rendered ahead of time in Blender on a see-through background (Flying Dragon by peaznchips, CC0, made purple) and placed
-     in the page itself, so it scrolls with the page, rock steady. Chrome, Android and Firefox play a see-through WebM;
-     Safari and every iPhone browser (all WebKit, which can't show WebM's see-through) get the same flight as an animated WebP. */
+  /* ── Dragons: the two winged YOWA dragons take turns flying through the seams, wings beating ──
+     Each wing beat is a short see-through loop (a WebM on Chrome, Android and Firefox; an animated WebP on Safari and every
+     iPhone browser, which can't show a see-through WebM); the page itself glides it across the lane, so it moves at the
+     screen's full frame rate and scrolls with the page. Reduced motion: the dragon holds still in its lane. */
   const lanes = $$('.dragon'), ua = navigator.userAgent;
   const webkitOnly = /AppleWebKit/.test(ua) && !/Chrome\/|Chromium|Edg\/|Android/.test(ua);
-  const laneKind = () => innerWidth >= 700 ? 'wide' : 'phone';
   function fillLane(el) {
-    const kind = laneKind(), still = reduced(), key = kind + (still ? '-still' : '');
-    if (el.dataset.kind === key && el.firstChild) return el.firstChild;
-    el.textContent = ''; el.dataset.kind = key;
+    if (el.firstChild) return el.querySelector('.dg-media');
+    const who = el.dataset.dragon, still = reduced();
+    const fly = document.createElement('div'), bob = document.createElement('div'); fly.className = 'dg-fly'; bob.className = 'dg-bob';
     let m;
-    if (still || webkitOnly) { m = new Image(); m.alt = ''; m.decoding = 'async'; m.src = 'img/dragon/' + (still ? 'still-' : 'fly-') + kind + '.webp'; }
+    if (still || webkitOnly) { m = new Image(); m.alt = ''; m.decoding = 'async'; m.src = 'img/dragon/wing-' + who + (still ? '-still' : '') + '.webp'; }
     else {
       m = document.createElement('video'); m.muted = m.defaultMuted = m.loop = m.playsInline = true; m.disablePictureInPicture = true;
-      m.setAttribute('muted', ''); m.setAttribute('playsinline', ''); m.preload = 'auto'; m.src = 'img/dragon/fly-' + kind + '.webm';
+      m.setAttribute('muted', ''); m.setAttribute('playsinline', ''); m.preload = 'auto'; m.src = 'img/dragon/wing-' + who + '.webm';
     }
-    m.className = 'dg-media'; el.appendChild(m); return m;
+    m.className = 'dg-media'; bob.appendChild(m); fly.appendChild(bob); el.appendChild(fly); el.classList.toggle('still', still); return m;
   }
-  // Each lane plays only while it's near the screen. Back after a while away, the dragon starts its flight again from the edge
+  const covered = () => rootEl0.classList.contains('menu-open');
+  const rootEl0 = document.documentElement;
+  const lanePlay = (el, on) => { const m = el.querySelector('video'); if (m) { if (on && !covered()) m.play().catch(() => { }); else m.pause(); } };
+  // A lane flies only while it's near the screen; each time you come back to it, the dragon sets off again from the edge
   const laneIO = new IntersectionObserver(es => es.forEach(e => {
     const el = e.target;
-    if (e.isIntersecting) {
-      const m = fillLane(el);
-      if (m.tagName === 'VIDEO') { if (Date.now() - (+el.dataset.left || 0) > 1500) try { m.currentTime = 0; } catch (x) { } m.play().catch(() => { }); }
-    } else if (el.firstChild) {
-      el.dataset.left = Date.now();
-      if (el.firstChild.tagName === 'VIDEO') el.firstChild.pause(); else { el.textContent = ''; delete el.dataset.kind; }
-    }
-  }), { rootMargin: '160px 0px' });
-  lanes.forEach((el, i) => el.classList.toggle('flip', i % 2 === 1));   // every other one flies the other way
+    if (e.isIntersecting) { fillLane(el); el.classList.add('on'); lanePlay(el, true); }
+    else { el.classList.remove('on'); lanePlay(el, false); }
+  }), { rootMargin: '120px 0px' });
+  lanes.forEach((el, i) => { el.dataset.dragon = i % 2 ? 'fire' : 'crystal'; el.classList.toggle('flip', i % 2 === 1); });   // they take turns, and fly opposite ways
   setTimeout(() => lanes.forEach(el => laneIO.observe(el)), 350);   // just after the first screen is up
-  let laneWide = innerWidth >= 700;
-  addEventListener('resize', () => { if ((innerWidth >= 700) === laneWide) return; laneWide = !laneWide; lanes.forEach(el => { if (el.firstChild) { const m = fillLane(el); if (m.play) m.play().catch(() => { }); } }); });
 
   /* ── Header state + menu ── */
   // Solid once you scroll. It slides away while you scroll down and comes back the moment you scroll up; the line on top shows how far down you are.
@@ -1335,72 +1334,39 @@ const LIBRARY = [
     if (swirl && dy) swirl.kick(Math.min(.6, Math.abs(dy) * .008));
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  // The dragon avatar opens the menu: it roars purple fire, the menu grows out of it in a circle, and an X takes its place.
-  const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement, mShop = $('#m-shop'), mShopBox = mShop.parentElement;
-  let menuT = 0;
+  // The crystal dragon opens the menu: it shines, the menu grows out of it as a circle, and an X takes its place.
+  // While the menu covers the page, everything behind it (the live swirl, the flying dragons) rests, so the menu stays smooth.
+  const menu = $('#menu'), menuBtn = $('#menu-open'), rootEl = document.documentElement, mShop = $('#m-shop'), mShopBox = mShop.parentElement, mScroll = $('#menu .m-scroll');
+  let menuT = 0, restT = 0;
   const menuOn = () => menu.classList.contains('on');
   const setShop = on => { mShop.setAttribute('aria-expanded', String(on)); mShopBox.classList.toggle('open', on); };
+  const rest = on => { clearTimeout(restT); if (on) restT = setTimeout(() => { if (swirl) swirl.stop(); lanes.forEach(el => lanePlay(el, false)); }, 650); else { if (swirl && !document.hidden) swirl.start(); lanes.forEach(el => { if (el.classList.contains('on')) lanePlay(el, true); }); } };
   function openMenu() {
     if (menuOn()) return; clearTimeout(menuT);
     const r = menuBtn.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     menu.style.setProperty('--mx', cx + 'px'); menu.style.setProperty('--my', cy + 'px');
-    menu.style.setProperty('--mr', Math.ceil(Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)) + 24) + 'px');
-    setShop(false); menu.hidden = false; menu.scrollTop = 0; void menu.offsetWidth; menu.classList.add('on');
-    document.body.style.overflow = 'hidden'; rootEl.classList.add('menu-open'); top.classList.remove('away');
+    menu.style.setProperty('--mr', Math.ceil(Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)) + 8) + 'px');
+    setShop(false); menu.hidden = false; mScroll.scrollTop = 0; void menu.offsetWidth; menu.classList.add('on');
+    document.body.style.overflow = 'hidden'; rootEl.classList.add('menu-open'); top.classList.remove('away'); rest(true);
     menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Close menu'); backstack.open(closeMenu); buzz(6);
   }
   function closeMenu(keep) {
     if (!menuOn()) return; menu.classList.remove('on'); flash('back', 650);
-    clearTimeout(menuT); menuT = setTimeout(() => { if (!menuOn()) menu.hidden = true; }, reduced() ? 0 : 520);   // the circle closes back into the dragon first
-    document.body.style.overflow = ''; rootEl.classList.remove('menu-open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close();
+    clearTimeout(menuT); menuT = setTimeout(() => { if (!menuOn()) menu.hidden = true; }, reduced() ? 0 : 560);   // the circle closes back into the dragon first
+    document.body.style.overflow = ''; rootEl.classList.remove('menu-open'); rest(false);
+    menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Menu'); if (keep !== true) backstack.close();
   }
-  // Purple fire: soft glowing puffs that pour out of the dragon's mouth, white hot at first, then lavender, purple, gone
-  const breath = (() => {
-    let cv, g, ps = [], raf = 0, last = 0, dpr = 1;
-    const sprite = (a, b) => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), r = x.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, a); r.addColorStop(.38, b); r.addColorStop(1, 'rgba(60,10,140,0)'); x.fillStyle = r; x.fillRect(0, 0, 64, 64); return c; };
-    let S;
-    function frame(now) {
-      const dt = Math.min(.05, last ? (now - last) / 1000 : .016); last = now;
-      g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalCompositeOperation = 'lighter';
-      ps = ps.filter(p => (p.age += dt) < p.life);
-      for (const p of ps) {
-        if (p.age < 0) continue;
-        const k = p.age / p.life, d = Math.exp(-p.drag * dt);
-        p.vx *= d; p.vy = p.vy * d - p.lift * dt; p.x += p.vx * dt; p.y += p.vy * dt;
-        const r = p.r0 + (p.r1 - p.r0) * Math.pow(k, .6);
-        g.globalAlpha = p.a * (1 - k) * Math.min(1, k * 14);
-        const st = k * p.heat; g.drawImage(S[st < .1 ? 0 : st < .34 ? 1 : st < .66 ? 2 : 3], p.x - r, p.y - r, r * 2, r * 2);
-      }
-      if (ps.length) raf = requestAnimationFrame(frame); else { raf = 0; last = 0; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
-    }
-    return (x, y, power) => {
-      if (reduced() || document.hidden) return;
-      if (!cv) { cv = document.createElement('canvas'); cv.className = 'breath'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv); g = cv.getContext('2d'); S = [sprite('rgba(255,255,255,1)', 'rgba(244,234,255,.75)'), sprite('rgba(236,220,255,1)', 'rgba(196,150,255,.6)'), sprite('rgba(170,96,255,.95)', 'rgba(122,47,224,.45)'), sprite('rgba(96,34,190,.7)', 'rgba(58,14,134,.3)')]; }
-      dpr = Math.min(devicePixelRatio || 1, 2); const w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
-      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
-      cv.hidden = false;
-      const n = Math.round(56 * power), far = Math.min(1.15, innerWidth / 400);
-      for (let i = 0; i < n; i++) {
-        const a = Math.PI * (.83 + (Math.random() - .5) * .22), v = rnd(520, 1050) * power ** .5 * far;
-        ps.push({ x: x + rnd(-2, 2), y: y + rnd(-2, 2), vx: Math.cos(a) * v, vy: Math.sin(a) * v, drag: rnd(1.9, 2.6), lift: rnd(30, 90), age: -Math.random() * .4 * power, life: rnd(.6, 1.05), r0: rnd(4, 8), r1: rnd(26, 64) * (.5 + power * .5), a: rnd(.3, .55), heat: rnd(.85, 1.2) });
-      }
-      for (let i = 0; i < Math.round(16 * power); i++) {   // embers that fly on and drift up
-        const a = Math.PI * (.84 + (Math.random() - .5) * .34), v = rnd(260, 620) * power ** .5;
-        ps.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, drag: rnd(1, 1.6), lift: rnd(90, 170), age: -Math.random() * .5 * power, life: rnd(.9, 1.5), r0: rnd(1.6, 3), r1: rnd(1, 2), a: 1, heat: .3 });
-      }
-      if (!raf) raf = requestAnimationFrame(frame);
-    };
-  })();
-  const mouth = () => { const r = menuBtn.getBoundingClientRect(); return [r.left + r.width * .3, r.top + r.height * .72]; };
-  const flash = (c, ms) => { menuBtn.classList.remove('fire', 'back'); void menuBtn.offsetWidth; menuBtn.classList.add(c); setTimeout(() => menuBtn.classList.remove(c), ms); };
+  const flash = (c, ms) => { menuBtn.classList.remove('shine', 'back'); void menuBtn.offsetWidth; menuBtn.classList.add(c); setTimeout(() => menuBtn.classList.remove(c), ms); };
+  // have the menu's dragon ready before the first tap, so the menu never waits on it
+  setTimeout(() => { const i = $('#menu .m-dr img'); if (i && i.decode) i.decode().catch(() => { }); }, 1800);
   // Light or dark, both purple. Remembered on this phone
   const themeBtn = $('#theme');
   const paintTheme = () => { const l = rootEl.dataset.theme === 'light'; themeBtn.setAttribute('aria-pressed', String(l)); themeBtn.setAttribute('aria-label', l ? 'Dark mode' : 'Light mode'); const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', l ? '#F3EEFF' : '#08060E'); };
   themeBtn.addEventListener('click', () => { if (rootEl.dataset.theme === 'light') delete rootEl.dataset.theme; else rootEl.dataset.theme = 'light'; store.set('yowa-theme', rootEl.dataset.theme === 'light' ? 'light' : 'dark'); paintTheme(); buzz(8); });
   paintTheme();
-  menuBtn.addEventListener('click', () => { if (menuOn()) return closeMenu(); flash('fire', 800); breath(...mouth(), 1); openMenu(); });
-  // now and then, a little smoke and embers from the mouth while it waits
-  (function idle() { setTimeout(() => { if (!menuOn() && !top.classList.contains('away') && getComputedStyle(menuBtn).display !== 'none') breath(...mouth(), .22); idle(); }, rnd(7000, 13000)); })();
+  menuBtn.addEventListener('click', () => { if (menuOn()) return closeMenu(); flash('shine', 800); openMenu(); });
+  // now and then a glint runs across the dragon while it waits
+  (function idle() { setTimeout(() => { if (!menuOn() && !reduced() && !document.hidden && !top.classList.contains('away')) flash('shine', 800); idle(); }, rnd(7000, 12000)); })();
   // A section in the menu: close it and glide there, without leaving an extra step in the back history.
   $$('#menu a.go').forEach(a => a.addEventListener('click', e => { e.preventDefault(); closeMenu(true); backstack.drop(); location.replace(a.getAttribute('href')); }));
   // Shop opens its categories in place: a round thumbnail and how many pieces each has. Picking one slides in the side shop
