@@ -19,7 +19,7 @@ Every photo has a fixed code, written next to it in `LIBRARY` at the top of the 
 
 | Where | Photo |
 |---|---|
-| Hero slideshow, in order | YW·054 the skateboard kickflip (`img/library/yowa-skate.jpg`), YW·010 the crew, YW·033 the black raglan, YW·042 red and black |
+| Hero slideshow, in order | `img/hero/hero-1.jpg` to `hero-5.jpg`: the crew in the 042 caps, Be You Be Different across the back at night, the red raglan, black long sleeves at the shutter, raglans and the skateboard in the car park. Just the photos, no codes on top |
 | Message background | YW·010, with its motion clip `img/motion/crew.mp4` |
 | The list background | YW·033 |
 | `img/look-*.jpg`, `img/detail-*.jpg`, `img/raglan-*.jpg` | The "In real life" gallery and the product photos |
