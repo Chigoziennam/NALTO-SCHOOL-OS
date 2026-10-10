@@ -25,19 +25,21 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="YOWA">
 <link rel="preload" as="image" href="img/library/yowa-skate.jpg" fetchpriority="high">
+<link rel="preload" href="fonts/black-panther.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Metal+Mania&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Metal+Mania&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap"></noscript>
 <style>
 /* YOWA main site. Night mode throughout; the live swirl sits behind the whole page and the photos move on top of it. */
+@font-face{font-family:"Black Panther";src:url(fonts/black-panther.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
 :root{
   --void:#08060E; --void-2:#0E0A1A; --panel:#140E26;
   --purple:#7A2FE0; --purple-l:#A65BFF; --purple-d:#4A1A94;
   --red:#E23A2E; --cream:#F3EEE2; --ink:#EFEAF7; --mut:#9A91B3; --cyan:#2BE8FF;
   --line:rgba(166,91,255,.22); --glow:rgba(140,60,255,.55);
   --f-display:"Anton",Impact,"Arial Narrow",sans-serif;
-  --f-mantra:"Metal Mania","Anton",Impact,sans-serif;   /* the spiky Black Panther look, free for commercial use (OFL) */
+  --f-mantra:"Black Panther","Anton",Impact,sans-serif;   /* licensed by YOWA; served from fonts/ */
   --f-body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
   --f-label:"Syncopate","Arial Black",Arial,sans-serif;
   --f-mono:"Space Mono","Courier New",ui-monospace,monospace;
@@ -218,7 +220,7 @@ img{max-width:100%}
 .sheet-menu .m-grid button:active{border-color:var(--purple-l);background:rgba(122,47,224,.32)}
 @media (hover:hover){.sheet-menu .m-grid button:hover{border-color:var(--purple-l)}}
 /* down at the bottom: the mantra and where to find us */
-.sheet-menu .menu-bybd{margin:auto 0 0;padding-top:28px;font:400 clamp(26px,7.6vw,34px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em;color:var(--purple-l);text-shadow:0 0 18px rgba(166,91,255,.45)}
+.sheet-menu .menu-bybd{margin:auto 0 0;padding-top:28px;font:400 clamp(24px,7vw,32px)/1.05 var(--f-mantra);text-transform:uppercase;letter-spacing:.02em;color:var(--purple-l);text-shadow:0 0 18px rgba(166,91,255,.45)}
 .sheet-menu .menu-foot{margin:10px 0 0;font:700 8.5px/1.8 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 .sheet-menu .menu-foot a{color:var(--ink);text-decoration:none}
 
@@ -245,7 +247,7 @@ img{max-width:100%}
 .bars b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:0 50%;box-shadow:0 0 8px rgba(166,91,255,.8)}
 .bars i.past b{transform:scaleX(1)}
 .hero-in{display:grid;justify-items:center;align-content:end;text-align:center;gap:14px;padding:120px var(--gut) calc(40px + env(safe-area-inset-bottom,0px));transition:opacity .35s ease}
-.hero-bybd{margin:0;font:400 clamp(28px,9.6vw,54px)/1.02 var(--f-mantra);text-transform:uppercase;letter-spacing:.01em;color:#fff;text-shadow:0 0 26px rgba(166,91,255,.7),0 3px 18px rgba(8,6,14,.75);animation:bybdin 1.1s var(--e-settle) .45s both}
+.hero-bybd{margin:0;font:400 clamp(32px,11.6vw,64px)/1.02 var(--f-mantra);text-transform:uppercase;letter-spacing:.01em;color:#fff;text-shadow:0 0 26px rgba(166,91,255,.7),0 3px 18px rgba(8,6,14,.75);animation:bybdin 1.1s var(--e-settle) .45s both}
 .hero-bybd .ln{display:block}   /* Be You, then Be Different */
 .hero-bybd .bi{--ih:.8em;gap:.14em;margin-left:.2em;vertical-align:.02em;filter:drop-shadow(0 0 10px rgba(166,91,255,.85)) drop-shadow(0 2px 6px rgba(8,6,14,.6))}
 @keyframes bybdin{from{opacity:0;transform:translateY(12px)}}
@@ -258,7 +260,7 @@ img{max-width:100%}
   .hero-media::after{background:linear-gradient(180deg,transparent 62%,rgba(8,6,14,.55) 100%),radial-gradient(140% 100% at 50% 40%,transparent 60%,rgba(60,20,130,.45) 100%)}
   .hero-media::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;z-index:3;background:repeating-linear-gradient(90deg,var(--purple-l) 0 22px,transparent 22px 44px)}
   .bars{top:14px;left:14px;right:14px}
-  .hero-bybd{font-size:clamp(50px,5.6vw,92px)}
+  .hero-bybd{font-size:clamp(60px,6.8vw,112px)}
 }
 .pen{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px var(--purple-l);opacity:0;pointer-events:none}
 @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(166,91,255,0);opacity:.6}}
