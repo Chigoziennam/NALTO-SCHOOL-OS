@@ -24,7 +24,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="YOWA">
-<link rel="preload" as="image" href="img/library/yowa-skate.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="img/hero/hero-3.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Pinyon+Script&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
@@ -388,6 +388,8 @@ section{position:relative}
 .shot .art svg{width:58%;height:auto;filter:drop-shadow(0 0 16px rgba(166,91,255,.7))}
 .shot .cap{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:space-between;align-items:center;font:700 8px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase}
 .shot .cap i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1.6s infinite}
+.irl-shelves{margin:0 0 clamp(14px,2vw,22px)}
+.empty-note{margin:6px 0 0;font:700 10px/1.6 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
 .rail-hint{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 16px;margin-top:16px}
 .rail-hint a{text-decoration:none;color:var(--ink);transition:color .2s}
 .rail-hint a b{color:var(--purple-l);font-weight:700}
@@ -752,11 +754,13 @@ section{position:relative}
         <h2 id="gal-t">In real life</h2>
         <p>Real pieces on real people. Tap one to see it up close.</p>
       </div>
+      <div class="lib-shelves irl-shelves rv" id="lib-shelves" role="group" aria-label="Filter"></div>
+      <p class="empty-note" id="irl-empty" hidden>New photos dropping soon.</p>
     </div>
     <div class="rail" id="rail" tabindex="0" aria-label="Gallery. Drag or use the arrow keys; press Enter on a photo to open it.">
       <div class="rail-track" id="rail-track"></div>
     </div>
-    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">54</b> photos in the Library →</a></div>
+    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">0</b> photos in the Library →</a></div>
   </section>
 
 
@@ -767,7 +771,6 @@ section{position:relative}
         <p>Every photo on file, numbered. Tap one to see it full size.</p>
       </div>
       <div class="lib-bar rv">
-        <div class="lib-shelves" id="lib-shelves" role="group" aria-label="Shelves"></div>
         <div class="lib-side">
           <span class="label" id="lib-count" role="status"></span>
           <div class="lib-views" role="group" aria-label="View">
@@ -776,6 +779,7 @@ section{position:relative}
           </div>
         </div>
       </div>
+      <p class="empty-note" id="lib-empty" hidden>New photos dropping soon.</p>
       <div id="lib-body"></div>
       <div class="lib-more"><button class="btn" type="button" id="lib-more" hidden>Show more</button></div>
     </div>
@@ -955,77 +959,12 @@ const optDefaults = p => { const c = {}; (p.opts || []).forEach(o => { c[o.name]
 const imagesFor = (p, c) => { const l = (p.looks || []).find(l => Object.keys(l.when).every(k => c && c[k] === l.when[k])); return l ? l.images : p.images; };
 const optText = (p, c) => (p.opts || []).filter(o => o.values.length > 1).map(o => c && c[o.name]).filter(Boolean).join(' · ');
 PRODUCTS.forEach(p => { p.opts = p.opts || []; if (!p.images) p.images = imagesFor(p, optDefaults(p)); });
-const GALLERY = [
-  { src: 'img/look-4.jpg', cap: 'Liberty Raglan · Blue' },
-  { src: 'img/detail-print.jpg', cap: 'The Liberty print' },
-  { src: 'img/look-2.jpg', cap: 'Liberty Raglan · Red' },
-  { src: 'img/detail-script.jpg', cap: 'Be You Be Different, down the sleeve' },
-  { src: 'img/look-3.jpg', cap: 'Blue and red' },
-  { src: 'img/detail-studs.jpg', cap: 'Studded raglan seams' },
-  { src: 'img/look-1.jpg', cap: 'Drop 01' },
-  { src: 'img/library/yowa-1522.jpg', cap: 'Liberty Raglan · Black' }
-];
 // Library: every photo on file. Each carries its own code (no), written here and never worked out from the order,
 // so YW·010 is always the same photo. Add new photos at the end with the next free code.
 // src is the full photo, the grid loads the small copy in img/library/t/. shelves: what's in the photo (Raglan shirts, Plain tees,
 // Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
 // Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
-const LIBRARY = [
-  { no: 'YW·001', src: 'img/library/yowa-1496.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red · The jump', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
-  { no: 'YW·002', src: 'img/library/yowa-0905.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Blue' } },
-  { no: 'YW·003', src: 'img/library/yowa-1002.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, up close', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·004', src: 'img/library/yowa-1522.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·005', src: 'img/library/yowa-1385.jpg', w: 1200, h: 1600, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·006', src: 'img/library/yowa-1480.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Danfo', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Blue' } },
-  { no: 'YW·007', src: 'img/library/yowa-1403.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Laid out', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·008', src: 'img/library/yowa-0899.jpg', w: 1066, h: 1600, cap: 'Red and blue, on the wall', shelves: ['Raglan shirts', 'Skull caps'] },
-  { no: 'YW·009', src: 'img/library/yowa-1515.jpg', w: 1066, h: 1600, cap: 'Red and black, on the block', shelves: ['Raglan shirts'] },
-  { no: 'YW·010', src: 'img/library/yowa-9924.jpg', w: 1200, h: 1600, cap: 'The crew · Rooftop', shelves: ['Plain tees', 'Caps'] },
-  { no: 'YW·011', src: 'img/library/yowa-0983.jpg', w: 1200, h: 1600, cap: '042 Cap · White', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·012', src: 'img/library/yowa-1427.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, studded', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·013', src: 'img/library/yowa-1370.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·014', src: 'img/library/yowa-0897.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
-  { no: 'YW·015', src: 'img/library/yowa-1512.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
-  { no: 'YW·016', src: 'img/library/yowa-1398.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·017', src: 'img/library/yowa-1523.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·018', src: 'img/library/yowa-0909.jpg', w: 1066, h: 1600, cap: 'Red and blue', shelves: ['Raglan shirts', 'Skull caps'] },
-  { no: 'YW·019', src: 'img/library/yowa-1361.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·020', src: 'img/library/yowa-1457.jpg', w: 1600, h: 1194, cap: 'Liberty Raglan · Black · Lagos', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·021', src: 'img/library/yowa-4405.jpg', w: 900, h: 1600, cap: '042 Caps · From above', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·022', src: 'img/library/yowa-1517.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·023', src: 'img/library/yowa-1409.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·024', src: 'img/library/yowa-1488.jpg', w: 1066, h: 1600, cap: 'The crew · Black raglans', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·025', src: 'img/library/yowa-0903.jpg', w: 1066, h: 1600, cap: 'Blue and red', shelves: ['Raglan shirts', 'Skull caps'] },
-  { no: 'YW·026', src: 'img/library/yowa-1005.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·027', src: 'img/library/yowa-1520.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Red', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Red' } },
-  { no: 'YW·028', src: 'img/library/yowa-1411.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·029', src: 'img/library/yowa-1458.jpg', w: 1066, h: 1600, cap: 'Black and grey', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·030', src: 'img/library/yowa-1364.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·031', src: 'img/library/yowa-1513.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·032', src: 'img/library/yowa-41b449d3-946.jpg', w: 900, h: 1600, cap: 'The crew · 042 Caps', shelves: ['Plain tees', 'Caps'], product: 'cap-042' },
-  { no: 'YW·033', src: 'img/library/yowa-1524.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black, full fit', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·034', src: 'img/library/yowa-1407.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Studded black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·035', src: 'img/library/yowa-0976.jpg', w: 1200, h: 1600, cap: '042 Cap · White, the patches', shelves: ['Skull caps', 'Caps'], product: 'cap-042' },
-  { no: 'YW·036', src: 'img/library/yowa-1511.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts', 'Caps', 'Joggers'] },
-  { no: 'YW·037', src: 'img/library/yowa-1386.jpg', w: 1600, h: 1200, cap: '042 Caps · Every colour', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·038', src: 'img/library/yowa-1477.jpg', w: 1066, h: 1600, cap: 'Grey raglan · Skull Cap', shelves: ['Raglan shirts', 'Skull caps'], product: 'liberty-raglan', pick: { Colour: 'Grey' } },
-  { no: 'YW·039', src: 'img/library/yowa-1401.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Up close', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·040', src: 'img/library/yowa-1514.jpg', w: 1066, h: 1600, cap: 'Black and red', shelves: ['Raglan shirts'] },
-  { no: 'YW·041', src: 'img/library/yowa-0999.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·042', src: 'img/library/yowa-1518.jpg', w: 1066, h: 1600, cap: 'Red and black', shelves: ['Raglan shirts'] },
-  { no: 'YW·043', src: 'img/library/yowa-1375.jpg', w: 1200, h: 1600, cap: '042 Caps · Navy, black and pink', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·044', src: 'img/library/yowa-1428.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·045', src: 'img/library/yowa-1412.jpg', w: 1200, h: 1600, cap: 'Skull Caps · In the yard', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·046', src: 'img/library/yowa-1489.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Black', shelves: ['Raglan shirts', 'Caps'], product: 'liberty-raglan', pick: { Colour: 'Black' } },
-  { no: 'YW·047', src: 'img/library/yowa-1003.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·048', src: 'img/library/yowa-1360.jpg', w: 1200, h: 1600, cap: '042 Cap · Black, on the stump', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·049', src: 'img/library/yowa-1397.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·050', src: 'img/library/yowa-1408.jpg', w: 1200, h: 1600, cap: 'Skull Caps · Camo and black', shelves: ['Skull caps'], product: 'skull-cap' },
-  { no: 'YW·051', src: 'img/library/yowa-0997.jpg', w: 1200, h: 1600, cap: '042 Cap · The signature side', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·052', src: 'img/library/yowa-1380.jpg', w: 1200, h: 1600, cap: '042 Caps · The set', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·053', src: 'img/library/yowa-1009.jpg', w: 1200, h: 1600, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042' },
-  { no: 'YW·054', src: 'img/library/yowa-skate.jpg', w: 1066, h: 1600, cap: 'Liberty Raglan · Blue · Kickflip', shelves: ['Raglan shirts', 'Joggers'], product: 'liberty-raglan', pick: { Colour: 'Blue' } }
-];
+const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED); In real life and the Library both show those photos
 /* ═══════════════════════════════════════════ */
 
 (() => {
@@ -1568,9 +1507,14 @@ const LIBRARY = [
   addEventListener('scroll', lightWords, { passive: true }); lightWords();
 
   /* ── Gallery: drag, throw and parallax on big screens; on phones a plain grid, so the page only scrolls up and down ── */
-  const track = $('#rail-track'), rail = $('#rail'); const shots = GALLERY.map((g, i) => ({ src: g.src, cap: g.cap, i }));
+  const track = $('#rail-track'), rail = $('#rail'); let shots = [];
   const stacked = matchMedia('(max-width:700px)');
-  shots.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (s.i + 1)); b.innerHTML = '<div class="art">' + artFor(s.i) + '</div><img src="' + s.src + '" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><span><i></i></span><span>' + pad(s.i + 1) + '</span></div>'; b.querySelector('.cap span').append(s.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, s.i, b); }); track.appendChild(b); });
+  // In real life: the newest photos from the YOWA Library site, filtered by the shelf pills above it (up to 12; the rest are in the Library)
+  function paintRail(items) {
+    shots = items.slice(0, 12); track.textContent = ''; gx = gv = 0;
+    shots.forEach((p, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (i + 1)); b.innerHTML = '<div class="art">' + artFor(i) + '</div><img alt="" loading="lazy" decoding="async"><div class="cap"><span><i></i></span><span>' + pad(i + 1) + '</span></div>'; const im = b.querySelector('img'); im.onerror = () => im.remove(); im.src = p.thumb || p.src; b.querySelector('.cap span').append(p.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, i, b); }); track.appendChild(b); });
+    $('#irl-empty').hidden = shots.length > 0; rail.hidden = !shots.length; $('.rail-hint').hidden = !shots.length; railStart();
+  }
   let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null, railRaf = 0, railSeen = true;
   const maxX = () => Math.min(0, rail.clientWidth - track.scrollWidth);
   function railFrame() {
@@ -1644,14 +1588,15 @@ const LIBRARY = [
 
   /* ── Library: every photo on file, numbered. Masonry grid or an index, filtered by shelf, all opening in the viewer ── */
   const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
-  const SHELF_ORDER = ['Raglan shirts', 'Plain tees', 'Skull caps', 'Caps', 'Joggers'];
+  const SHELF_ORDER = ['Raglan shirts', 'Plain tees', 'Skull caps', 'Caps', 'Joggers', 'Jorts'];
   const libBody = $('#lib-body'), libMore = $('#lib-more'), libCount = $('#lib-count'), peek = $('#lib-peek'), peekImg = $('#lib-peek img');
   let shelf = 'All', libView = store.get('yowa-lib-view', 'grid') === 'index' ? 'index' : 'grid', cols = 0, colH = [], colEls = [], list = [], rowsEl = null;
   const pk = { x: 0, y: 0, tx: 0, ty: 0, on: false, raf: 0 };
   const colsFor = () => innerWidth >= 1100 ? 6 : innerWidth >= 700 ? 4 : 3;
   const pageSize = () => colsFor() * (innerWidth >= 700 ? 2 : 3);   // square tiles: two rows at a time on a computer, three on a phone
   let shown = pageSize();
-  const libItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => (p.shelves || []).indexOf(shelf) >= 0);
+  const libItems = () => LIB.slice();   // the Library is every photo, numbered
+  const irlItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => (p.shelves || []).indexOf(shelf) >= 0);
   function paintShelves() {
     const n = {}; LIB.forEach(p => (p.shelves || []).forEach(x => { n[x] = (n[x] || 0) + 1; }));
     const names = ['All'].concat(SHELF_ORDER.filter(s => n[s]), Object.keys(n).filter(s => SHELF_ORDER.indexOf(s) < 0));
@@ -1659,10 +1604,10 @@ const LIBRARY = [
     names.forEach(name => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'pill'; b.setAttribute('aria-pressed', String(name === shelf));
       const c = document.createElement('i'); c.textContent = name === 'All' ? LIB.length : n[name]; b.append(name, c);
-      b.addEventListener('click', () => { if (shelf === name) return; shelf = name; shown = pageSize(); $$('.pill', box).forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderLib(true); });
+      b.addEventListener('click', () => { if (shelf === name) return; shelf = name; $$('.pill', box).forEach(x => x.setAttribute('aria-pressed', String(x === b))); paintRail(irlItems()); });
       box.appendChild(b);
     });
-    $('#lib-total').textContent = LIB.length;
+    $('#lib-total').textContent = LIB.length; box.hidden = !LIB.length;
   }
   function tile(p, idx, c) {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'lib-tile'; b.style.setProperty('--d', c * 70 + 'ms');
@@ -1711,7 +1656,7 @@ const LIBRARY = [
   }
   function paintMore() {
     const n = Math.min(shown, list.length), left = list.length - n;
-    libCount.textContent = n + ' of ' + list.length + (shelf === 'All' ? ' photos' : ' · ' + shelf);
+    libCount.textContent = list.length ? n + ' of ' + list.length + ' photos' : ''; $('#lib-empty').hidden = list.length > 0; $('.lib-bar').hidden = !list.length;
     libMore.hidden = left <= 0; libMore.textContent = 'Show more · ' + left + ' to go';
   }
   libMore.addEventListener('click', () => { const from = Math.min(shown, list.length); shown += pageSize(); const to = Math.min(shown, list.length), first = libView === 'grid' ? addTiles(from, to, true) : addRows(from, to, true); paintMore(); if (libMore.hidden && first) first.focus({ preventScroll: true }); });
@@ -1737,7 +1682,7 @@ const LIBRARY = [
     if (!pk.on) { pk.x = x; pk.y = y; } pk.tx = x; pk.ty = y; pk.on = true; peek.classList.add('on'); if (!pk.raf) pk.raf = requestAnimationFrame(peekLoop);
   });
   libBody.addEventListener('pointerleave', hidePeek); addEventListener('scroll', hidePeek, { passive: true });
-  paintShelves(); renderLib(true);
+  paintShelves(); renderLib(true); paintRail(irlItems());
   // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
   function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
   let pendingCode = '';
@@ -1752,15 +1697,14 @@ const LIBRARY = [
   if (CONFIG.LIBRARY_FEED && !CONFIG.PREVIEW) fetch(CONFIG.LIBRARY_FEED).then(r => r.ok ? r.json() : null).then(d => {
     const https = u => typeof u === 'string' && u.indexOf('https://') === 0, name = u => String(u).split('/').pop(), have = new Set(LIB.map(p => name(p.src)));
     const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox)$/.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(name(p.path)));
-    if (!fresh.length) return;
+    if (!fresh.length) return;   // nothing on the Library site yet: both sections show 'New photos dropping soon'
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
       const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.folder || '')).toLowerCase();
       LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
-        shelves: [/raglan/.test(t) && 'Raglan shirts', /\btees?\b|t-?shirt/.test(t) && 'Plain tees', /skull/.test(t) && 'Skull caps', /\bcaps?\b/.test(t.replace(/skull[\s_-]*caps?/g, '')) && 'Caps', /jogger/.test(t) && 'Joggers'].filter(Boolean) });
+        shelves: [/raglan/.test(t) && 'Raglan shirts', /\btees?\b|t-?shirt/.test(t) && 'Plain tees', /skull/.test(t) && 'Skull caps', /\bcaps?\b/.test(t.replace(/skull[\s_-]*caps?/g, '')) && 'Caps', /jogger/.test(t) && 'Joggers', /jort/.test(t) && 'Jorts'].filter(Boolean) });
     });
-    const before = list.length; paintShelves(); list = libItems();
-    if (libView === 'grid') addTiles(Math.min(before, shown), Math.min(shown, list.length), true); else renderLib(false);
+    paintShelves(); renderLib(true); paintRail(irlItems());
     paintMore(); if (pendingCode && openCode(pendingCode)) pendingCode = '';
   }).catch(() => { });
 
