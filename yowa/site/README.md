@@ -66,6 +66,6 @@ The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`
 ## Partner round notes
 
 - **Shop:** nine pieces, no "Drop 01" labels. Raglans and the 042 cap have With / Without beads, and the "without" raglan photos are the clean renders. Jorts are always beaded (no option). The black 042 cap adds Bead colour. The Skull Cap has camo and the two original black photos.
-- **In real life:** the 21 photos in `img/library/` are bundled with codes and captions, and anything new on the Library site joins after them. Folders map to filters: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps (real-life, brand and inbox are ignored). There is no separate Library section any more.
+- **In real life:** the 21 photos in `img/library/` are bundled with codes and captions, and anything new on the Library site joins after them. The filters are product names: Raglans, Tees, Joggers, Jorts, Caps. New uploads are filed by what their tags, caption or filename say (real-life, brand and inbox folders are ignored). There is no separate Library section any more.
 - **Ask YOWA:** `api/chat.js` answers from the catalogue and the FAQ. It needs `OPENROUTER_API_KEY` set in Vercel (yowa project, Production) and a redeploy. The key is never kept in the code.
-- **In real life views:** like the iPhone's Photos. Grid is tight squares (3 across on a phone), Index is a list with thumbnails, and both keep the All / Tops / Bottoms / Caps filter. The choice is remembered. Tapping opens the swipe viewer.
+- **In real life views:** like the iPhone's Photos. Grid is tight squares (3 across on a phone), Index is a list with thumbnails, and both keep the product filters. The choice is remembered. Tapping opens the swipe viewer.
