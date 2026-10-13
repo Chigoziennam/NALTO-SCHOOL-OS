@@ -15,11 +15,11 @@ Static site (HTML + two serverless functions), deploys on Vercel like the waitli
 - **Ask YOWA:** the fire dragon is its face, on the button and in the chat, and the chat sits on the YOWA swirl, like the menu.
 
 ## Photos and their codes
-Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the last one is YW·054).
+Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the bundled photos run YW·001 to YW·021).
 
 | Where | Photo |
 |---|---|
-| Hero slideshow, in order | `img/hero/`: hero-3 the red raglan, hero-4 the three in black raglans, hero-2 the sleeveless Be You Be Different back, hero-1 the crew in the 042 caps, hero-5 the car park last. Just the photos, no codes on top |
+| Hero slideshow, in order | `img/hero/`: hero-3 the red raglan, hero-4 the three in black raglans, hero-6 the kickflip, hero-1 the crew in the 042 caps, hero-5 the car park last. Just the photos, no codes on top |
 | Message background | YW·010, with its motion clip `img/motion/crew.mp4` |
 | The list background | YW·033 |
 | `img/look-*.jpg`, `img/detail-*.jpg`, `img/raglan-*.jpg` | The "In real life" gallery and the product photos |
@@ -32,7 +32,7 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 - `LIBRARY` lists every photo: code, file, size, caption, `shelves` (what's in the photo: Raglan shirts, Plain tees, Skull caps, Caps, Joggers) and the product it shows (adds "Shop this piece" in the viewer).
 - The shelves are the filters above the photos. A photo with a raglan and joggers in it sits on both.
 - Any photo can be shared with its own link, like `yowabybd.com/#yw-010`. It opens straight in the viewer, and the Share button in the viewer sends that link.
-- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`, and it is the only source of photos for **In real life** and the **Library** (the site no longer bundles any). Every photo filed there in any folder except `brand` and `inbox` shows in both: In real life shows up to 12 with the filters (All, Raglan shirts, Plain tees, Skull caps, Caps, Joggers, Jorts, picked from each photo's tags and folder name: raglan, tee, skull, cap, jogger, jort); the Library lists them all, numbered YW·001 up in upload order. With nothing uploaded, both say "New photos dropping soon". Leaving a photo in `inbox` keeps it off the site.
+- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. Photos filed there join the 21 bundled ones, numbered after them (see Partner round notes for the folder-to-shelf map). In real life shows up to 30 with the filters; the Library lists them all. Leaving a photo in `inbox` keeps it off the site.
 
 ## How it moves
 - **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear the words off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
@@ -62,3 +62,9 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 
 ## Domain: yowabybd.com (registered at Hostinger)
 The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`), so Vercel runs its DNS and the HTTPS certificate. `www.yowabybd.com` redirects to `yowabybd.com`. Email records (MX), if the domain ever needs email, are added in Vercel → Domains → yowabybd.com.
+
+## Partner round notes
+
+- **Shop:** nine pieces, no "Drop 01" labels. Raglans, jorts and the 042 cap have With / Without beads and the photos really show no beads. The black 042 cap adds Bead colour (White, Red, Purple, Black). The 042 cap also comes in Green, Navy and Green & Yellow. The skull cap opens on the front view, then the back.
+- **In real life / Library:** the 21 photos in `img/library/` are bundled with codes and captions, then anything new on the Library site joins after them. Folders map to shelves: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps. The real-life, brand and inbox folders are ignored. Filters are All, Tops, Bottoms and Caps in In real life; the Library has Grid and Index.
+- **Ask YOWA:** `api/chat.js` answers from the catalogue and the FAQ. It needs `OPENROUTER_API_KEY` set in Vercel (yowa project, Production) and a redeploy. The key is never kept in the code.
