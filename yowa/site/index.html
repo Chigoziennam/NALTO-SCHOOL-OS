@@ -76,7 +76,6 @@
 [data-theme="light"] .pv-media.cut .pv-bars i{background:rgba(20,15,31,.16)}
 [data-theme="light"] .pv-media.cut .pv-bars b{background:var(--ink)}
 [data-theme="light"] .frame.cut img{filter:drop-shadow(0 16px 18px rgba(60,20,130,.22))}
-[data-theme="light"] .shot{box-shadow:0 10px 26px rgba(74,26,148,.16)}
 [data-theme="light"] .sec-head p,[data-theme="light"] .done p,[data-theme="light"] .join p{color:var(--ink)!important}
 [data-theme="light"] .form{background:rgba(255,255,255,.78)}
 [data-theme="light"] .hero-bybd{color:#1A0F33;text-shadow:0 0 22px rgba(243,238,255,.9),0 2px 10px rgba(243,238,255,.7)}
@@ -378,30 +377,33 @@ section{position:relative}
 @media (prefers-reduced-motion:reduce){.mani .w{opacity:1}}
 
 /* ── Gallery: in real life ── */
-.rail{position:relative;overflow:hidden;cursor:grab;touch-action:pan-y;padding-block:6px}
-.rail.grabbing{cursor:grabbing}
-.rail-track{display:flex;gap:14px;width:max-content;will-change:transform;padding-inline:var(--gut)}
-.shot{flex:none;width:clamp(200px,22vw,300px);aspect-ratio:3/4;border:0;padding:0;border-radius:8px;overflow:hidden;position:relative;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;cursor:inherit;isolation:isolate}
-.shot::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.5)}
-.shot img{position:absolute;inset:-8% -12%;width:124%;max-width:none;height:116%;object-fit:cover;transform:translate3d(var(--sx,0),0,0);will-change:transform}
-.shot .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
-.shot .art svg{width:58%;height:auto;filter:drop-shadow(0 0 16px rgba(166,91,255,.7))}
-.shot .cap{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:space-between;align-items:center;font:700 8px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase}
-.shot .cap i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1.6s infinite}
-.irl-shelves{margin:0 0 clamp(14px,2vw,22px)}
+/* In real life, like the iPhone's Photos: a tight grid of squares, or an index list. Filters on the left, the view switch on the right */
+.irl-bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:space-between;margin-bottom:clamp(12px,1.8vw,20px)}
+.lib-views{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:rgba(8,6,14,.55);margin-left:auto}
+.lib-views .pill{border:0;background:none;padding:9px 14px}
+.lib-views .pill[aria-pressed="true"]{background:var(--purple);color:#fff}
+.irl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;border-radius:10px;overflow:hidden}
+@media (min-width:700px){.irl-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (min-width:1100px){.irl-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.irl-tile{position:relative;display:block;width:100%;aspect-ratio:1;padding:0;border:0;overflow:hidden;cursor:zoom-in;background:#140E26;isolation:isolate}
+.irl-tile img{display:block;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease,transform .8s var(--e-settle)}
+.irl-tile.ok img{opacity:1}
+.irl-tile:active img{transform:scale(.97)}
+@media (hover:hover){.irl-tile:hover img{transform:scale(1.05)}}
+.irl-tile:focus-visible{outline:2px solid var(--purple-l);outline-offset:-2px}
+.irl-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.irl-row{width:100%;display:grid;grid-template-columns:64px minmax(0,1fr) 18px;gap:2px 14px;align-items:center;padding:10px 2px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;transition:background .25s}
+.irl-row:active,.irl-row:focus-visible{background:rgba(122,47,224,.16)}
+@media (hover:hover){.irl-row:hover{background:rgba(122,47,224,.14)}}
+.irl-row .th{grid-row:1/3;width:64px;height:64px;border-radius:8px;object-fit:cover;background:#140E26}
+.irl-row .nm{font:600 15px/1.25 var(--f-body);text-transform:none}
+.irl-row .sh{font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.irl-row .go{grid-row:1/3;grid-column:3;color:var(--purple-l)}
+.irl-count{display:block;text-align:center;margin-top:14px;color:var(--mut)}
+@media (max-width:640px){.lib-shelves{flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.irl-tile img{transition:none}}
 .empty-note{margin:6px 0 0;font:700 10px/1.6 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
-.rail-hint{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 16px;margin-top:16px}
-.rail-hint a{text-decoration:none;color:var(--ink);transition:color .2s}
-.rail-hint a b{color:var(--purple-l);font-weight:700}
-@media (hover:hover){.rail-hint a:hover{color:var(--purple-l)}}
-/* Phones: the rail becomes a plain grid, so the page only scrolls up and down */
 @media (max-width:700px){
-  .rail{overflow:visible;cursor:auto;touch-action:auto;padding-inline:var(--gut)}
-  .rail-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:auto;padding-inline:0;transform:none!important}
-  .shot{width:auto;cursor:zoom-in}
-  .shot:first-child,.shot:last-child:nth-child(even){grid-column:1/-1;aspect-ratio:4/5}
-  .shot img{inset:0;width:100%;height:100%;transform:none}
-  .rail-hint .drag{display:none}
 }
 .lightbox{position:fixed;inset:0;z-index:80;background:rgba(8,6,14,.94);display:grid;place-items:center;padding:24px}
 .lightbox figure{margin:0;max-width:min(92vw,1100px);display:grid;gap:12px;justify-items:center}
@@ -603,9 +605,6 @@ section{position:relative}
 
 /* ── Phones: every section kept, made short ── */
 @media (max-width:700px){
-  .rail-track{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-  .shot,.shot:first-child,.shot:last-child:nth-child(even){grid-column:auto;aspect-ratio:1;border-radius:6px}
-  .shot:nth-child(n+7),.shot .cap{display:none}
   .celeb{aspect-ratio:1;padding:10px}
   .celeb .eye{width:44px;height:44px;box-shadow:inset 0 0 0 7px rgba(239,234,247,.8)}
   .celeb .eye::after{width:14px;height:14px}
@@ -627,10 +626,9 @@ section{position:relative}
 .burst{position:fixed;left:0;top:0;z-index:97;pointer-events:none;font-size:26px;line-height:1;color:#fff;filter:drop-shadow(0 0 6px rgba(166,91,255,.95));will-change:transform,opacity}
 [data-theme="light"] .burst{color:var(--purple)}
 /* Touch screens: a press shows, since there's no hover */
-.shot{transition:transform .3s var(--e-settle)}
 @media (hover:none){
   .btn:active,.pill:active,.x:active,.bag-btn:active,.menu-btn:active,.size:active,.chips button:active,.chat-fab:active{transform:scale(.95)}
-  .card:active .frame,.shot:active{transform:scale(.97)}
+  .card:active .frame{transform:scale(.97)}
 }
 
 /* ── Reveal on scroll (content stays visible without JS) ── */
@@ -712,13 +710,17 @@ section{position:relative}
         <h2 id="gal-t">In real life</h2>
         <p>Real pieces on real people. Tap one to see it up close.</p>
       </div>
-      <div class="lib-shelves irl-shelves rv" id="lib-shelves" role="group" aria-label="Filter"></div>
+      <div class="irl-bar rv">
+        <div class="lib-shelves" id="lib-shelves" role="group" aria-label="Filter"></div>
+        <div class="lib-views" role="group" aria-label="View">
+          <button class="pill" type="button" data-view="grid" aria-pressed="true">Grid</button>
+          <button class="pill" type="button" data-view="index" aria-pressed="false">Index</button>
+        </div>
+      </div>
       <p class="empty-note" id="irl-empty" hidden>New photos dropping soon.</p>
+      <div id="irl-body"></div>
+      <p class="label irl-count" id="irl-count" role="status"></p>
     </div>
-    <div class="rail" id="rail" tabindex="0" aria-label="Gallery. Drag or use the arrow keys; press Enter on a photo to open it.">
-      <div class="rail-track" id="rail-track"></div>
-    </div>
-    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span></div>
   </section>
 
 
@@ -1480,35 +1482,37 @@ const LIBRARY = [
   function lightWords() { if (reduced()) { spans.forEach(s => s.classList.add('on')); return; } const r = mp.getBoundingClientRect(), pr = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .1))); const k = Math.round(pr * spans.length); spans.forEach((s, i) => s.classList.toggle('on', i < k)); }
   addEventListener('scroll', lightWords, { passive: true }); lightWords();
 
-  /* ── Gallery: drag, throw and parallax on big screens; on phones a plain grid, so the page only scrolls up and down ── */
-  const track = $('#rail-track'), rail = $('#rail'); let shots = [];
-  const stacked = matchMedia('(max-width:700px)');
-  // In real life: the newest photos from the YOWA Library site, filtered by the shelf pills above it (up to 30; the rest are in the Library)
-  function paintRail(items) {
-    shots = items.slice(0, 30); track.textContent = ''; gx = gv = 0;
-    shots.forEach((p, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (i + 1)); b.innerHTML = '<div class="art">' + artFor(i) + '</div><img alt="" loading="lazy" decoding="async"><div class="cap"><span><i></i></span><span>' + pad(i + 1) + '</span></div>'; const im = b.querySelector('img'); im.onerror = () => { if (p.thumb && p.thumb !== p.src && im.getAttribute('src') !== p.src) im.src = p.src; else im.remove(); }; im.src = p.thumb || p.src; b.querySelector('.cap span').append(p.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, i, b); }); track.appendChild(b); });
-    $('#irl-empty').hidden = shots.length > 0; rail.hidden = !shots.length; $('.rail-hint').hidden = !shots.length; railStart();
+  /* ── In real life: Grid or Index, like the iPhone's Photos. The grid is tight squares, the index a list; both open the viewer ── */
+  const irlBody = $('#irl-body'), irlCount = $('#irl-count');
+  let irlView = store.get('yowa-irl-view', 'grid') === 'index' ? 'index' : 'grid', irlList = [];
+  function irlThumb(im, p, onload) { im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.onload = onload; im.onerror = () => { if (p.thumb && p.thumb !== p.src && im.getAttribute('src') !== p.src) im.src = p.src; else onload(); }; im.src = p.thumb || p.src; }
+  function renderIrl(items) {
+    irlList = items; irlBody.textContent = '';
+    if (irlView === 'grid') {
+      const g = document.createElement('div'); g.className = 'irl-grid';
+      items.forEach((p, i) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'irl-tile'; b.setAttribute('aria-label', 'Open ' + (p.cap || 'photo ' + (i + 1)));
+        const im = document.createElement('img'); irlThumb(im, p, () => b.classList.add('ok')); b.appendChild(im);
+        b.addEventListener('click', () => openLightbox(irlList, i, b)); g.appendChild(b);
+      });
+      irlBody.appendChild(g);
+    } else {
+      const ul = document.createElement('ul'); ul.className = 'irl-list';
+      items.forEach((p, i) => {
+        const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.className = 'irl-row';
+        b.innerHTML = '<img class="th" alt=""><span class="nm"></span><span class="sh"></span><span class="go" aria-hidden="true">→</span>';
+        const th = b.querySelector('.th'); th.loading = 'lazy'; th.decoding = 'async'; th.onerror = () => { if (p.thumb !== p.src && th.getAttribute('src') !== p.src) th.src = p.src; }; th.src = p.thumb || p.src;
+        b.querySelector('.nm').textContent = p.cap || p.no; b.querySelector('.sh').textContent = [p.no].concat(p.shelves || []).filter(Boolean).join(' · ');
+        b.addEventListener('click', () => openLightbox(irlList, i, b)); li.appendChild(b); ul.appendChild(li);
+      });
+      irlBody.appendChild(ul);
+    }
+    $('#irl-empty').hidden = items.length > 0; irlCount.hidden = !items.length; irlCount.textContent = items.length + (items.length === 1 ? ' photo' : ' photos');
   }
-  let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null, railRaf = 0, railSeen = true;
-  const maxX = () => Math.min(0, rail.clientWidth - track.scrollWidth);
-  function railFrame() {
-    railRaf = 0;
-    if (stacked.matches) { gx = gv = 0; track.style.transform = ''; $$('.shot', track).forEach(el => el.style.removeProperty('--sx')); return; }
-    if (!drag) { if (Math.abs(gv) > .01) { gx += gv * 16; gv *= .93; } }
-    const mx = maxX(); if (gx > 0) { gx += (0 - gx) * .18; gv = 0; } if (gx < mx) { gx += (mx - gx) * .18; gv = 0; }
-    track.style.transform = 'translate3d(' + gx.toFixed(1) + 'px,0,0)';
-    const cw = rail.clientWidth; $$('.shot', track).forEach(el => { const r = el.getBoundingClientRect(), c = (r.left + r.width / 2) / cw - .5; el.style.setProperty('--sx', (c * -40).toFixed(1) + 'px'); });
-    if (railSeen || drag || Math.abs(gv) > .01) railRaf = requestAnimationFrame(railFrame);
-  }
-  const railStart = () => { if (!railRaf) railRaf = requestAnimationFrame(railFrame); };
-  new IntersectionObserver(([e]) => { railSeen = e.isIntersecting; if (railSeen) railStart(); }).observe(rail);
-  if (stacked.addEventListener) stacked.addEventListener('change', railStart); else stacked.addListener(railStart);
-  railStart();
-  rail.addEventListener('pointerdown', e => { if (stacked.matches) return; drag = true; moved = 0; lx = e.clientX; ltm = performance.now(); gv = 0; pid = e.pointerId; try { rail.setPointerCapture(pid); } catch (_) { } rail.classList.add('grabbing'); railStart(); });
-  rail.addEventListener('pointermove', e => { if (!drag) return; const now = performance.now(), dx = e.clientX - lx; gx += dx; moved += Math.abs(dx); gv = dx / Math.max(1, now - ltm); lx = e.clientX; ltm = now; });
-  rail.addEventListener('pointerup', e => { if (!drag) return; drag = false; rail.classList.remove('grabbing'); try { rail.releasePointerCapture(pid); } catch (_) { } if (moved < 6) { const el = document.elementFromPoint(e.clientX, e.clientY), s = el && el.closest('.shot'); if (s) openLightbox(shots, $$('.shot', track).indexOf(s), s); } });
-  rail.addEventListener('pointercancel', () => { drag = false; rail.classList.remove('grabbing'); });
-  rail.addEventListener('keydown', e => { if (stacked.matches) return; if (e.key === 'ArrowRight') gx -= 320; if (e.key === 'ArrowLeft') gx += 320; railStart(); });
+  $$('.lib-views .pill').forEach(b => {
+    b.setAttribute('aria-pressed', String(b.dataset.view === irlView));
+    b.addEventListener('click', () => { if (irlView === b.dataset.view) return; irlView = b.dataset.view; store.set('yowa-irl-view', irlView); $$('.lib-views .pill').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderIrl(irlList); });
+  });
 
   /* ── Viewer: one lightbox for the gallery and the library. Swipe sideways for the next, pull down to close, tap to zoom, share any photo ── */
   const slug = no => String(no || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');   // 'YW·010' → 'yw-010'
@@ -1572,12 +1576,12 @@ const LIBRARY = [
     names.forEach(name => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'pill'; b.setAttribute('aria-pressed', String(name === shelf));
       const c = document.createElement('i'); c.textContent = name === 'All' ? LIB.length : n[name]; b.append(name, c);
-      b.addEventListener('click', () => { if (shelf === name) return; shelf = name; $$('.pill', box).forEach(x => x.setAttribute('aria-pressed', String(x === b))); paintRail(irlItems()); });
+      b.addEventListener('click', () => { if (shelf === name) return; shelf = name; $$('.pill', box).forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderIrl(irlItems()); });
       box.appendChild(b);
     });
     box.hidden = !LIB.length;
   }
-  paintShelves(); paintRail(irlItems());
+  paintShelves(); renderIrl(irlItems());
   // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
   function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
   let pendingCode = '';
@@ -1599,7 +1603,7 @@ const LIBRARY = [
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
         shelves: [{ raw: 'Tops', 'behind-the-scenes': 'Bottoms', products: 'Caps', campaign: 'Caps' }[String(p.folder).toLowerCase()] || (/\b(tees?|t-?shirt|raglan|long[\s-]*sleeve|top)s?\b/.test(t) ? 'Tops' : /jogger|jort|short|pant/.test(t) ? 'Bottoms' : /\bcaps?\b/.test(t) ? 'Caps' : '')].filter(Boolean) });
     });
-    paintShelves(); paintRail(irlItems());
+    paintShelves(); renderIrl(irlItems());
     if (pendingCode && openCode(pendingCode)) pendingCode = '';
   }).catch(() => { });
 
