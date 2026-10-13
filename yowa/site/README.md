@@ -15,11 +15,11 @@ Static site (HTML + two serverless functions), deploys on Vercel like the waitli
 - **Ask YOWA:** the fire dragon is its face, on the button and in the chat, and the chat sits on the YOWA swirl, like the menu.
 
 ## Photos and their codes
-Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the last one is YW·054).
+Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the bundled photos run YW·001 to YW·021).
 
 | Where | Photo |
 |---|---|
-| Hero slideshow, in order | `img/hero/`: hero-3 the red raglan, hero-4 the three in black raglans, hero-2 the sleeveless Be You Be Different back, hero-1 the crew in the 042 caps, hero-5 the car park last. Just the photos, no codes on top |
+| Hero slideshow, in order | `img/hero/`: hero-3 the red raglan, hero-4 the three in black raglans, hero-6 the kickflip, hero-1 the crew in the 042 caps, hero-5 the car park last. Just the photos, no codes on top |
 | Message background | YW·010, with its motion clip `img/motion/crew.mp4` |
 | The list background | YW·033 |
 | `img/look-*.jpg`, `img/detail-*.jpg`, `img/raglan-*.jpg` | The "In real life" gallery and the product photos |
@@ -62,3 +62,9 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 
 ## Domain: yowabybd.com (registered at Hostinger)
 The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`), so Vercel runs its DNS and the HTTPS certificate. `www.yowabybd.com` redirects to `yowabybd.com`. Email records (MX), if the domain ever needs email, are added in Vercel → Domains → yowabybd.com.
+
+## Partner round notes
+
+- **Shop:** nine pieces, no "Drop 01" labels. Raglans, jorts and the 042 cap have With / Without beads and the photos really show no beads. The black 042 cap adds Bead colour (White, Red, Purple, Black). The 042 cap also comes in Green, Navy and Green & Yellow. The skull cap opens on the front view, then the back.
+- **In real life / Library:** the 21 photos in `img/library/` are bundled with codes and captions, then anything new on the Library site joins after them. Folders map to shelves: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps. The real-life, brand and inbox folders are ignored. Filters are All, Tops, Bottoms and Caps in In real life; the Library has Grid and Index.
+- **Ask YOWA:** `api/chat.js` answers from the catalogue and the FAQ. It needs `OPENROUTER_API_KEY` set in Vercel (yowa project, Production) and a redeploy. The key is never kept in the code.

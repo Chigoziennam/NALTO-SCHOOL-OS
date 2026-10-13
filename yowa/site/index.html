@@ -258,7 +258,7 @@ img{max-width:100%}
 [data-theme="light"] .hero-bybd .tx{text-shadow:0 0 14px rgba(243,238,255,.95)}
 [data-theme="light"] .hero-bybd .tx b{color:#6A2FD0;text-shadow:0 0 14px rgba(243,238,255,.9),0 0 26px rgba(166,91,255,.6)}
 .hero-bybd .ln-ic{display:flex;justify-content:center;margin-top:calc(var(--lh) * .22)}   /* the heart, swords and dragon sit underneath, like on the raglan sleeve */
-.hero-bybd .bi{--ih:.42em;gap:.22em;margin-left:0;vertical-align:.02em;filter:drop-shadow(0 0 10px rgba(166,91,255,.85)) drop-shadow(0 2px 6px rgba(8,6,14,.6))}
+.hero-bybd .bi{--ih:.42em;gap:.04em;margin-left:0;vertical-align:.02em;filter:drop-shadow(0 0 10px rgba(166,91,255,.85)) drop-shadow(0 2px 6px rgba(8,6,14,.6))}
 @keyframes bybdin{from{opacity:0;transform:translateY(12px)}}
 /* Holding a photo on a phone clears everything off it */
 @media (max-width:959px){.hero-media{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 96px),transparent)}.hero.paused .hero-in{opacity:0}.hold .top{opacity:0;pointer-events:none}}
@@ -734,7 +734,7 @@ section{position:relative}
 
   <section class="sec panel" id="drop" aria-labelledby="drop-t">
     <div class="wrap">
-      <h2 class="sr" id="drop-t">Shop · Drop 01</h2>
+      <h2 class="sr" id="drop-t">Shop</h2>
       <div class="cd drop-cd" id="cd" aria-label="Countdown to the drop" hidden>
         <div class="seg"><b data-u="d">00</b><span>Days</span></div>
         <div class="seg"><b data-u="h">00</b><span>Hours</span></div>
@@ -842,7 +842,7 @@ section{position:relative}
   <div class="pview-in">
     <div class="pv-media" id="pv-media"><div class="pv-slides" id="pv-slides" aria-live="polite"></div><span class="pv-bars" id="pv-bars" aria-hidden="true"></span><span class="pv-grab" aria-hidden="true"></span><button class="x xi pv-close" type="button" id="pv-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="pv-info">
-      <span class="label" id="pv-line">Drop 01</span>
+      <span class="label" id="pv-line"></span>
       <h3 id="pv-title">Piece</h3>
       <div class="pv-price" id="pv-price"></div>
       <div class="pv-opts" id="pv-opts"></div>
@@ -892,7 +892,6 @@ section{position:relative}
 <script>
 /* ════════════════ EDIT HERE ════════════════ */
 const CONFIG = {
-  DROP_NAME: 'Drop 01',
   DROP_AT: null,                 // e.g. '2026-10-17T18:00:00+01:00' starts the countdown; null shows "Loading"
   CODE: 'BYBD',                  // hype gate for the shop. Real protection moves server-side with Paystack.
   JOIN_ENDPOINT: '/api/join',  // sign-ups reach Supabase through a Vercel function, so no key sits in the page
@@ -904,7 +903,7 @@ const CONFIG = {
   HERO_SLIDES: [
     { src: 'img/hero/hero-3.jpg', pos: '50% 35%' },   // the red Liberty Raglan
     { src: 'img/hero/hero-4.jpg', pos: '62% 45%' },   // black long sleeves at the shutter
-    { src: 'img/hero/hero-2.jpg', pos: '45% 50%' },   // Be You Be Different across the back, at night
+    { src: 'img/hero/hero-6.jpg', pos: '60% 52%' },   // the kickflip
     { src: 'img/hero/hero-1.jpg', pos: '50% 45%' },   // the crew in the 042 caps on the balcony
     { src: 'img/hero/hero-5.jpg', pos: '45% 55%' }   // raglans and the skateboard under the car park
   ],
@@ -918,53 +917,93 @@ const SIZES = ['M', 'L', 'XL', 'XXL'];
 const BEADS = { name: 'Beads', values: [{ v: 'With beads' }, { v: 'Without beads' }] };
 const SKULL_BEADS = { name: 'Beads', values: [{ v: 'No beads' }, { v: 'Black beads', sw: '#121212' }, { v: 'White beads', sw: '#F4F1EA' }] };
 const CAMO = 'conic-gradient(from 40deg,#2a2a2c 0 22%,#8b8b8f 0 41%,#4b4b4f 0 63%,#b3b3b6 0 78%,#2a2a2c 0)';
+const IMG = 'img/products/';
+// a colour with its beaded photos and its plain ones (the beads taken off), front first and back second
+const beadLooks = (C, withBeads, plain) => [{ when: { Colour: C, Beads: 'With beads' }, images: withBeads }, { when: { Colour: C, Beads: 'Without beads' }, images: plain }];
+const ragLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'raglan-' + c + '-front.webp', IMG + 'raglan-' + c + '-back.webp'], [IMG + 'raglan-' + c + '-front-plain.webp', IMG + 'raglan-' + c + '-back-plain.webp']); };
+const jortLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'jorts-' + c + '.webp'], [IMG + 'jorts-' + c + '-plain.webp']); };
+const BEAD_COLOURS = { name: 'Bead colour', show: c => c.Colour === 'Black' && c.Beads === 'With beads', values: [{ v: 'White', sw: '#F4F1EA' }, { v: 'Red', sw: '#D3202B' }, { v: 'Purple', sw: '#8A3FE0' }, { v: 'Black', sw: '#121212' }] };
+const capBlack = col => ({ when: { Colour: 'Black', Beads: 'With beads', 'Bead colour': col }, images: [IMG + 'cap-black-front-' + col.toLowerCase() + '.webp', IMG + 'cap-black-side-' + col.toLowerCase() + '.webp'] });
 const PRODUCTS = [
-  { id: 'liberty-raglan', name: 'Liberty Raglan', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
-    looks: [{ when: { Colour: 'Black' }, images: ['img/products/raglan-black-front.webp', 'img/products/raglan-black-back.webp'] }, { when: { Colour: 'Red' }, images: ['img/products/raglan-red-front.webp', 'img/products/raglan-red-back.webp'] },
-      { when: { Colour: 'Blue' }, images: ['img/products/raglan-blue-front.webp', 'img/products/raglan-blue-back.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/raglan-grey-front.webp', 'img/products/raglan-grey-back.webp'] }],
+    looks: [].concat(ragLooks('Black'), ragLooks('Red'), ragLooks('Blue'), ragLooks('Grey')),
     desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
-  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
-    images: ['img/products/ringer-front.webp', 'img/products/ringer-back.webp'],
+  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: [IMG + 'ringer-front.webp', IMG + 'ringer-back.webp'],
     desc: 'White tee with a black ringer collar and cuffs, the signature on the chest, 💜⚔️🐉 on the back of the neck and snaps along the hem. Handmade, limited run.' },
-  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', line: 'Drop 01', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
-    images: ['img/products/longsleeve-front.webp', 'img/products/longsleeve-back.webp'],
+  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: [IMG + 'longsleeve-front.webp', IMG + 'longsleeve-back.webp'],
     desc: 'Boxy white long sleeve with YOWA across the chest, 💜⚔️🐉 on the back of the neck and snaps on the cuffs and hem. Handmade, limited run.' },
-  { id: 'bybd-tee', name: 'Be Different Tee', colour: 'Black', line: 'Drop 01', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
-    images: ['img/products/bybd-tee-front.webp', 'img/products/bybd-tee-back.webp'],   // front first, then the back
+  { id: 'bybd-tee', name: 'Be Different Tee', colour: 'Black', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: [IMG + 'bybd-tee-front.webp', IMG + 'bybd-tee-back.webp'],   // front first, then the back
     desc: 'Black tee with YOWA on the chest and Be You Be Different stamped big across the back, 💜⚔️🐉 at the neck. Handmade, limited run.' },
-  { id: 'joggers', name: 'Joggers', line: 'Drop 01', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'logo-tee', name: 'YOWA Logo Tee', colour: 'Black', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: [IMG + 'logo-tee-front.webp'],
+    desc: 'Black tee with the YOWA wordmark across the chest. Handmade, limited run.' },
+  { id: 'joggers', name: 'Joggers', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
-    looks: [{ when: { Colour: 'Black', Beads: 'With beads' }, images: ['img/products/joggers-black-beads.webp', 'img/products/joggers-black-red.webp'] }, { when: { Colour: 'Black' }, images: ['img/products/joggers-black.webp'] },
-      { when: { Colour: 'Grey', Beads: 'With beads' }, images: ['img/products/joggers-grey-beads.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/joggers-grey.webp'] }],
+    looks: [{ when: { Colour: 'Black', Beads: 'With beads' }, images: [IMG + 'joggers-black-beads.webp', IMG + 'joggers-black-red.webp'] }, { when: { Colour: 'Black' }, images: [IMG + 'joggers-black.webp'] },
+      { when: { Colour: 'Grey', Beads: 'With beads' }, images: [IMG + 'joggers-grey-beads.webp'] }, { when: { Colour: 'Grey' }, images: [IMG + 'joggers-grey.webp'] }],
     desc: 'Wide-leg joggers with the signature on the hip. Beads down the side or keep them plain. Handmade, limited run.' },
-  { id: 'jorts', name: 'Jorts', line: 'Drop 01', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'jorts', name: 'Jorts', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
-    looks: [{ when: { Colour: 'Black' }, images: ['img/products/jorts-black.webp'] }, { when: { Colour: 'Purple' }, images: ['img/products/jorts-purple.webp'] }, { when: { Colour: 'Grey' }, images: ['img/products/jorts-grey.webp'] }],
+    looks: [].concat(jortLooks('Black'), jortLooks('Purple'), jortLooks('Grey')),
     desc: 'Long jorts with the signature on the front and beads down both sides, or without. Handmade, limited run.' },
-  { id: 'skull-cap', name: 'Skull Cap', line: 'Drop 01', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
+  { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Camo', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
-    looks: [{ when: { Colour: 'Black', Beads: 'White beads' }, images: ['img/products/skull-black-white-beads.webp', 'img/products/skull-black-black-beads.webp'] }, { when: { Colour: 'Black' }, images: ['img/products/skull-black-black-beads.webp', 'img/products/skull-black-white-beads.webp'] },
-      { when: { Colour: 'Camo' }, images: ['img/products/skull-camo.webp', 'img/products/skull-camo-sig.webp'] }],
+    looks: [{ when: { Colour: 'Black', Beads: 'No beads' }, images: [IMG + 'skull-black-plain-front.webp', IMG + 'skull-black-plain-back.webp'] },   // front view first, back view second
+      { when: { Colour: 'Black', Beads: 'White beads' }, images: [IMG + 'skull-black-white-beads.webp'] }, { when: { Colour: 'Black', Beads: 'Black beads' }, images: [IMG + 'skull-black-black-beads.webp'] },
+      { when: { Colour: 'Camo' }, images: [IMG + 'skull-camo.webp', IMG + 'skull-camo-sig.webp'] }],
     desc: 'Skull cap with stitched seams, in camo or black. Add beads in black or white, or keep it clean. One size.' },
-  { id: 'cap-042', name: '042 Cap', line: 'Drop 01', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
-    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }] }],
-    looks: [{ when: {  }, images: ['img/products/cap-042.webp'] }],
-    desc: 'Black cap covered in patches: 042, the YOWA wordmark, the heart and the signature down the side. Studded crown. One size. More colours coming.' }
+  { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }],
+        }, Object.assign({ show: c => c.Colour !== 'Green & Yellow' }, BEADS), BEAD_COLOURS],
+    looks: [].concat(['White', 'Red', 'Purple', 'Black'].map(capBlack),
+      [{ when: { Colour: 'Black', Beads: 'Without beads' }, images: [IMG + 'cap-black-front-plain.webp', IMG + 'cap-black-side-plain.webp'] }],
+      beadLooks('Green', [IMG + 'cap-green.webp'], [IMG + 'cap-green-plain.webp']), beadLooks('Navy', [IMG + 'cap-navy.webp'], [IMG + 'cap-navy-plain.webp']),
+      [{ when: { Colour: 'Green & Yellow' }, images: [IMG + 'cap-green-yellow.webp'] }]),
+    desc: 'The 042 patch cap: 042, the YOWA wordmark, the heart, the flame and the signature down the side. Pick the colour, with beads or without. On the black one the beads come in white, red, purple or black. One size.' }
 ];
 // Categories for the menu's Shop list and the side shop
 const CATS = [['new', 'New'], ['all', 'All'], ['tops', 'Tops'], ['caps', 'Caps'], ['bottoms', 'Bottoms']];
 // What's picked to start, the photos for a pick, and the pick in words
 const optDefaults = p => { const c = {}; (p.opts || []).forEach(o => { c[o.name] = o.values[0].v; }); return c; };
 const imagesFor = (p, c) => { const l = (p.looks || []).find(l => Object.keys(l.when).every(k => c && c[k] === l.when[k])); return l ? l.images : p.images; };
-const optText = (p, c) => (p.opts || []).filter(o => o.values.length > 1).map(o => c && c[o.name]).filter(Boolean).join(' · ');
+const optsFor = (p, c) => (p.opts || []).filter(o => !o.show || o.show(c || {}));   // an option can show only for some picks (bead colours, for the black cap with beads)
+const optText = (p, c) => optsFor(p, c).filter(o => o.values.length > 1).map(o => c && c[o.name]).filter(Boolean).join(' · ');
+const pickOnly = (p, c) => { const o = {}; optsFor(p, c).forEach(x => { o[x.name] = c[x.name]; }); return o; };   // what goes in the cart: only the options that were showing
 PRODUCTS.forEach(p => { p.opts = p.opts || []; if (!p.images) p.images = imagesFor(p, optDefaults(p)); });
 // Library: every photo on file. Each carries its own code (no), written here and never worked out from the order,
 // so YW·010 is always the same photo. Add new photos at the end with the next free code.
 // src is the full photo, the grid loads the small copy in img/library/t/. shelves: what's in the photo (Raglan shirts, Plain tees,
 // Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
 // Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
-const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED); In real life and the Library both show those photos
+// The photos from the YOWA Library, numbered. In real life and the Library both show them; new uploads on the Library site join after these.
+// Shelves follow the library folders: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps (real-life is ignored).
+const LIBRARY = [
+  { no: 'YW·001', src: 'img/library/img_6995.jpg', w: 787, h: 1400, cap: 'Blue raglan · The crew', shelves: ['Tops'], product: 'liberty-raglan', file: 'img_6995' },
+  { no: 'YW·002', src: 'img/library/img_4234.jpg', w: 1050, h: 1400, cap: 'The tees · Front', shelves: ['Tops'], product: 'logo-tee', file: 'img_4234' },
+  { no: 'YW·003', src: 'img/library/img_0570.jpg', w: 787, h: 1400, cap: '042 Cap · Cream and blue', shelves: ['Caps'], product: 'cap-042', file: 'img_0570' },
+  { no: 'YW·004', src: 'img/library/img_4123.jpg', w: 1050, h: 1400, cap: 'Grey jorts · On the shelf', shelves: ['Bottoms'], product: 'jorts', file: 'img_4123' },
+  { no: 'YW·005', src: 'img/library/img_9132.jpg', w: 1050, h: 1400, cap: 'Black joggers · On the board', shelves: ['Bottoms'], product: 'joggers', file: 'img_9132' },
+  { no: 'YW·006', src: 'img/library/img_4618.jpg', w: 1050, h: 1400, cap: '042 Cap · Black, the signature side', shelves: ['Caps'], product: 'cap-042', file: 'img_4618' },
+  { no: 'YW·007', src: 'img/library/img_4250.jpg', w: 1050, h: 1400, cap: 'The tees · Be You Be Different', shelves: ['Tops'], product: 'bybd-tee', file: 'img_4250' },
+  { no: 'YW·008', src: 'img/library/img_9725.jpg', w: 1050, h: 1400, cap: 'Purple jorts · The beads', shelves: ['Bottoms'], product: 'jorts', file: 'img_9725' },
+  { no: 'YW·009', src: 'img/library/img_3726.jpg', w: 1050, h: 1400, cap: '042 Caps · In the box', shelves: ['Caps'], product: 'cap-042', file: 'img_3726' },
+  { no: 'YW·010', src: 'img/library/img_8866.jpg', w: 1120, h: 1400, cap: 'Raglans and tees · Studded', shelves: ['Tops'], file: 'img_8866' },
+  { no: 'YW·011', src: 'img/library/img_5149.jpg', w: 1050, h: 1400, cap: 'Grey joggers · The glow', shelves: ['Bottoms'], product: 'joggers', file: 'img_5149' },
+  { no: 'YW·012', src: 'img/library/img_3939.jpg', w: 1050, h: 1400, cap: '042 Caps · Stacked', shelves: ['Caps'], product: 'cap-042', file: 'img_3939' },
+  { no: 'YW·013', src: 'img/library/img_9664.jpg', w: 1050, h: 1400, cap: 'Purple jorts · Up close', shelves: ['Bottoms'], product: 'jorts', file: 'img_9664' },
+  { no: 'YW·014', src: 'img/library/img_9620.jpg', w: 1050, h: 1400, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042', file: 'img_9620' },
+  { no: 'YW·015', src: 'img/library/img_5132.jpg', w: 1050, h: 1400, cap: 'Black joggers · After dark', shelves: ['Bottoms'], product: 'joggers', file: 'img_5132' },
+  { no: 'YW·016', src: 'img/library/img_5327.jpg', w: 1050, h: 1400, cap: 'The crew · Joggers and jorts', shelves: ['Bottoms'], file: 'img_5327' },
+  { no: 'YW·017', src: 'img/library/img_9739.jpg', w: 1050, h: 1400, cap: 'Black jorts · The beads', shelves: ['Bottoms'], product: 'jorts', file: 'img_9739' },
+  { no: 'YW·018', src: 'img/library/img_5356.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts', shelves: ['Bottoms'], product: 'joggers', file: 'img_5356' },
+  { no: 'YW·019', src: 'img/library/img_6603.jpg', w: 787, h: 1400, cap: 'Black joggers · Red beads', shelves: ['Bottoms'], product: 'joggers', file: 'img_6603' },
+  { no: 'YW·020', src: 'img/library/img_5369.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts, up close', shelves: ['Bottoms'], product: 'joggers', file: 'img_5369' },
+  { no: 'YW·021', src: 'img/library/img_5173.jpg', w: 787, h: 1400, cap: 'Black joggers · The signature', shelves: ['Bottoms'], product: 'joggers', file: 'img_5173' }
+];
 /* ═══════════════════════════════════════════ */
 
 (() => {
@@ -1367,29 +1406,30 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
   function paintQty() { $('#pv-qn').textContent = qty; $('#pv-qty [data-d="-1"]').disabled = qty <= 1; $('#pv-qty [data-d="1"]').disabled = qty >= 10; }
   $$('#pv-qty button').forEach(b => b.addEventListener('click', () => { qty = clamp(qty + +b.dataset.d, 1, 10); paintQty(); buzz(5); }));
   // The choices: colours as round swatches, the rest (beads) as pills; the photos follow the colour and beads you pick
-  function paintOpts(p) {
+  function paintOpts(p, keep) {
     const box = $('#pv-opts'); box.textContent = '';
-    p.opts.forEach(o => {
+    optsFor(p, choice).forEach(o => {
       const wrap = document.createElement('div'); wrap.className = 'opt';
       wrap.innerHTML = '<span class="label"></span><div class="opt-row" role="radiogroup"></div>';
       const lab = wrap.querySelector('.label'), chips = wrap.querySelector('.opt-row'); chips.setAttribute('aria-label', o.name);
       const say = () => { lab.textContent = o.name + ' · '; const b = document.createElement('b'); b.textContent = choice[o.name]; lab.appendChild(b); };
       o.values.forEach(v => {
-        const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(choice[o.name] === v.v));
+        const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.k = o.name + '|' + v.v; b.setAttribute('aria-checked', String(choice[o.name] === v.v));
         if (o.name === 'Colour') { b.className = 'sw'; b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('aria-label', v.v); }
         else { b.className = 'pill'; b.setAttribute('aria-pressed', String(choice[o.name] === v.v)); if (v.sw) { const d = document.createElement('i'); d.className = 'dot'; d.style.setProperty('--c', v.sw); b.appendChild(d); } b.append(v.v); }
         b.addEventListener('click', () => {
           const before = imagesFor(p, choice).join(); choice = Object.assign({}, choice, { [o.name]: v.v });
-          $$('button', chips).forEach(x => { x.setAttribute('aria-checked', String(x === b)); if (x.classList.contains('pill')) x.setAttribute('aria-pressed', String(x === b)); });
-          say(); paintLine(p); if (imagesFor(p, choice).join() !== before) pvBuild(p, imagesFor(p, choice)); buzz(5);
+          paintOpts(p, o.name + '|' + v.v); paintLine(p); if (imagesFor(p, choice).join() !== before) pvBuild(p, imagesFor(p, choice)); buzz(5);
         });
         chips.appendChild(b);
       });
       say(); box.appendChild(wrap);
     });
     box.hidden = !p.opts.length;
+    if (keep) { const k = $$('button', box).find(x => x.dataset.k === keep); if (k) k.focus({ preventScroll: true }); }
   }
-  const paintLine = p => { const t = optText(p, choice) || p.colour; $('#pv-line').textContent = p.line + (t ? ' · ' + t : ''); };
+  const CAT_NAME = {}; CATS.forEach(([id, label]) => { CAT_NAME[id] = label; });
+  const paintLine = p => { const t = optText(p, choice) || p.colour; $('#pv-line').textContent = (CAT_NAME[p.cat] || '') + (t ? ' · ' + t : ''); };
   function openProduct(p, o) {
     o = o || {}; current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
     choice = Object.assign(optDefaults(p), o.choice || {});
@@ -1453,7 +1493,7 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
   const drawer = $('#drawer');
   function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; $('#bag-open').dataset.n = n; $('#bag-open').setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items')); const qc = $('#qs-count'); if (qc) qc.textContent = n; }
   const bumpBag = () => { const b = $('#bag-open'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
-  function addToBag(p, s, q, ch) { q = Math.max(1, q || 1); ch = ch || {}; const key = JSON.stringify(ch); const hit = bag.find(i => i.id === p.id && i.size === s && JSON.stringify(i.opts || {}) === key); if (hit) hit.qty = Math.min(20, hit.qty + q); else bag.push({ id: p.id, size: s, qty: q, opts: ch }); saveBag(); }
+  function addToBag(p, s, q, ch) { q = Math.max(1, q || 1); ch = pickOnly(p, ch || {}); const key = JSON.stringify(ch); const hit = bag.find(i => i.id === p.id && i.size === s && JSON.stringify(i.opts || {}) === key); if (hit) hit.qty = Math.min(20, hit.qty + q); else bag.push({ id: p.id, size: s, qty: q, opts: ch }); saveBag(); }
   function renderBag() {
     const body = $('#dr-body'); body.textContent = ''; let total = 0;
     if (!bag.length) { const e = document.createElement('p'); e.className = 'dr-empty'; e.textContent = 'Your cart is empty. The drop is where the good stuff is.'; body.appendChild(e); }
@@ -1509,10 +1549,10 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
   /* ── Gallery: drag, throw and parallax on big screens; on phones a plain grid, so the page only scrolls up and down ── */
   const track = $('#rail-track'), rail = $('#rail'); let shots = [];
   const stacked = matchMedia('(max-width:700px)');
-  // In real life: the newest photos from the YOWA Library site, filtered by the shelf pills above it (up to 12; the rest are in the Library)
+  // In real life: the newest photos from the YOWA Library site, filtered by the shelf pills above it (up to 30; the rest are in the Library)
   function paintRail(items) {
-    shots = items.slice(0, 12); track.textContent = ''; gx = gv = 0;
-    shots.forEach((p, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (i + 1)); b.innerHTML = '<div class="art">' + artFor(i) + '</div><img alt="" loading="lazy" decoding="async"><div class="cap"><span><i></i></span><span>' + pad(i + 1) + '</span></div>'; const im = b.querySelector('img'); im.onerror = () => im.remove(); im.src = p.thumb || p.src; b.querySelector('.cap span').append(p.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, i, b); }); track.appendChild(b); });
+    shots = items.slice(0, 30); track.textContent = ''; gx = gv = 0;
+    shots.forEach((p, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'shot'; b.setAttribute('aria-label', 'Open photo ' + (i + 1)); b.innerHTML = '<div class="art">' + artFor(i) + '</div><img alt="" loading="lazy" decoding="async"><div class="cap"><span><i></i></span><span>' + pad(i + 1) + '</span></div>'; const im = b.querySelector('img'); im.onerror = () => { if (p.thumb && p.thumb !== p.src && im.getAttribute('src') !== p.src) im.src = p.src; else im.remove(); }; im.src = p.thumb || p.src; b.querySelector('.cap span').append(p.cap); b.addEventListener('click', e => { if (e.detail === 0 || stacked.matches) openLightbox(shots, i, b); }); track.appendChild(b); });
     $('#irl-empty').hidden = shots.length > 0; rail.hidden = !shots.length; $('.rail-hint').hidden = !shots.length; railStart();
   }
   let gx = 0, gv = 0, drag = false, lx = 0, ltm = 0, moved = 0, pid = null, railRaf = 0, railSeen = true;
@@ -1588,7 +1628,7 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
 
   /* ── Library: every photo on file, numbered. Masonry grid or an index, filtered by shelf, all opening in the viewer ── */
   const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
-  const SHELF_ORDER = ['Raglan shirts', 'Plain tees', 'Skull caps', 'Caps', 'Joggers', 'Jorts'];
+  const SHELF_ORDER = ['Tops', 'Bottoms', 'Caps'];
   const libBody = $('#lib-body'), libMore = $('#lib-more'), libCount = $('#lib-count'), peek = $('#lib-peek'), peekImg = $('#lib-peek img');
   let shelf = 'All', libView = store.get('yowa-lib-view', 'grid') === 'index' ? 'index' : 'grid', cols = 0, colH = [], colEls = [], list = [], rowsEl = null;
   const pk = { x: 0, y: 0, tx: 0, ty: 0, on: false, raf: 0 };
@@ -1695,14 +1735,14 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
   // Photos filed in yowa-library later (any folder but brand and inbox) join here on their own, numbered after the highest code.
   let lastNo = LIB.reduce((m, p) => Math.max(m, parseInt(String(p.no).replace(/\D/g, ''), 10) || 0), 0);
   if (CONFIG.LIBRARY_FEED && !CONFIG.PREVIEW) fetch(CONFIG.LIBRARY_FEED).then(r => r.ok ? r.json() : null).then(d => {
-    const https = u => typeof u === 'string' && u.indexOf('https://') === 0, name = u => String(u).split('/').pop(), have = new Set(LIB.map(p => name(p.src)));
-    const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox)$/.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(name(p.path)));
+    const https = u => typeof u === 'string' && u.indexOf('https://') === 0, key = u => String(u).split('/').pop().replace(/^[a-z0-9]{6,9}-/i, '').replace(/\.[a-z0-9]+$/, '').toLowerCase(), have = new Set(LIB.map(p => String(p.file || key(p.src)).toLowerCase()));
+    const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox|real-?life)$/i.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(key(p.path)));
     if (!fresh.length) return;   // nothing on the Library site yet: both sections show 'New photos dropping soon'
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
       const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.folder || '')).toLowerCase();
       LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
-        shelves: [/raglan/.test(t) && 'Raglan shirts', /\btees?\b|t-?shirt/.test(t) && 'Plain tees', /skull/.test(t) && 'Skull caps', /\bcaps?\b/.test(t.replace(/skull[\s_-]*caps?/g, '')) && 'Caps', /jogger/.test(t) && 'Joggers', /jort/.test(t) && 'Jorts'].filter(Boolean) });
+        shelves: [{ raw: 'Tops', 'behind-the-scenes': 'Bottoms', products: 'Caps', campaign: 'Caps' }[String(p.folder).toLowerCase()] || (/\b(tees?|t-?shirt|raglan|long[\s-]*sleeve|top)s?\b/.test(t) ? 'Tops' : /jogger|jort|short|pant/.test(t) ? 'Bottoms' : /\bcaps?\b/.test(t) ? 'Caps' : '')].filter(Boolean) });
     });
     paintShelves(); renderLib(true); paintRail(irlItems());
     paintMore(); if (pendingCode && openCode(pendingCode)) pendingCode = '';
@@ -1738,6 +1778,9 @@ const LIBRARY = [];   // filled from the YOWA Library site (CONFIG.LIBRARY_FEED)
   $('#chat-open').addEventListener('click', () => toggleChat(chat.hidden)); $('#chat-close').addEventListener('click', () => toggleChat(false));
   function offline(q) {
     q = q.toLowerCase();
+    if (/who (is|are) yowa|who owns|who made|who runs|owner|founder|yvng|mike/.test(q)) return "YOWA is a family of positivity, positive vibes and chills. It's owned by a student, influencer and YouTuber popularly known as Yvng Mike, together with his brother.";
+    if (/what('s| is) yowa|meaning|mean\b|origin|hausa/.test(q)) return "YOWA started as a Hausa word, a phrase of positivity you say when you feel good, just got something done, or everything is going well.";
+    if (/about|brand|story|different/.test(q)) return "YOWA is a clothing brand about being weird, being different, easy to spot in a group, and being YOU. Be You Be Different 💜⚔️🐉";
     if (/code|password|early|access/.test(q)) return "The code goes to the list first. Join with your email in the Get the code section and it lands in your inbox before the shop opens.";
     if (/when|date|drop|time/.test(q)) return CONFIG.DROP_AT ? 'The drop opens ' + new Date(CONFIG.DROP_AT).toLocaleString() + '. The list gets the code first.' : "The date drops soon. Join the list and you'll hear first.";
     if (/size|fit|small|large/.test(q)) return 'Raglans, tees, joggers and jorts come in M to XXL with a relaxed fit. Caps and skull caps are one size. Tell me your height and usual size and I will suggest one.';
