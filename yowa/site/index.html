@@ -76,7 +76,7 @@
 [data-theme="light"] .pv-media.cut .pv-bars i{background:rgba(20,15,31,.16)}
 [data-theme="light"] .pv-media.cut .pv-bars b{background:var(--ink)}
 [data-theme="light"] .frame.cut img{filter:drop-shadow(0 16px 18px rgba(60,20,130,.22))}
-[data-theme="light"] .lib-tile,[data-theme="light"] .shot{box-shadow:0 10px 26px rgba(74,26,148,.16)}
+[data-theme="light"] .shot{box-shadow:0 10px 26px rgba(74,26,148,.16)}
 [data-theme="light"] .sec-head p,[data-theme="light"] .done p,[data-theme="light"] .join p{color:var(--ink)!important}
 [data-theme="light"] .form{background:rgba(255,255,255,.78)}
 [data-theme="light"] .hero-bybd{color:#1A0F33;text-shadow:0 0 22px rgba(243,238,255,.9),0 2px 10px rgba(243,238,255,.7)}
@@ -416,52 +416,16 @@ section{position:relative}
 .lb-nav{position:absolute;top:50%;transform:translateY(-50%)}
 .lb-prev{left:14px}.lb-next{right:14px}
 
-/* ── Library: every photo on file ── */
-.lib-bar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;border-block:1px solid var(--line);padding:12px 0;margin-bottom:clamp(18px,2.6vw,28px)}
+/* ── In real life filters ── */
 .lib-shelves{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 auto;min-width:0;padding:2px}
-.lib-side{display:flex;align-items:center;gap:14px;margin-left:auto}
 .pill{flex:none;display:inline-flex;align-items:center;gap:8px;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(8,6,14,.55);cursor:pointer;white-space:nowrap;transition:background .25s,color .25s,border-color .25s}
 @media (hover:hover){.pill:hover{border-color:var(--purple-l)}}
 .pill i{font-style:normal;color:var(--purple-l)}
 .pill[aria-pressed="true"]{background:#fff;color:var(--void);border-color:#fff}
 .pill[aria-pressed="true"] i{color:var(--purple)}
-.lib-views{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:rgba(8,6,14,.55)}
-.lib-views .pill{border:0;background:none;padding:9px 12px}
-.lib-views .pill[aria-pressed="true"]{background:var(--purple);color:#fff}
-.lib-cols{display:flex;gap:clamp(8px,1.2vw,14px);align-items:flex-start}
-.lib-col{flex:1;min-width:0;display:grid;gap:clamp(8px,1.2vw,14px)}
-.lib-tile{position:relative;display:block;width:100%;aspect-ratio:1;padding:0;border:0;border-radius:8px;overflow:hidden;cursor:zoom-in;color:#fff;text-align:left;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate}
-.lib-tile::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,rgba(8,6,14,.6) 30%,rgba(122,47,224,.35) 50%,rgba(8,6,14,.6) 70%) 0 0/300% 100%;animation:shimmer 1.6s linear infinite}
-.lib-tile.ok::before{animation:none;background:none}
 @keyframes shimmer{to{background-position:-150% 0}}
-.lib-tile img{display:block;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .7s ease,transform 1.1s var(--e-settle)}
-.lib-tile.ok img{opacity:1;transform:none}
-@media (hover:hover){.lib-tile.ok:hover img{transform:scale(1.05)}.lib-tile:hover .cap{transform:none}.lib-tile:hover{box-shadow:0 0 0 1px var(--purple-l),0 18px 50px rgba(122,47,224,.3)}}
-.lib-tile .no{position:absolute;left:8px;top:8px;font:700 7.5px/1 var(--f-label);letter-spacing:.16em;padding:7px 8px;border-radius:999px;background:rgba(8,6,14,.7);border:1px solid var(--line)}
-.lib-tile .cap{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;background:linear-gradient(180deg,transparent,rgba(8,6,14,.88));font:700 8px/1.5 var(--f-label);letter-spacing:.14em;text-transform:uppercase;transform:translateY(101%);transition:transform .45s var(--e-settle)}
-.lib-tile:focus-visible .cap{transform:none}
-@media (hover:none){.lib-tile .cap{display:none}}
-.js .lib-tile{opacity:0;transform:translateY(28px);transition:opacity .8s var(--e-settle) var(--d,0ms),transform .8s var(--e-settle) var(--d,0ms),box-shadow .3s}
-.js .lib-tile.in{opacity:1;transform:none}
-.lib-index{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.lib-index li{animation:rowin .6s var(--e-settle) both;animation-delay:var(--d,0ms)}
 @keyframes rowin{from{opacity:0;transform:translateY(12px)}}
-.lib-row{width:100%;display:grid;grid-template-areas:"no nm sh go";grid-template-columns:86px minmax(0,1fr) auto 24px;gap:6px 18px;align-items:center;padding:16px 6px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;transition:background .3s,padding .45s var(--e-settle)}
-.lib-row:focus-visible{background:rgba(122,47,224,.14);padding-left:16px}
-@media (hover:hover){.lib-row:hover{background:rgba(122,47,224,.14);padding-left:16px}.lib-row:hover .go{transform:translateX(4px)}}
-.lib-row .no{grid-area:no;font:700 8.5px/1 var(--f-label);letter-spacing:.16em;color:var(--mut)}
-.lib-row .nm{grid-area:nm;font:400 clamp(20px,2.8vw,36px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
-.lib-row .sh{grid-area:sh;font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
-.lib-row .go{grid-area:go;color:var(--purple-l);transition:transform .45s var(--e-settle)}
-.lib-row .th{grid-area:th;display:none;width:52px;height:66px;border-radius:6px;object-fit:cover;background:#140E26}
-@media (max-width:700px){.lib-row{grid-template-areas:"th no go" "th nm go";grid-template-columns:52px minmax(0,1fr) 18px;padding:12px 2px}.lib-row .th{display:block}.lib-row .sh{display:none}.lib-row .nm{font-size:20px}}
-.lib-peek{position:fixed;left:0;top:0;z-index:45;width:250px;border-radius:10px;overflow:hidden;pointer-events:none;opacity:0;background:#140E26;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px var(--line),0 0 40px rgba(122,47,224,.35);transition:opacity .25s ease;will-change:transform}
-.lib-peek.on{opacity:1}
-.lib-peek img{display:block;width:100%;height:auto}
-@media (hover:none),(pointer:coarse){.lib-peek{display:none}}
-.lib-more{display:flex;justify-content:center;margin-top:clamp(24px,3vw,36px)}
-@media (max-width:640px){.lib-shelves{flex-basis:100%}.lib-side{margin-left:0;width:100%;justify-content:space-between}}
-@media (prefers-reduced-motion:reduce){.js .lib-tile{opacity:1;transform:none}.lib-index li{animation:none}.lib-tile::before{animation:none}}
+@media (max-width:640px){.lib-shelves{flex-basis:100%}}
 
 .worn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 @media (max-width:900px){.worn{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -642,10 +606,6 @@ section{position:relative}
   .rail-track{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
   .shot,.shot:first-child,.shot:last-child:nth-child(even){grid-column:auto;aspect-ratio:1;border-radius:6px}
   .shot:nth-child(n+7),.shot .cap{display:none}
-  .lib-cols,.lib-col{gap:6px}
-  .lib-tile{border-radius:6px}
-  .lib-tile .no{left:5px;top:5px;font-size:6.5px;padding:5px 6px}
-  .lib-bar{padding:8px 0;margin-bottom:12px}
   .celeb{aspect-ratio:1;padding:10px}
   .celeb .eye{width:44px;height:44px;box-shadow:inset 0 0 0 7px rgba(239,234,247,.8)}
   .celeb .eye::after{width:14px;height:14px}
@@ -671,8 +631,6 @@ section{position:relative}
 @media (hover:none){
   .btn:active,.pill:active,.x:active,.bag-btn:active,.menu-btn:active,.size:active,.chips button:active,.chat-fab:active{transform:scale(.95)}
   .card:active .frame,.shot:active{transform:scale(.97)}
-  .lib-tile:active{box-shadow:0 0 0 2px var(--purple-l)}
-  .lib-row:active{background:rgba(122,47,224,.18)}
 }
 
 /* ── Reveal on scroll (content stays visible without JS) ── */
@@ -760,31 +718,10 @@ section{position:relative}
     <div class="rail" id="rail" tabindex="0" aria-label="Gallery. Drag or use the arrow keys; press Enter on a photo to open it.">
       <div class="rail-track" id="rail-track"></div>
     </div>
-    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span><a class="label" href="#library">All <b id="lib-total">0</b> photos in the Library →</a></div>
+    <div class="wrap rail-hint"><span class="label"><span class="drag">Drag · </span>Tap to zoom</span></div>
   </section>
 
 
-  <section class="sec" id="library" aria-labelledby="lib-t">
-    <div class="wrap">
-      <div class="sec-head rv">
-        <h2 id="lib-t">Library</h2>
-        <p>Every photo on file, numbered. Tap one to see it full size.</p>
-      </div>
-      <div class="lib-bar rv">
-        <div class="lib-side">
-          <span class="label" id="lib-count" role="status"></span>
-          <div class="lib-views" role="group" aria-label="View">
-            <button class="pill" type="button" data-view="grid" aria-pressed="true">Grid</button>
-            <button class="pill" type="button" data-view="index" aria-pressed="false">Index</button>
-          </div>
-        </div>
-      </div>
-      <p class="empty-note" id="lib-empty" hidden>New photos dropping soon.</p>
-      <div id="lib-body"></div>
-      <div class="lib-more"><button class="btn" type="button" id="lib-more" hidden>Show more</button></div>
-    </div>
-    <div class="lib-peek" id="lib-peek" aria-hidden="true"><img alt=""></div>
-  </section>
 
 
   <section class="sec" id="message" aria-labelledby="msg-t">
@@ -915,13 +852,11 @@ const CONFIG = {
 // looks: the photos for each pick; the first look whose `when` matches what's picked is shown (no `when` keys = always).
 const SIZES = ['M', 'L', 'XL', 'XXL'];
 const BEADS = { name: 'Beads', values: [{ v: 'With beads' }, { v: 'Without beads' }] };
-const SKULL_BEADS = { name: 'Beads', values: [{ v: 'No beads' }, { v: 'Black beads', sw: '#121212' }, { v: 'White beads', sw: '#F4F1EA' }] };
 const CAMO = 'conic-gradient(from 40deg,#2a2a2c 0 22%,#8b8b8f 0 41%,#4b4b4f 0 63%,#b3b3b6 0 78%,#2a2a2c 0)';
 const IMG = 'img/products/';
 // a colour with its beaded photos and its plain ones (the beads taken off), front first and back second
 const beadLooks = (C, withBeads, plain) => [{ when: { Colour: C, Beads: 'With beads' }, images: withBeads }, { when: { Colour: C, Beads: 'Without beads' }, images: plain }];
 const ragLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'raglan-' + c + '-front.webp', IMG + 'raglan-' + c + '-back.webp'], [IMG + 'raglan-' + c + '-front-plain.webp', IMG + 'raglan-' + c + '-back-plain.webp']); };
-const jortLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'jorts-' + c + '.webp'], [IMG + 'jorts-' + c + '-plain.webp']); };
 const BEAD_COLOURS = { name: 'Bead colour', show: c => c.Colour === 'Black' && c.Beads === 'With beads', values: [{ v: 'White', sw: '#F4F1EA' }, { v: 'Red', sw: '#D3202B' }, { v: 'Purple', sw: '#8A3FE0' }, { v: 'Black', sw: '#121212' }] };
 const capBlack = col => ({ when: { Colour: 'Black', Beads: 'With beads', 'Bead colour': col }, images: [IMG + 'cap-black-front-' + col.toLowerCase() + '.webp', IMG + 'cap-black-side-' + col.toLowerCase() + '.webp'] });
 const PRODUCTS = [
@@ -947,15 +882,12 @@ const PRODUCTS = [
       { when: { Colour: 'Grey', Beads: 'With beads' }, images: [IMG + 'joggers-grey-beads.webp'] }, { when: { Colour: 'Grey' }, images: [IMG + 'joggers-grey.webp'] }],
     desc: 'Wide-leg joggers with the signature on the hip. Beads down the side or keep them plain. Handmade, limited run.' },
   { id: 'jorts', name: 'Jorts', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
-    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
-    looks: [].concat(jortLooks('Black'), jortLooks('Purple'), jortLooks('Grey')),
-    desc: 'Long jorts with the signature on the front and beads down both sides, or without. Handmade, limited run.' },
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }],
+    looks: ['Black', 'Purple', 'Grey'].map(C => ({ when: { Colour: C }, images: [IMG + 'jorts-' + C.toLowerCase() + '.webp'] })),
+    desc: 'Long jorts with the signature on the front and beads down both sides. Handmade, limited run.' },
   { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
-    opts: [{ name: 'Colour', values: [{ v: 'Camo', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
-    looks: [{ when: { Colour: 'Black', Beads: 'No beads' }, images: [IMG + 'skull-black-plain-front.webp', IMG + 'skull-black-plain-back.webp'] },   // front view first, back view second
-      { when: { Colour: 'Black', Beads: 'White beads' }, images: [IMG + 'skull-black-white-beads.webp'] }, { when: { Colour: 'Black', Beads: 'Black beads' }, images: [IMG + 'skull-black-black-beads.webp'] },
-      { when: { Colour: 'Camo' }, images: [IMG + 'skull-camo.webp', IMG + 'skull-camo-sig.webp'] }],
-    desc: 'Skull cap with stitched seams, in camo or black. Add beads in black or white, or keep it clean. One size.' },
+    images: [IMG + 'skull-camo.webp', IMG + 'skull-camo-sig.webp'],
+    desc: 'Camo skull cap with stitched seams. One size.' },
   { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }],
         }, Object.assign({ show: c => c.Colour !== 'Green & Yellow' }, BEADS), BEAD_COLOURS],
@@ -1626,16 +1558,10 @@ const LIBRARY = [
     backstack.open(close); show(i); lb.querySelector('.lb-close').focus({ preventScroll: true });
   }
 
-  /* ── Library: every photo on file, numbered. Masonry grid or an index, filtered by shelf, all opening in the viewer ── */
+  /* ── Photos: the numbered set behind In real life, filtered by shelf, opening in the viewer ── */
   const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
   const SHELF_ORDER = ['Tops', 'Bottoms', 'Caps'];
-  const libBody = $('#lib-body'), libMore = $('#lib-more'), libCount = $('#lib-count'), peek = $('#lib-peek'), peekImg = $('#lib-peek img');
-  let shelf = 'All', libView = store.get('yowa-lib-view', 'grid') === 'index' ? 'index' : 'grid', cols = 0, colH = [], colEls = [], list = [], rowsEl = null;
-  const pk = { x: 0, y: 0, tx: 0, ty: 0, on: false, raf: 0 };
-  const colsFor = () => innerWidth >= 1100 ? 6 : innerWidth >= 700 ? 4 : 3;
-  const pageSize = () => colsFor() * (innerWidth >= 700 ? 2 : 3);   // square tiles: two rows at a time on a computer, three on a phone
-  let shown = pageSize();
-  const libItems = () => LIB.slice();   // the Library is every photo, numbered
+  let shelf = 'All';
   const irlItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => (p.shelves || []).indexOf(shelf) >= 0);
   function paintShelves() {
     const n = {}; LIB.forEach(p => (p.shelves || []).forEach(x => { n[x] = (n[x] || 0) + 1; }));
@@ -1647,82 +1573,9 @@ const LIBRARY = [
       b.addEventListener('click', () => { if (shelf === name) return; shelf = name; $$('.pill', box).forEach(x => x.setAttribute('aria-pressed', String(x === b))); paintRail(irlItems()); });
       box.appendChild(b);
     });
-    $('#lib-total').textContent = LIB.length; box.hidden = !LIB.length;
+    box.hidden = !LIB.length;
   }
-  function tile(p, idx, c) {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'lib-tile'; b.style.setProperty('--d', c * 70 + 'ms');
-    b.setAttribute('aria-label', 'Open ' + p.no + ', ' + p.cap);
-    const im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
-    im.onload = () => { if (p.live && im.naturalWidth) { p.w = im.naturalWidth; p.h = im.naturalHeight; p.live = false; } b.classList.add('ok'); };
-    im.onerror = () => { if (p.thumb !== p.src && im.getAttribute('src') !== p.src) im.src = p.src; else b.classList.add('ok'); };
-    im.src = p.thumb;
-    const no = document.createElement('span'); no.className = 'no'; no.textContent = p.no;
-    const cp = document.createElement('span'); cp.className = 'cap'; cp.textContent = p.cap;
-    b.append(im, no, cp); b.addEventListener('click', () => openLightbox(list, idx, b));
-    return b;
-  }
-  const libIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); libIO.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
-  function addTiles(from, to, reveal) {
-    let first = null;
-    for (let i = from; i < to; i++) {
-      const p = list[i]; let c = 0; for (let k = 1; k < cols; k++) if (colH[k] < colH[c] - .01) c = k;   // shortest column, ties go left
-      const t = tile(p, i, c); colEls[c].appendChild(t); colH[c] += 1; first = first || t;
-      if (reveal && !reduced()) libIO.observe(t); else t.classList.add('in');
-    }
-    return first;
-  }
-  function renderLib(reveal) {
-    list = libItems(); hidePeek(); libBody.textContent = '';
-    if (libView === 'grid') {
-      cols = colsFor(); colH = new Array(cols).fill(0);
-      const wrap = document.createElement('div'); wrap.className = 'lib-cols';
-      colEls = Array.from({ length: cols }, () => { const c = document.createElement('div'); c.className = 'lib-col'; return wrap.appendChild(c); });
-      libBody.appendChild(wrap); addTiles(0, Math.min(shown, list.length), reveal);
-    } else {
-      rowsEl = document.createElement('ol'); rowsEl.className = 'lib-index'; libBody.appendChild(rowsEl); addRows(0, Math.min(shown, list.length), reveal);
-    }
-    paintMore();
-  }
-  function addRows(from, to, reveal) {
-    let first = null;
-    for (let i = from; i < to; i++) {
-      const p = list[i], li = document.createElement('li'); if (reveal && !reduced()) li.style.setProperty('--d', Math.min(i - from, 14) * 30 + 'ms'); else li.style.animation = 'none';
-      const b = document.createElement('button'); b.type = 'button'; b.className = 'lib-row'; b.dataset.i = i;
-      b.innerHTML = '<img class="th" alt="" loading="lazy" decoding="async"><span class="no"></span><span class="nm"></span><span class="sh"></span><span class="go" aria-hidden="true">→</span>';
-      b.querySelector('.th').src = p.thumb; b.querySelector('.no').textContent = p.no; b.querySelector('.nm').textContent = p.cap; b.querySelector('.sh').textContent = (p.shelves || []).join(' · ');
-      b.addEventListener('click', () => openLightbox(list, i, b)); li.appendChild(b); rowsEl.appendChild(li); first = first || b;
-    }
-    return first;
-  }
-  function paintMore() {
-    const n = Math.min(shown, list.length), left = list.length - n;
-    libCount.textContent = list.length ? n + ' of ' + list.length + ' photos' : ''; $('#lib-empty').hidden = list.length > 0; $('.lib-bar').hidden = !list.length;
-    libMore.hidden = left <= 0; libMore.textContent = 'Show more · ' + left + ' to go';
-  }
-  libMore.addEventListener('click', () => { const from = Math.min(shown, list.length); shown += pageSize(); const to = Math.min(shown, list.length), first = libView === 'grid' ? addTiles(from, to, true) : addRows(from, to, true); paintMore(); if (libMore.hidden && first) first.focus({ preventScroll: true }); });
-  $$('.lib-views .pill').forEach(b => {
-    b.setAttribute('aria-pressed', String(b.dataset.view === libView));
-    b.addEventListener('click', () => { if (libView === b.dataset.view) return; libView = b.dataset.view; store.set('yowa-lib-view', libView); $$('.lib-views .pill').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderLib(true); });
-  });
-  let libRs = 0; addEventListener('resize', () => { clearTimeout(libRs); libRs = setTimeout(() => { if (libView === 'grid' && colsFor() !== cols) renderLib(false); }, 160); });
-  // Index view on a desktop: the photo follows the cursor down the list.
-  function peekLoop() {
-    const k = reduced() ? 1 : .2; pk.x += (pk.tx - pk.x) * k; pk.y += (pk.ty - pk.y) * k;
-    const tilt = Math.max(-6, Math.min(6, (pk.tx - pk.x) * .06));
-    peek.style.transform = 'translate3d(' + pk.x.toFixed(1) + 'px,' + pk.y.toFixed(1) + 'px,0) rotate(' + tilt.toFixed(2) + 'deg)';
-    pk.raf = pk.on && (Math.abs(pk.tx - pk.x) > .3 || Math.abs(pk.ty - pk.y) > .3) ? requestAnimationFrame(peekLoop) : 0;
-  }
-  function hidePeek() { pk.on = false; peek.classList.remove('on'); }
-  libBody.addEventListener('pointermove', e => {
-    if (e.pointerType !== 'mouse' || libView !== 'index') return;
-    const row = e.target.closest && e.target.closest('.lib-row'), p = row && list[+row.dataset.i]; if (!p) { hidePeek(); return; }
-    if (peekImg.getAttribute('src') !== p.thumb) peekImg.src = p.thumb;
-    const w = peek.offsetWidth || 250, h = w * p.h / p.w; let x = e.clientX + 32; if (x + w > innerWidth - 16) x = e.clientX - w - 32;
-    const y = Math.max(16, Math.min(innerHeight - h - 16, e.clientY - h / 2));
-    if (!pk.on) { pk.x = x; pk.y = y; } pk.tx = x; pk.ty = y; pk.on = true; peek.classList.add('on'); if (!pk.raf) pk.raf = requestAnimationFrame(peekLoop);
-  });
-  libBody.addEventListener('pointerleave', hidePeek); addEventListener('scroll', hidePeek, { passive: true });
-  paintShelves(); renderLib(true); paintRail(irlItems());
+  paintShelves(); paintRail(irlItems());
   // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
   function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
   let pendingCode = '';
@@ -1737,15 +1590,15 @@ const LIBRARY = [
   if (CONFIG.LIBRARY_FEED && !CONFIG.PREVIEW) fetch(CONFIG.LIBRARY_FEED).then(r => r.ok ? r.json() : null).then(d => {
     const https = u => typeof u === 'string' && u.indexOf('https://') === 0, key = u => String(u).split('/').pop().replace(/^[a-z0-9]{6,9}-/i, '').replace(/\.[a-z0-9]+$/, '').toLowerCase(), have = new Set(LIB.map(p => String(p.file || key(p.src)).toLowerCase()));
     const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox|real-?life)$/i.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(key(p.path)));
-    if (!fresh.length) return;   // nothing on the Library site yet: both sections show 'New photos dropping soon'
+    if (!fresh.length) return;   // nothing on the Library site yet: In real life shows what is bundled
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
       const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.folder || '')).toLowerCase();
       LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
         shelves: [{ raw: 'Tops', 'behind-the-scenes': 'Bottoms', products: 'Caps', campaign: 'Caps' }[String(p.folder).toLowerCase()] || (/\b(tees?|t-?shirt|raglan|long[\s-]*sleeve|top)s?\b/.test(t) ? 'Tops' : /jogger|jort|short|pant/.test(t) ? 'Bottoms' : /\bcaps?\b/.test(t) ? 'Caps' : '')].filter(Boolean) });
     });
-    paintShelves(); renderLib(true); paintRail(irlItems());
-    paintMore(); if (pendingCode && openCode(pendingCode)) pendingCode = '';
+    paintShelves(); paintRail(irlItems());
+    if (pendingCode && openCode(pendingCode)) pendingCode = '';
   }).catch(() => { });
 
   /* ── The list: same Supabase waitlist table (via /api/join) + Formspree backup ── */
