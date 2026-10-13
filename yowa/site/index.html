@@ -916,29 +916,29 @@ PRODUCTS.forEach(p => { p.opts = p.opts || []; if (!p.images) p.images = imagesF
 // Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
 // Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
 // The photos from the YOWA Library, numbered. In real life and the Library both show them; new uploads on the Library site join after these.
-// Shelves follow the library folders: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps (real-life is ignored).
+// Shelves are the product names (Raglans, Tees, Joggers, Jorts, Caps), set by what is in each photo. Real-life, brand and inbox folders are ignored.
 const LIBRARY = [
-  { no: 'YW·001', src: 'img/library/img_6995.jpg', w: 787, h: 1400, cap: 'Blue raglan · The crew', shelves: ['Tops'], product: 'liberty-raglan', file: 'img_6995' },
-  { no: 'YW·002', src: 'img/library/img_4234.jpg', w: 1050, h: 1400, cap: 'The tees · Front', shelves: ['Tops'], product: 'logo-tee', file: 'img_4234' },
+  { no: 'YW·001', src: 'img/library/img_6995.jpg', w: 787, h: 1400, cap: 'Blue raglan · The crew', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_6995' },
+  { no: 'YW·002', src: 'img/library/img_4234.jpg', w: 1050, h: 1400, cap: 'The tees · Front', shelves: ['Tees'], product: 'logo-tee', file: 'img_4234' },
   { no: 'YW·003', src: 'img/library/img_0570.jpg', w: 787, h: 1400, cap: '042 Cap · Cream and blue', shelves: ['Caps'], product: 'cap-042', file: 'img_0570' },
-  { no: 'YW·004', src: 'img/library/img_4123.jpg', w: 1050, h: 1400, cap: 'Grey jorts · On the shelf', shelves: ['Bottoms'], product: 'jorts', file: 'img_4123' },
-  { no: 'YW·005', src: 'img/library/img_9132.jpg', w: 1050, h: 1400, cap: 'Black joggers · On the board', shelves: ['Bottoms'], product: 'joggers', file: 'img_9132' },
+  { no: 'YW·004', src: 'img/library/img_4123.jpg', w: 1050, h: 1400, cap: 'Grey jorts · On the shelf', shelves: ['Jorts'], product: 'jorts', file: 'img_4123' },
+  { no: 'YW·005', src: 'img/library/img_9132.jpg', w: 1050, h: 1400, cap: 'Black joggers · On the board', shelves: ['Joggers'], product: 'joggers', file: 'img_9132' },
   { no: 'YW·006', src: 'img/library/img_4618.jpg', w: 1050, h: 1400, cap: '042 Cap · Black, the signature side', shelves: ['Caps'], product: 'cap-042', file: 'img_4618' },
-  { no: 'YW·007', src: 'img/library/img_4250.jpg', w: 1050, h: 1400, cap: 'The tees · Be You Be Different', shelves: ['Tops'], product: 'bybd-tee', file: 'img_4250' },
-  { no: 'YW·008', src: 'img/library/img_9725.jpg', w: 1050, h: 1400, cap: 'Purple jorts · The beads', shelves: ['Bottoms'], product: 'jorts', file: 'img_9725' },
+  { no: 'YW·007', src: 'img/library/img_4250.jpg', w: 1050, h: 1400, cap: 'The tees · Be You Be Different', shelves: ['Tees'], product: 'bybd-tee', file: 'img_4250' },
+  { no: 'YW·008', src: 'img/library/img_9725.jpg', w: 1050, h: 1400, cap: 'Purple jorts · The beads', shelves: ['Jorts'], product: 'jorts', file: 'img_9725' },
   { no: 'YW·009', src: 'img/library/img_3726.jpg', w: 1050, h: 1400, cap: '042 Caps · In the box', shelves: ['Caps'], product: 'cap-042', file: 'img_3726' },
-  { no: 'YW·010', src: 'img/library/img_8866.jpg', w: 1120, h: 1400, cap: 'Raglans and tees · Studded', shelves: ['Tops'], file: 'img_8866' },
-  { no: 'YW·011', src: 'img/library/img_5149.jpg', w: 1050, h: 1400, cap: 'Grey joggers · The glow', shelves: ['Bottoms'], product: 'joggers', file: 'img_5149' },
+  { no: 'YW·010', src: 'img/library/img_8866.jpg', w: 1120, h: 1400, cap: 'Raglans and tees · Studded', shelves: ['Raglans', 'Tees'], file: 'img_8866' },
+  { no: 'YW·011', src: 'img/library/img_5149.jpg', w: 1050, h: 1400, cap: 'Grey joggers · The glow', shelves: ['Joggers'], product: 'joggers', file: 'img_5149' },
   { no: 'YW·012', src: 'img/library/img_3939.jpg', w: 1050, h: 1400, cap: '042 Caps · Stacked', shelves: ['Caps'], product: 'cap-042', file: 'img_3939' },
-  { no: 'YW·013', src: 'img/library/img_9664.jpg', w: 1050, h: 1400, cap: 'Purple jorts · Up close', shelves: ['Bottoms'], product: 'jorts', file: 'img_9664' },
+  { no: 'YW·013', src: 'img/library/img_9664.jpg', w: 1050, h: 1400, cap: 'Purple jorts · Up close', shelves: ['Jorts'], product: 'jorts', file: 'img_9664' },
   { no: 'YW·014', src: 'img/library/img_9620.jpg', w: 1050, h: 1400, cap: '042 Cap · Black', shelves: ['Caps'], product: 'cap-042', file: 'img_9620' },
-  { no: 'YW·015', src: 'img/library/img_5132.jpg', w: 1050, h: 1400, cap: 'Black joggers · After dark', shelves: ['Bottoms'], product: 'joggers', file: 'img_5132' },
-  { no: 'YW·016', src: 'img/library/img_5327.jpg', w: 1050, h: 1400, cap: 'The crew · Joggers and jorts', shelves: ['Bottoms'], file: 'img_5327' },
-  { no: 'YW·017', src: 'img/library/img_9739.jpg', w: 1050, h: 1400, cap: 'Black jorts · The beads', shelves: ['Bottoms'], product: 'jorts', file: 'img_9739' },
-  { no: 'YW·018', src: 'img/library/img_5356.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts', shelves: ['Bottoms'], product: 'joggers', file: 'img_5356' },
-  { no: 'YW·019', src: 'img/library/img_6603.jpg', w: 787, h: 1400, cap: 'Black joggers · Red beads', shelves: ['Bottoms'], product: 'joggers', file: 'img_6603' },
-  { no: 'YW·020', src: 'img/library/img_5369.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts, up close', shelves: ['Bottoms'], product: 'joggers', file: 'img_5369' },
-  { no: 'YW·021', src: 'img/library/img_5173.jpg', w: 787, h: 1400, cap: 'Black joggers · The signature', shelves: ['Bottoms'], product: 'joggers', file: 'img_5173' }
+  { no: 'YW·015', src: 'img/library/img_5132.jpg', w: 1050, h: 1400, cap: 'Black joggers · After dark', shelves: ['Joggers'], product: 'joggers', file: 'img_5132' },
+  { no: 'YW·016', src: 'img/library/img_5327.jpg', w: 1050, h: 1400, cap: 'The crew · Joggers and jorts', shelves: ['Joggers', 'Jorts'], file: 'img_5327' },
+  { no: 'YW·017', src: 'img/library/img_9739.jpg', w: 1050, h: 1400, cap: 'Black jorts · The beads', shelves: ['Jorts'], product: 'jorts', file: 'img_9739' },
+  { no: 'YW·018', src: 'img/library/img_5356.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts', shelves: ['Joggers', 'Jorts'], product: 'joggers', file: 'img_5356' },
+  { no: 'YW·019', src: 'img/library/img_6603.jpg', w: 787, h: 1400, cap: 'Black joggers · Red beads', shelves: ['Joggers'], product: 'joggers', file: 'img_6603' },
+  { no: 'YW·020', src: 'img/library/img_5369.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts, up close', shelves: ['Joggers', 'Jorts'], product: 'joggers', file: 'img_5369' },
+  { no: 'YW·021', src: 'img/library/img_5173.jpg', w: 787, h: 1400, cap: 'Black joggers · The signature', shelves: ['Joggers'], product: 'joggers', file: 'img_5173' }
 ];
 /* ═══════════════════════════════════════════ */
 
@@ -1566,7 +1566,7 @@ const LIBRARY = [
 
   /* ── Photos: the numbered set behind In real life, filtered by shelf, opening in the viewer ── */
   const LIB = LIBRARY.map(p => ({ ...p, thumb: small(p.src) }));
-  const SHELF_ORDER = ['Tops', 'Bottoms', 'Caps'];
+  const SHELF_ORDER = ['Raglans', 'Tees', 'Joggers', 'Jorts', 'Caps'];
   let shelf = 'All';
   const irlItems = () => shelf === 'All' ? LIB.slice() : LIB.filter(p => (p.shelves || []).indexOf(shelf) >= 0);
   function paintShelves() {
@@ -1598,10 +1598,10 @@ const LIBRARY = [
     const fresh = (d && Array.isArray(d.photos) ? d.photos : []).filter(p => p && https(p.url) && !/^(brand|inbox|real-?life)$/i.test(p.folder) && /\.(jpe?g|png|webp|avif)$/i.test(p.path || '') && !have.has(key(p.path)));
     if (!fresh.length) return;   // nothing on the Library site yet: In real life shows what is bundled
     fresh.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(p => {
-      const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.folder || '')).toLowerCase();
+      const t = ((Array.isArray(p.tags) ? p.tags : []).join(' ') + ' ' + (p.caption || '') + ' ' + (p.folder || '')).toLowerCase();
       LIB.push({ src: p.url, thumb: https(p.thumb) ? p.thumb : p.url, w: 2, h: 3, live: true, no: 'YW·' + String(++lastNo).padStart(3, '0'),
         cap: typeof p.caption === 'string' && p.caption.trim() ? p.caption.trim().slice(0, 80) : 'Shoot · ' + String(p.folder || 'new'),
-        shelves: [{ raw: 'Tops', 'behind-the-scenes': 'Bottoms', products: 'Caps', campaign: 'Caps' }[String(p.folder).toLowerCase()] || (/\b(tees?|t-?shirt|raglan|long[\s-]*sleeve|top)s?\b/.test(t) ? 'Tops' : /jogger|jort|short|pant/.test(t) ? 'Bottoms' : /\bcaps?\b/.test(t) ? 'Caps' : '')].filter(Boolean) });
+        shelves: [/raglan/.test(t) && 'Raglans', /\btees?\b|t-?shirt|long[\s-]*sleeve/.test(t.replace(/raglan/g, '')) && 'Tees', /jogger/.test(t) && 'Joggers', /jort|short/.test(t) && 'Jorts', /\bcaps?\b|skull|beanie/.test(t) && 'Caps'].filter(Boolean) });
     });
     paintShelves(); renderIrl(irlItems());
     if (pendingCode && openCode(pendingCode)) pendingCode = '';
