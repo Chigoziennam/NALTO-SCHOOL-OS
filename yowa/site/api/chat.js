@@ -22,7 +22,7 @@ ABOUT YOWA
 - Instagram: @yowa_bybd. Everything is handmade in small limited runs. When a run is gone, it is gone.
 
 THE SITE AND THE SHOP
-- Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads); Jorts (black, purple or grey, with or without beads); Skull Cap (camo or black; no beads, black beads or white beads; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; with or without beads; the black one can have black, red, white or purple beads; one size).
+- Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads); Jorts (black, purple or grey, always with beads); Skull Cap (camo; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; with or without beads; the black one can have black, red, white or purple beads; one size).
 - Clothes come in M, L, XL and XXL with a relaxed fit.
 - Shop sections: New, All, Tops, Caps, Bottoms. Tap the eye on a piece to see it, the bag to add it. Pick colour, beads, size and quantity, then add to cart.
 - Anyone can fill a cart. Checking out takes the drop code, typed in at checkout. People on the list ("Get the code" on the site, just an email) get the code first, plus an early-bird discount and a first look at styling.

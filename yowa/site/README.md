@@ -65,6 +65,6 @@ The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`
 
 ## Partner round notes
 
-- **Shop:** nine pieces, no "Drop 01" labels. Raglans, jorts and the 042 cap have With / Without beads and the photos really show no beads. The black 042 cap adds Bead colour (White, Red, Purple, Black). The 042 cap also comes in Green, Navy and Green & Yellow. The skull cap opens on the front view, then the back.
-- **In real life / Library:** the 21 photos in `img/library/` are bundled with codes and captions, then anything new on the Library site joins after them. Folders map to shelves: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps. The real-life, brand and inbox folders are ignored. Filters are All, Tops, Bottoms and Caps in In real life; the Library has Grid and Index.
+- **Shop:** nine pieces, no "Drop 01" labels. Raglans and the 042 cap have With / Without beads, and the "without" raglan photos are the clean renders. Jorts are always beaded (no option). The black 042 cap adds Bead colour. The Skull Cap is camo only for now.
+- **In real life:** the 21 photos in `img/library/` are bundled with codes and captions, and anything new on the Library site joins after them. Folders map to filters: raw = Tops, behind-the-scenes = Bottoms, products + campaign = Caps (real-life, brand and inbox are ignored). There is no separate Library section any more.
 - **Ask YOWA:** `api/chat.js` answers from the catalogue and the FAQ. It needs `OPENROUTER_API_KEY` set in Vercel (yowa project, Production) and a redeploy. The key is never kept in the code.
