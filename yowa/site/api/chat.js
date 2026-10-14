@@ -22,8 +22,8 @@ ABOUT YOWA
 - Instagram: @yowa_bybd. Everything is handmade in small limited runs. When a run is gone, it is gone.
 
 THE SITE AND THE SHOP
-- Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads); Jorts (black, purple or grey, always with beads); Skull Cap (camo; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; with or without beads; the black one can have black, red, white or purple beads; one size).
-- Clothes come in M, L, XL and XXL with a relaxed fit.
+- Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads, no size choice); Jorts (black, purple or grey, always with beads, no size choice); Skull Cap (grey camo or black, clean or with white or black beads; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; always with beads, in white, red, purple or black; one size).
+- Tops come in M, L, XL and XXL with a relaxed fit (XXL is not available on the Liberty Raglan). Joggers and jorts have no size choice. Caps and skull caps are one size.
 - Shop sections: New, All, Tops, Caps, Bottoms. Tap the eye on a piece to see it, the bag to add it. Pick colour, beads, size and quantity, then add to cart.
 - Anyone can fill a cart. Checking out takes the drop code, typed in at checkout. People on the list ("Get the code" on the site, just an email) get the code first, plus an early-bird discount and a first look at styling.
 - Prices and the drop date go to the list first. The "In real life" section shows real photos of the pieces on real people, filtered by Tops, Bottoms and Caps.`;

@@ -516,6 +516,9 @@ section{position:relative}
 .sizes{display:flex;flex-wrap:wrap;gap:6px}
 .size{width:46px;height:46px;padding:0;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font:600 13px/1 var(--f-shop);display:inline-grid;place-items:center;transition:background .2s,color .2s,border-color .2s,transform .2s}
 .size.wide{width:auto;padding:0 18px;border-radius:999px}
+/* a size that is not available: crossed out with a red ban sign */
+.size.out{position:relative;opacity:.55;cursor:not-allowed;color:var(--mut)}
+.size.out::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid #E23A2E;background:linear-gradient(to top right,transparent calc(50% - 1.3px),#E23A2E calc(50% - 1.3px),#E23A2E calc(50% + 1.3px),transparent calc(50% + 1.3px))}
 .size[aria-pressed="true"]{background:#fff;color:var(--void)}
 .pv-close{position:absolute;top:12px;right:12px;z-index:4}
 .drawer{position:fixed;top:0;right:0;bottom:0;z-index:76;width:min(420px,100%);touch-action:pan-y;background:var(--cream);color:#140F1F;display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(0,0,0,.4)}
@@ -854,52 +857,51 @@ const CONFIG = {
 // looks: the photos for each pick; the first look whose `when` matches what's picked is shown (no `when` keys = always).
 const SIZES = ['M', 'L', 'XL', 'XXL'];
 const BEADS = { name: 'Beads', values: [{ v: 'With beads' }, { v: 'Without beads' }] };
+const SKULL_BEADS = { name: 'Beads', values: [{ v: 'No beads' }, { v: 'White beads', sw: '#F4F1EA' }, { v: 'Black beads', sw: '#121212' }] };
 const CAMO = 'conic-gradient(from 40deg,#2a2a2c 0 22%,#8b8b8f 0 41%,#4b4b4f 0 63%,#b3b3b6 0 78%,#2a2a2c 0)';
 const IMG = 'img/products/';
 // a colour with its beaded photos and its plain ones (the beads taken off), front first and back second
 const beadLooks = (C, withBeads, plain) => [{ when: { Colour: C, Beads: 'With beads' }, images: withBeads }, { when: { Colour: C, Beads: 'Without beads' }, images: plain }];
 const ragLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'raglan-' + c + '-front.webp', IMG + 'raglan-' + c + '-back.webp'], [IMG + 'raglan-' + c + '-front-plain.webp', IMG + 'raglan-' + c + '-back-plain.webp']); };
-const BEAD_COLOURS = { name: 'Bead colour', show: c => c.Colour === 'Black' && c.Beads === 'With beads', values: [{ v: 'White', sw: '#F4F1EA' }, { v: 'Red', sw: '#D3202B' }, { v: 'Purple', sw: '#8A3FE0' }, { v: 'Black', sw: '#121212' }] };
-const capBlack = col => ({ when: { Colour: 'Black', Beads: 'With beads', 'Bead colour': col }, images: [IMG + 'cap-black-front-' + col.toLowerCase() + '.webp', IMG + 'cap-black-side-' + col.toLowerCase() + '.webp'] });
+// every 042 cap comes with beads, in four colours; the photos are named cap-<colour>-<bead colour>, the black cap's front and side cap-black-front-... and cap-black-side-...
+const BEAD_COLOURS = { name: 'Bead colour', values: [{ v: 'White', sw: '#F4F1EA' }, { v: 'Red', sw: '#D3202B' }, { v: 'Purple', sw: '#8A3FE0' }, { v: 'Black', sw: '#121212' }] };
+const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLowerCase(); return { when: { Colour: C, 'Bead colour': b.v }, images: slug === 'black' ? [IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp'] : [IMG + 'cap-' + slug + '-' + k + '.webp'] }; });
+const skullLook = (C, B, imgs) => ({ when: { Colour: C, Beads: B }, images: imgs.map(f => IMG + f + '.webp') });
 const PRODUCTS = [
-  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
     looks: [].concat(ragLooks('Black'), ragLooks('Red'), ragLooks('Blue'), ragLooks('Grey')),
     desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
-  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
     images: [IMG + 'ringer-front.webp', IMG + 'ringer-back.webp'],
     desc: 'White tee with a black ringer collar and cuffs, the signature on the chest, 💜⚔️🐉 on the back of the neck and snaps along the hem. Handmade, limited run.' },
-  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', cat: 'tops', cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
     images: [IMG + 'longsleeve-front.webp', IMG + 'longsleeve-back.webp'],
     desc: 'Boxy white long sleeve with YOWA across the chest, 💜⚔️🐉 on the back of the neck and snaps on the cuffs and hem. Handmade, limited run.' },
   { id: 'bybd-tee', name: 'Be Different Tee', colour: 'Black', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
     images: [IMG + 'bybd-tee-front.webp', IMG + 'bybd-tee-back.webp'],   // front first, then the back
     desc: 'Black tee with YOWA on the chest and Be You Be Different stamped big across the back, 💜⚔️🐉 at the neck. Handmade, limited run.' },
   { id: 'logo-tee', name: 'YOWA Logo Tee', colour: 'Black', cat: 'tops', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
-    images: [IMG + 'logo-tee-front.webp'],
-    desc: 'Black tee with the YOWA wordmark across the chest. Handmade, limited run.' },
-  { id: 'joggers', name: 'Joggers', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+    images: [IMG + 'logo-tee-front.webp', IMG + 'bybd-tee-back.webp'],   // the same back as the Be Different Tee
+    desc: 'Black tee with the YOWA wordmark across the chest and Be You Be Different stamped across the back, 💜⚔️🐉 at the neck. Handmade, limited run.' },
+  { id: 'joggers', name: 'Joggers', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: ['One size'], noSize: true,
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Grey', sw: '#A3A3A7' }] }, BEADS],
     looks: [{ when: { Colour: 'Black', Beads: 'With beads' }, images: [IMG + 'joggers-black-beads.webp', IMG + 'joggers-black-red.webp'] }, { when: { Colour: 'Black' }, images: [IMG + 'joggers-black.webp'] },
       { when: { Colour: 'Grey', Beads: 'With beads' }, images: [IMG + 'joggers-grey-beads.webp'] }, { when: { Colour: 'Grey' }, images: [IMG + 'joggers-grey.webp'] }],
     desc: 'Wide-leg joggers with the signature on the hip. Beads down the side or keep them plain. Handmade, limited run.' },
-  { id: 'jorts', name: 'Jorts', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: SIZES,
+  { id: 'jorts', name: 'Jorts', cat: 'bottoms', isNew: true, cut: true, price: null, art: 'raglan', sizes: ['One size'], noSize: true,
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }],
     looks: ['Black', 'Purple', 'Grey'].map(C => ({ when: { Colour: C }, images: [IMG + 'jorts-' + C.toLowerCase() + '.webp'] })),
     desc: 'Long jorts with the signature on the front and beads down both sides. Handmade, limited run.' },
   { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
-    opts: [{ name: 'Colour', values: [{ v: 'Camo', sw: CAMO }, { v: 'Black', sw: '#121212' }] }],
-    looks: [{ when: { Colour: 'Camo' }, images: [IMG + 'skull-camo.webp', IMG + 'skull-camo-sig.webp'] },
-      { when: { Colour: 'Black' }, images: [IMG + 'skull-black-white-beads.webp', IMG + 'skull-black-black-beads.webp'] }],
-    desc: 'Skull cap with stitched seams, in camo or black. One size.' },
+    opts: [{ name: 'Colour', values: [{ v: 'Grey', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
+    looks: [skullLook('Grey', 'No beads', ['skull-camo', 'skull-camo-sig']), skullLook('Grey', 'White beads', ['skull-camo-front-white', 'skull-camo-back-white']), skullLook('Grey', 'Black beads', ['skull-camo-front-black', 'skull-camo-back-black']),
+      skullLook('Black', 'No beads', ['skull-black-plain']), skullLook('Black', 'White beads', ['skull-black-white']), skullLook('Black', 'Black beads', ['skull-black-black'])],
+    desc: 'Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.' },
   { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
-    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }],
-        }, Object.assign({ show: c => c.Colour !== 'Green & Yellow' }, BEADS), BEAD_COLOURS],
-    looks: [].concat(['White', 'Red', 'Purple', 'Black'].map(capBlack),
-      [{ when: { Colour: 'Black', Beads: 'Without beads' }, images: [IMG + 'cap-black-front-plain.webp', IMG + 'cap-black-side-plain.webp'] }],
-      beadLooks('Green', [IMG + 'cap-green.webp'], [IMG + 'cap-green-plain.webp']), beadLooks('Navy', [IMG + 'cap-navy.webp'], [IMG + 'cap-navy-plain.webp']),
-      [{ when: { Colour: 'Green & Yellow' }, images: [IMG + 'cap-green-yellow.webp'] }]),
-    desc: 'The 042 patch cap: 042, the YOWA wordmark, the heart, the flame and the signature down the side. Pick the colour, with beads or without. On the black one the beads come in white, red, purple or black. One size.' }
+    opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }] }, BEAD_COLOURS],
+    looks: [].concat(capLooks('Black', 'black'), capLooks('Green', 'green'), capLooks('Navy', 'navy'), capLooks('Green & Yellow', 'green-yellow')),
+    desc: 'The 042 patch cap: 042, the YOWA wordmark, the heart, the flame and the signature down the side. Pick the colour, and the beads in white, red, purple or black. One size.' }
 ];
 // Categories for the menu's Shop list and the side shop
 const CATS = [['new', 'New'], ['all', 'All'], ['tops', 'Tops'], ['caps', 'Caps'], ['bottoms', 'Bottoms']];
@@ -1373,7 +1375,8 @@ const LIBRARY = [
     $('#pv-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
     qty = 1; paintQty();
     const sz = $('#pv-sizes'); sz.textContent = '';
-    p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.className = 'size' + (s.length > 3 ? ' wide' : ''); b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
+    p.sizes.forEach(s => { const b = document.createElement('button'); b.type = 'button'; const out = (p.soldOut || []).indexOf(s) >= 0; b.className = 'size' + (s.length > 3 ? ' wide' : '') + (out ? ' out' : ''); b.textContent = s; b.setAttribute('aria-pressed', String(s === size)); if (out) { b.disabled = true; b.setAttribute('aria-label', s + ', not available'); } b.addEventListener('click', () => { size = s; $$('.size', sz).forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#pv-msg').textContent = ''; }); sz.appendChild(b); });
+    sz.parentElement.hidden = !!p.noSize;
     $('#pv-msg').textContent = ''; $('#pv-msg').classList.remove('bad');
     pview.hidden = false; $('.pview-in').scrollTop = 0; pvBuild(p, imagesFor(p, choice)); scrim.hidden = false; document.body.style.overflow = 'hidden'; backstack.open(closeProduct);
     const sheet = matchMedia('(max-width:820px)').matches;
@@ -1438,7 +1441,7 @@ const LIBRARY = [
       const row = document.createElement('div'); row.className = 'dr-item';
       row.innerHTML = '<div class="th"></div><div><b></b><span></span></div><button type="button">Remove</button>';
       const pick = optText(p, it.opts) || p.colour, src = small(imagesFor(p, it.opts || {})[0]);
-      row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : ''); row.querySelector('span').textContent = it.size + ' · ' + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
+      row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : ''); row.querySelector('span').textContent = (p.noSize ? '' : it.size + ' · ') + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
       const t = new Image(); t.onload = () => { const th = row.querySelector('.th'); th.style.backgroundImage = 'url("' + src + '")'; if (p.cut) th.classList.add('cut'); }; t.src = src;
       row.querySelector('button').addEventListener('click', () => { bag.splice(idx, 1); saveBag(); renderBag(); }); body.appendChild(row);
     });
