@@ -392,13 +392,12 @@ section{position:relative}
 @media (hover:hover){.irl-tile:hover img{transform:scale(1.05)}}
 .irl-tile:focus-visible{outline:2px solid var(--purple-l);outline-offset:-2px}
 .irl-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.irl-row{width:100%;display:grid;grid-template-columns:64px minmax(0,1fr) 18px;gap:2px 14px;align-items:center;padding:10px 2px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;transition:background .25s}
+.irl-row{width:100%;display:grid;grid-template-columns:64px minmax(0,1fr);gap:2px 14px;align-items:center;padding:10px 2px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;transition:background .25s}
 .irl-row:active,.irl-row:focus-visible{background:rgba(122,47,224,.16)}
 @media (hover:hover){.irl-row:hover{background:rgba(122,47,224,.14)}}
 .irl-row .th{grid-row:1/3;width:64px;height:64px;border-radius:8px;object-fit:cover;background:#140E26}
 .irl-row .nm{font:600 15px/1.25 var(--f-body);text-transform:none}
 .irl-row .sh{font:700 8px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
-.irl-row .go{grid-row:1/3;grid-column:3;color:var(--purple-l)}
 .irl-more{display:flex;justify-content:center;margin-top:clamp(18px,2.4vw,28px)}
 .irl-count{display:block;text-align:center;margin-top:14px;color:var(--mut)}
 @media (max-width:640px){.lib-shelves{flex-basis:100%}}
@@ -418,6 +417,7 @@ section{position:relative}
 .lb-close{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:18px}
 .lb-nav{position:absolute;top:50%;transform:translateY(-50%)}
 .lb-prev{left:14px}.lb-next{right:14px}
+@media (hover:none),(pointer:coarse){.lb-prev,.lb-next{display:none}}   /* on a phone you swipe, like a real gallery */
 
 /* ── In real life filters ── */
 .lib-shelves{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 auto;min-width:0;padding:2px}
@@ -897,7 +897,7 @@ const PRODUCTS = [
     desc: 'Long jorts with the signature on the front and beads down both sides. Handmade, limited run.' },
   { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: null, art: 'beanie', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Grey', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
-    looks: [skullLook('Grey', 'No beads', ['skull-camo', 'skull-camo-sig']), skullLook('Grey', 'White beads', ['skull-camo-front-white', 'skull-camo-back-white']), skullLook('Grey', 'Black beads', ['skull-camo-front-black', 'skull-camo-back-black']),
+    looks: [skullLook('Grey', 'No beads', ['skull-camo', 'skull-camo-sig']), skullLook('Grey', 'White beads', ['skull-camo-front-white', 'skull-camo-back-white']), skullLook('Grey', 'Black beads', ['skull-camo-back-black']),
       skullLook('Black', 'No beads', ['skull-black-front-plain', 'skull-black-back-plain']), skullLook('Black', 'White beads', ['skull-black-white']), skullLook('Black', 'Black beads', ['skull-black-front-black', 'skull-black-back-black'])],
     desc: 'Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.' },
   { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: null, art: 'cap', sizes: ['One size'],
@@ -942,7 +942,29 @@ const LIBRARY = [
   { no: 'YW·018', src: 'img/library/img_5356.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts', shelves: ['Joggers', 'Jorts'], product: 'joggers', file: 'img_5356' },
   { no: 'YW·019', src: 'img/library/img_6603.jpg', w: 787, h: 1400, cap: 'Black joggers · Red beads', shelves: ['Joggers'], product: 'joggers', file: 'img_6603' },
   { no: 'YW·020', src: 'img/library/img_5369.jpg', w: 1050, h: 1400, cap: 'Grey joggers · Black jorts, up close', shelves: ['Joggers', 'Jorts'], product: 'joggers', file: 'img_5369' },
-  { no: 'YW·021', src: 'img/library/img_5173.jpg', w: 787, h: 1400, cap: 'Black joggers · The signature', shelves: ['Joggers'], product: 'joggers', file: 'img_5173' }
+  { no: 'YW·021', src: 'img/library/img_5173.jpg', w: 787, h: 1400, cap: 'Black joggers · The signature', shelves: ['Joggers'], product: 'joggers', file: 'img_5173' },
+  { no: 'YW·022', src: 'img/library/img_9604.jpg', w: 1050, h: 1400, cap: 'Blue raglan · The beads', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_9604' },
+  { no: 'YW·023', src: 'img/library/img_0909.jpg', w: 933, h: 1400, cap: 'Red and blue raglans', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_0909' },
+  { no: 'YW·024', src: 'img/library/img_1537.jpg', w: 1050, h: 1400, cap: 'Blue raglan · In the shop', shelves: ['Raglans', 'Caps'], product: 'liberty-raglan', file: 'img_1537' },
+  { no: 'YW·025', src: 'img/library/img_1488.jpg', w: 933, h: 1400, cap: 'Black raglans · The crew', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_1488' },
+  { no: 'YW·026', src: 'img/library/img_1484.jpg', w: 933, h: 1400, cap: 'Red raglan · The beads', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_1484' },
+  { no: 'YW·027', src: 'img/library/img_0907.jpg', w: 933, h: 1400, cap: 'Red raglan', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_0907' },
+  { no: 'YW·028', src: 'img/library/img_0910.jpg', w: 933, h: 1400, cap: 'Blue raglan · Be You Be Different', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_0910' },
+  { no: 'YW·029', src: 'img/library/img_1480.jpg', w: 933, h: 1400, cap: 'Blue raglan · On the street', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_1480' },
+  { no: 'YW·030', src: 'img/library/img_1465.jpg', w: 933, h: 1400, cap: 'Grey raglan · The statue', shelves: ['Raglans'], product: 'liberty-raglan', file: 'img_1465' },
+  { no: 'YW·031', src: 'img/library/img_4406.jpg', w: 788, h: 1400, cap: '042 caps · On the ground', shelves: ['Caps'], product: 'cap-042', file: 'img_4406' },
+  { no: 'YW·032', src: 'img/library/img_9986.jpg', w: 1050, h: 1400, cap: 'Green and yellow 042 cap', shelves: ['Caps'], product: 'cap-042', file: 'img_9986' },
+  { no: 'YW·033', src: 'img/library/img_9927.jpg', w: 1050, h: 1400, cap: '042 caps · The crew', shelves: ['Caps'], product: 'cap-042', file: 'img_9927' },
+  { no: 'YW·034', src: 'img/library/img_2068.jpg', w: 787, h: 1400, cap: 'Pink 042 cap · By the pool', shelves: ['Caps'], product: 'cap-042', file: 'img_2068' },
+  { no: 'YW·035', src: 'img/library/img_9802.jpg', w: 1050, h: 1400, cap: 'Green caps · The view', shelves: ['Caps'], product: 'cap-042', file: 'img_9802' },
+  { no: 'YW·036', src: 'img/library/img_6633.jpg', w: 1050, h: 1400, cap: 'Green 042 cap · After dark', shelves: ['Caps'], product: 'cap-042', file: 'img_6633' },
+  { no: 'YW·037', src: 'img/library/img_6499.jpg', w: 1050, h: 1400, cap: 'Green 042 cap · In hand', shelves: ['Caps'], product: 'cap-042', file: 'img_6499' },
+  { no: 'YW·038', src: 'img/library/img_6415.jpg', w: 1050, h: 1400, cap: '042 caps · In the shop', shelves: ['Caps'], product: 'cap-042', file: 'img_6415' },
+  { no: 'YW·039', src: 'img/library/img_5974.jpg', w: 933, h: 1400, cap: '042 caps · Green and black', shelves: ['Caps'], product: 'cap-042', file: 'img_5974' },
+  { no: 'YW·040', src: 'img/library/img_0699.jpg', w: 1050, h: 1400, cap: '042 caps · From above', shelves: ['Caps'], product: 'cap-042', file: 'img_0699' },
+  { no: 'YW·041', src: 'img/library/img_4916.jpg', w: 1050, h: 1400, cap: 'Green 042 cap', shelves: ['Caps'], product: 'cap-042', file: 'img_4916' },
+  { no: 'YW·042', src: 'img/library/img_1493.jpg', w: 1050, h: 1400, cap: 'White long sleeve · The signature', shelves: ['Tees'], product: 'yowa-long-sleeve', file: 'img_1493' },
+  { no: 'YW·043', src: 'img/library/img_1448.jpg', w: 1050, h: 1400, cap: 'Grey camo skull cap · From behind', shelves: ['Caps'], product: 'skull-cap', file: 'img_1448' }
 ];
 /* ═══════════════════════════════════════════ */
 
@@ -1517,7 +1539,7 @@ const LIBRARY = [
       const ul = document.createElement('ul'); ul.className = 'irl-list';
       items.forEach((p, i) => {
         const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.className = 'irl-row';
-        b.innerHTML = '<img class="th" alt=""><span class="nm"></span><span class="sh"></span><span class="go" aria-hidden="true">→</span>';
+        b.innerHTML = '<img class="th" alt=""><span class="nm"></span><span class="sh"></span>';
         const th = b.querySelector('.th'); th.loading = 'lazy'; th.decoding = 'async'; th.onerror = () => { if (p.thumb !== p.src && th.getAttribute('src') !== p.src) th.src = p.src; }; th.src = p.thumb || p.src;
         b.querySelector('.nm').textContent = p.cap || p.no; b.querySelector('.sh').textContent = [p.no].concat(p.shelves || []).filter(Boolean).join(' · ');
         b.addEventListener('click', () => openLightbox(irlList, i, b)); li.appendChild(b); ul.appendChild(li);
@@ -1535,7 +1557,7 @@ const LIBRARY = [
   const slug = no => String(no || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');   // 'YW·010' → 'yw-010'
   function openLightbox(items, i, from) {
     const lb = document.createElement('div'); lb.className = 'lightbox'; lb.id = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Photo viewer');
-    lb.innerHTML = '<figure><div class="lb-media"></div><figcaption class="lb-foot"><span class="label lb-cap"></span><button class="btn lb-share" type="button">Share</button><button class="btn lb-shop" type="button" hidden>Shop this piece →</button></figcaption></figure><button class="x lb-close" type="button">Close</button><button class="x lb-nav lb-prev" type="button" aria-label="Previous photo">←</button><button class="x lb-nav lb-next" type="button" aria-label="Next photo">→</button>';
+    lb.innerHTML = '<figure><div class="lb-media"></div><figcaption class="lb-foot"><span class="label lb-cap"></span><button class="btn lb-share" type="button">Share</button><button class="btn lb-shop" type="button" hidden>Shop this piece</button></figcaption></figure><button class="x lb-close" type="button">Close</button><button class="x lb-nav lb-prev" type="button" aria-label="Previous photo">←</button><button class="x lb-nav lb-next" type="button" aria-label="Next photo">→</button>';
     document.body.appendChild(lb); document.body.style.overflow = 'hidden';
     const media = lb.querySelector('.lb-media'), cap = lb.querySelector('.lb-cap'), shop = lb.querySelector('.lb-shop'); let closed = false;
     const show = k => {
@@ -1544,11 +1566,15 @@ const LIBRARY = [
       media.innerHTML = it.no ? '' : '<div class="art">' + artFor(i) + '</div>';
       const im = document.createElement('img'); im.alt = it.cap || 'Photo ' + (i + 1); im.decoding = 'async';
       im.onload = () => { if (!it.w && im.naturalWidth) media.style.setProperty('--ar', (im.naturalWidth / im.naturalHeight).toFixed(4)); };
-      im.onerror = () => im.remove(); im.src = it.src; media.appendChild(im);
+      // the small copy opens at once; the big one replaces it when it has arrived, and if it never does the small one stays
+      const small0 = it.thumb && it.thumb !== it.src ? it.thumb : '';
+      im.onerror = () => { if (im.getAttribute('src') !== it.src && it.src) im.src = it.src; };
+      im.src = small0 || it.src; media.appendChild(im);
+      if (small0) { const big = new Image(); big.onload = () => { if (im.isConnected) im.src = it.src; }; big.src = it.src; }
       cap.textContent = [it.no, it.cap, pad(i + 1) + ' / ' + pad(items.length)].filter(Boolean).join(' · ');
       shop.hidden = !(it.product && PRODUCTS.some(p => p.id === it.product));
       if (it.no) try { history.replaceState(history.state, '', '#' + slug(it.no)); } catch (e) { }   // the address bar always holds this photo's link
-      [i + 1, i - 1].forEach(j => { const n = items[(j + items.length) % items.length]; if (n) new Image().src = n.src; });
+      [i + 1, i - 1].forEach(j => { const n = items[(j + items.length) % items.length]; if (n) new Image().src = n.thumb || n.src; });
       if (!reduced()) media.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
     };
     const close = keep => { if (closed) return; closed = true; lb.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', key); if (keep !== true) backstack.close(); if (from && from.isConnected) from.focus({ preventScroll: true }); };
