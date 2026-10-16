@@ -12,6 +12,12 @@ const NAMES = {
   'liberty-raglan': 'Liberty Raglan', 'ringer-tee': 'Ringer Tee', 'yowa-long-sleeve': 'YOWA Long Sleeve', 'bybd-tee': 'Be Different Tee',
   'logo-tee': 'YOWA Logo Tee', 'joggers': 'Joggers', 'jorts': 'Jorts', 'skull-cap': 'Skull Cap', 'cap-042': '042 Cap'
 };
+// Delivery tiers: Nsukka ₦3,000 · Other Enugu ₦5,000 · Other states ₦8,500
+const calcDelivery = (state, lga) => {
+  if (!state) return 0;
+  if (state === 'Enugu') return lga === 'Nsukka' ? 3000 : 5000;
+  return 8500;
+};
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const clip = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
 
@@ -21,8 +27,9 @@ export default async function handler(req, res) {
   if (!secret) return res.status(503).json({ error: 'Payments are not switched on yet' });
 
   const b = req.body || {};
-  const email = clip(b.email, 160).toLowerCase(), name = clip(b.name, 80), phone = clip(b.phone, 30), address = clip(b.address, 240);
-  if (!EMAIL.test(email) || !name || !phone || !address) return res.status(400).json({ error: 'Name, email, phone and delivery address are needed' });
+  const email = clip(b.email, 160).toLowerCase(), name = clip(b.name, 80), phone = clip(b.phone, 30);
+  const state = clip(b.state, 60), lga = clip(b.lga, 60), address = clip(b.address, 240);
+  if (!EMAIL.test(email) || !name || !phone || !state || !address) return res.status(400).json({ error: 'Name, email, phone, state and street address are needed' });
 
   const items = Array.isArray(b.items) ? b.items.slice(0, 30) : [];
   let total = 0; const lines = [];
@@ -35,19 +42,32 @@ export default async function handler(req, res) {
   }
   if (!lines.length) return res.status(400).json({ error: 'The cart is empty' });
 
+  const delivery = calcDelivery(state, lga);
+  const grand = total + delivery;
+  const deliveryLabel = state === 'Enugu' ? (lga ? lga + ', Enugu' : 'Enugu') : state;
+  const deliverTo = [name, address, lga, state].filter(Boolean).join(', ');
+
   try {
     const r = await fetch('https://api.paystack.co/transaction/initialize', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + secret, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email, amount: total * 100, currency: 'NGN',
+        email, amount: grand * 100, currency: 'NGN',
         callback_url: 'https://yowabybd.com/',
-        metadata: { name, phone, address, order: lines.join(' | '), custom_fields: [{ display_name: 'Order', variable_name: 'order', value: lines.join(' | ') }, { display_name: 'Deliver to', variable_name: 'address', value: address }] }
+        metadata: {
+          name, phone, address, state, lga,
+          order: lines.join(' | '),
+          custom_fields: [
+            { display_name: 'Order', variable_name: 'order', value: lines.join(' | ') },
+            { display_name: 'Deliver to', variable_name: 'address', value: deliverTo },
+            { display_name: 'Delivery fee', variable_name: 'delivery', value: '₦' + delivery.toLocaleString('en-NG') + ' (' + deliveryLabel + ')' }
+          ]
+        }
       })
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.status || !j.data) return res.status(502).json({ error: 'Paystack could not start the payment' });
-    return res.status(200).json({ url: j.data.authorization_url, reference: j.data.reference });
+    return res.status(200).json({ url: j.data.authorization_url, reference: j.data.reference, delivery });
   } catch (e) {
     return res.status(500).json({ error: 'Checkout failed' });
   }
