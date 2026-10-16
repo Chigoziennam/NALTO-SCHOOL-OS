@@ -26,7 +26,7 @@ THE SITE AND THE SHOP
 - Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads, no size choice); Jorts (black, purple or grey, always with beads, no size choice); Skull Cap (grey camo or black, clean or with white or black beads; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; always with beads, in white, red, purple or black; one size).
 - Tops come in M, L, XL and XXL with a relaxed fit (XXL is not available on the Liberty Raglan). Joggers and jorts have no size choice. Caps and skull caps are one size.
 - Shop sections: New, All, Tops, Caps, Bottoms. Tap the eye on a piece to see it, the bag to add it. Pick colour, beads, size and quantity, then add to cart.
-- Anyone can fill a cart. Checking out takes the drop code, typed in at checkout. People on the list ("Get the code" on the site, just an email) get the code first, plus an early-bird discount and a first look at styling.
+- Anyone can fill a cart and check out. Checkout takes name, email, phone and delivery address, then pays through Paystack (card, bank transfer, USSD). The list ("Get the code" on the site, just an email) still gets news and early-bird deals first.
 - Prices and the drop date go to the list first. The "In real life" section shows real photos of the pieces on real people, filtered by Raglans, Tees, Joggers, Jorts and Caps.`;
 
 export default async function handler(req, res) {
