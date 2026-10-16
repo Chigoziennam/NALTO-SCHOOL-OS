@@ -22,11 +22,12 @@ ABOUT YOWA
 - Instagram: @yowa_bybd. Everything is handmade in small limited runs. When a run is gone, it is gone.
 
 THE SITE AND THE SHOP
+- Prices (naira): Liberty Raglan 40,000; Ringer Tee 22,000; White Long Sleeve 23,500; Be Different Tee 30,000; YOWA Logo Tee 30,000; Joggers 35,000; Jorts 30,000; Skull Cap 18,000; 042 Cap 45,000. The New section holds the two white tees (Ringer Tee and White Long Sleeve).
 - Pieces: Liberty Raglan (black body; sleeves in black, red, blue or grey; with beads or without); Ringer Tee and YOWA Long Sleeve (white); Be Different Tee (black, YOWA on the chest, Be You Be Different on the back); YOWA Logo Tee (black, big YOWA wordmark); Joggers (black or grey, with or without beads, no size choice); Jorts (black, purple or grey, always with beads, no size choice); Skull Cap (grey camo or black, clean or with white or black beads; one size); 042 Cap, the patch cap (black, green, navy, or green with a yellow peak; always with beads, in white, red, purple or black; one size).
 - Tops come in M, L, XL and XXL with a relaxed fit (XXL is not available on the Liberty Raglan). Joggers and jorts have no size choice. Caps and skull caps are one size.
 - Shop sections: New, All, Tops, Caps, Bottoms. Tap the eye on a piece to see it, the bag to add it. Pick colour, beads, size and quantity, then add to cart.
 - Anyone can fill a cart. Checking out takes the drop code, typed in at checkout. People on the list ("Get the code" on the site, just an email) get the code first, plus an early-bird discount and a first look at styling.
-- Prices and the drop date go to the list first. The "In real life" section shows real photos of the pieces on real people, filtered by Tops, Bottoms and Caps.`;
+- Prices and the drop date go to the list first. The "In real life" section shows real photos of the pieces on real people, filtered by Raglans, Tees, Joggers, Jorts and Caps.`;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
