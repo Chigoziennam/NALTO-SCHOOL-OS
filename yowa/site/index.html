@@ -530,8 +530,14 @@ section{position:relative}
 .dr-foot .btn{justify-content:center;width:100%;color:#fff}
 .dr-note{font-size:12.5px;color:#655C73;margin:0}
 .dr-ship{display:grid;gap:8px;margin:0 0 10px}
-.dr-ship input{min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;color:#fff}
-[data-theme="light"] .dr-ship input{background:#fff;color:var(--ink)}
+.dr-ship input,.dr-ship select{min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;color:#fff}
+.dr-ship select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A91B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:12px 8px;padding-right:36px}
+.dr-ship select option{background:#140E26;color:#fff}
+[data-theme="light"] .dr-ship input,[data-theme="light"] .dr-ship select{background:#fff;color:var(--ink)}
+.grand-row{border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+.grand-row strong{font-size:1.08em;color:var(--purple-l)}
+.pay-link{text-align:center;letter-spacing:.04em;animation:pulse-pay 2s ease-in-out infinite}
+@keyframes pulse-pay{0%,100%{box-shadow:0 0 0 0 rgba(122,47,224,.5)}50%{box-shadow:0 0 0 8px rgba(122,47,224,0)}}
 .dr-note.ok{color:#2E9E6B}
 .dr-empty{color:#655C73;padding:30px 0;text-align:center}
 .x.xi{display:grid;place-items:center;width:40px;height:40px;padding:0;font-size:0}
@@ -797,14 +803,19 @@ section{position:relative}
   <div class="dr-body" id="dr-body"></div>
   <div class="dr-foot">
     <div class="row"><span>Subtotal</span><span id="dr-total">₦0</span></div>
+    <div class="row" id="dr-fee-row" hidden><span>Delivery</span><span id="dr-fee"></span></div>
+    <div class="row grand-row" id="dr-grand-row" hidden><span>Total</span><strong id="dr-grand"></strong></div>
     <div class="dr-ship" id="dr-ship">
       <input id="sh-name" type="text" autocomplete="name" placeholder="Full name" aria-label="Full name">
       <input id="sh-email" type="email" autocomplete="email" inputmode="email" placeholder="Email" aria-label="Email">
       <input id="sh-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Phone number" aria-label="Phone number">
-      <input id="sh-addr" type="text" autocomplete="street-address" placeholder="Delivery address" aria-label="Delivery address">
+      <select id="sh-state" aria-label="State"><option value="">State…</option></select>
+      <select id="sh-lga" aria-label="LGA / Area" hidden><option value="">LGA / Area…</option></select>
+      <input id="sh-addr" type="text" autocomplete="street-address" placeholder="Street address" aria-label="Street address">
     </div>
-    <button class="btn solid" type="button" id="checkout">Checkout with Paystack</button>
-    <p class="dr-note" id="dr-note">Card, bank transfer and USSD through Paystack. We deliver to the address above.</p>
+    <button class="btn solid" type="button" id="checkout">Get payment link</button>
+    <a id="pay-link" class="btn solid pay-link" href="#" target="_blank" rel="noopener" hidden>Tap here to pay →</a>
+    <p class="dr-note" id="dr-note">Card, transfer and USSD through Paystack. Delivery included in total.</p>
   </div>
 </aside>
 
@@ -1435,6 +1446,19 @@ const LIBRARY = [
   /* ── Bag ── */
   // a saved cart only keeps pieces and sizes the shop still has
   let bag = store.get('yowa-bag', []).filter(i => { const p = PRODUCTS.find(x => x.id === i.id); return p && p.sizes.indexOf(i.size) >= 0 && i.qty > 0; });
+  const NG_STATES = ['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT (Abuja)','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
+  const ENUGU_LGAS = ['Aninri','Awgu','Enugu East','Enugu North','Enugu South','Ezeagu','Igbo-Etiti','Igbo-Eze North','Igbo-Eze South','Isi-Uzo','Nkanu East','Nkanu West','Nsukka','Oji River','Udenu','Udi','Uzo-Uwani'];
+  const calcDelivery = (state, lga) => !state ? 0 : state === 'Enugu' ? (lga === 'Nsukka' ? 3000 : 5000) : 8500;
+  let deliveryFee = 0;
+  const updateFeeDisplay = () => {
+    const state = $('#sh-state').value, lga = $('#sh-lga') && !$('#sh-lga').hidden ? $('#sh-lga').value : '';
+    deliveryFee = calcDelivery(state, lga);
+    const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
+    if (deliveryFee > 0 && subtotal > 0) {
+      $('#dr-fee').textContent = naira(deliveryFee); $('#dr-grand').textContent = naira(subtotal + deliveryFee);
+      $('#dr-fee-row').hidden = false; $('#dr-grand-row').hidden = false;
+    } else { $('#dr-fee-row').hidden = true; $('#dr-grand-row').hidden = true; }
+  };
   const drawer = $('#drawer');
   function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; $('#bag-open').dataset.n = n; $('#bag-open').setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items')); const qc = $('#qs-count'); if (qc) qc.textContent = n; }
   const bumpBag = () => { const b = $('#bag-open'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
@@ -1453,6 +1477,7 @@ const LIBRARY = [
     });
     const tbc = bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.price == null; });
     $('#dr-total').textContent = tbc ? (total ? naira(total) + ' + prices to come' : 'Prices drop soon') : naira(total); $('#checkout').disabled = !bag.length;
+    updateFeeDisplay();
   }
   function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
   function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
@@ -1474,19 +1499,40 @@ const LIBRARY = [
   drawer.addEventListener('pointercancel', () => { if (bx == null) return; bx = null; bagSettle(); drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); });
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); if (!qshop.hidden) closeShop(); });
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
+  // Populate state and LGA dropdowns
+  const shState = $('#sh-state'), shLga = $('#sh-lga');
+  NG_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if (s === 'Enugu') o.selected = true; shState.appendChild(o); });
+  ENUGU_LGAS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; shLga.appendChild(o); });
+  shLga.hidden = false; // Enugu is pre-selected, so LGA shows on load
+  shState.addEventListener('change', () => { const isEnugu = shState.value === 'Enugu'; shLga.hidden = !isEnugu; if (!isEnugu) shLga.value = ''; updateFeeDisplay(); hidePay(); });
+  shLga.addEventListener('change', () => { updateFeeDisplay(); hidePay(); });
+
+  const hidePay = () => { const pl = $('#pay-link'); pl.hidden = true; pl.href = '#'; };
+  const showPay = (url, total) => { const pl = $('#pay-link'); pl.href = url; pl.textContent = 'Tap here to pay ' + naira(total) + ' →'; pl.hidden = false; };
+
   $('#checkout').addEventListener('click', () => {
     const note = $('#dr-note'); note.classList.remove('bad');
-    const f = { name: $('#sh-name').value.trim(), email: $('#sh-email').value.trim(), phone: $('#sh-phone').value.trim(), address: $('#sh-addr').value.trim() };
-    if (!f.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email) || !f.phone || !f.address) { note.classList.add('bad'); note.textContent = 'Fill in your name, email, phone and delivery address.'; return; }
+    const state = shState.value, lga = !shLga.hidden ? shLga.value : '';
+    const f = { name: $('#sh-name').value.trim(), email: $('#sh-email').value.trim(), phone: $('#sh-phone').value.trim(), state, lga, address: $('#sh-addr').value.trim() };
+    if (!f.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email) || !f.phone || !f.state) { note.classList.add('bad'); note.textContent = 'Fill in your name, email, phone and state.'; return; }
+    if (f.state === 'Enugu' && !f.lga) { note.classList.add('bad'); note.textContent = 'Pick your LGA / area in Enugu.'; return; }
+    if (!f.address) { note.classList.add('bad'); note.textContent = 'Add your street address.'; return; }
     if (bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return !p || p.price == null; })) { note.classList.add('bad'); note.textContent = 'A piece in your cart has no price yet.'; return; }
     store.set('yowa-ship', f);
-    const btn = $('#checkout'); btn.disabled = true; note.textContent = 'Opening Paystack…';
+    const btn = $('#checkout'); btn.disabled = true; note.textContent = 'Getting your payment link…';
     fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({}, f, { items: bag.map(i => ({ id: i.id, size: i.size, qty: i.qty, opts: i.opts || {} })) })) })
       .then(r => r.json().then(j => ({ ok: r.ok, j })))
-      .then(x => { if (x.ok && x.j.url) { location.href = x.j.url; return; } throw new Error(x.j && x.j.error || 'Checkout failed'); })
+      .then(x => {
+        if (x.ok && x.j.url) {
+          const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(z => z.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
+          showPay(x.j.url, subtotal + (x.j.delivery || 0));
+          note.textContent = 'Your payment link is ready. Tap the button below.';
+          btn.disabled = !bag.length; return;
+        } throw new Error(x.j && x.j.error || 'Checkout failed');
+      })
       .catch(e => { note.classList.add('bad'); note.textContent = (e && e.message) || 'Checkout failed. Try again.'; btn.disabled = !bag.length; });
   });
-  { const f = store.get('yowa-ship', null); if (f) { $('#sh-name').value = f.name || ''; $('#sh-email').value = f.email || ''; $('#sh-phone').value = f.phone || ''; $('#sh-addr').value = f.address || ''; } }
+  { const f = store.get('yowa-ship', null); if (f) { $('#sh-name').value = f.name || ''; $('#sh-email').value = f.email || ''; $('#sh-phone').value = f.phone || ''; if (f.state) { shState.value = f.state; const isEnugu = f.state === 'Enugu'; shLga.hidden = !isEnugu; if (isEnugu && f.lga) shLga.value = f.lga; } $('#sh-addr').value = f.address || ''; } }
   // Back from Paystack: confirm the payment with the server, then clear the cart.
   { const q = new URLSearchParams(location.search), ref = q.get('reference') || q.get('trxref');
     if (ref) {
