@@ -856,7 +856,7 @@ const beadLooks = (C, withBeads, plain) => [{ when: { Colour: C, Beads: 'With be
 const ragLooks = C => { const c = C.toLowerCase(); return beadLooks(C, [IMG + 'raglan-' + c + '-front.webp', IMG + 'raglan-' + c + '-back.webp'], [IMG + 'raglan-' + c + '-front-plain.webp', IMG + 'raglan-' + c + '-back-plain.webp']); };
 // every 042 cap comes with beads, in four colours; the photos are named cap-<colour>-<bead colour>, the black cap's front and side cap-black-front-... and cap-black-side-...
 const BEAD_COLOURS = { name: 'Bead colour', values: [{ v: 'White', sw: '#F4F1EA' }, { v: 'Red', sw: '#D3202B' }, { v: 'Purple', sw: '#8A3FE0' }, { v: 'Black', sw: '#121212' }] };
-const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLowerCase(); return { when: { Colour: C, 'Bead colour': b.v }, images: slug === 'black' ? [IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp'].concat(k === 'red' ? [IMG + 'cap-black-rear-red.webp'] : []) : [IMG + 'cap-' + slug + '-' + k + '.webp'] }; });   // the rear view is a real photo, so only the red beads have one for now
+const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLowerCase(); return { when: { Colour: C, 'Bead colour': b.v }, images: slug === 'black' ? (k === 'red' ? [IMG + 'cap-black-rear-red.webp', IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp'] : [IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp']) : [IMG + 'cap-' + slug + '-' + k + '.webp'] }; });   // red beads: back shown first (embroidery hero), then front (YOWA logo), then side
 const skullLook = (C, B, imgs) => ({ when: { Colour: C, Beads: B }, images: imgs.map(f => IMG + f + '.webp') });
 const PRODUCTS = [
   { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
@@ -886,8 +886,8 @@ const PRODUCTS = [
     desc: 'Long jorts with the signature on the front and beads down both sides. Handmade, limited run.' },
   { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: 100, art: 'beanie', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Grey', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
-    looks: [skullLook('Grey', 'No beads', ['skull-camo', 'skull-camo-sig']), skullLook('Grey', 'White beads', ['skull-camo-front-white', 'skull-camo-back-white']), skullLook('Grey', 'Black beads', ['skull-camo-front-black', 'skull-camo-back-black']),
-      skullLook('Black', 'No beads', ['skull-black-front-plain', 'skull-black-back-plain']), skullLook('Black', 'White beads', ['skull-black-white', 'skull-black-back-white']), skullLook('Black', 'Black beads', ['skull-black-front-black', 'skull-black-back-black'])],
+    looks: [skullLook('Grey', 'No beads', ['skull-camo-sig', 'skull-camo']), skullLook('Grey', 'White beads', ['skull-camo-back-white', 'skull-camo-front-white']), skullLook('Grey', 'Black beads', ['skull-camo-back-black', 'skull-camo-front-black']),
+      skullLook('Black', 'No beads', ['skull-black-back-plain', 'skull-black-front-plain']), skullLook('Black', 'White beads', ['skull-black-back-white', 'skull-black-white']), skullLook('Black', 'Black beads', ['skull-black-back-black', 'skull-black-front-black'])],
     desc: 'Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.' },
   { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: 45000, art: 'cap', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }] }, BEAD_COLOURS],
