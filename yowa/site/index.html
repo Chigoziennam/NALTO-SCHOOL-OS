@@ -69,7 +69,7 @@
 [data-theme="light"] .pill[aria-pressed="true"],[data-theme="light"] .size[aria-pressed="true"]{background:var(--purple);color:#fff;border-color:var(--purple)}
 [data-theme="light"] .pill[aria-pressed="true"] i{color:#fff}
 [data-theme="light"] .pv-desc{color:var(--ink)}
-[data-theme="light"] .fld input,[data-theme="light"] .fld select,[data-theme="light"] .pv-code input{background:#fff;color:var(--ink)}
+[data-theme="light"] .fld input,[data-theme="light"] .fld select{background:#fff;color:var(--ink)}
 [data-theme="light"] .qs-head .x,[data-theme="light"] .chat-head .x{color:var(--ink)}
 [data-theme="light"] .pv-media .pv-close{color:#fff}
 [data-theme="light"] .pv-media.cut .pv-close{color:var(--ink)}
@@ -309,14 +309,6 @@ section{position:relative}
 .panel::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:rgba(8,6,14,.82);-webkit-mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent);mask-image:linear-gradient(180deg,transparent,#000 120px,#000 calc(100% - 120px),transparent)}
 
 /* ── The drop (Corteiz-plain grid) ── */
-/* The drop code: asked for on the piece, when someone goes to buy it */
-.pv-unlock{display:grid;gap:10px}
-.pv-code{display:flex;gap:8px}
-.pv-code input{flex:1;min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:999px;padding:13px 18px;font-size:16px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#fff}
-.pv-code input::placeholder{color:var(--mut);letter-spacing:.14em}
-.pv-code input:focus{outline:none;border-color:var(--purple-l);box-shadow:0 0 0 3px rgba(166,91,255,.2)}
-.pv-code-hint{margin:0;font-size:13px;color:var(--mut)}
-.pv-code-hint a{color:var(--purple-l)}
 .gate-msg{font-size:13px;color:var(--mut);min-height:1.4em;margin:0}
 .gate-msg.bad{color:#FF8A7E}
 /* Shop grid: the photo, then the name and price centred underneath, with plenty of air between pieces */
@@ -530,9 +522,6 @@ section{position:relative}
 .dr-item .th{width:64px;height:80px;border-radius:6px;background:#2A1860 url(img/brand/bg-swirl.jpg) center/cover}
 .dr-item .th.cut{background-color:transparent;background-size:contain;background-repeat:no-repeat}
 .dr-note.bad{color:#C0392B}
-.drawer .pv-code input{background:#fff;color:#140F1F;border-color:rgba(20,15,31,.25)}
-.drawer .pv-code .btn{width:auto;flex:none;color:#140F1F;border-color:#140F1F;background:none;box-shadow:none}
-.drawer .pv-code-hint{color:#655C73}.drawer .pv-code-hint a{color:#5B22B8}
 .dr-item b{display:block;font:400 18px/1 var(--f-display);text-transform:uppercase}
 .dr-item span{font-size:13px;color:#655C73}
 .dr-item button{border:0;background:none;text-decoration:underline;cursor:pointer;font-size:13px;color:#655C73}
@@ -540,6 +529,10 @@ section{position:relative}
 .dr-foot .row{display:flex;justify-content:space-between;font-weight:600}
 .dr-foot .btn{justify-content:center;width:100%;color:#fff}
 .dr-note{font-size:12.5px;color:#655C73;margin:0}
+.dr-ship{display:grid;gap:8px;margin:0 0 10px}
+.dr-ship input{min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;color:#fff}
+[data-theme="light"] .dr-ship input{background:#fff;color:var(--ink)}
+.dr-note.ok{color:#2E9E6B}
 .dr-empty{color:#655C73;padding:30px 0;text-align:center}
 .x.xi{display:grid;place-items:center;width:40px;height:40px;padding:0;font-size:0}
 .x.xi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
@@ -804,16 +797,14 @@ section{position:relative}
   <div class="dr-body" id="dr-body"></div>
   <div class="dr-foot">
     <div class="row"><span>Subtotal</span><span id="dr-total">₦0</span></div>
-    <div class="pv-unlock" id="pv-unlock" hidden>
-      <form class="pv-code" id="pv-code" novalidate>
-        <label class="sr" for="code">Drop code</label>
-        <input id="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" placeholder="Drop code">
-        <button class="btn" type="submit">Unlock</button>
-      </form>
-      <p class="pv-code-hint">No code yet? <a href="#list" id="pv-getcode">Get on the list</a> and it lands in your inbox first.</p>
+    <div class="dr-ship" id="dr-ship">
+      <input id="sh-name" type="text" autocomplete="name" placeholder="Full name" aria-label="Full name">
+      <input id="sh-email" type="email" autocomplete="email" inputmode="email" placeholder="Email" aria-label="Email">
+      <input id="sh-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Phone number" aria-label="Phone number">
+      <input id="sh-addr" type="text" autocomplete="street-address" placeholder="Delivery address" aria-label="Delivery address">
     </div>
     <button class="btn solid" type="button" id="checkout">Checkout with Paystack</button>
-    <p class="dr-note" id="dr-note">Card, bank transfer and USSD through Paystack. Delivery is added at checkout.</p>
+    <p class="dr-note" id="dr-note">Card, bank transfer and USSD through Paystack. We deliver to the address above.</p>
   </div>
 </aside>
 
@@ -837,10 +828,8 @@ section{position:relative}
 /* ════════════════ EDIT HERE ════════════════ */
 const CONFIG = {
   DROP_AT: null,                 // e.g. '2026-10-17T18:00:00+01:00' starts the countdown; null shows "Loading"
-  CODE: 'BYBD',                  // hype gate for the shop. Real protection moves server-side with Paystack.
   JOIN_ENDPOINT: '/api/join',  // sign-ups reach Supabase through a Vercel function, so no key sits in the page
   FORMSPREE: 'https://formspree.io/f/mbgjaedg',
-  PAYSTACK_PUBLIC_KEY: '',       // pk_live_… once prices are in
   CHAT_ENDPOINT: '/api/chat',    // OpenRouter through a Vercel function
   // Hero slideshow, in this order. Each photo is pinned by its Library code (no), so it never shifts.
   // pos: the part of the photo that stays in frame on a phone. Optional: hold (ms on screen), video (a looping clip over the photo).
@@ -1291,14 +1280,7 @@ const LIBRARY = [
   });
   mShop.addEventListener('click', () => { setShop(mShop.getAttribute('aria-expanded') !== 'true'); buzz(5); });
 
-  /* ── The drop: the grid goes straight to the pieces. The code is asked for at checkout ── */
-  let unlocked = store.get('yowa-unlocked', false);
-  const unlockBox = $('#pv-unlock'), codeForm = $('#pv-code');
-  codeForm.addEventListener('submit', e => {
-    e.preventDefault(); const v = $('#code').value.trim().toUpperCase(), note = $('#dr-note');
-    if (v === CONFIG.CODE) { unlocked = true; store.set('yowa-unlocked', true); unlockBox.hidden = true; note.classList.remove('bad'); note.textContent = "You're in. " + (CONFIG.PAYSTACK_PUBLIC_KEY ? 'Tap checkout to pay.' : 'Checkout opens when prices and the Paystack key are in. Your cart is saved.'); buzz([12, 40, 12, 40, 30]); burstFrom($('#checkout')); }
-    else { note.classList.add('bad'); note.textContent = "That code isn't right. Get on the list and it comes to your inbox first."; buzz([40, 60, 40]); if (!reduced()) codeForm.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)', filter: 'drop-shadow(3px 0 0 #2BE8FF) drop-shadow(-3px 0 0 #A65BFF)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(0)', filter: 'none' }], { duration: 480 }); }
-  });
+  /* ── The drop: the grid goes straight to the pieces ── */
   const ICO = { eye: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3"/></svg>', bag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 8.2h13l-1 12a1.6 1.6 0 0 1-1.6 1.4H8.1a1.6 1.6 0 0 1-1.6-1.4z"/><path d="M9 8.2V6.6a3 3 0 0 1 6 0v1.6"/></svg>' };
   // A piece in the shop: its photo (tap to see it), the eye and the bag by its side, the name, the price and its colours
   function makeCard(p, open) {
@@ -1492,14 +1474,30 @@ const LIBRARY = [
   drawer.addEventListener('pointercancel', () => { if (bx == null) return; bx = null; bagSettle(); drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); });
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); if (!qshop.hidden) closeShop(); });
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
-  $('#pv-getcode').addEventListener('click', e => { e.preventDefault(); closeBag(true); backstack.drop(); location.replace('#list'); });
   $('#checkout').addEventListener('click', () => {
     const note = $('#dr-note'); note.classList.remove('bad');
-    if (!unlocked) { unlockBox.hidden = false; note.textContent = 'The list gets the drop code first. Pop it in to check out.'; $('#code').focus({ preventScroll: true }); return; }
-    note.textContent = CONFIG.PAYSTACK_PUBLIC_KEY ? 'Opening Paystack…' : 'Checkout opens when prices and the Paystack key are in. Your cart is saved.';
-    // Next step: POST the bag to /api/checkout; the server prices it from the catalogue, calls Paystack Initialize,
-    // and returns an access_code for new PaystackPop().resumeTransaction(access_code).
+    const f = { name: $('#sh-name').value.trim(), email: $('#sh-email').value.trim(), phone: $('#sh-phone').value.trim(), address: $('#sh-addr').value.trim() };
+    if (!f.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email) || !f.phone || !f.address) { note.classList.add('bad'); note.textContent = 'Fill in your name, email, phone and delivery address.'; return; }
+    if (bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return !p || p.price == null; })) { note.classList.add('bad'); note.textContent = 'A piece in your cart has no price yet.'; return; }
+    store.set('yowa-ship', f);
+    const btn = $('#checkout'); btn.disabled = true; note.textContent = 'Opening Paystack…';
+    fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({}, f, { items: bag.map(i => ({ id: i.id, size: i.size, qty: i.qty, opts: i.opts || {} })) })) })
+      .then(r => r.json().then(j => ({ ok: r.ok, j })))
+      .then(x => { if (x.ok && x.j.url) { location.href = x.j.url; return; } throw new Error(x.j && x.j.error || 'Checkout failed'); })
+      .catch(e => { note.classList.add('bad'); note.textContent = (e && e.message) || 'Checkout failed. Try again.'; btn.disabled = !bag.length; });
   });
+  { const f = store.get('yowa-ship', null); if (f) { $('#sh-name').value = f.name || ''; $('#sh-email').value = f.email || ''; $('#sh-phone').value = f.phone || ''; $('#sh-addr').value = f.address || ''; } }
+  // Back from Paystack: confirm the payment with the server, then clear the cart.
+  { const q = new URLSearchParams(location.search), ref = q.get('reference') || q.get('trxref');
+    if (ref) {
+      history.replaceState(null, '', location.pathname + location.hash);
+      fetch('/api/verify?reference=' + encodeURIComponent(ref)).then(r => r.json()).then(j => {
+        const note = $('#dr-note');
+        if (j && j.paid) { bag = []; saveBag(); renderBag(); note.classList.add('ok'); note.textContent = 'Payment received. Thank you, we will be in touch about delivery.'; }
+        else { note.classList.add('bad'); note.textContent = 'We could not confirm that payment. If you were charged, message us with your Paystack receipt.'; }
+        openBag();
+      }).catch(() => { });
+    } }
   saveBag();
 
   /* ── Manifesto: words light up as you read ── */

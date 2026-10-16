@@ -8,7 +8,7 @@ Static site (HTML + two serverless functions), deploys on Vercel like the waitli
 - **Then, in the menu's order:** Shop, Gallery (six photos) and the Library (nine square photos at a time, Show more for the rest), Message, Get the code and a one-line footer.
 - **Shop:** eight pieces, every one cut out and glowing on the dark: the Liberty Raglan (black, red, blue or grey sleeves, with beads or without), the Ringer Tee, the YOWA Long Sleeve, the Be Different Tee (YOWA on the chest, Be You Be Different on the back), Joggers (black or grey) and Jorts (black, purple or grey), each with beads or without, the Skull Cap (camo or black, with no beads, black beads or white beads) and the 042 Cap. Each card has an eye (see it) and a bag (add it) by its side and its colours under the name; tapping a colour swaps the photo. The bag adds a piece with nothing to choose (the 042 cap) straight away; anything else opens on its choices. Sizes are M, L, XL and XXL. The piece count and the one-or-two-across switch sit on top. The photos live in `img/products/` and are listed in `PRODUCTS` (`opts` are the choices, `looks` the photos for each choice). Every piece shows its front first and its back last. In the product view the description comes last, after the size, quantity and Add to cart.
 - **Product view:** the photos play like the opening slideshow (bars fill, it moves on by itself; tap right or left, swipe, or hold to pause). Round size pickers, a quantity picker and Add to cart. The choices sit above the size: colours as round swatches, beads as pills; the photos follow what you pick, and the cart keeps it (e.g. "Skull Cap · Black · White beads").
-- **Cart:** The cart icon top right shows how many pieces are in it. The X, a swipe right or back closes it. The drop code is asked for at checkout, with a link to the list for anyone who doesn't have it yet.
+- **Cart:** The cart icon top right shows how many pieces are in it. The X, a swipe right or back closes it. Checkout takes delivery details and pays through Paystack.
 - **Header:** like gocrazy: the crystal dragon (the menu) and a back arrow on the left, YOWA in the middle turning round in 3D (a front, a mirrored back and purple layers for its thickness, one turn every 9 seconds), the light/dark switch and the cart icon on the right, the same on phones and computers. The back arrow glides back to where you were before your last jump (a menu link, YOWA, any # link), or up to the top; it dims when there is nowhere to go back to and hides while the menu is open. The bar is solid when it sticks (no blur, so scrolling stays smooth).
 - **Menu:** tap the crystal dragon and it shines, the menu grows out of it as a circle and an X takes its place. Behind the menu is the slimy YOWA swirl. Centred: the signature, Home, Shop (with a small crystal dragon beating its wings), Gallery, Message, Get the code; down at the bottom the mantra (in the same lettering) and Instagram. Ask YOWA lives on its own button on the page, not in the menu. Shop opens New, All, Tops, Caps and Bottoms with a round thumbnail and how many pieces each has; picking one slides in the side shop with the same cards.
 - **Light and dark:** the sun (in dark) turns into the moon (in light) and the page flips to the other mode in a circle growing from the button, where the browser supports it. Remembered on the phone.
@@ -51,7 +51,6 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 
 ## Edit at the top of the `<script>` in index.html
 - `CONFIG.DROP_AT`: drop date and time, starts the countdown on The drop page (e.g. `'2026-10-17T18:00:00+01:00'`)
-- `CONFIG.CODE`: the drop code the list receives (asked for in the product view when someone buys)
 - `PRODUCTS[]`: `price` in naira (`null` shows "Price drops soon"), `cat` (raglan, tee, cap, skull, jogger), `isNew` (shows under New), `cut` (background removed), `images` (the slideshow, in order). Cut-out photos live in `img/products/`.
 - `CATS`: the categories in the menu's Shop list and the side shop
 
@@ -76,3 +75,8 @@ The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`
 - Prices set: Raglan 40,000; Ringer Tee 22,000; White Long Sleeve 23,500; Be Different Tee 30,000; YOWA Logo Tee 30,000; Joggers 35,000; Jorts 30,000; Skull Cap 18,000; 042 Cap 45,000.
 - "New" holds only the two white tees (`isNew`).
 - 042 Black cap with Red beads has a real rear view; Camo skull cap with Black beads uses the real front and back photos.
+
+## Checkout
+- `api/checkout.js` prices the cart on the server and starts a Paystack payment; `api/verify.js` confirms it when the buyer returns.
+- Vercel env var needed: `PAYSTACK_SECRET_KEY` (sk_live_…). `OPENROUTER_API_KEY` for Ask YOWA. Keep `PRICES` in `api/checkout.js` in step with `PRODUCTS`.
+- The drop-code gate is removed.
