@@ -529,15 +529,34 @@ section{position:relative}
 .dr-foot .row{display:flex;justify-content:space-between;font-weight:600}
 .dr-foot .btn{justify-content:center;width:100%;color:#fff}
 .dr-note{font-size:12.5px;color:#655C73;margin:0}
-.dr-ship{display:grid;gap:8px;margin:0 0 10px}
-.dr-ship input,.dr-ship select{min-width:0;background:rgba(8,6,14,.7);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;color:#fff}
-.dr-ship select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A91B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:12px 8px;padding-right:36px}
-.dr-ship select option{background:#140E26;color:#fff}
-[data-theme="light"] .dr-ship input,[data-theme="light"] .dr-ship select{background:#fff;color:var(--ink)}
 .grand-row{border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
 .grand-row strong{font-size:1.08em;color:var(--purple-l)}
-.pay-link{text-align:center;letter-spacing:.04em;animation:pulse-pay 2s ease-in-out infinite}
+/* ── Checkout wizard overlay ── */
+.co-overlay{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;background:var(--void-2);padding-top:env(safe-area-inset-top,0px)}
+.co-overlay[hidden]{display:none}
+.co-head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 0;min-height:54px}
+.co-prog{font:700 9px/1 var(--f-label);letter-spacing:.2em;color:var(--mut);text-transform:uppercase}
+.co-body{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;padding:0 24px 40px}
+.co-step{display:flex;flex-direction:column;flex:1;padding-top:clamp(28px,6vw,56px)}
+.co-q{font:400 clamp(30px,8vw,52px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px;color:var(--ink)}
+.co-hint{font-size:13px;color:var(--mut);margin:0 0 32px}
+.co-input{width:100%;background:rgba(8,6,14,.55);border:1px solid var(--line);border-radius:18px;padding:16px 18px;font-size:18px;color:#fff;outline:none;transition:border-color .2s}
+.co-input:focus{border-color:var(--purple-l)}
+select.co-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A91B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;background-size:12px 8px;padding-right:42px}
+select.co-input option{background:#140E26;color:#fff}
+[data-theme="light"] .co-input{background:#fff;color:var(--ink)}
+.co-delivery-note{margin:10px 0 0;font-size:13px;color:var(--purple-l);font-weight:600}
+.co-actions{display:grid;gap:10px;margin-top:28px}
+.co-confirm-rows{display:grid;gap:6px;margin:0 0 28px}
+.co-confirm-row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid rgba(166,91,255,.12)}
+.co-confirm-row.total-row{border-bottom:none;border-top:1px solid var(--line);padding-top:12px;font-weight:700;font-size:16px}
+.co-confirm-row.total-row strong{color:var(--purple-l)}
+.co-items-mini{font-size:13px;color:var(--mut);margin:0 0 20px;line-height:1.6}
+.co-pay-link{text-align:center;letter-spacing:.04em;animation:pulse-pay 2s ease-in-out infinite}
 @keyframes pulse-pay{0%,100%{box-shadow:0 0 0 0 rgba(122,47,224,.5)}50%{box-shadow:0 0 0 8px rgba(122,47,224,0)}}
+.co-note{font-size:12.5px;color:var(--mut);margin:4px 0 0;text-align:center}
+.co-note.bad{color:#E05252}
+.co-note.ok{color:#2E9E6B}
 .dr-note.ok{color:#2E9E6B}
 .dr-empty{color:#655C73;padding:30px 0;text-align:center}
 .x.xi{display:grid;place-items:center;width:40px;height:40px;padding:0;font-size:0}
@@ -803,21 +822,19 @@ section{position:relative}
   <div class="dr-body" id="dr-body"></div>
   <div class="dr-foot">
     <div class="row"><span>Subtotal</span><span id="dr-total">₦0</span></div>
-    <div class="row" id="dr-fee-row" hidden><span>Delivery</span><span id="dr-fee"></span></div>
-    <div class="row grand-row" id="dr-grand-row" hidden><span>Total</span><strong id="dr-grand"></strong></div>
-    <div class="dr-ship" id="dr-ship">
-      <input id="sh-name" type="text" autocomplete="name" placeholder="Full name" aria-label="Full name">
-      <input id="sh-email" type="email" autocomplete="email" inputmode="email" placeholder="Email" aria-label="Email">
-      <input id="sh-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Phone number" aria-label="Phone number">
-      <select id="sh-state" aria-label="State"><option value="">State…</option></select>
-      <select id="sh-lga" aria-label="LGA / Area" hidden><option value="">LGA / Area…</option></select>
-      <input id="sh-addr" type="text" autocomplete="street-address" placeholder="Street address" aria-label="Street address">
-    </div>
-    <button class="btn solid" type="button" id="checkout">Get payment link</button>
-    <a id="pay-link" class="btn solid pay-link" href="#" target="_blank" rel="noopener" hidden>Tap here to pay →</a>
-    <p class="dr-note" id="dr-note">Card, transfer and USSD through Paystack. Delivery included in total.</p>
+    <button class="btn solid" type="button" id="checkout">Checkout</button>
+    <p class="dr-note" id="dr-note">Delivery fee shown at checkout. Card, transfer and USSD.</p>
   </div>
 </aside>
+
+<div class="co-overlay" id="co-overlay" hidden role="dialog" aria-label="Checkout" aria-modal="true">
+  <div class="co-head">
+    <button class="ico-btn back-btn" type="button" id="co-back" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    <span class="co-prog"><span id="co-step-n">1</span> / <span id="co-step-of">6</span></span>
+    <button class="x xi" type="button" id="co-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="co-body" id="co-body"></div>
+</div>
 
 <aside class="qshop" id="qshop" hidden aria-label="Shop">
   <div class="qs-head"><b id="qs-title">Shop</b><button class="x xi" type="button" id="qs-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
@@ -1449,16 +1466,6 @@ const LIBRARY = [
   const NG_STATES = ['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT (Abuja)','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
   const ENUGU_LGAS = ['Aninri','Awgu','Enugu East','Enugu North','Enugu South','Ezeagu','Igbo-Etiti','Igbo-Eze North','Igbo-Eze South','Isi-Uzo','Nkanu East','Nkanu West','Nsukka','Oji River','Udenu','Udi','Uzo-Uwani'];
   const calcDelivery = (state, lga) => !state ? 0 : state === 'Enugu' ? (lga === 'Nsukka' ? 3000 : 5000) : 8500;
-  let deliveryFee = 0;
-  const updateFeeDisplay = () => {
-    const state = $('#sh-state').value, lga = $('#sh-lga') && !$('#sh-lga').hidden ? $('#sh-lga').value : '';
-    deliveryFee = calcDelivery(state, lga);
-    const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
-    if (deliveryFee > 0 && subtotal > 0) {
-      $('#dr-fee').textContent = naira(deliveryFee); $('#dr-grand').textContent = naira(subtotal + deliveryFee);
-      $('#dr-fee-row').hidden = false; $('#dr-grand-row').hidden = false;
-    } else { $('#dr-fee-row').hidden = true; $('#dr-grand-row').hidden = true; }
-  };
   const drawer = $('#drawer');
   function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; $('#bag-open').dataset.n = n; $('#bag-open').setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items')); const qc = $('#qs-count'); if (qc) qc.textContent = n; }
   const bumpBag = () => { const b = $('#bag-open'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
@@ -1477,7 +1484,6 @@ const LIBRARY = [
     });
     const tbc = bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.price == null; });
     $('#dr-total').textContent = tbc ? (total ? naira(total) + ' + prices to come' : 'Prices drop soon') : naira(total); $('#checkout').disabled = !bag.length;
-    updateFeeDisplay();
   }
   function openBag() { renderBag(); drawer.hidden = false; scrim.hidden = false; backstack.open(closeBag); if (!reduced()) drawer.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' }); $('#bag-close').focus({ preventScroll: true }); }
   function closeBag(keep) { if (drawer.hidden) return; drawer.hidden = true; if (pview.hidden && $('#chat').hidden) scrim.hidden = true; if (keep !== true) backstack.close(); $('#bag-open').focus({ preventScroll: true }); }
@@ -1486,7 +1492,7 @@ const LIBRARY = [
   // Phones: swipe the bag to the right to put it away.
   let bx = null, bdx = 0, bid = null;
   const bagSettle = () => { drawer.style.transition = 'transform .3s cubic-bezier(.16,1,.3,1)'; };
-  drawer.addEventListener('pointerdown', e => { if (!e.isPrimary || e.button > 0 || e.target.closest('button,a,input')) return; bx = e.clientX; bdx = 0; bid = e.pointerId; });
+  drawer.addEventListener('pointerdown', e => { if (!e.isPrimary || e.button > 0 || e.target.closest('button,a,input,select')) return; bx = e.clientX; bdx = 0; bid = e.pointerId; });
   drawer.addEventListener('pointermove', e => {
     if (bx == null || e.pointerId !== bid) return; bdx = Math.max(0, e.clientX - bx);
     if (bdx > 8) { if (!drawer.hasPointerCapture(bid)) try { drawer.setPointerCapture(bid); } catch (_) { } drawer.style.transition = 'none'; drawer.style.transform = 'translateX(' + bdx + 'px)'; }
@@ -1498,41 +1504,145 @@ const LIBRARY = [
   });
   drawer.addEventListener('pointercancel', () => { if (bx == null) return; bx = null; bagSettle(); drawer.style.transform = ''; setTimeout(() => { drawer.style.transition = ''; }, 320); });
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); if (!qshop.hidden) closeShop(); });
-  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
-  // Populate state and LGA dropdowns
-  const shState = $('#sh-state'), shLga = $('#sh-lga');
-  NG_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if (s === 'Enugu') o.selected = true; shState.appendChild(o); });
-  ENUGU_LGAS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; shLga.appendChild(o); });
-  shLga.hidden = false; // Enugu is pre-selected, so LGA shows on load
-  shState.addEventListener('change', () => { const isEnugu = shState.value === 'Enugu'; shLga.hidden = !isEnugu; if (!isEnugu) shLga.value = ''; updateFeeDisplay(); hidePay(); });
-  shLga.addEventListener('change', () => { updateFeeDisplay(); hidePay(); });
+  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!$('#co-overlay').hidden) closeCheckout(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
 
-  const hidePay = () => { const pl = $('#pay-link'); pl.hidden = true; pl.href = '#'; };
-  const showPay = (url, total) => { const pl = $('#pay-link'); pl.href = url; pl.textContent = 'Tap here to pay ' + naira(total) + ' →'; pl.hidden = false; };
+  /* ── Step-by-step checkout wizard ── */
+  const coOverlay = $('#co-overlay'), coBody = $('#co-body'), coStepN = $('#co-step-n'), coStepOf = $('#co-step-of');
+  let coData = {}; // collected answers
+  let coStepIdx = 0;
 
-  $('#checkout').addEventListener('click', () => {
-    const note = $('#dr-note'); note.classList.remove('bad');
-    const state = shState.value, lga = !shLga.hidden ? shLga.value : '';
-    const f = { name: $('#sh-name').value.trim(), email: $('#sh-email').value.trim(), phone: $('#sh-phone').value.trim(), state, lga, address: $('#sh-addr').value.trim() };
-    if (!f.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email) || !f.phone || !f.state) { note.classList.add('bad'); note.textContent = 'Fill in your name, email, phone and state.'; return; }
-    if (f.state === 'Enugu' && !f.lga) { note.classList.add('bad'); note.textContent = 'Pick your LGA / area in Enugu.'; return; }
-    if (!f.address) { note.classList.add('bad'); note.textContent = 'Add your street address.'; return; }
-    if (bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return !p || p.price == null; })) { note.classList.add('bad'); note.textContent = 'A piece in your cart has no price yet.'; return; }
-    store.set('yowa-ship', f);
-    const btn = $('#checkout'); btn.disabled = true; note.textContent = 'Getting your payment link…';
-    fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({}, f, { items: bag.map(i => ({ id: i.id, size: i.size, qty: i.qty, opts: i.opts || {} })) })) })
-      .then(r => r.json().then(j => ({ ok: r.ok, j })))
-      .then(x => {
-        if (x.ok && x.j.url) {
-          const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(z => z.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
-          showPay(x.j.url, subtotal + (x.j.delivery || 0));
-          note.textContent = 'Your payment link is ready. Tap the button below.';
-          btn.disabled = !bag.length; return;
-        } throw new Error(x.j && x.j.error || 'Checkout failed');
-      })
-      .catch(e => { note.classList.add('bad'); note.textContent = (e && e.message) || 'Checkout failed. Try again.'; btn.disabled = !bag.length; });
+  // Step definitions. fn(data) returns the step spec.
+  const coSteps = [
+    { id:'name',    q:'What\'s your full name?',     hint:'We need this for your delivery.',        type:'text',  autocomplete:'name',           keyboard:'text',  validate: v => v.trim().length >= 2 ? '' : 'Enter your full name.' },
+    { id:'phone',   q:'Phone number?',               hint:'We\'ll contact you about delivery.',    type:'tel',   autocomplete:'tel',            keyboard:'tel',   validate: v => v.trim().length >= 7 ? '' : 'Enter a valid phone number.' },
+    { id:'email',   q:'Email address?',              hint:'For your receipt and order updates.',   type:'email', autocomplete:'email',          keyboard:'email', validate: v => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()) ? '' : 'Enter a valid email address.' },
+    { id:'state',   q:'Which state?',                hint:'',                                      type:'select',options:NG_STATES,              validate: v => v ? '' : 'Pick your state.' },
+    { id:'lga',     q:'Your area in Enugu?',         hint:'Nsukka is ₦3,000 · Other Enugu ₦5,000.',type:'select',options:ENUGU_LGAS,            validate: v => v ? '' : 'Pick your area.', onlyIf: d => d.state === 'Enugu' },
+    { id:'address', q:'Street address?',             hint:'House number, street name, nearest landmark.', type:'text', autocomplete:'street-address', keyboard:'text', validate: v => v.trim().length >= 4 ? '' : 'Enter your street address.' },
+  ];
+
+  function visibleSteps() { return coSteps.filter(s => !s.onlyIf || s.onlyIf(coData)); }
+  function totalSteps() { return visibleSteps().length + 1; } // +1 for summary
+
+  function buildStateSelect(sel, saved) {
+    NG_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if (s === (saved || 'Enugu')) o.selected = true; sel.appendChild(o); });
+  }
+  function buildLgaSelect(sel, saved) {
+    const ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Choose area…'; sel.appendChild(ph);
+    ENUGU_LGAS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if (s === saved) o.selected = true; sel.appendChild(o); });
+  }
+
+  function renderCoStep(idx) {
+    coStepIdx = idx;
+    const vsteps = visibleSteps(); const tot = vsteps.length + 1;
+    coStepN.textContent = idx + 1; coStepOf.textContent = tot;
+    $('#co-back').style.visibility = idx === 0 ? 'hidden' : '';
+    coBody.textContent = '';
+    if (idx < vsteps.length) {
+      const step = vsteps[idx];
+      const div = document.createElement('div'); div.className = 'co-step';
+      const q = document.createElement('p'); q.className = 'co-q'; q.textContent = step.q; div.appendChild(q);
+      if (step.hint) { const h = document.createElement('p'); h.className = 'co-hint'; h.textContent = step.hint; div.appendChild(h); }
+      let input;
+      if (step.type === 'select') {
+        input = document.createElement('select'); input.className = 'co-input'; input.setAttribute('aria-label', step.q);
+        if (step.id === 'state') buildStateSelect(input, coData.state);
+        else buildLgaSelect(input, coData.lga);
+      } else {
+        input = document.createElement('input'); input.type = step.type; input.className = 'co-input';
+        input.setAttribute('inputmode', step.keyboard || 'text'); input.setAttribute('autocomplete', step.autocomplete || 'off');
+        input.setAttribute('aria-label', step.q); input.value = coData[step.id] || '';
+      }
+      div.appendChild(input);
+      if (step.id === 'state') {
+        const note = document.createElement('p'); note.className = 'co-delivery-note'; note.id = 'co-del-note';
+        const updateDelNote = () => { const fee = calcDelivery(input.value, ''); note.textContent = fee ? 'Delivery: ' + naira(fee === 3000 ? 3000 : fee) + (input.value === 'Enugu' ? ' (Nsukka ₦3,000 · rest ₦5,000)' : '') : ''; };
+        input.addEventListener('change', updateDelNote); updateDelNote();
+        div.appendChild(note);
+      }
+      const err = document.createElement('p'); err.className = 'co-note bad'; err.id = 'co-err'; err.hidden = true; div.appendChild(err);
+      const actions = document.createElement('div'); actions.className = 'co-actions';
+      const next = document.createElement('button'); next.type = 'button'; next.className = 'btn solid'; next.textContent = idx < vsteps.length - 1 ? 'Continue →' : 'Review order →';
+      next.addEventListener('click', () => {
+        const val = input.value; const errMsg = step.validate(val);
+        if (errMsg) { err.textContent = errMsg; err.hidden = false; return; }
+        coData[step.id] = (step.type === 'select' ? val : val.trim());
+        renderCoStep(idx + 1);
+      });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') next.click(); });
+      actions.appendChild(next); div.appendChild(actions);
+      coBody.appendChild(div);
+      setTimeout(() => { try { input.focus(); } catch(_) {} }, 80);
+    } else {
+      // Summary / payment step
+      const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
+      const fee = calcDelivery(coData.state, coData.lga);
+      const grand = subtotal + fee;
+      const div = document.createElement('div'); div.className = 'co-step';
+      const q = document.createElement('p'); q.className = 'co-q'; q.style.fontSize = 'clamp(24px,6vw,38px)'; q.textContent = 'Order summary'; div.appendChild(q);
+      // mini item list
+      const items = document.createElement('p'); items.className = 'co-items-mini';
+      items.textContent = bag.map(it => { const p = PRODUCTS.find(x => x.id === it.id); return it.qty + ' × ' + (p ? p.name : it.id); }).join(' · ');
+      div.appendChild(items);
+      // delivery rows
+      const rows = document.createElement('div'); rows.className = 'co-confirm-rows';
+      const mk = (label, val, cls) => { const r = document.createElement('div'); r.className = 'co-confirm-row' + (cls ? ' ' + cls : ''); r.innerHTML = '<span></span><span></span>'; r.children[0].textContent = label; r.children[1].textContent = val; return r; };
+      rows.appendChild(mk('Subtotal', naira(subtotal)));
+      rows.appendChild(mk('Delivery (' + (coData.state || '') + (coData.lga ? ', ' + coData.lga : '') + ')', naira(fee)));
+      const tr = mk('Total', '', 'total-row'); tr.children[1].innerHTML = '<strong>' + naira(grand) + '</strong>'; rows.appendChild(tr);
+      div.appendChild(rows);
+      // address summary
+      const addr = document.createElement('p'); addr.className = 'co-hint'; addr.style.marginBottom = '8px';
+      addr.textContent = [coData.name, coData.address, coData.lga, coData.state].filter(Boolean).join(', ');
+      div.appendChild(addr);
+      const err = document.createElement('p'); err.className = 'co-note bad'; err.id = 'co-pay-err'; err.hidden = true; div.appendChild(err);
+      const actions = document.createElement('div'); actions.className = 'co-actions';
+      const payBtn = document.createElement('button'); payBtn.type = 'button'; payBtn.className = 'btn solid'; payBtn.textContent = 'Get payment link';
+      const payLink = document.createElement('a'); payLink.className = 'btn solid co-pay-link'; payLink.href = '#'; payLink.rel = 'noopener'; payLink.target = '_blank'; payLink.hidden = true; payLink.textContent = 'Tap here to pay →';
+      payBtn.addEventListener('click', () => {
+        if (bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return !p || p.price == null; })) { err.textContent = 'A piece in your cart has no price yet.'; err.hidden = false; return; }
+        store.set('yowa-ship', coData);
+        payBtn.disabled = true; payBtn.textContent = 'Getting your link…'; err.hidden = true;
+        fetch('/api/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(Object.assign({}, coData, { items: bag.map(i => ({ id:i.id, size:i.size, qty:i.qty, opts:i.opts||{} })) })) })
+          .then(r => r.json().then(j => ({ ok:r.ok, j })))
+          .then(x => {
+            if (x.ok && x.j.url) {
+              payLink.href = x.j.url; payLink.textContent = 'Tap here to pay ' + naira(grand) + ' →'; payLink.hidden = false;
+              payBtn.hidden = true;
+              return;
+            }
+            throw new Error(x.j && x.j.error || 'Checkout failed');
+          })
+          .catch(e => { err.textContent = (e && e.message) || 'Checkout failed. Try again.'; err.hidden = false; payBtn.disabled = false; payBtn.textContent = 'Get payment link'; });
+      });
+      actions.appendChild(payBtn); actions.appendChild(payLink); div.appendChild(actions);
+      coBody.appendChild(div);
+    }
+  }
+
+  function openCheckout() {
+    if (!bag.length) return;
+    const saved = store.get('yowa-ship', null); if (saved) coData = Object.assign({}, saved); else coData = {};
+    coStepIdx = 0;
+    closeBag(true);
+    coOverlay.hidden = false; document.body.style.overflow = 'hidden';
+    if (!reduced()) coOverlay.animate([{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none'}], {duration:380,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});
+    backstack.open(closeCheckout);
+    renderCoStep(0);
+  }
+  function closeCheckout(keep) {
+    if (coOverlay.hidden) return;
+    coOverlay.hidden = true; document.body.style.overflow = '';
+    if (keep !== true) backstack.close();
+  }
+  $('#co-close').addEventListener('click', () => closeCheckout());
+  $('#co-back').addEventListener('click', () => {
+    const prev = coStepIdx - 1;
+    if (prev < 0) { closeCheckout(); return; }
+    renderCoStep(prev);
   });
-  { const f = store.get('yowa-ship', null); if (f) { $('#sh-name').value = f.name || ''; $('#sh-email').value = f.email || ''; $('#sh-phone').value = f.phone || ''; if (f.state) { shState.value = f.state; const isEnugu = f.state === 'Enugu'; shLga.hidden = !isEnugu; if (isEnugu && f.lga) shLga.value = f.lga; } $('#sh-addr').value = f.address || ''; } }
+  $('#checkout').addEventListener('click', () => openCheckout());
+
   // Back from Paystack: confirm the payment with the server, then clear the cart.
   { const q = new URLSearchParams(location.search), ref = q.get('reference') || q.get('trxref');
     if (ref) {
