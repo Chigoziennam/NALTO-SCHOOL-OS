@@ -539,8 +539,19 @@ section{position:relative}
 .co-head{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;padding:6px 18px 10px;min-height:54px;position:sticky;top:env(safe-area-inset-top,0px);background:linear-gradient(180deg,var(--void-2) 85%,transparent);z-index:2;flex-shrink:0}
 [data-theme="light"] .co-head{background:linear-gradient(180deg,#fff 85%,transparent)}
 .co-body{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;padding:0 24px 180px;-webkit-overflow-scrolling:touch}
-.co-form{display:flex;flex-direction:column;padding-top:clamp(20px,5vw,36px);animation:coFadeIn .35s cubic-bezier(.16,1,.3,1) both}
-@keyframes coFadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.co-dots{display:flex;gap:5px;justify-content:center;align-items:center}
+.co-dots .d{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .35s cubic-bezier(.16,1,.3,1)}
+[data-theme="light"] .co-dots .d{background:rgba(0,0,0,.14)}
+.co-dots .d.on{width:22px;border-radius:999px;background:var(--purple-l)}
+.co-form{display:flex;flex-direction:column;padding-top:clamp(20px,5vw,36px);animation:coSlideFwd .38s cubic-bezier(.16,1,.3,1) both}
+.co-form.back{animation:coSlideBack .38s cubic-bezier(.16,1,.3,1) both}
+@keyframes coSlideFwd{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes coSlideBack{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.co-recap{margin:0 0 20px;padding:15px 17px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px}
+[data-theme="light"] .co-recap{background:#F2F2F7;border-color:rgba(0,0,0,.06)}
+.co-recap .who{font-size:15.5px;font-weight:600;margin:0 0 4px;color:var(--ink)}
+.co-recap .where{font-size:13px;color:var(--mut);line-height:1.55;margin:0}
+.co-recap .edit{margin:12px 0 0;padding:0;background:none;border:0;color:var(--purple-l);font:800 10px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
 .co-title{font:400 clamp(34px,9vw,58px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;margin:0 0 4px;color:var(--ink)}
 .co-sub{font-size:13.5px;color:var(--mut);margin:0 0 28px;line-height:1.4}
 .co-field{display:flex;flex-direction:column;gap:7px;margin:0 0 16px}
@@ -881,8 +892,8 @@ select.co-input option{background:#140E26;color:#fff}
 <div class="co-overlay" id="co-overlay" hidden role="dialog" aria-label="Checkout" aria-modal="true">
   <div class="co-grabber" aria-hidden="true"></div>
   <div class="co-head">
-    <span></span>
-    <span class="co-label" style="letter-spacing:.2em">CHECKOUT</span>
+    <button class="ico-btn back-btn" type="button" id="co-back" aria-label="Back" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="co-dots" id="co-dots" aria-hidden="true"><span class="d on"></span><span class="d"></span></div>
     <button class="x xi" type="button" id="co-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   </div>
   <div class="co-body" id="co-body"></div>
@@ -1562,9 +1573,11 @@ const LIBRARY = [
   scrim.addEventListener('click', () => { if (!pview.hidden) closeProduct(); if (!drawer.hidden) closeBag(); if (!qshop.hidden) closeShop(); });
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!$('#co-overlay').hidden) closeCheckout(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
 
-  /* ── Single-page checkout: name, phone, email, state, LGA (Enugu only), address, order summary, pay ── */
+  /* ── Checkout: page 1 takes the details, page 2 shows the total and pays ── */
   const coOverlay = $('#co-overlay'), coBody = $('#co-body');
   let coData = {};
+  let coPage = 0;   // 0 details, 1 summary
+  let coDir = 1;    // 1 forward, -1 back — drives the slide
 
   const CO_FIELDS = [
     { id:'name',    label:'Full name',      hint:'We need this for your delivery.',               type:'text',  autocomplete:'name',           keyboard:'text',  validate: v => v.trim().length >= 2 ? '' : 'Enter your full name.' },
@@ -1583,9 +1596,45 @@ const LIBRARY = [
     ENUGU_LGAS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; if (s === saved) o.selected = true; sel.appendChild(o); });
   }
 
+  function coTotals() {
+    const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
+    const fee = calcDelivery(coData.state, coData.lga);
+    return { subtotal, fee, grand: subtotal + fee };
+  }
+
+  // Pre-order checklist receipt, or null when nothing in the cart is a pre-order
+  function buildPreReceipt() {
+    const preItems = bag.filter(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.preorder; });
+    if (!preItems.length) return null;
+    const box = document.createElement('div'); box.className = 'co-pre-receipt';
+    const head = document.createElement('div'); head.className = 'head'; head.innerHTML = '<span class="ribbon"></span><b>Pre-order receipt</b>'; box.appendChild(head);
+    const ul = document.createElement('ul');
+    preItems.forEach(it => {
+      const p = PRODUCTS.find(x => x.id === it.id); if (!p) return;
+      const li = document.createElement('li');
+      const pick = optText(p, it.opts) || p.colour || '';
+      li.innerHTML = '<span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg></span><span></span>';
+      li.children[1].textContent = it.qty + ' × ' + p.name + (pick ? ' · ' + pick : '') + (p.noSize ? '' : ' · ' + it.size);
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+    const foot = document.createElement('p'); foot.className = 'foot'; foot.textContent = 'These pieces ship when the drop lands. We will contact you with the delivery date.';
+    box.appendChild(foot);
+    return box;
+  }
+
+  function goCheckoutPage(n) { coDir = n > coPage ? 1 : -1; coPage = n; renderCheckout(); }
+
   function renderCheckout() {
     coBody.textContent = '';
-    const form = document.createElement('div'); form.className = 'co-form';
+    $('#co-back').hidden = coPage === 0;
+    $$('#co-dots .d').forEach((d, i) => d.classList.toggle('on', i === coPage));
+    coBody.scrollTop = 0;
+    if (coPage === 0) renderDetails(); else renderSummary();
+  }
+
+  function renderDetails() {
+    const form = document.createElement('div'); form.className = 'co-form' + (coDir < 0 ? ' back' : '');
     const title = document.createElement('p'); title.className = 'co-title'; title.textContent = 'Your details'; form.appendChild(title);
     const sub = document.createElement('p'); sub.className = 'co-sub'; sub.textContent = 'For your delivery and receipt.'; form.appendChild(sub);
 
@@ -1612,69 +1661,34 @@ const LIBRARY = [
       fieldEls[f.id] = { wrap, input, err };
     });
 
-    // Pre-order checklist receipt — appears above the summary when any item is a pre-order
-    const preItems = bag.filter(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.preorder; });
-    if (preItems.length) {
-      const box = document.createElement('div'); box.className = 'co-pre-receipt';
-      const head = document.createElement('div'); head.className = 'head'; head.innerHTML = '<span class="ribbon"></span><b>Pre-order receipt</b>'; box.appendChild(head);
-      const ul = document.createElement('ul');
-      preItems.forEach(it => {
-        const p = PRODUCTS.find(x => x.id === it.id); if (!p) return;
-        const li = document.createElement('li');
-        const pick = optText(p, it.opts) || p.colour || '';
-        li.innerHTML = '<span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg></span><span></span>';
-        li.children[1].textContent = it.qty + ' × ' + p.name + (pick ? ' · ' + pick : '') + (p.noSize ? '' : ' · ' + it.size);
-        ul.appendChild(li);
-      });
-      box.appendChild(ul);
-      const foot = document.createElement('p'); foot.className = 'foot'; foot.textContent = 'These pieces ship when the drop lands. We will contact you with the delivery date.';
-      box.appendChild(foot);
-      form.appendChild(box);
+    // What the delivery will cost, updated as the state and area change
+    const delNote = document.createElement('p'); delNote.className = 'co-delivery-note';
+    fieldEls.state.wrap.appendChild(delNote);
+    function paintDelNote() {
+      const st = fieldEls.state.input.value;
+      const lga = st === 'Enugu' ? fieldEls.lga.input.value : '';
+      delNote.textContent = st ? 'Delivery to ' + st + (lga ? ', ' + lga : '') + ' · ' + naira(calcDelivery(st, lga)) : '';
     }
-
-    const sumBox = document.createElement('div'); sumBox.className = 'co-summary'; form.appendChild(sumBox);
-    const itemsNote = document.createElement('p'); itemsNote.className = 'co-items-note'; sumBox.appendChild(itemsNote);
-    const subRow = document.createElement('div'); subRow.className = 'co-summary-row'; subRow.innerHTML = '<span>Subtotal</span><span></span>'; sumBox.appendChild(subRow);
-    const delRow = document.createElement('div'); delRow.className = 'co-summary-row'; delRow.innerHTML = '<span></span><span></span>'; sumBox.appendChild(delRow);
-    const totRow = document.createElement('div'); totRow.className = 'co-summary-row total'; totRow.innerHTML = '<span>Total</span><strong></strong>'; sumBox.appendChild(totRow);
-
-    function refreshSummary() {
-      const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
-      const stateVal = fieldEls.state.input.value;
-      const lgaVal = stateVal === 'Enugu' ? fieldEls.lga.input.value : '';
-      const fee = calcDelivery(stateVal, lgaVal);
-      const grand = subtotal + fee;
-      itemsNote.textContent = bag.map(it => { const p = PRODUCTS.find(x => x.id === it.id); return it.qty + ' × ' + (p ? p.name : it.id); }).join(' · ');
-      subRow.children[1].textContent = naira(subtotal);
-      delRow.children[0].textContent = 'Delivery' + (stateVal ? ' (' + stateVal + (lgaVal ? ', ' + lgaVal : '') + ')' : '');
-      delRow.children[1].textContent = naira(fee);
-      totRow.children[1].textContent = naira(grand);
-      return { subtotal, fee, grand };
-    }
-
     function toggleLgaVisibility() {
       const show = fieldEls.state.input.value === 'Enugu';
       fieldEls.lga.wrap.classList.toggle('hide', !show);
       if (!show) fieldEls.lga.err.hidden = true;
     }
-
-    fieldEls.state.input.addEventListener('change', () => { toggleLgaVisibility(); refreshSummary(); });
-    fieldEls.lga.input.addEventListener('change', refreshSummary);
+    fieldEls.state.input.addEventListener('change', () => { toggleLgaVisibility(); paintDelNote(); });
+    fieldEls.lga.input.addEventListener('change', paintDelNote);
     toggleLgaVisibility();
-    refreshSummary();
+    paintDelNote();
 
     coBody.appendChild(form);
 
-    // Sticky pay button
     const actions = document.createElement('div'); actions.className = 'co-actions';
     const err = document.createElement('p'); err.className = 'co-note bad'; err.hidden = true; actions.appendChild(err);
-    const payBtn = document.createElement('button'); payBtn.type = 'button'; payBtn.className = 'btn solid'; payBtn.textContent = 'Get payment link';
-    const payLink = document.createElement('a'); payLink.className = 'btn solid co-pay-link'; payLink.href = '#'; payLink.rel = 'noopener'; payLink.target = '_blank'; payLink.hidden = true; payLink.textContent = 'Tap here to pay →';
-    actions.appendChild(payBtn); actions.appendChild(payLink);
+    const next = document.createElement('button'); next.type = 'button'; next.className = 'btn solid'; next.textContent = 'Continue →';
+    actions.appendChild(next);
     coBody.appendChild(actions);
 
-    payBtn.addEventListener('click', () => {
-      // Validate everything, show errors inline, scroll to the first bad field
+    next.addEventListener('click', () => {
+      // Check every field, mark the bad ones, jump to the first
       let firstBad = null;
       const data = {};
       CO_FIELDS.forEach(f => {
@@ -1700,12 +1714,58 @@ const LIBRARY = [
         try { firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' }); firstBad.focus(); } catch(_) {}
         return;
       }
+      coData = data;
+      store.set('yowa-ship', coData);
+      goCheckoutPage(1);
+    });
+  }
+
+  function renderSummary() {
+    const form = document.createElement('div'); form.className = 'co-form' + (coDir < 0 ? ' back' : '');
+    const title = document.createElement('p'); title.className = 'co-title'; title.textContent = 'Order summary'; form.appendChild(title);
+    const sub = document.createElement('p'); sub.className = 'co-sub'; sub.textContent = 'Check it over, then pay.'; form.appendChild(sub);
+
+    // Who it goes to and where, with a way back to the form
+    const recap = document.createElement('div'); recap.className = 'co-recap';
+    const who = document.createElement('p'); who.className = 'who'; who.textContent = coData.name || ''; recap.appendChild(who);
+    const where = document.createElement('p'); where.className = 'where';
+    where.textContent = [coData.address, coData.lga, coData.state].filter(Boolean).join(', ') + (coData.phone ? ' · ' + coData.phone : '');
+    recap.appendChild(where);
+    const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'edit'; edit.textContent = 'Edit details';
+    edit.addEventListener('click', () => goCheckoutPage(0));
+    recap.appendChild(edit);
+    form.appendChild(recap);
+
+    const pre = buildPreReceipt(); if (pre) form.appendChild(pre);
+
+    const { subtotal, fee, grand } = coTotals();
+    const sumBox = document.createElement('div'); sumBox.className = 'co-summary';
+    const itemsNote = document.createElement('p'); itemsNote.className = 'co-items-note';
+    itemsNote.textContent = bag.map(it => { const p = PRODUCTS.find(x => x.id === it.id); return it.qty + ' × ' + (p ? p.name : it.id); }).join(' · ');
+    sumBox.appendChild(itemsNote);
+    const mkRow = (label, val, cls) => {
+      const r = document.createElement('div'); r.className = 'co-summary-row' + (cls ? ' ' + cls : '');
+      r.innerHTML = cls === 'total' ? '<span></span><strong></strong>' : '<span></span><span></span>';
+      r.children[0].textContent = label; r.children[1].textContent = val; return r;
+    };
+    sumBox.appendChild(mkRow('Subtotal', naira(subtotal)));
+    sumBox.appendChild(mkRow('Delivery (' + (coData.state || '') + (coData.lga ? ', ' + coData.lga : '') + ')', naira(fee)));
+    sumBox.appendChild(mkRow('Total', naira(grand), 'total'));
+    form.appendChild(sumBox);
+
+    coBody.appendChild(form);
+
+    const actions = document.createElement('div'); actions.className = 'co-actions';
+    const err = document.createElement('p'); err.className = 'co-note bad'; err.hidden = true; actions.appendChild(err);
+    const payBtn = document.createElement('button'); payBtn.type = 'button'; payBtn.className = 'btn solid'; payBtn.textContent = 'Pay ' + naira(grand);
+    const payLink = document.createElement('a'); payLink.className = 'btn solid co-pay-link'; payLink.href = '#'; payLink.rel = 'noopener'; payLink.target = '_blank'; payLink.hidden = true; payLink.textContent = 'Tap here to pay →';
+    actions.appendChild(payBtn); actions.appendChild(payLink);
+    coBody.appendChild(actions);
+
+    payBtn.addEventListener('click', () => {
       if (bag.some(it => { const p = PRODUCTS.find(x => x.id === it.id); return !p || p.price == null; })) {
         err.textContent = 'A piece in your cart has no price yet.'; err.hidden = false; return;
       }
-      coData = data;
-      store.set('yowa-ship', coData);
-      const { grand } = refreshSummary();
       payBtn.disabled = true; payBtn.textContent = 'Getting your link…'; err.hidden = true;
       fetch('/api/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(Object.assign({}, coData, { items: bag.map(i => ({ id:i.id, size:i.size, qty:i.qty, opts:i.opts||{} })) })) })
         .then(r => r.json().then(j => ({ ok:r.ok, j })))
@@ -1717,13 +1777,14 @@ const LIBRARY = [
           }
           throw new Error(x.j && x.j.error || 'Checkout failed');
         })
-        .catch(e => { err.textContent = (e && e.message) || 'Checkout failed. Try again.'; err.hidden = false; payBtn.disabled = false; payBtn.textContent = 'Get payment link'; });
+        .catch(e => { err.textContent = (e && e.message) || 'Checkout failed. Try again.'; err.hidden = false; payBtn.disabled = false; payBtn.textContent = 'Pay ' + naira(grand); });
     });
   }
 
   function openCheckout() {
     if (!bag.length) return;
     const saved = store.get('yowa-ship', null); if (saved) coData = Object.assign({}, saved); else coData = {};
+    coPage = 0; coDir = 1;
     closeBag(true);
     coOverlay.hidden = false; document.body.style.overflow = 'hidden';
     if (!reduced()) coOverlay.animate([{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none'}], {duration:380,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});
@@ -1736,6 +1797,7 @@ const LIBRARY = [
     if (keep !== true) backstack.close();
   }
   $('#co-close').addEventListener('click', () => closeCheckout());
+  $('#co-back').addEventListener('click', () => goCheckoutPage(0));
   $('#checkout').addEventListener('click', () => openCheckout());
 
   // Back from Paystack: confirm the payment with the server, then clear the cart.
