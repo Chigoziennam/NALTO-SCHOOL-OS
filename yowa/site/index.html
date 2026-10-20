@@ -558,6 +558,22 @@ section{position:relative}
 [data-theme="light"] .co-summary-row.total{border-top-color:rgba(0,0,0,.08)}
 .co-summary-row.total strong{color:var(--purple-l)}
 .co-items-note{font-size:12.5px;color:var(--mut);margin:0 0 10px;line-height:1.5}
+
+/* Pre-order treatment: a purple pill on cards, product view and cart lines; a checklist receipt in checkout */
+.badge-pre{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(166,91,255,.14);border:1px solid rgba(166,91,255,.3);color:var(--purple-l);font:700 9.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.badge-pre.on-media{position:absolute;top:12px;left:12px;z-index:3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(122,47,224,.22);box-shadow:0 2px 10px rgba(0,0,0,.14)}
+.card-media{position:relative}
+.pv-pre{display:flex;margin:-4px 0 10px}
+.dr-item .pre-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;margin-left:6px;border-radius:999px;background:rgba(166,91,255,.14);border:1px solid rgba(166,91,255,.3);color:var(--purple-l);font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+.co-pre-receipt{margin:20px 0 0;padding:18px;background:linear-gradient(145deg,rgba(166,91,255,.08),rgba(166,91,255,.04));border:1px solid rgba(166,91,255,.22);border-radius:16px}
+.co-pre-receipt .head{display:flex;align-items:center;gap:8px;margin:0 0 12px}
+.co-pre-receipt .head .ribbon{width:4px;height:16px;border-radius:2px;background:var(--purple-l)}
+.co-pre-receipt .head b{font:700 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--purple-l)}
+.co-pre-receipt ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.co-pre-receipt li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink)}
+.co-pre-receipt li .ck{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--purple);display:grid;place-items:center;color:#fff}
+.co-pre-receipt li .ck svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.co-pre-receipt .foot{margin:12px 0 0;font-size:12.5px;color:var(--mut);line-height:1.5;font-style:italic}
 .co-input:focus{border-color:var(--purple-l);background:rgba(255,255,255,.09);box-shadow:0 0 0 4px rgba(166,91,255,.18),inset 0 1px 0 rgba(255,255,255,.04)}
 select.co-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A91B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;background-size:12px 8px;padding-right:42px}
 select.co-input option{background:#140E26;color:#fff}
@@ -827,6 +843,7 @@ select.co-input option{background:#140E26;color:#fff}
     <div class="pv-info">
       <span class="label" id="pv-line"></span>
       <h3 id="pv-title">Piece</h3>
+      <div class="pv-pre" id="pv-pre" hidden><span class="badge-pre">Available on pre-order</span></div>
       <div class="pv-price" id="pv-price"></div>
       <div class="pv-opts" id="pv-opts"></div>
       <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
@@ -909,11 +926,11 @@ const BEAD_COLOURS = { name: 'Bead colour', values: [{ v: 'White', sw: '#F4F1EA'
 const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLowerCase(); return { when: { Colour: C, 'Bead colour': b.v }, images: slug === 'black' ? [IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp'].concat(k === 'red' ? [IMG + 'cap-black-rear-red.webp', IMG + 'cap-black-rear-red-2.webp'] : []) : [IMG + 'cap-' + slug + '-' + k + '.webp'] }; });   // the rear view is a real photo, so only the red beads have one for now
 const skullLook = (C, B, imgs) => ({ when: { Colour: C, Beads: B }, images: imgs.map(f => IMG + f + '.webp') });
 const PRODUCTS = [
-  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
+  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, preorder: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
     looks: [].concat(ragLooks('Black'), ragLooks('Red'), ragLooks('Blue'), ragLooks('Grey')),
     desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
-  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', cat: 'tops', isNew: true, cut: true, price: 22000, art: 'raglan', sizes: SIZES,
+  { id: 'ringer-tee', name: 'Ringer Tee', colour: 'White', cat: 'tops', isNew: true, cut: true, preorder: true, price: 22000, art: 'raglan', sizes: SIZES,
     images: [IMG + 'ringer-front.webp', IMG + 'ringer-back.webp'],
     desc: 'White tee with a black ringer collar and cuffs, the signature on the chest, 💜⚔️🐉 on the back of the neck and snaps along the hem. Handmade, limited run.' },
   { id: 'yowa-long-sleeve', name: 'YOWA Long Sleeve', colour: 'White', cat: 'tops', isNew: true, cut: true, price: 23500, art: 'raglan', sizes: SIZES,
@@ -939,7 +956,7 @@ const PRODUCTS = [
     looks: [skullLook('Grey', 'No beads', ['skull-camo-sig', 'skull-camo']), skullLook('Grey', 'White beads', ['skull-camo-back-white', 'skull-camo-front-white']), skullLook('Grey', 'Black beads', ['skull-camo-back-black', 'skull-camo-front-black']),
       skullLook('Black', 'No beads', ['skull-black-back-plain', 'skull-black-front-plain']), skullLook('Black', 'White beads', ['skull-black-back-white', 'skull-black-white']), skullLook('Black', 'Black beads', ['skull-black-back-black', 'skull-black-front-black'])],
     desc: 'Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.' },
-  { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: 45000, art: 'cap', sizes: ['One size'],
+  { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, preorder: true, price: 45000, art: 'cap', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }] }, BEAD_COLOURS],
     looks: [].concat(capLooks('Black', 'black'), capLooks('Green', 'green'), capLooks('Navy', 'navy'), capLooks('Green & Yellow', 'green-yellow')),
     desc: 'The 042 patch cap: 042, the YOWA wordmark, the heart, the flame and the signature down the side. Pick the colour, and the beads in white, red, purple or black. One size.' }
@@ -1337,7 +1354,7 @@ const LIBRARY = [
     let ch = optDefaults(p);
     const el = document.createElement('div'); el.className = 'card rv in';
     const col = p.opts.find(o => o.name === 'Colour' && o.values.length > 1);
-    el.innerHTML = '<div class="card-media"><button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="Add to cart">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
+    el.innerHTML = '<div class="card-media">' + (p.preorder ? '<span class="badge-pre on-media">Pre-order</span>' : '') + '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="' + (p.preorder ? 'Pre-order' : 'Add to cart') + '">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
     const nm = el.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
     if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
     el.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
@@ -1428,6 +1445,8 @@ const LIBRARY = [
     o = o || {}; current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
     choice = Object.assign(optDefaults(p), o.choice || {});
     $('#pv-title').textContent = p.name; paintLine(p); putText($('#pv-desc'), p.desc); paintOpts(p);
+    $('#pv-pre').hidden = !p.preorder;
+    $('#pv-add').textContent = p.preorder ? 'Pre-order' : 'Add to cart';
     $('#pv-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
     qty = 1; paintQty();
     const sz = $('#pv-sizes'); sz.textContent = '';
@@ -1500,7 +1519,9 @@ const LIBRARY = [
       const row = document.createElement('div'); row.className = 'dr-item';
       row.innerHTML = '<div class="th"></div><div><b></b><span></span></div><button type="button">Remove</button>';
       const pick = optText(p, it.opts) || p.colour, src = small(imagesFor(p, it.opts || {})[0]);
-      row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : ''); row.querySelector('span').textContent = (p.noSize ? '' : it.size + ' · ') + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
+      row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : '');
+      if (p.preorder) { const chip = document.createElement('span'); chip.className = 'pre-chip'; chip.textContent = 'Pre-order'; row.querySelector('b').appendChild(chip); }
+      row.querySelector('span').textContent = (p.noSize ? '' : it.size + ' · ') + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
       const t = new Image(); t.onload = () => { const th = row.querySelector('.th'); th.style.backgroundImage = 'url("' + src + '")'; if (p.cut) th.classList.add('cut'); }; t.src = src;
       row.querySelector('button').addEventListener('click', () => { bag.splice(idx, 1); saveBag(); renderBag(); }); body.appendChild(row);
     });
@@ -1577,6 +1598,26 @@ const LIBRARY = [
       form.appendChild(wrap);
       fieldEls[f.id] = { wrap, input, err };
     });
+
+    // Pre-order checklist receipt — appears above the summary when any item is a pre-order
+    const preItems = bag.filter(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.preorder; });
+    if (preItems.length) {
+      const box = document.createElement('div'); box.className = 'co-pre-receipt';
+      const head = document.createElement('div'); head.className = 'head'; head.innerHTML = '<span class="ribbon"></span><b>Pre-order receipt</b>'; box.appendChild(head);
+      const ul = document.createElement('ul');
+      preItems.forEach(it => {
+        const p = PRODUCTS.find(x => x.id === it.id); if (!p) return;
+        const li = document.createElement('li');
+        const pick = optText(p, it.opts) || p.colour || '';
+        li.innerHTML = '<span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg></span><span></span>';
+        li.children[1].textContent = it.qty + ' × ' + p.name + (pick ? ' · ' + pick : '') + (p.noSize ? '' : ' · ' + it.size);
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+      const foot = document.createElement('p'); foot.className = 'foot'; foot.textContent = 'These pieces ship when the drop lands. We will contact you with the delivery date.';
+      box.appendChild(foot);
+      form.appendChild(box);
+    }
 
     const sumBox = document.createElement('div'); sumBox.className = 'co-summary'; form.appendChild(sumBox);
     const itemsNote = document.createElement('p'); itemsNote.className = 'co-items-note'; sumBox.appendChild(itemsNote);
