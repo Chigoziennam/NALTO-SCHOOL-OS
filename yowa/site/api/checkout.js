@@ -6,7 +6,7 @@
 
 const PRICES = {
   'liberty-raglan': 40000, 'ringer-tee': 22000, 'yowa-long-sleeve': 23500, 'bybd-tee': 30000, 'logo-tee': 30000,
-  'joggers': 35000, 'jorts': 30000, 'skull-cap': 100, 'cap-042': 45000
+  'joggers': 35000, 'jorts': 30000, 'skull-cap': 18000, 'cap-042': 45000
 };
 const NAMES = {
   'liberty-raglan': 'Liberty Raglan', 'ringer-tee': 'Ringer Tee', 'yowa-long-sleeve': 'YOWA Long Sleeve', 'bybd-tee': 'Be Different Tee',
