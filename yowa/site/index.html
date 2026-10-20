@@ -532,21 +532,35 @@ section{position:relative}
 .grand-row{border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
 .grand-row strong{font-size:1.08em;color:var(--purple-l)}
 /* ── Checkout wizard overlay ── */
-.co-overlay{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;background:var(--void-2);padding-top:env(safe-area-inset-top,0px)}
+.co-overlay{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--void-2) 0%,var(--void) 100%);padding-top:env(safe-area-inset-top,0px)}
+.co-grabber{width:36px;height:5px;border-radius:999px;background:rgba(255,255,255,.2);margin:8px auto 2px;flex-shrink:0}
+[data-theme="light"] .co-grabber{background:rgba(0,0,0,.18)}
+.co-dots{display:flex;gap:5px;justify-content:center;align-items:center}
+.co-dots .d{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .35s cubic-bezier(.16,1,.3,1)}
+[data-theme="light"] .co-dots .d{background:rgba(0,0,0,.14)}
+.co-dots .d.on{width:22px;border-radius:999px;background:var(--purple-l)}
+.co-dots .d.done{background:var(--purple-l);opacity:.6}
 .co-overlay[hidden]{display:none}
-.co-head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 0;min-height:54px}
-.co-prog{font:700 9px/1 var(--f-label);letter-spacing:.2em;color:var(--mut);text-transform:uppercase}
-.co-body{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;padding:0 24px 40px}
-.co-step{display:flex;flex-direction:column;flex:1;padding-top:clamp(28px,6vw,56px)}
-.co-q{font:400 clamp(30px,8vw,52px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px;color:var(--ink)}
-.co-hint{font-size:13px;color:var(--mut);margin:0 0 32px}
-.co-input{width:100%;background:rgba(8,6,14,.55);border:1px solid var(--line);border-radius:18px;padding:16px 18px;font-size:18px;color:#fff;outline:none;transition:border-color .2s}
-.co-input:focus{border-color:var(--purple-l)}
+.co-head{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;padding:6px 18px 10px;min-height:54px;position:sticky;top:env(safe-area-inset-top,0px);background:linear-gradient(180deg,var(--void-2) 85%,transparent);z-index:2;flex-shrink:0}
+[data-theme="light"] .co-head{background:linear-gradient(180deg,#fff 85%,transparent)}
+.co-body{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;padding:0 24px 180px;-webkit-overflow-scrolling:touch}
+.co-step{display:flex;flex-direction:column;flex:1;padding-top:clamp(28px,8vw,64px);animation:coSlideIn .4s cubic-bezier(.16,1,.3,1) both}
+.co-step.back{animation:coSlideBack .4s cubic-bezier(.16,1,.3,1) both}
+@keyframes coSlideIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes coSlideBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.co-q{font:400 clamp(30px,8vw,52px)/.98 var(--f-display);text-transform:uppercase;letter-spacing:.01em;margin:0 0 8px;color:var(--ink)}
+.co-hint{font-size:13.5px;color:var(--mut);margin:0 0 36px;line-height:1.4}
+.co-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:17px 18px;font-size:17px;color:#fff;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;-webkit-appearance:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.co-input:focus{border-color:var(--purple-l);background:rgba(255,255,255,.09);box-shadow:0 0 0 4px rgba(166,91,255,.18),inset 0 1px 0 rgba(255,255,255,.04)}
 select.co-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A91B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;background-size:12px 8px;padding-right:42px}
 select.co-input option{background:#140E26;color:#fff}
-[data-theme="light"] .co-input{background:#fff;color:var(--ink)}
-.co-delivery-note{margin:10px 0 0;font-size:13px;color:var(--purple-l);font-weight:600}
-.co-actions{display:grid;gap:10px;margin-top:28px}
+[data-theme="light"] .co-input{background:#F2F2F7;color:var(--ink);border:1px solid rgba(0,0,0,.08);box-shadow:none}
+[data-theme="light"] .co-input:focus{background:#fff;border-color:var(--purple);box-shadow:0 0 0 4px rgba(122,47,224,.14)}
+.co-delivery-note{margin:14px 0 0;font-size:13px;color:var(--purple-l);font-weight:600;padding:11px 14px;background:rgba(166,91,255,.08);border-radius:12px;border:1px solid rgba(166,91,255,.14)}
+.co-actions{position:fixed;left:0;right:0;bottom:0;display:grid;gap:10px;padding:16px 24px calc(18px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,transparent 0%,var(--void-2) 40%);z-index:5;pointer-events:none}
+[data-theme="light"] .co-actions{background:linear-gradient(180deg,transparent 0%,#fff 40%)}
+.co-actions>*{pointer-events:auto}
+.co-actions .btn{width:100%;justify-content:center;padding:17px 26px;border-radius:999px;font:700 11px/1 var(--f-label);letter-spacing:.14em}
 .co-confirm-rows{display:grid;gap:6px;margin:0 0 28px}
 .co-confirm-row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid rgba(166,91,255,.12)}
 .co-confirm-row.total-row{border-bottom:none;border-top:1px solid var(--line);padding-top:12px;font-weight:700;font-size:16px}
@@ -828,9 +842,10 @@ select.co-input option{background:#140E26;color:#fff}
 </aside>
 
 <div class="co-overlay" id="co-overlay" hidden role="dialog" aria-label="Checkout" aria-modal="true">
+  <div class="co-grabber" aria-hidden="true"></div>
   <div class="co-head">
-    <button class="ico-btn back-btn" type="button" id="co-back" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
-    <span class="co-prog"><span id="co-step-n">1</span> / <span id="co-step-of">6</span></span>
+    <button class="ico-btn back-btn" type="button" id="co-back" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="co-dots" id="co-dots" aria-hidden="true"></div>
     <button class="x xi" type="button" id="co-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   </div>
   <div class="co-body" id="co-body"></div>
@@ -1507,9 +1522,18 @@ const LIBRARY = [
   addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#lightbox') && !pview.hidden) closeProduct(); else if (!$('#co-overlay').hidden) closeCheckout(); else if (!drawer.hidden) closeBag(); else if (!qshop.hidden) closeShop(); else if (!$('#chat').hidden) toggleChat(false); else if (menuOn()) closeMenu(); });
 
   /* ── Step-by-step checkout wizard ── */
-  const coOverlay = $('#co-overlay'), coBody = $('#co-body'), coStepN = $('#co-step-n'), coStepOf = $('#co-step-of');
+  const coOverlay = $('#co-overlay'), coBody = $('#co-body'), coDots = $('#co-dots');
   let coData = {}; // collected answers
   let coStepIdx = 0;
+  let coDir = 1; // 1 forward, -1 back — drives the slide direction
+  function renderCoDots(cur, tot) {
+    coDots.textContent = '';
+    for (let i = 0; i < tot; i++) {
+      const d = document.createElement('span');
+      d.className = 'd' + (i === cur ? ' on' : (i < cur ? ' done' : ''));
+      coDots.appendChild(d);
+    }
+  }
 
   // Step definitions. fn(data) returns the step spec.
   const coSteps = [
@@ -1535,12 +1559,12 @@ const LIBRARY = [
   function renderCoStep(idx) {
     coStepIdx = idx;
     const vsteps = visibleSteps(); const tot = vsteps.length + 1;
-    coStepN.textContent = idx + 1; coStepOf.textContent = tot;
+    renderCoDots(idx, tot);
     $('#co-back').style.visibility = idx === 0 ? 'hidden' : '';
     coBody.textContent = '';
     if (idx < vsteps.length) {
       const step = vsteps[idx];
-      const div = document.createElement('div'); div.className = 'co-step';
+      const div = document.createElement('div'); div.className = 'co-step' + (coDir < 0 ? ' back' : '');
       const q = document.createElement('p'); q.className = 'co-q'; q.textContent = step.q; div.appendChild(q);
       if (step.hint) { const h = document.createElement('p'); h.className = 'co-hint'; h.textContent = step.hint; div.appendChild(h); }
       let input;
@@ -1567,6 +1591,7 @@ const LIBRARY = [
         const val = input.value; const errMsg = step.validate(val);
         if (errMsg) { err.textContent = errMsg; err.hidden = false; return; }
         coData[step.id] = (step.type === 'select' ? val : val.trim());
+        coDir = 1;
         renderCoStep(idx + 1);
       });
       input.addEventListener('keydown', e => { if (e.key === 'Enter') next.click(); });
@@ -1578,7 +1603,7 @@ const LIBRARY = [
       const subtotal = bag.reduce((s, it) => { const p = PRODUCTS.find(x => x.id === it.id); return s + (p ? (p.price || 0) * it.qty : 0); }, 0);
       const fee = calcDelivery(coData.state, coData.lga);
       const grand = subtotal + fee;
-      const div = document.createElement('div'); div.className = 'co-step';
+      const div = document.createElement('div'); div.className = 'co-step' + (coDir < 0 ? ' back' : '');
       const q = document.createElement('p'); q.className = 'co-q'; q.style.fontSize = 'clamp(24px,6vw,38px)'; q.textContent = 'Order summary'; div.appendChild(q);
       // mini item list
       const items = document.createElement('p'); items.className = 'co-items-mini';
@@ -1639,6 +1664,7 @@ const LIBRARY = [
   $('#co-back').addEventListener('click', () => {
     const prev = coStepIdx - 1;
     if (prev < 0) { closeCheckout(); return; }
+    coDir = -1;
     renderCoStep(prev);
   });
   $('#checkout').addEventListener('click', () => openCheckout());
