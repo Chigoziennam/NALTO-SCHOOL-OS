@@ -560,24 +560,31 @@ section{position:relative}
 .co-items-note{font-size:12.5px;color:var(--mut);margin:0 0 10px;line-height:1.5}
 
 /* Pre-order treatment: a purple pill on cards, product view and cart lines; a checklist receipt in checkout */
-.badge-pre{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(166,91,255,.14);border:1px solid rgba(166,91,255,.3);color:var(--purple-l);font:700 9.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
-.stamp-pre{position:absolute;top:18px;left:18px;z-index:4;transform:rotate(-9deg);transform-origin:top left;padding:9px 13px 8px;border:2.5px solid #FF6A6E;outline:1.5px solid #FF6A6E;outline-offset:3px;border-radius:4px;background:rgba(255,255,255,.94);color:#C8282E;font:900 10.5px/1.25 var(--f-label);letter-spacing:.18em;text-transform:uppercase;text-align:center;white-space:normal;max-width:132px;pointer-events:none;text-shadow:0 0 1px rgba(200,40,46,.3);box-shadow:0 4px 14px rgba(0,0,0,.3),0 0 0 1px rgba(255,106,110,.2);opacity:1;animation:stampIn .5s cubic-bezier(.16,1,.3,1) .1s both}
-.stamp-pre::after{content:'';position:absolute;inset:1px;border-radius:3px;background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.3) 0%,transparent 55%);pointer-events:none;mix-blend-mode:overlay}
-[data-theme="light"] .stamp-pre{background:#fff;color:#C8282E;border-color:#D3202B;outline-color:#D3202B}
-@keyframes stampIn{from{opacity:0;transform:rotate(-8deg) scale(1.3) translateY(-6px)}60%{opacity:.95;transform:rotate(-8deg) scale(.96)}to{opacity:.95;transform:rotate(-8deg) scale(1)}}
-.stamp-pre b{display:block;font-size:11.5px;letter-spacing:.14em;margin-bottom:1px}
-.pv-pre{display:flex;margin:4px 0 14px;min-height:58px}
-.stamp-pre.pv-stamp{position:relative;top:auto;left:auto;transform:rotate(-6deg);transform-origin:center;max-width:150px;padding:10px 16px 9px;font-size:11px}
-.stamp-pre.pv-stamp b{font-size:14px}
+/* Centred bar with red targeting brackets, slammed over the photo */
+.stamp-pre{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;width:min(82%,250px);display:grid;pointer-events:none;animation:stampLock .55s cubic-bezier(.16,1,.3,1) both}
+.stamp-pre b{position:relative;overflow:hidden;display:block;width:100%;padding:12px 8px;background:rgba(6,5,10,.9);color:#fff;font:900 clamp(11px,1.5vw,16px)/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase;text-align:center;white-space:nowrap;animation:stampGlow 2.4s ease-in-out infinite}
+.stamp-pre b::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 36%,rgba(255,255,255,.3) 50%,transparent 64%);animation:stampSweep 3s ease-in-out infinite}
+.stamp-pre::before,.stamp-pre::after{content:'';position:absolute;top:-10px;bottom:-10px;width:26px;border:4px solid #FF2E39;animation:stampPulse 1.7s ease-in-out infinite}
+.stamp-pre::before{left:-15px;border-right:0}
+.stamp-pre::after{right:-15px;border-left:0}
+@keyframes stampLock{from{opacity:0;transform:translate(-50%,-50%) scale(1.3)}70%{opacity:1;transform:translate(-50%,-50%) scale(.97)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes stampPulse{0%,100%{border-color:#FF2E39;box-shadow:0 0 0 0 rgba(255,46,57,0)}50%{border-color:#FF737A;box-shadow:0 0 20px 2px rgba(255,46,57,.6)}}
+@keyframes stampGlow{0%,100%{text-shadow:0 0 10px rgba(255,255,255,.28)}50%{text-shadow:0 0 22px rgba(255,255,255,.8),0 0 42px rgba(255,46,57,.45)}}
+@keyframes stampSweep{0%{transform:translateX(-130%)}55%,100%{transform:translateX(130%)}}
+@media (prefers-reduced-motion:reduce){.stamp-pre,.stamp-pre b,.stamp-pre b::after,.stamp-pre::before,.stamp-pre::after{animation:none}}
+/* The same bar sitting in the product panel, not over a photo */
+.pv-pre{display:block;margin:6px 0 18px;padding:0 15px}
+.stamp-pre.pv-stamp{position:relative;left:auto;top:auto;transform:none;width:100%;max-width:250px;animation:none}
+.stamp-pre.pv-stamp b{font-size:15px;padding:13px 8px}
 .card-media{position:relative}
-.dr-item .pre-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;margin-left:6px;border-radius:999px;background:rgba(166,91,255,.14);border:1px solid rgba(166,91,255,.3);color:var(--purple-l);font:700 8.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
-.co-pre-receipt{margin:20px 0 0;padding:18px;background:linear-gradient(145deg,rgba(166,91,255,.08),rgba(166,91,255,.04));border:1px solid rgba(166,91,255,.22);border-radius:16px}
+.dr-item .pre-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;margin-left:6px;border-radius:3px;background:rgba(255,46,57,.14);border:1px solid rgba(255,46,57,.45);color:#FF6B73;font:800 8.5px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase}
+.co-pre-receipt{margin:20px 0 0;padding:18px;background:linear-gradient(145deg,rgba(255,46,57,.08),rgba(255,46,57,.03));border:1px solid rgba(255,46,57,.26);border-radius:16px}
 .co-pre-receipt .head{display:flex;align-items:center;gap:8px;margin:0 0 12px}
-.co-pre-receipt .head .ribbon{width:4px;height:16px;border-radius:2px;background:var(--purple-l)}
-.co-pre-receipt .head b{font:700 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--purple-l)}
+.co-pre-receipt .head .ribbon{width:4px;height:16px;border-radius:2px;background:#FF2E39}
+.co-pre-receipt .head b{font:800 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:#FF6B73}
 .co-pre-receipt ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .co-pre-receipt li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink)}
-.co-pre-receipt li .ck{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--purple);display:grid;place-items:center;color:#fff}
+.co-pre-receipt li .ck{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:#D3202B;display:grid;place-items:center;color:#fff}
 .co-pre-receipt li .ck svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .co-pre-receipt .foot{margin:12px 0 0;font-size:12.5px;color:var(--mut);line-height:1.5;font-style:italic}
 .co-input:focus{border-color:var(--purple-l);background:rgba(255,255,255,.09);box-shadow:0 0 0 4px rgba(166,91,255,.18),inset 0 1px 0 rgba(255,255,255,.04)}
@@ -849,7 +856,7 @@ select.co-input option{background:#140E26;color:#fff}
     <div class="pv-info">
       <span class="label" id="pv-line"></span>
       <h3 id="pv-title">Piece</h3>
-      <div class="pv-pre" id="pv-pre" hidden><span class="stamp-pre pv-stamp" aria-label="Pre-order available now"><b>Pre-order</b>Available now</span></div>
+      <div class="pv-pre" id="pv-pre" hidden><span class="stamp-pre pv-stamp" aria-label="Pre-order available now"><b>Pre order</b></span></div>
       <div class="pv-price" id="pv-price"></div>
       <div class="pv-opts" id="pv-opts"></div>
       <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
@@ -1360,7 +1367,7 @@ const LIBRARY = [
     let ch = optDefaults(p);
     const el = document.createElement('div'); el.className = 'card rv in';
     const col = p.opts.find(o => o.name === 'Colour' && o.values.length > 1);
-    el.innerHTML = '<div class="card-media">' + (p.preorder ? '<span class="stamp-pre" aria-label="Pre-order available now"><b>Pre-order</b>Available now</span>' : '') + '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="' + (p.preorder ? 'Pre-order' : 'Add to cart') + '">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
+    el.innerHTML = '<div class="card-media">' + (p.preorder ? '<span class="stamp-pre" aria-label="Pre-order available now"><b>Pre order</b></span>' : '') + '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="' + (p.preorder ? 'Pre-order' : 'Add to cart') + '">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
     const nm = el.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
     if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
     el.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
