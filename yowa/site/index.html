@@ -939,7 +939,7 @@ const BEAD_COLOURS = { name: 'Bead colour', values: [{ v: 'White', sw: '#F4F1EA'
 const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLowerCase(); return { when: { Colour: C, 'Bead colour': b.v }, images: slug === 'black' ? [IMG + 'cap-black-front-' + k + '.webp', IMG + 'cap-black-side-' + k + '.webp'].concat(k === 'red' ? [IMG + 'cap-black-rear-red.webp', IMG + 'cap-black-rear-red-2.webp'] : []) : [IMG + 'cap-' + slug + '-' + k + '.webp'] }; });   // the rear view is a real photo, so only the red beads have one for now
 const skullLook = (C, B, imgs) => ({ when: { Colour: C, Beads: B }, images: imgs.map(f => IMG + f + '.webp') });
 const PRODUCTS = [
-  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, preorder: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
+  { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
     looks: [].concat(ragLooks('Black'), ragLooks('Red'), ragLooks('Blue'), ragLooks('Grey')),
     desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
@@ -964,12 +964,12 @@ const PRODUCTS = [
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Purple', sw: '#5A3FC6' }, { v: 'Grey', sw: '#A3A3A7' }] }],
     looks: ['Black', 'Purple', 'Grey'].map(C => ({ when: { Colour: C }, images: [IMG + 'jorts-' + C.toLowerCase() + '.webp'] })),
     desc: 'Long jorts with the signature on the front and beads down both sides. Handmade, limited run.' },
-  { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, price: 100, art: 'beanie', sizes: ['One size'],
+  { id: 'skull-cap', name: 'Skull Cap', cat: 'caps', cut: true, preorder: true, price: 100, art: 'beanie', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Grey', sw: CAMO }, { v: 'Black', sw: '#121212' }] }, SKULL_BEADS],
     looks: [skullLook('Grey', 'No beads', ['skull-camo-sig', 'skull-camo']), skullLook('Grey', 'White beads', ['skull-camo-back-white', 'skull-camo-front-white']), skullLook('Grey', 'Black beads', ['skull-camo-back-black', 'skull-camo-front-black']),
       skullLook('Black', 'No beads', ['skull-black-back-plain', 'skull-black-front-plain']), skullLook('Black', 'White beads', ['skull-black-back-white', 'skull-black-white']), skullLook('Black', 'Black beads', ['skull-black-back-black', 'skull-black-front-black'])],
     desc: 'Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.' },
-  { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, preorder: true, price: 45000, art: 'cap', sizes: ['One size'],
+  { id: 'cap-042', name: '042 Cap', cat: 'caps', cut: true, price: 45000, art: 'cap', sizes: ['One size'],
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Green', sw: '#2F5A38' }, { v: 'Navy', sw: '#1B2A5E' }, { v: 'Green & Yellow', sw: 'linear-gradient(135deg,#2F5A38 50%,#F2A60C 50%)' }] }, BEAD_COLOURS],
     looks: [].concat(capLooks('Black', 'black'), capLooks('Green', 'green'), capLooks('Navy', 'navy'), capLooks('Green & Yellow', 'green-yellow')),
     desc: 'The 042 patch cap: 042, the YOWA wordmark, the heart, the flame and the signature down the side. Pick the colour, and the beads in white, red, purple or black. One size.' }
