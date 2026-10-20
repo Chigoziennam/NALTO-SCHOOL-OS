@@ -552,6 +552,20 @@ section{position:relative}
 .co-recap .who{font-size:15.5px;font-weight:600;margin:0 0 4px;color:var(--ink)}
 .co-recap .where{font-size:13px;color:var(--mut);line-height:1.55;margin:0}
 .co-recap .edit{margin:12px 0 0;padding:0;background:none;border:0;color:var(--purple-l);font:800 10px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.co-when{margin:0 0 20px;padding:16px 17px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px}
+[data-theme="light"] .co-when{background:#F2F2F7;border-color:rgba(0,0,0,.06)}
+.co-when .head{display:flex;align-items:center;gap:8px;margin:0 0 13px}
+.co-when .head .ribbon{width:4px;height:16px;border-radius:2px;background:var(--purple-l)}
+.co-when .head b{font:800 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--purple-l)}
+.co-when .line{display:flex;gap:11px;padding:11px 0 0;margin-top:11px;border-top:1px solid rgba(255,255,255,.07)}
+.co-when .line:first-of-type{border-top:0;padding-top:0;margin-top:0}
+[data-theme="light"] .co-when .line{border-top-color:rgba(0,0,0,.07)}
+.co-when .dot{flex-shrink:0;width:8px;height:8px;border-radius:50%;margin-top:5px;background:#2E9E6B;box-shadow:0 0 0 3px rgba(46,158,107,.16)}
+.co-when .line.pre .dot{background:#FF2E39;box-shadow:0 0 0 3px rgba(255,46,57,.16)}
+.co-when .what{font:800 9.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+.co-when .when{font-size:14px;color:var(--ink);margin:0;line-height:1.5}
+.co-when .when b{font-weight:700}
+.co-when .when .soft{color:var(--mut)}
 .co-title{font:400 clamp(34px,9vw,58px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;margin:0 0 4px;color:var(--ink)}
 .co-sub{font-size:13.5px;color:var(--mut);margin:0 0 28px;line-height:1.4}
 .co-field{display:flex;flex-direction:column;gap:7px;margin:0 0 16px}
@@ -1531,6 +1545,15 @@ const LIBRARY = [
   const NG_STATES = ['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT (Abuja)','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
   const ENUGU_LGAS = ['Aninri','Awgu','Enugu East','Enugu North','Enugu South','Ezeagu','Igbo-Etiti','Igbo-Eze North','Igbo-Eze South','Isi-Uzo','Nkanu East','Nkanu West','Nsukka','Oji River','Udenu','Udi','Uzo-Uwani'];
   const calcDelivery = (state, lga) => !state ? 0 : state === 'Enugu' ? (lga === 'Nsukka' ? 3000 : 5000) : 8500;
+  // When it arrives. In stock goes out the same day up to nightfall, the next day after that.
+  // Pre-order pieces are made to order: a week and five days.
+  const NIGHTFALL_HOUR = 18, PREORDER_DAYS = 12;
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const niceDate = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  function deliveryWindow() {
+    const now = new Date(), afterDark = now.getHours() >= NIGHTFALL_HOUR;
+    return { afterDark, stock: addDays(now, afterDark ? 1 : 0), pre: addDays(now, PREORDER_DAYS) };
+  }
   const drawer = $('#drawer');
   function saveBag() { store.set('yowa-bag', bag); const n = bag.reduce((t, i) => t + i.qty, 0); $('#bag-count').textContent = n; $('#bag-open').dataset.n = n; $('#bag-open').setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items')); const qc = $('#qs-count'); if (qc) qc.textContent = n; }
   const bumpBag = () => { const b = $('#bag-open'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
@@ -1602,6 +1625,36 @@ const LIBRARY = [
     return { subtotal, fee, grand: subtotal + fee };
   }
 
+  const isPre = it => { const p = PRODUCTS.find(x => x.id === it.id); return !!(p && p.preorder); };
+  const pieceCount = list => { const n = list.reduce((s, it) => s + it.qty, 0); return n + (n === 1 ? ' piece' : ' pieces'); };
+
+  // When each half of the cart arrives: in stock same day up to nightfall, pre-order in a week and five days
+  function buildWhenItArrives() {
+    const w = deliveryWindow();
+    const stockItems = bag.filter(it => !isPre(it)), preItems = bag.filter(isPre);
+    const box = document.createElement('div'); box.className = 'co-when';
+    box.innerHTML = '<div class="head"><span class="ribbon"></span><b>When it arrives</b></div>';
+    const line = (cls, what, strong, soft) => {
+      const el = document.createElement('div'); el.className = 'line' + (cls ? ' ' + cls : '');
+      el.innerHTML = '<span class="dot"></span><div><p class="what"></p><p class="when"><b></b><span class="soft"></span></p></div>';
+      el.querySelector('.what').textContent = what;
+      el.querySelector('.when b').textContent = strong;
+      el.querySelector('.when .soft').textContent = soft;
+      box.appendChild(el);
+    };
+    if (stockItems.length) {
+      line('', 'In stock · ' + pieceCount(stockItems),
+        w.afterDark ? 'Tomorrow, ' + niceDate(w.stock) : 'Today, ' + niceDate(w.stock),
+        w.afterDark ? ' — ordered after nightfall, so it goes out first thing.' : ' — ordered before nightfall, so it goes out today.');
+    }
+    if (preItems.length) {
+      line('pre', 'Pre-order · ' + pieceCount(preItems),
+        '1 week 5 days, around ' + niceDate(w.pre),
+        ' — these are made to order. We will call you before they move.');
+    }
+    return box;
+  }
+
   // Pre-order checklist receipt, or null when nothing in the cart is a pre-order
   function buildPreReceipt() {
     const preItems = bag.filter(it => { const p = PRODUCTS.find(x => x.id === it.id); return p && p.preorder; });
@@ -1618,7 +1671,8 @@ const LIBRARY = [
       ul.appendChild(li);
     });
     box.appendChild(ul);
-    const foot = document.createElement('p'); foot.className = 'foot'; foot.textContent = 'These pieces ship when the drop lands. We will contact you with the delivery date.';
+    const foot = document.createElement('p'); foot.className = 'foot';
+    foot.textContent = 'Made to order — a week and five days, around ' + niceDate(deliveryWindow().pre) + '.';
     box.appendChild(foot);
     return box;
   }
@@ -1735,6 +1789,8 @@ const LIBRARY = [
     edit.addEventListener('click', () => goCheckoutPage(0));
     recap.appendChild(edit);
     form.appendChild(recap);
+
+    form.appendChild(buildWhenItArrives());
 
     const pre = buildPreReceipt(); if (pre) form.appendChild(pre);
 
