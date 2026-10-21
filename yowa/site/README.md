@@ -3,19 +3,24 @@
 Static site (HTML + two serverless functions), deploys on Vercel like the waitlist. Built for phones first: everything below works by touch, and the desktop layout is the same site with more room.
 
 ## How it's laid out
-- **Home** is just YOWA over the photos. Nothing else, and it doesn't scroll.
-- **Menu:** the three lines top right. They turn into an X while the menu is open; tap the X to close it. The menu holds every page (Home, The drop, Message, Gallery, Library, Worn by, Get the code), Ask YOWA, the mantra, Instagram and the credit.
-- **Pages:** each section is its own page and only shows when it's picked in the menu (or in the header links on a computer). Links like `yowabybd.com/#library` open that page directly, and the back button goes back a page. Tapping the signature goes home.
-- A dragon closes every page. Its words are the `data-dragon` on that page's `<section>`; `data-void` gives it the dark body.
+- One short scrolling page: about six phone screens from top to bottom.
+- **Top:** the photos, with BE YOU / BE DIFFERENT and the heart, swords and dragon low over them in the slim script from the raglan sleeve (Pinyon Script): Be you / be different, with Be and different in purple, a purple beam behind and the heart, swords and dragon underneath (no big YOWA there; YOWA spins in the header).
+- **Then, in the menu's order:** Shop, Gallery (six photos) and the Library (nine square photos at a time, Show more for the rest), Message, Get the code and a one-line footer.
+- **Shop:** eight pieces, every one cut out and glowing on the dark: the Liberty Raglan (black, red, blue or grey sleeves, with beads or without), the Ringer Tee, the YOWA Long Sleeve, the Be Different Tee (YOWA on the chest, Be You Be Different on the back), Joggers (black or grey) and Jorts (black, purple or grey), each with beads or without, the Skull Cap (camo or black, with no beads, black beads or white beads) and the 042 Cap. Each card has an eye (see it) and a bag (add it) by its side and its colours under the name; tapping a colour swaps the photo. The bag adds a piece with nothing to choose (the 042 cap) straight away; anything else opens on its choices. Sizes are M, L, XL and XXL. The piece count and the one-or-two-across switch sit on top. The photos live in `img/products/` and are listed in `PRODUCTS` (`opts` are the choices, `looks` the photos for each choice). Every piece shows its front first and its back last. In the product view the description comes last, after the size, quantity and Add to cart.
+- **Product view:** the photos play like the opening slideshow (bars fill, it moves on by itself; tap right or left, swipe, or hold to pause). Round size pickers, a quantity picker and Add to cart. The choices sit above the size: colours as round swatches, beads as pills; the photos follow what you pick, and the cart keeps it (e.g. "Skull Cap · Black · White beads").
+- **Cart:** The cart icon top right shows how many pieces are in it. The X, a swipe right or back closes it. Checkout takes delivery details and pays through Paystack.
+- **Header:** like gocrazy: the crystal dragon (the menu) and a back arrow on the left, YOWA in the middle turning round in 3D (a front, a mirrored back and purple layers for its thickness, one turn every 9 seconds), the light/dark switch and the cart icon on the right, the same on phones and computers. The back arrow glides back to where you were before your last jump (a menu link, YOWA, any # link), or up to the top; it dims when there is nowhere to go back to and hides while the menu is open. The bar is solid when it sticks (no blur, so scrolling stays smooth).
+- **Menu:** tap the crystal dragon and it shines, the menu grows out of it as a circle and an X takes its place. Behind the menu is the slimy YOWA swirl. Centred: the signature, Home, Shop (with a small crystal dragon beating its wings), Gallery, Message, Get the code; down at the bottom the mantra (in the same lettering) and Instagram. Ask YOWA lives on its own button on the page, not in the menu. Shop opens New, All, Tops, Caps and Bottoms with a round thumbnail and how many pieces each has; picking one slides in the side shop with the same cards.
+- **Light and dark:** the sun (in dark) turns into the moon (in light) and the page flips to the other mode in a circle growing from the button, where the browser supports it. Remembered on the phone.
+- **Ask YOWA:** the fire dragon is its face, on the button and in the chat, and the chat sits on the YOWA swirl, like the menu.
 
 ## Photos and their codes
-Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the last one is YW·054).
+Every photo has a fixed code, written next to it in `LIBRARY` at the top of the script in `index.html` (`no: 'YW·010'`). Codes never shift when photos are added or moved. A new photo goes at the end of the list with the next free code (the bundled photos run YW·001 to YW·021).
 
 | Where | Photo |
 |---|---|
-| Hero slideshow, in order | YW·054 the skateboard kickflip (`img/library/yowa-skate.jpg`), YW·010 the crew, YW·033 the black raglan, YW·042 red and black |
+| Hero slideshow, in order | `img/hero/`: hero-3 the red raglan, hero-4 the three in black raglans, hero-6 the kickflip, hero-1 the crew in the 042 caps, hero-5 the car park last. Just the photos, no codes on top |
 | Message background | YW·010, with its motion clip `img/motion/crew.mp4` |
-| Worn by background | YW·042 |
 | The list background | YW·033 |
 | `img/look-*.jpg`, `img/detail-*.jpg`, `img/raglan-*.jpg` | The "In real life" gallery and the product photos |
 | `img/library/` | Every photo, 1600px. `img/library/t/` holds the small copies the grids and cards load |
@@ -24,30 +29,30 @@ Every photo has a fixed code, written next to it in `LIBRARY` at the top of the 
 The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (the short caption), `pos` (which part of the photo stays in frame on a phone). Optional: `hold` (ms on screen), `video` (a looping clip over the photo).
 
 ## Library
-- `LIBRARY` lists every photo: code, file, size, caption, shelf (Streets, Campaign, Caps, Skull caps, Crew) and the product it shows (adds "Shop this piece" in the viewer).
+- `LIBRARY` lists every photo: code, file, size, caption, `shelves` (what's in the photo: Raglan shirts, Plain tees, Skull caps, Caps, Joggers) and the product it shows (adds "Shop this piece" in the viewer).
+- The shelves are the filters above the photos. A photo with a raglan and joggers in it sits on both.
 - Any photo can be shared with its own link, like `yowabybd.com/#yw-010`. It opens straight in the viewer, and the Share button in the viewer sends that link.
-- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. A photo filed there in any folder except `brand` and `inbox` joins the Library on its own, numbered after the highest code. Leaving a photo in `inbox` keeps it off the site. Set the feed to `''` to turn this off.
+- `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. Photos filed there join the 21 bundled ones, numbered after them (see Partner round notes for the folder-to-shelf map). In real life shows up to 30 with the filters; the Library lists them all. Leaving a photo in `inbox` keeps it off the site.
 
 ## How it moves
-- **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear YOWA off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
-- **Glitch:** only YOWA glitches, never the photos of people. The logo tears, splits purple and cyan, blinks out and snaps back: on every new photo, now and then on its own, when tapped, and when you come back home.
-- **Dragon:** the serpent ribbon at the end of each page. It slithers, and thrashes when you scroll fast. Sections fade at their edges, so none of them ends on a straight line.
-- **Signature:** top left. It writes itself on load, and again when tapped (which also takes you home).
+- **Hero:** works like a story. The bars fill while a photo is up. Tap the right side for the next, the left for the last, swipe, or hold to pause and clear the words off the photo. Tap the code in the corner to open that photo in the Library. On Android the photo leans as the phone tilts.
+- **Dragons:** for now there are no dragons flying between the sections; the sections follow each other over the swirl. To bring one back, drop a long dragon (see-through PNG or on black) in `img/dragon/` and put a lane back between sections.
+- **Signature:** at the top of the menu, and in the Message section under the letter.
+- **The heart, the swords and the dragon:** YOWA's own icons (`img/brand/bybd-heart.png`, `bybd-swords.png`, `bybd-dragon.png`) stand in for 💜⚔️🐉 everywhere on the page: the opening line, the letter, the footer, product notes, the sign-up note, Ask YOWA's replies and the burst when you tap them. They are masks, so they take the colour of the words around them. Text that goes off the page (sharing, the page title) keeps the emojis or drops them.
 - Everything still and calm when the phone is set to reduce motion. Motion clips are skipped on data saver.
 
 ## Phone details
-- The back button closes the menu, a product, the bag, the chat or the viewer, and otherwise goes back a page, instead of leaving the site.
+- The back button closes the menu, the side shop, a product, the cart, the chat or the viewer instead of leaving the site.
 - Products open as a bottom sheet. Drag its handle down to put it away.
 - The header slides away while you scroll down and comes back when you scroll up. The thin line on top shows how far down the page you are.
-- Vibration on unlock, a wrong code, add to bag and joining the list (Android).
+- Vibration on unlock, a wrong code, add to cart and joining the list (Android).
 - Add to Home Screen gives a YOWA app icon (`manifest.webmanifest`, icons in `img/brand/`).
-- "Be You Be Different" always carries 💜⚔️🐉, on the page and in Ask YOWA's replies.
+- "Be You Be Different" always carries the heart, swords and dragon, on the page and in Ask YOWA's replies (it writes 💜⚔️🐉 and the page shows the icons).
 
 ## Edit at the top of the `<script>` in index.html
 - `CONFIG.DROP_AT`: drop date and time, starts the countdown on The drop page (e.g. `'2026-10-17T18:00:00+01:00'`)
-- `CONFIG.CODE`: the drop code the list receives
-- `PRODUCTS[].price`: naira prices (`null` shows "Price drops soon")
-- `CELEBS`: name, what they wore, IG post link, photo
+- `PRODUCTS[]`: `price` in naira (`null` shows "Price drops soon"), `cat` (raglan, tee, cap, skull, jogger), `isNew` (shows under New), `cut` (background removed), `images` (the slideshow, in order). Cut-out photos live in `img/products/`.
+- `CATS`: the categories in the menu's Shop list and the side shop
 
 ## Vercel
 - Root directory: `yowa/site`
@@ -56,3 +61,22 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 
 ## Domain: yowabybd.com (registered at Hostinger)
 The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`), so Vercel runs its DNS and the HTTPS certificate. `www.yowabybd.com` redirects to `yowabybd.com`. Email records (MX), if the domain ever needs email, are added in Vercel → Domains → yowabybd.com.
+
+## Partner round notes
+
+- **Shop:** nine pieces, no "Drop 01" labels. Raglans and the 042 cap have With / Without beads, and the "without" raglan photos are the clean renders. Jorts are always beaded (no option). The black 042 cap adds Bead colour. The Skull Cap has camo and the two original black photos.
+- **In real life:** the 21 photos in `img/library/` are bundled with codes and captions, and anything new on the Library site joins after them. The filters are product names: Raglans, Tees, Joggers, Jorts, Caps. New uploads are filed by what their tags, caption or filename say (real-life, brand and inbox folders are ignored). There is no separate Library section any more.
+- **Ask YOWA:** `api/chat.js` answers from the catalogue and the FAQ. It needs `OPENROUTER_API_KEY` set in Vercel (yowa project, Production) and a redeploy. The key is never kept in the code.
+- **In real life views:** like the iPhone's Photos. Grid is tight squares (3 across on a phone), Index is a list with thumbnails, and both keep the product filters. The choice is remembered. Tapping opens the swipe viewer.
+- **Round 3 shop notes:** the Liberty Raglan's XXL is crossed out (not available). The Ringer Tee and YOWA Long Sleeve are in New. Jorts and joggers have no size row. The YOWA Logo Tee uses the Be Different Tee's back. 042 caps always come with beads: colours Black, Green, Navy, Green & Yellow, bead colours White, Red, Purple, Black (photos `cap-<colour>-<bead>.webp`). The Skull Cap is Grey (camo) or Black, with No / White / Black beads.
+- **In real life photos:** 43 photos from the Library site are bundled (YW·001 to YW·043), each filed by the product people are wearing (a photo can sit under two, like a raglan with a cap). New uploads join after them. The viewer opens the small copy at once and swaps in the big one, and keeps the small one if the big one never arrives. No arrows: swipe on a phone; the Index list has none.
+
+## Prices round
+- Prices set: Raglan 40,000; Ringer Tee 22,000; White Long Sleeve 23,500; Be Different Tee 30,000; YOWA Logo Tee 30,000; Joggers 35,000; Jorts 30,000; Skull Cap 18,000; 042 Cap 45,000.
+- "New" holds only the two white tees (`isNew`).
+- 042 Black cap with Red beads has a real rear view; Camo skull cap with Black beads uses the real front and back photos.
+
+## Checkout
+- `api/checkout.js` prices the cart on the server and starts a Paystack payment; `api/verify.js` confirms it when the buyer returns.
+- Vercel env var needed: `PAYSTACK_SECRET_KEY` (sk_live_…). `OPENROUTER_API_KEY` for Ask YOWA. Keep `PRICES` in `api/checkout.js` in step with `PRODUCTS`.
+- The drop-code gate is removed.
