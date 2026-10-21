@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>YOWA Admin</title>
+<link rel="icon" href="img/brand/favicon.png">
+<style>
+/* One dark surface, chosen and validated against it: bars #A65BFF, delivered #4ECF93, awaiting #FFB02E */
+:root{
+  --surface:#0C0818; --card:#140E26; --line:rgba(255,255,255,.09);
+  --ink:#F2EEFA; --mut:#9A91B3; --faint:#6A6280;
+  --bar:#A65BFF; --bar-soft:rgba(166,91,255,.2);
+  --good:#4ECF93; --wait:#FFB02E;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --lab:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}   /* .gate sets display:grid, which would otherwise beat the attribute */
+html,body{margin:0;background:var(--surface);color:var(--ink);font-family:var(--f);-webkit-font-smoothing:antialiased}
+body{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,var(--surface) 78%,transparent);padding:calc(14px + env(safe-area-inset-top,0px)) 0 12px}
+header .in{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mark{font:800 12px/1 var(--lab);letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.mark span{color:var(--bar)}
+.ghost{background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:9px 14px;font:700 10px/1 var(--lab);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:color .2s,border-color .2s}
+.ghost:hover{color:var(--ink);border-color:rgba(255,255,255,.26)}
+.ghost[disabled]{opacity:.5;cursor:default}
+
+/* Passcode gate */
+.gate{min-height:70vh;display:grid;place-items:center}
+.gate form{width:100%;max-width:330px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px}
+.gate h1{font:800 13px/1 var(--lab);letter-spacing:.2em;text-transform:uppercase;margin:0 0 6px}
+.gate p{font-size:13px;color:var(--mut);margin:0 0 20px;line-height:1.5}
+input[type=password]{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:15px 16px;font-size:17px;color:#fff;outline:none;transition:border-color .2s,box-shadow .2s}
+input[type=password]:focus{border-color:var(--bar);box-shadow:0 0 0 4px rgba(166,91,255,.16)}
+.go{width:100%;margin-top:12px;background:var(--bar);border:0;border-radius:999px;padding:15px;color:#fff;font:800 11px/1 var(--lab);letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.go[disabled]{opacity:.6;cursor:default}
+.bad{color:#FF7A80;font-size:13px;margin:12px 0 0;line-height:1.5}
+
+h2{font:800 11px/1 var(--lab);letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin:34px 0 14px}
+.note{background:rgba(255,176,46,.08);border:1px solid rgba(255,176,46,.28);color:#FFC96B;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin:0 0 20px}
+
+/* Stat tiles — a number with its name, no plot, so no hover layer */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:720px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.tile .k{font:700 9.5px/1 var(--lab);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:0 0 9px}
+.tile .v{font:700 25px/1.05 var(--f);letter-spacing:-.02em;margin:0}
+.tile .s{font-size:12px;color:var(--mut);margin:7px 0 0;line-height:1.4}
+
+.proj{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:10px}
+.proj .k{font:700 9.5px/1 var(--lab);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
+.proj .v{font:700 clamp(30px,8vw,42px)/1 var(--f);letter-spacing:-.025em;margin:0;color:var(--bar)}
+.proj .s{font-size:13px;color:var(--mut);margin:10px 0 0;line-height:1.55}
+
+/* Charts. Bars: 4px rounded data-end, square against the baseline, 2px gap, recessive grid. */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.bars{display:flex;align-items:flex-end;gap:2px;height:150px;position:relative;border-bottom:1px solid var(--line);padding-bottom:0}
+.bars .grid{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.06);pointer-events:none}
+.bars .col{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;cursor:default;background:none;border:0;padding:0}
+.bars .col:focus-visible{outline:2px solid var(--bar);outline-offset:2px;border-radius:4px}
+.bars .col i{display:block;width:100%;background:var(--bar-soft);border-radius:4px 4px 0 0;transition:background .18s}
+.bars .col.has i{background:var(--bar)}
+.bars .col:hover i,.bars .col:focus-visible i{background:#C98CFF}
+.xaxis{display:flex;gap:2px;margin-top:9px}
+.xaxis span{flex:1;min-width:0;text-align:center;font:600 9px/1 var(--lab);color:var(--faint);overflow:hidden;white-space:nowrap}
+.peak{font-size:12px;color:var(--mut);margin:12px 0 0}
+.peak b{color:var(--ink)}
+
+/* Ranked states — horizontal bars, value read directly off each row */
+.rank{display:grid;gap:11px}
+.row{background:none;border:0;padding:0;display:block;width:100%;text-align:left;cursor:default}
+.row:focus-visible{outline:2px solid var(--bar);outline-offset:3px;border-radius:6px}
+.row .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.row .nm{font-size:14px;font-weight:600}
+.row .amt{font-size:13px;color:var(--mut);white-space:nowrap}
+.row .track{display:block;height:9px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.row .fill{display:block;height:100%;background:var(--bar);border-radius:0 4px 4px 0;transition:background .18s}
+.row:hover .fill,.row:focus-visible .fill{background:#C98CFF}
+
+#tip{position:fixed;z-index:60;pointer-events:none;background:#241a3d;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;transition:opacity .14s;white-space:nowrap}
+#tip.on{opacity:1}
+#tip b{display:block;font-size:13.5px;margin-bottom:2px}
+
+/* Filters sit in one row above the orders */
+.filters{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex:0 0 auto;background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:9px 15px;font:700 10px/1 var(--lab);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.filters button[aria-pressed=true]{background:var(--bar);border-color:var(--bar);color:#fff}
+
+.orders{display:grid;gap:11px}
+.order{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px}
+.order .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.order .who{font-size:16px;font-weight:600;margin:0}
+.order .paid{font-size:15px;font-weight:700;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:5px 10px;border-radius:999px;font:700 9.5px/1 var(--lab);letter-spacing:.12em;text-transform:uppercase}
+.pill .d{width:7px;height:7px;border-radius:50%}
+.pill.ok{background:rgba(78,207,147,.12);border:1px solid rgba(78,207,147,.4);color:var(--good)}
+.pill.ok .d{background:var(--good)}
+.pill.wait{background:rgba(255,176,46,.12);border:1px solid rgba(255,176,46,.4);color:var(--wait)}
+.pill.wait .d{background:var(--wait)}
+.meta{margin:14px 0 0;display:grid;gap:9px}
+.meta div{display:grid;grid-template-columns:76px 1fr;gap:10px;font-size:13.5px;line-height:1.5}
+.meta dt{font:700 9px/1.6 var(--lab);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0}
+.meta dd{margin:0;color:var(--ink);word-break:break-word}
+.meta a{color:var(--bar);text-decoration:none}
+.order .act{margin-top:15px;width:100%;border-radius:999px;padding:13px;font:800 10.5px/1 var(--lab);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:1px solid var(--line);background:none;color:var(--ink);transition:all .2s}
+.order .act.primary{background:var(--good);border-color:var(--good);color:#06260F}
+.order .act[disabled]{opacity:.5;cursor:default}
+.empty{color:var(--mut);text-align:center;padding:40px 0;font-size:14px}
+</style>
+</head>
+<body>
+
+<header><div class="wrap in">
+  <span class="mark">YOWA <span>Admin</span></span>
+  <button class="ghost" type="button" id="refresh" hidden>Refresh</button>
+</div></header>
+
+<main class="wrap gate" id="gate">
+  <form id="gate-form">
+    <h1>Passcode</h1>
+    <p>This page carries buyers' names, numbers and addresses. It stays shut without the passcode.</p>
+    <label class="sr" for="pw">Passcode</label>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••">
+    <button class="go" type="submit" id="go">Open the board</button>
+    <p class="bad" id="gate-err" hidden></p>
+  </form>
+</main>
+
+<main class="wrap" id="board" hidden>
+  <p class="note" id="note" hidden></p>
+
+  <h2>All time</h2>
+  <div class="tiles">
+    <div class="tile"><p class="k">Revenue</p><p class="v" id="m-rev">—</p><p class="s" id="m-rev-s"></p></div>
+    <div class="tile"><p class="k">Orders</p><p class="v" id="m-ord">—</p><p class="s" id="m-ord-s"></p></div>
+    <div class="tile"><p class="k">Average order</p><p class="v" id="m-avg">—</p><p class="s">per buyer</p></div>
+    <div class="tile"><p class="k">Pieces sold</p><p class="v" id="m-pcs">—</p><p class="s" id="m-pcs-s"></p></div>
+  </div>
+
+  <h2>Projected sales</h2>
+  <div class="proj">
+    <p class="k">This month, on the run rate so far</p>
+    <p class="v" id="p-val">—</p>
+    <p class="s" id="p-sub"></p>
+  </div>
+
+  <h2>Revenue, last 14 days</h2>
+  <div class="panel">
+    <div class="bars" id="daily" role="img" aria-label="Daily revenue over the last 14 days"></div>
+    <div class="xaxis" id="daily-x"></div>
+    <p class="peak" id="daily-peak"></p>
+  </div>
+
+  <h2>Where the orders come from</h2>
+  <div class="panel">
+    <div class="rank" id="states" role="img" aria-label="States ranked by revenue"></div>
+  </div>
+
+  <h2>Orders</h2>
+  <div class="filters" id="filters" role="group" aria-label="Filter orders">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="wait" aria-pressed="false">Needs delivery</button>
+    <button type="button" data-f="done" aria-pressed="false">Delivered</button>
+  </div>
+  <div class="orders" id="orders"></div>
+</main>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const naira = n => '₦' + Math.round(n).toLocaleString('en-NG');
+const short = n => n >= 1e6 ? '₦' + (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M'
+                 : n >= 1e4 ? '₦' + Math.round(n / 1e3) + 'k' : naira(n);
+const dayKey = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const niceDay = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+
+let KEY = sessionStorage.getItem('yowa-admin') || '';
+let ORDERS = [], FILTER = 'all', TRACKING = true;
+
+/* ── Passcode ───────────────────────────────────────────────── */
+$('#gate-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = $('#pw').value;
+  if (!v) return;
+  $('#go').disabled = true; $('#go').textContent = 'Checking…';
+  load(v).catch(() => {}).finally(() => { $('#go').disabled = false; $('#go').textContent = 'Open the board'; });
+});
+
+async function load(pass) {
+  const key = pass || KEY;
+  if (!key) return;
+  const r = await fetch('/api/admin-orders', { headers: { 'x-admin-key': key } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    sessionStorage.removeItem('yowa-admin'); KEY = '';
+    $('#gate-err').textContent = j.error || 'Could not open the board.';
+    $('#gate-err').hidden = false;
+    throw new Error(j.error || 'denied');
+  }
+  KEY = key; sessionStorage.setItem('yowa-admin', key);
+  ORDERS = j.orders || [];
+  TRACKING = j.deliveryTracking !== false;
+  if (j.deliveryNote) { $('#note').textContent = j.deliveryNote; $('#note').hidden = false; }
+  $('#gate').hidden = true; $('#board').hidden = false; $('#refresh').hidden = false;
+  paint();
+}
+
+/* ── Numbers ────────────────────────────────────────────────── */
+// "2 x Liberty Raglan / L | 1 x Jorts" → 3
+const piecesIn = s => String(s || '').split('|').reduce((n, part) => {
+  const m = part.trim().match(/^(\d+)\s*x\s/i);
+  return n + (m ? parseInt(m[1], 10) : 0);
+}, 0);
+
+function paint() {
+  const rev = ORDERS.reduce((s, o) => s + o.amount, 0);
+  const pcs = ORDERS.reduce((s, o) => s + piecesIn(o.order), 0);
+  const waiting = ORDERS.filter(o => !o.delivered).length;
+
+  $('#m-rev').textContent = short(rev);
+  $('#m-rev-s').textContent = rev ? naira(rev) : 'nothing through yet';
+  $('#m-ord').textContent = ORDERS.length;
+  $('#m-ord-s').textContent = waiting ? waiting + ' still to deliver' : 'all delivered';
+  $('#m-avg').textContent = ORDERS.length ? short(rev / ORDERS.length) : '—';
+  $('#m-pcs').textContent = pcs || '—';
+  $('#m-pcs-s').textContent = ORDERS.length ? (pcs / ORDERS.length).toFixed(1) + ' a basket' : '';
+
+  projection();
+  daily();
+  states();
+  orders();
+}
+
+// Where the month lands if the days so far keep their pace. Stated as a run rate, not a promise.
+function projection() {
+  const now = new Date(), mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const soFar = ORDERS.filter(o => o.paidAt && new Date(o.paidAt) >= mStart).reduce((s, o) => s + o.amount, 0);
+  const elapsed = now.getDate(), inMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const month = now.toLocaleDateString('en-GB', { month: 'long' });
+  if (!soFar) {
+    $('#p-val').textContent = '—';
+    $('#p-sub').textContent = 'Nothing has come in this month yet, so there is no rate to read.';
+    return;
+  }
+  $('#p-val').textContent = short(soFar / elapsed * inMonth);
+  $('#p-sub').textContent = naira(soFar) + ' over ' + elapsed + (elapsed === 1 ? ' day' : ' days') + ' of ' + month +
+    ' — about ' + naira(soFar / elapsed) + ' a day, carried to all ' + inMonth + '.';
+}
+
+function daily() {
+  const days = [];
+  for (let i = 13; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push({ d, total: 0 }); }
+  const idx = {}; days.forEach((x, i) => { idx[dayKey(x.d)] = i; });
+  ORDERS.forEach(o => { const i = idx[dayKey(new Date(o.paidAt))]; if (i != null) days[i].total += o.amount; });
+
+  const max = Math.max(1, ...days.map(x => x.total));
+  const host = $('#daily'); host.textContent = '';
+  [0.5, 1].forEach(f => { const g = document.createElement('span'); g.className = 'grid'; g.style.bottom = (f * 100) + '%'; host.appendChild(g); });
+  days.forEach(x => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'col' + (x.total ? ' has' : '');
+    b.setAttribute('aria-label', niceDay(x.d) + ', ' + (x.total ? naira(x.total) : 'nothing'));
+    const i = document.createElement('i');
+    i.style.height = Math.max(x.total ? 4 : 2, Math.round(x.total / max * 100)) + '%';
+    b.appendChild(i);
+    tipOn(b, niceDay(x.d), x.total ? naira(x.total) : 'Nothing that day');
+    host.appendChild(b);
+  });
+  const xs = $('#daily-x'); xs.textContent = '';
+  days.forEach((x, i) => { const s = document.createElement('span'); s.textContent = (i % 3 === 0 || i === 13) ? x.d.getDate() : ''; xs.appendChild(s); });
+
+  // One direct label, on the best day only
+  const best = days.reduce((a, b) => b.total > a.total ? b : a, days[0]);
+  $('#daily-peak').innerHTML = best.total
+    ? 'Best day <b>' + niceDay(best.d) + '</b> at <b>' + naira(best.total) + '</b>'
+    : 'No orders in the last 14 days.';
+}
+
+function states() {
+  const by = {};
+  ORDERS.forEach(o => {
+    const k = o.state || 'Not given';
+    (by[k] = by[k] || { rev: 0, n: 0 });
+    by[k].rev += o.amount; by[k].n++;
+  });
+  const rows = Object.entries(by).map(([name, v]) => ({ name, ...v })).sort((a, b) => b.rev - a.rev);
+  const host = $('#states'); host.textContent = '';
+  if (!rows.length) { host.innerHTML = '<p class="empty">No orders yet.</p>'; return; }
+  const max = rows[0].rev || 1;
+  rows.forEach(r => {
+    const el = document.createElement('button');
+    el.type = 'button'; el.className = 'row';
+    el.setAttribute('aria-label', r.name + ', ' + naira(r.rev) + ' from ' + r.n + (r.n === 1 ? ' order' : ' orders'));
+    el.innerHTML = '<span class="top"><span class="nm"></span><span class="amt"></span></span><span class="track"><span class="fill"></span></span>';
+    el.querySelector('.nm').textContent = r.name;
+    el.querySelector('.amt').textContent = naira(r.rev) + ' · ' + r.n;
+    el.querySelector('.fill').style.width = Math.max(3, Math.round(r.rev / max * 100)) + '%';
+    tipOn(el, r.name, naira(r.rev) + ' from ' + r.n + (r.n === 1 ? ' order' : ' orders'));
+    host.appendChild(el);
+  });
+}
+
+function orders() {
+  const host = $('#orders'); host.textContent = '';
+  const list = ORDERS.filter(o => FILTER === 'all' || (FILTER === 'done' ? o.delivered : !o.delivered));
+  if (!list.length) {
+    host.innerHTML = '<p class="empty">' + (ORDERS.length ? 'Nothing under this filter.' : 'No paid orders yet.') + '</p>';
+    return;
+  }
+  list.forEach(o => {
+    const el = document.createElement('article'); el.className = 'order';
+    const when = o.paidAt ? new Date(o.paidAt) : null;
+    el.innerHTML =
+      '<div class="hd"><p class="who"></p><span class="paid"></span></div>' +
+      '<span class="pill ' + (o.delivered ? 'ok' : 'wait') + '"><span class="d"></span><span class="st"></span></span>' +
+      '<div class="meta">' +
+        '<div><dt>Phone</dt><dd class="ph"></dd></div>' +
+        '<div><dt>Email</dt><dd class="em"></dd></div>' +
+        '<div><dt>Deliver to</dt><dd class="ad"></dd></div>' +
+        '<div><dt>Bought</dt><dd class="it"></dd></div>' +
+        '<div><dt>Paid</dt><dd class="dt"></dd></div>' +
+      '</div>';
+    el.querySelector('.who').textContent = o.name || 'No name given';
+    el.querySelector('.paid').textContent = naira(o.amount);
+    el.querySelector('.st').textContent = o.delivered ? 'Delivered' : 'Needs delivery';
+    el.querySelector('.ph').innerHTML = o.phone ? '<a href="tel:' + encodeURIComponent(o.phone) + '"></a>' : '—';
+    if (o.phone) el.querySelector('.ph a').textContent = o.phone;
+    el.querySelector('.em').textContent = o.email || '—';
+    el.querySelector('.ad').textContent = [o.address, o.lga, o.state].filter(Boolean).join(', ') || '—';
+    el.querySelector('.it').textContent = (o.order || '—').replace(/\s*\|\s*/g, ' · ');
+    el.querySelector('.dt').textContent = when ? niceDay(when) + ', ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '—';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'act' + (o.delivered ? '' : ' primary');
+    btn.textContent = o.delivered ? 'Undo delivered' : 'Mark delivered';
+    if (!TRACKING) { btn.disabled = true; btn.textContent = 'Delivery marks are off'; }
+    btn.addEventListener('click', () => mark(o, btn));
+    el.appendChild(btn);
+    host.appendChild(el);
+  });
+}
+
+async function mark(o, btn) {
+  const want = !o.delivered;
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const r = await fetch('/api/admin-deliver', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': KEY },
+      body: JSON.stringify({ reference: o.reference, delivered: want })
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || 'Could not save');
+    o.delivered = want;
+    paint();
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = e.message.slice(0, 40);
+    setTimeout(() => paint(), 2600);
+  }
+}
+
+/* ── Hover and focus readout ────────────────────────────────── */
+const tip = $('#tip');
+function tipOn(el, title, body) {
+  const show = e => {
+    tip.innerHTML = '<b></b><span></span>';
+    tip.querySelector('b').textContent = title;
+    tip.querySelector('span').textContent = body;
+    const r = el.getBoundingClientRect();
+    tip.classList.add('on');
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = (e && e.clientX != null ? e.clientX : r.left + r.width / 2) - w / 2;
+    tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x)) + 'px';
+    tip.style.top = Math.max(8, r.top - h - 10) + 'px';
+  };
+  const hide = () => tip.classList.remove('on');
+  el.addEventListener('mouseenter', show);
+  el.addEventListener('mousemove', show);
+  el.addEventListener('mouseleave', hide);
+  el.addEventListener('focus', show);
+  el.addEventListener('blur', hide);
+}
+
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  FILTER = b.dataset.f;
+  [...$('#filters').children].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  orders();
+});
+$('#refresh').addEventListener('click', () => {
+  $('#refresh').disabled = true;
+  load().catch(() => {}).finally(() => { $('#refresh').disabled = false; });
+});
+
+if (KEY) load().catch(() => {});
+</script>
+</body>
+</html>
