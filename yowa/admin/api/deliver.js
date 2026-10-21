@@ -1,8 +1,8 @@
 // Vercel serverless function: marks one order delivered, or takes the mark back off.
 // Paystack metadata is fixed once a payment starts, so the delivered flag lives in Supabase.
-// Same env vars as /api/admin-orders; see that file for the `deliveries` table.
+// Same env vars as /api/orders; see that file for the `deliveries` table.
 
-import { passwordOk, supabaseKey } from './admin-orders.js';
+import { passwordOk, supabaseKey } from './orders.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });

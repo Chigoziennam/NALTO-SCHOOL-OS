@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>YOWA Admin</title>
-<link rel="icon" href="img/brand/favicon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C0818'/%3E%3Crect x='7' y='16' width='4' height='9' rx='1.5' fill='%23A65BFF'/%3E%3Crect x='14' y='10' width='4' height='15' rx='1.5' fill='%23A65BFF'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1.5' fill='%23A65BFF'/%3E%3C/svg%3E">
 <style>
 /* One dark surface, chosen and validated against it: bars #A65BFF, delivered #4ECF93, awaiting #FFB02E */
 :root{
@@ -197,7 +197,7 @@ $('#gate-form').addEventListener('submit', e => {
 async function load(pass) {
   const key = pass || KEY;
   if (!key) return;
-  const r = await fetch('/api/admin-orders', { headers: { 'x-admin-key': key } });
+  const r = await fetch('/api/orders', { headers: { 'x-admin-key': key } });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) {
     sessionStorage.removeItem('yowa-admin'); KEY = '';
@@ -353,7 +353,7 @@ async function mark(o, btn) {
   const want = !o.delivered;
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const r = await fetch('/api/admin-deliver', {
+    const r = await fetch('/api/deliver', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-admin-key': KEY },
       body: JSON.stringify({ reference: o.reference, delivered: want })

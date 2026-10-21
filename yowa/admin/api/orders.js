@@ -1,4 +1,4 @@
-// Vercel serverless function: the orders behind /admin.
+// Vercel serverless function: the orders behind the admin board.
 // Paystack is the record of what was bought — /api/checkout writes the buyer's name, phone,
 // address, state and order lines into each transaction's metadata, so everything the
 // dashboard shows is read back from there. Supabase only holds which orders have been
