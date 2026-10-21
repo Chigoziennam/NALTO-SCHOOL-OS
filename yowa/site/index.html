@@ -586,7 +586,7 @@ section{position:relative}
 
 /* Pre-order treatment: a purple pill on cards, product view and cart lines; a checklist receipt in checkout */
 /* Centred bar with red targeting brackets, slammed over the photo */
-.stamp-pre{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;width:min(64%,180px);display:grid;pointer-events:none;animation:stampLock .55s cubic-bezier(.16,1,.3,1) both}
+.stamp-pre{position:absolute;left:50%;top:64%;transform:translate(-50%,-50%);z-index:4;width:min(64%,180px);display:grid;pointer-events:none;animation:stampLock .55s cubic-bezier(.16,1,.3,1) both}
 .stamp-pre b{position:relative;overflow:hidden;display:block;width:100%;padding:8px 6px;background:rgba(6,5,10,.9);color:#fff;font:900 clamp(8.5px,1.05vw,11.5px)/1 var(--f-label);letter-spacing:.17em;text-transform:uppercase;text-align:center;white-space:nowrap;animation:stampGlow 2.4s ease-in-out infinite}
 .stamp-pre b::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 36%,rgba(255,255,255,.3) 50%,transparent 64%);animation:stampSweep 3s ease-in-out infinite}
 .stamp-pre::before,.stamp-pre::after{content:'';position:absolute;top:-7px;bottom:-7px;width:18px;border:3px solid #FF2E39;animation:stampPulse 1.7s ease-in-out infinite}
