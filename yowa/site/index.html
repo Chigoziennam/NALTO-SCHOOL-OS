@@ -2340,7 +2340,7 @@ const LIBRARY = [
    the shop. Plays once per visitor, then a small seal marks opening day.
    To move the opening, change OPEN_AT below and nothing else. */
 (function(){
-  var OPEN_AT = new Date('2026-10-23T12:00:00+01:00').getTime();  /* noon in Enugu, opening day */
+  var OPEN_AT = new Date('2026-10-23T00:00:00+01:00').getTime();  /* midnight in Enugu, opening day */
   var SEEN = 'yowa-opened', DAY = 864e5;
   var slot = document.getElementById('open-slot');
   if (!slot) return;
