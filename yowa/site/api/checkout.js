@@ -12,8 +12,11 @@ const NAMES = {
   'liberty-raglan': 'Liberty Raglan', 'ringer-tee': 'Ringer Tee', 'yowa-long-sleeve': 'YOWA Long Sleeve', 'bybd-tee': 'Be Different Tee',
   'logo-tee': 'YOWA Logo Tee', 'joggers': 'Joggers', 'jorts': 'Jorts', 'skull-cap': 'Skull Cap', 'cap-042': '042 Cap'
 };
-// Delivery tiers: Nsukka ₦3,000 · Other Enugu ₦5,000 · Other states ₦8,500
-const calcDelivery = (state, lga) => {
+// Delivery tiers: Nsukka ₦3,000 · Other Enugu ₦5,000 · Other states ₦8,500.
+// Collecting in person costs nothing, so a pickup order pays for the clothes alone.
+const PICKUP_AT = 'Enugu';
+const calcDelivery = (state, lga, fulfil) => {
+  if (fulfil === 'pickup') return 0;
   if (!state) return 0;
   if (state === 'Enugu') return lga === 'Nsukka' ? 3000 : 5000;
   return 8500;
@@ -28,8 +31,13 @@ export default async function handler(req, res) {
 
   const b = req.body || {};
   const email = clip(b.email, 160).toLowerCase(), name = clip(b.name, 80), phone = clip(b.phone, 30);
-  const state = clip(b.state, 60), lga = clip(b.lga, 60), address = clip(b.address, 240);
-  if (!EMAIL.test(email) || !name || !phone || !state || !address) return res.status(400).json({ error: 'Name, email, phone, state and street address are needed' });
+  const fulfil = b.fulfil === 'pickup' ? 'pickup' : 'delivery';
+  const pickup = fulfil === 'pickup';
+  const state = pickup ? 'Pickup' : clip(b.state, 60);
+  const lga = pickup ? '' : clip(b.lga, 60);
+  const address = pickup ? ('Collecting in ' + PICKUP_AT) : clip(b.address, 240);
+  if (!EMAIL.test(email) || !name || !phone) return res.status(400).json({ error: 'Name, email and phone are needed' });
+  if (!pickup && (!state || !address)) return res.status(400).json({ error: 'State and street address are needed for delivery' });
 
   const items = Array.isArray(b.items) ? b.items.slice(0, 30) : [];
   let total = 0; const lines = [];
@@ -42,10 +50,11 @@ export default async function handler(req, res) {
   }
   if (!lines.length) return res.status(400).json({ error: 'The cart is empty' });
 
-  const delivery = calcDelivery(state, lga);
+  const delivery = calcDelivery(state, lga, fulfil);
   const grand = total + delivery;
-  const deliveryLabel = state === 'Enugu' ? (lga ? lga + ', Enugu' : 'Enugu') : state;
-  const deliverTo = [name, address, lga, state].filter(Boolean).join(', ');
+  const deliveryLabel = pickup ? ('Pickup, ' + PICKUP_AT) : (state === 'Enugu' ? (lga ? lga + ', Enugu' : 'Enugu') : state);
+  const deliverTo = pickup ? (name + ' — collecting in ' + PICKUP_AT) : [name, address, lga, state].filter(Boolean).join(', ');
+  const feeLabel = pickup ? ('None — pickup in ' + PICKUP_AT) : ('₦' + delivery.toLocaleString('en-NG') + ' (' + deliveryLabel + ')');
 
   try {
     const r = await fetch('https://api.paystack.co/transaction/initialize', {
@@ -55,19 +64,19 @@ export default async function handler(req, res) {
         email, amount: grand * 100, currency: 'NGN',
         callback_url: 'https://yowabybd.com/',
         metadata: {
-          name, phone, address, state, lga,
+          name, phone, address, state, lga, fulfil,
           order: lines.join(' | '),
           custom_fields: [
             { display_name: 'Order', variable_name: 'order', value: lines.join(' | ') },
-            { display_name: 'Deliver to', variable_name: 'address', value: deliverTo },
-            { display_name: 'Delivery fee', variable_name: 'delivery', value: '₦' + delivery.toLocaleString('en-NG') + ' (' + deliveryLabel + ')' }
+            { display_name: pickup ? 'Pickup' : 'Deliver to', variable_name: 'address', value: deliverTo },
+            { display_name: 'Delivery fee', variable_name: 'delivery', value: feeLabel }
           ]
         }
       })
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.status || !j.data) return res.status(502).json({ error: 'Paystack could not start the payment' });
-    return res.status(200).json({ url: j.data.authorization_url, reference: j.data.reference, delivery });
+    return res.status(200).json({ url: j.data.authorization_url, reference: j.data.reference, delivery, fulfil });
   } catch (e) {
     return res.status(500).json({ error: 'Checkout failed' });
   }
