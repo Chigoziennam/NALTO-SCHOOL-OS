@@ -81,18 +81,10 @@ const str = v => (typeof v === 'string' ? v : v == null ? '' : String(v));
 // have; this table holds the order itself, so a sale is never lost to a wrong
 // key, a changed mode, or a payment that stopped half way.
 const ORDERS_TABLE = 'yowa_orders';
-// Opening day in Enugu — the point from which the shop should have been
-// recording every checkout into Supabase.
-const OPENED = '2026-10-23';
-const dayKey = iso => {
-  const d = new Date(iso);
-  if (isNaN(d)) return '';
-  const p = {};
-  new Intl.DateTimeFormat('en-GB', { timeZone: 'Africa/Lagos', year: 'numeric', month: '2-digit', day: '2-digit' })
-    .formatToParts(d).forEach(x => { if (x.type !== 'literal') p[x.type] = x.value; });
-  return p.year + '-' + p.month + '-' + p.day;
-};
-
+// The moment the shop gained the credential it needs to write to yowa_orders.
+// Checkouts before this could not be recorded however healthy the setup is, so
+// flagging them would leave a warning up that no action can ever clear.
+const RECORDING_SINCE = Date.parse('2026-10-23T09:36:02Z');
 async function fetchSaved() {
   const url = process.env.SUPABASE_URL, key = supabaseKey();
   if (!url || !key) return null;
@@ -175,13 +167,13 @@ export default async function handler(req, res) {
     // the two sources here and say so out loud. Only transactions from opening
     // day on are counted: anything older predates the table.
     const savedRefs = new Set((saved || []).map(r => str(r.reference)).filter(Boolean));
-    const recent = fromPaystack.filter(o => o.paidAt && dayKey(o.paidAt) >= OPENED);
+    const recent = fromPaystack.filter(o => o.paidAt && Date.parse(o.paidAt) >= RECORDING_SINCE);
     const missing = recent.filter(o => !savedRefs.has(o.reference)).length;
     const savedNote = saved === null
       ? 'Supabase could not be read, so this board is running on Paystack alone. Nothing is being recorded independently.'
       : missing
-        ? missing + ' of ' + recent.length + ' transactions since opening never reached Supabase. The shop cannot write to ' +
-          ORDERS_TABLE + ' — set SUPABASE_SERVICE_KEY on the yowa project. Until then Paystack is the only copy.'
+        ? missing + ' of the last ' + recent.length + ' transactions never reached Supabase. The shop cannot write to ' +
+          ORDERS_TABLE + ' — check SUPABASE_SERVICE_KEY on the yowa project. Until then Paystack is the only copy.'
         : '';
 
     return res.status(200).json({
