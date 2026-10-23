@@ -9,7 +9,18 @@ export default async function handler(req, res) {
   try {
     const r = await fetch('https://api.paystack.co/transaction/verify/' + encodeURIComponent(ref), { headers: { Authorization: 'Bearer ' + secret } });
     const j = await r.json().catch(() => ({}));
-    return res.status(200).json({ paid: !!(j && j.data && j.data.status === 'success') });
+    const d = (j && j.data) || {};
+    const m = d.metadata || {};
+    const paid = d.status === 'success';
+    if (!paid) return res.status(200).json({ paid: false });
+    return res.status(200).json({
+      paid: true,
+      reference: String(d.reference || ref),
+      amount: Math.round((Number(d.amount) || 0) / 100),   // kobo to naira
+      name: typeof m.name === 'string' ? m.name : '',
+      order: typeof m.order === 'string' ? m.order : '',
+      fulfil: m.fulfil === 'pickup' ? 'pickup' : 'delivery'
+    });
   } catch (e) {
     return res.status(500).json({ error: 'Could not check the payment' });
   }

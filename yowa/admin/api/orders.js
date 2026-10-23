@@ -51,10 +51,11 @@ async function fetchDelivered() {
 }
 
 // Paystack pages at 100; three pages covers far more than this shop will see in a season.
+// No status filter: a buyer whose payment did not reach `success` still needs finding.
 async function fetchPaid(secret) {
   const out = [];
   for (let page = 1; page <= 3; page++) {
-    const r = await fetch('https://api.paystack.co/transaction?status=success&perPage=100&page=' + page, {
+    const r = await fetch('https://api.paystack.co/transaction?perPage=100&page=' + page, {
       headers: { Authorization: 'Bearer ' + secret }
     });
     if (!r.ok) break;
@@ -91,6 +92,9 @@ export default async function handler(req, res) {
         state: str(m.state),
         lga: str(m.lga),
         order: str(m.order),
+        status: str(t.status) || 'unknown',
+        paid: t.status === 'success',
+        fulfil: m.fulfil === 'pickup' ? 'pickup' : 'delivery',
         delivered: !!(delivered && delivered[str(t.reference)])
       };
     }).sort((a, b) => String(b.paidAt).localeCompare(String(a.paidAt)));
