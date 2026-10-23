@@ -844,9 +844,39 @@ select.co-input option{background:#140E26;color:#fff}
 @keyframes annRunR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .ann-run i{font-style:normal;opacity:.5;padding:0 .7em}
 
+/* ---------- open · day one ----------
+   What is left on the hero once the ceremony has been and gone, for the first
+   day only. A quiet mark under the mantra, never a second headline: a hairline
+   capsule, a live dot that says the shop is taking orders right now, and two
+   tiers of small caps. No rosette here — the heart, swords and dragon sit
+   directly above it, and a third ornament would just be noise. */
+#open-slot{display:flex;justify-content:center;margin-top:clamp(16px,4vw,24px)}
+.open-seal{
+  display:inline-flex;align-items:center;gap:clamp(8px,2.2vw,11px);margin:0;
+  padding:clamp(7px,1.9vw,9px) clamp(13px,3.4vw,17px);
+  border-radius:999px;border:1px solid rgba(166,91,255,.36);
+  background:rgba(122,47,224,.12);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  box-shadow:0 10px 26px -14px rgba(122,47,224,.95),inset 0 1px 0 rgba(255,255,255,.08);
+  animation:sealIn .62s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes sealIn{from{opacity:0;transform:translateY(9px) scale(.96)}}
+
+.open-seal .lamp{position:relative;flex:0 0 auto;width:7px;height:7px;border-radius:50%;
+  background:#4ADE80;box-shadow:0 0 9px rgba(74,222,128,.95)}
+.open-seal .lamp::after{content:"";position:absolute;inset:-3px;border-radius:50%;
+  border:1px solid rgba(74,222,128,.6);animation:sealLamp 2.2s ease-out infinite}
+@keyframes sealLamp{0%{transform:scale(.6);opacity:.9}70%,100%{transform:scale(1.65);opacity:0}}
+
+.open-seal b{font:700 clamp(9px,2.3vw,10px)/1 var(--f-label);letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream)}
+.open-seal s{text-decoration:none;width:1px;height:11px;background:rgba(243,238,226,.26)}
+.open-seal i{font:700 clamp(8px,2.1vw,9px)/1 var(--f-label);letter-spacing:.2em;
+  font-style:normal;text-transform:uppercase;color:rgba(243,238,226,.58)}
+
 @media (prefers-reduced-motion:reduce){
   .seal-band::after{animation:none;opacity:0}
   .ann-run{animation:none!important}
+  .open-seal{animation:none}
+  .open-seal .lamp::after{animation:none;opacity:0}
 }
 
 /* Back from Paystack. This is the moment a buyer decides whether they trust you,
@@ -2411,7 +2441,11 @@ const LIBRARY = [
   /* ---------- the seal, opening day only ---------- */
   function seal(){
     if (Date.now() > OPEN_AT + DAY) { slot.innerHTML = ''; return; }
-    slot.innerHTML = '<p class="open-seal">' + rosette('rosette') + '<span>Open &middot; day one</span></p>';
+    slot.innerHTML =
+      '<p class="open-seal" aria-label="YOWA is open, day one">' +
+        '<span class="lamp" aria-hidden="true"></span>' +
+        '<b>Open</b><s aria-hidden="true"></s><i>Day one</i>' +
+      '</p>';
   }
 
   /* ---------- the ceremony ---------- */
