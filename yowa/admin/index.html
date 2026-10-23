@@ -295,7 +295,10 @@ async function load(pass) {
   KEY = key; sessionStorage.setItem('yowa-admin', key);
   ORDERS = j.orders || [];
   TRACKING = j.deliveryTracking !== false;
-  if (j.deliveryNote) { $('#note').textContent = j.deliveryNote; $('#note').hidden = false; }
+  // A key Paystack refuses looks exactly like a shop with no sales, so say which.
+  const note = $('#note');
+  if (j.paystackError) { note.textContent = j.paystackError; note.hidden = false; }
+  else if (j.deliveryNote) { note.textContent = j.deliveryNote; note.hidden = false; }
   $('#gate').hidden = true; $('#board').hidden = false; $('#refresh').hidden = false; $('#chloe-fab').hidden = false;
   paint();
 }

@@ -52,13 +52,20 @@ async function fetchDelivered() {
 
 // Paystack pages at 100; three pages covers far more than this shop will see in a season.
 // No status filter: a buyer whose payment did not reach `success` still needs finding.
-async function fetchPaid(secret) {
+async function fetchPaid(secret, report) {
   const out = [];
   for (let page = 1; page <= 3; page++) {
     const r = await fetch('https://api.paystack.co/transaction?perPage=100&page=' + page, {
       headers: { Authorization: 'Bearer ' + secret }
     });
-    if (!r.ok) break;
+    if (!r.ok) {
+      if (report && page === 1) {
+        report.error = r.status === 401
+          ? 'Paystack rejected this key (401). The admin PAYSTACK_SECRET_KEY is wrong, or belongs to a different account or mode than the shop charges on.'
+          : 'Paystack refused the request (HTTP ' + r.status + ').';
+      }
+      break;
+    }
     const j = await r.json().catch(() => ({}));
     const rows = (j && j.data) || [];
     out.push(...rows);
@@ -99,7 +106,8 @@ export default async function handler(req, res) {
   if (!secret) return res.status(503).json({ error: 'PAYSTACK_SECRET_KEY is missing' });
 
   try {
-    const [rows, delivered, saved] = await Promise.all([fetchPaid(secret), fetchDelivered(), fetchSaved()]);
+    const paystack = {};
+    const [rows, delivered, saved] = await Promise.all([fetchPaid(secret, paystack), fetchDelivered(), fetchSaved()]);
     const fromPaystack = rows.map(t => {
       const m = (t && t.metadata) || {};
       return {
@@ -153,6 +161,7 @@ export default async function handler(req, res) {
       orders,
       savedOrders: saved === null ? null : saved.length,
       paystackOrders: fromPaystack.length,
+      paystackError: paystack.error || '',
       deliveryTracking: delivered !== null,
       deliveryNote: delivered === null
         ? 'Delivered marks need SUPABASE_URL and SUPABASE_SERVICE_KEY, and a `deliveries` table. Everything else below is live.'
