@@ -23,6 +23,29 @@ const calcDelivery = (state, lga, fulfil) => {
 };
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+// Every checkout is written to our own table the moment it starts, before the
+// buyer has even paid. Paystack stays the authority on money, but it is not the
+// only place the order exists: when a payment does not finish, or a key points
+// at the wrong account, the buyer and what they wanted are still here to chase.
+// Never let a failure here stop a sale — the payment matters more than the row.
+const ORDERS_TABLE = 'yowa_orders';
+async function saveOrder(row) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) return;
+  try {
+    await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE, {
+      method: 'POST',
+      headers: {
+        apikey: key, Authorization: 'Bearer ' + key,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify(row)
+    });
+  } catch (e) { /* the sale goes through regardless */ }
+}
+
 // Where Paystack sends the buyer once they have paid. This used to be a hard-coded
 // domain; when that domain stopped resolving every buyer was dropped on a dead page
 // and never saw their confirmation. Take it from the request instead, so it always
@@ -90,6 +113,15 @@ export default async function handler(req, res) {
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.status || !j.data) return res.status(502).json({ error: 'Paystack could not start the payment' });
+
+    await saveOrder({
+      reference: j.data.reference,
+      status: 'pending',
+      amount: grand, subtotal: total, delivery_fee: delivery,
+      fulfil, name, email, phone, address, state, lga,
+      items: lines.join(' | ')
+    });
+
     return res.status(200).json({ url: j.data.authorization_url, reference: j.data.reference, delivery, fulfil });
   } catch (e) {
     return res.status(500).json({ error: 'Checkout failed' });
