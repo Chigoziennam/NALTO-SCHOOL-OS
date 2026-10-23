@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YOWA Receipt · Krymez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Syncopate:wght@400;700&display=swap">
+<style>
+  :root{
+    --void:#08060E; --panel:#140E26; --purple:#7A2FE0; --purple-l:#A65BFF;
+    --cream:#F3EEE2; --ink:#EFEAF7; --mut:#9A91B3; --good:#2BE88C;
+    --line:rgba(166,91,255,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--void);color:var(--ink);font:400 15px/1.5 "Space Grotesk",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px}
+  .r{width:100%;max-width:420px;background:linear-gradient(180deg,#160F2A,#0E0919);
+    border:1px solid var(--line);border-radius:20px;padding:28px 24px 24px;position:relative;overflow:hidden;
+    box-shadow:0 30px 80px -30px rgba(90,25,200,.6)}
+  /* the YOWA watermark, as on the order cards */
+  .r::before{content:"YOWA";position:absolute;right:-14px;top:40px;font:400 86px/1 "Anton",sans-serif;
+    color:rgba(166,91,255,.055);letter-spacing:.04em;transform:rotate(90deg);transform-origin:center;pointer-events:none}
+  .hd{display:flex;align-items:center;justify-content:space-between;
+    padding-bottom:16px;margin-bottom:18px;border-bottom:1px dashed rgba(255,255,255,.12)}
+  .mark{font:700 10px/1 "Syncopate",sans-serif;letter-spacing:.3em;color:var(--cream)}
+  .paid{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;
+    font:700 9px/1 "Syncopate",sans-serif;letter-spacing:.16em;background:rgba(43,232,140,.14);
+    color:var(--good);border:1px solid rgba(43,232,140,.3);transform:rotate(-1.5deg)}
+  h1{font:400 clamp(26px,8vw,36px)/1 "Anton",sans-serif;letter-spacing:.015em;color:var(--cream);margin-bottom:4px}
+  h1 b{color:var(--purple-l);font-weight:inherit}
+  .sub{font-size:13px;color:var(--mut);margin-bottom:20px}
+  .items{border-top:1px dashed rgba(255,255,255,.12);padding-top:16px;margin-top:4px}
+  .il{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:7px 0}
+  .il .n{font-size:14px;color:var(--ink)}
+  .il .q{font:700 12px/1 "Space Mono",monospace;color:var(--mut);white-space:nowrap}
+  .tot{display:flex;justify-content:space-between;align-items:baseline;
+    margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.12)}
+  .tot .l{font:700 10px/1 "Syncopate",sans-serif;letter-spacing:.16em;color:var(--mut)}
+  .tot .v{font:400 28px/1 "Anton",sans-serif;color:var(--cream);letter-spacing:.01em}
+  dl{margin-top:20px;padding-top:16px;border-top:1px dashed rgba(255,255,255,.12);
+    display:grid;grid-template-columns:auto 1fr;gap:9px 16px;font-size:13px}
+  dt{font:700 9px/1.6 "Syncopate",sans-serif;letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
+  dd{text-align:right;color:var(--ink);word-break:break-word}
+  dd.ref{font:700 11px/1.5 "Space Mono",monospace;letter-spacing:.02em}
+  .note{margin-top:20px;padding:13px 14px;border-radius:12px;background:rgba(166,91,255,.08);
+    border:1px solid var(--line);font-size:12.5px;line-height:1.5;color:var(--ink)}
+  .ft{margin-top:20px;text-align:center}
+  .ft .m{font:700 9px/1 "Syncopate",sans-serif;letter-spacing:.26em;color:var(--mut);text-transform:uppercase}
+  .ft .u{font-size:11.5px;color:var(--purple-l);margin-top:7px}
+  @media print{body{background:#fff;padding:0}.r{box-shadow:none;border-color:#ddd}}
+</style></head>
+<body>
+<main class="r">
+  <div class="hd"><span class="mark">YOWA</span><span class="paid">PAID ✓</span></div>
+
+  <h1>THANK YOU, <b>KRYMEZ</b></h1>
+  <p class="sub">Your order is in. Here is your receipt.</p>
+
+  <div class="items">
+    <div class="il"><span class="n">Liberty Raglan — Black, XL, with beads</span><span class="q">×1</span></div>
+  </div>
+
+  <div class="tot"><span class="l">Total paid</span><span class="v">₦40,000</span></div>
+
+  <dl>
+    <dt>Reference</dt><dd class="ref">T788159057592673</dd>
+    <dt>Paid on</dt><dd>22 October 2026</dd>
+    <dt>Method</dt><dd>OPay</dd>
+    <dt>Collection</dt><dd>Pickup in Enugu — no delivery fee</dd>
+    <dt>Email</dt><dd>krymeziscrazy@gmail.com</dd>
+  </dl>
+
+  <p class="note">We will message you on WhatsApp with where and when to collect. Keep this
+  reference — it is how we find your order.</p>
+
+  <div class="ft">
+    <p class="m">Be you &middot; Be different</p>
+    <p class="u">yowabybd.vercel.app</p>
+  </div>
+</main>
+</body></html>
