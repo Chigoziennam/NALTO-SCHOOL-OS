@@ -227,11 +227,11 @@ h2{font:800 11px/1 var(--lab);letter-spacing:.2em;text-transform:uppercase;color
 
   <h2>Orders</h2>
   <div class="filters" id="filters" role="group" aria-label="Filter orders">
-    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="all" aria-pressed="true">All sales</button>
     <button type="button" data-f="wait" aria-pressed="false">Needs delivery</button>
     <button type="button" data-f="pickup" aria-pressed="false">Pickup</button>
     <button type="button" data-f="done" aria-pressed="false">Delivered</button>
-    <button type="button" data-f="unpaid" aria-pressed="false">Not paid</button>
+    <button type="button" data-f="unpaid" aria-pressed="false">Didn't pay</button>
   </div>
   <div class="orders" id="orders"></div>
 </main>
@@ -452,15 +452,20 @@ function parseItems(s) {
 function orders() {
   const host = $('#orders'); host.textContent = '';
   const list = ORDERS.filter(o => {
+    if (FILTER === 'unpaid') return !o.paid;      // the abandoned carts, on their own tab
+    if (!o.paid || isTest(o)) return false;        // everything else is money that arrived
     if (FILTER === 'all')    return true;
-    if (FILTER === 'unpaid') return !o.paid;
-    if (!o.paid || isTest(o)) return false;  // every filter below is about real sales
     if (FILTER === 'pickup') return o.fulfil === 'pickup';
     if (FILTER === 'done')   return o.delivered;
     return !o.delivered && o.fulfil !== 'pickup';   // needs delivery
   });
   if (!list.length) {
-    host.innerHTML = '<p class="empty">' + (ORDERS.length ? 'Nothing under this filter.' : 'Nothing from Paystack yet.') + '</p>';
+    const unpaidN = ORDERS.filter(o => !o.paid).length;
+    host.innerHTML = '<p class="empty">' + (
+      !ORDERS.length ? 'Nothing from Paystack yet.'
+      : FILTER === 'all' && unpaidN ? 'No payments through yet. ' + unpaidN + ' cart' + (unpaidN === 1 ? '' : 's') +
+        ' reached checkout without paying — they are under “Didn\u2019t pay”, with their emails.'
+      : 'Nothing under this filter.') + '</p>';
     return;
   }
   list.forEach(o => {
