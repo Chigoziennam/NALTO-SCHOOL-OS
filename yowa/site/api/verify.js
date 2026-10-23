@@ -9,7 +9,7 @@ async function markOrder(ref, patch) {
   const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   if (!url || !key) return;
   try {
-    await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE + '?reference=eq.' + encodeURIComponent(ref), {
+    const r = await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE + '?reference=eq.' + encodeURIComponent(ref), {
       method: 'PATCH',
       headers: {
         apikey: key, Authorization: 'Bearer ' + key,
@@ -17,7 +17,10 @@ async function markOrder(ref, patch) {
       },
       body: JSON.stringify(patch)
     });
-  } catch (e) { /* the buyer still gets their answer */ }
+    // Same trap as the write: a refusal resolves, so say so rather than letting
+    // a paid order sit in our table marked pending forever.
+    if (!r.ok) console.error('yowa: ' + ORDERS_TABLE + ' update refused, HTTP ' + r.status + ' ' + (await r.text().catch(() => '')).slice(0, 200));
+  } catch (e) { console.error('yowa: ' + ORDERS_TABLE + ' update failed, ' + e.message); }
 }
 
 export default async function handler(req, res) {

@@ -34,7 +34,7 @@ async function saveOrder(row) {
   const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   if (!url || !key) return;
   try {
-    await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE, {
+    const r = await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE, {
       method: 'POST',
       headers: {
         apikey: key, Authorization: 'Bearer ' + key,
@@ -43,7 +43,11 @@ async function saveOrder(row) {
       },
       body: JSON.stringify(row)
     });
-  } catch (e) { /* the sale goes through regardless */ }
+    // A refused write resolves like any other response, so without this check a
+    // lost order looks exactly like a saved one. Never throw — the payment
+    // matters more than the row — but never stay quiet about it either.
+    if (!r.ok) console.error('yowa: ' + ORDERS_TABLE + ' write refused, HTTP ' + r.status + ' ' + (await r.text().catch(() => '')).slice(0, 200));
+  } catch (e) { console.error('yowa: ' + ORDERS_TABLE + ' write failed, ' + e.message); }
 }
 
 // Where Paystack sends the buyer once they have paid. This used to be a hard-coded

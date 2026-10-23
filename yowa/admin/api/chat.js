@@ -15,6 +15,18 @@ const piecesIn = s => String(s || '').split('|').reduce((n, part) => {
 
 const str = v => (typeof v === 'string' ? v : v == null ? '' : String(v));
 
+// Chloe reads the same clock and the same opening day as the board, or she will
+// quote the owner numbers his own dashboard contradicts.
+const TZ = 'Africa/Lagos';
+const OPENED = '2026-10-23';
+const dayKey = d => {
+  const p = {};
+  new Intl.DateTimeFormat('en-GB', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' })
+    .formatToParts(d).forEach(x => { if (x.type !== 'literal') p[x.type] = x.value; });
+  return p.year + '-' + p.month + '-' + p.day;
+};
+const dayNo = k => Math.floor(Date.parse(k + 'T00:00:00Z') / 86400000);
+
 async function fetchPaid(secret) {
   const out = [];
   for (let page = 1; page <= 3; page++) {
@@ -31,7 +43,7 @@ async function fetchPaid(secret) {
 }
 
 function buildMetrics(rows) {
-  const orders = rows.map(t => {
+  const all = rows.map(t => {
     const m = (t && t.metadata) || {};
     return {
       paidAt: str(t.paid_at || t.createdAt || t.created_at),
@@ -40,6 +52,9 @@ function buildMetrics(rows) {
       order: str(m.order),
     };
   });
+  // Paid before opening day = our own test runs. Kept out of every figure below.
+  const orders = all.filter(o => o.paidAt && dayKey(new Date(o.paidAt)) >= OPENED);
+  const tests = all.length - orders.length;
 
   const rev = orders.reduce((s, o) => s + o.amount, 0);
   const pcs = orders.reduce((s, o) => s + piecesIn(o.order), 0);
@@ -68,23 +83,27 @@ function buildMetrics(rows) {
   });
   const topItems = Object.entries(items).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
-  const now = new Date();
-  const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const mOrders = orders.filter(o => o.paidAt && new Date(o.paidAt) >= mStart);
+  const now = new Date(), today = dayKey(now);
+  const mStart = today.slice(0, 8) + '01';
+  // The run rate counts days of trading, never days the shop was shut.
+  const from = mStart > OPENED ? mStart : OPENED;
+  const mOrders = orders.filter(o => dayKey(new Date(o.paidAt)) >= from);
   const mRev = mOrders.reduce((s, o) => s + o.amount, 0);
-  const elapsed = now.getDate();
-  const inMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const traded = Math.max(1, dayNo(today) - dayNo(from) + 1);
+  const inMonth = new Date(Date.UTC(+today.slice(0, 4), +today.slice(5, 7), 0)).getUTCDate();
+  const left = inMonth - +today.slice(8, 10);
 
   const weekAgo = new Date(now - 7 * 86400000);
   const wOrders = orders.filter(o => o.paidAt && new Date(o.paidAt) >= weekAgo);
   const wRev = wOrders.reduce((s, o) => s + o.amount, 0);
 
-  return `LIVE METRICS (${now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}):
+  return `LIVE METRICS (${now.toLocaleDateString('en-GB', { timeZone: TZ, day: 'numeric', month: 'short', year: 'numeric' })}, Enugu time):
+YOWA opened ${OPENED}. Day ${traded} of trading.${tests ? ` ${tests} pre-launch test transaction(s) excluded from every figure here.` : ''}
 Total revenue: ₦${rev.toLocaleString()} from ${orders.length} orders
 Average order: ₦${orders.length ? Math.round(rev / orders.length).toLocaleString() : '0'}
 Pieces sold: ${pcs}
 Last 7 days: ${wOrders.length} orders, ₦${wRev.toLocaleString()}
-This month: ₦${mRev.toLocaleString()} over ${elapsed} days → projected ₦${(mRev > 0 ? Math.round(mRev / elapsed * inMonth) : 0).toLocaleString()}
+Since opening: ₦${mRev.toLocaleString()} over ${traded} trading day(s) = ₦${Math.round(mRev / traded).toLocaleString()}/day → month projected ₦${(mRev > 0 ? Math.round(mRev + mRev / traded * left) : 0).toLocaleString()} (${left} days left)${traded < 3 ? ' — a run rate off ' + traded + ' day(s) is very rough; say so if you quote it.' : ''}
 States: ${stateRank.join(' · ') || 'none yet'}
 Top items: ${topItems.map(([n, q]) => `${n} ×${q}`).join(', ') || 'none yet'}`;
 }
