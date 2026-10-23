@@ -127,6 +127,7 @@ h2{font:800 11px/1 var(--lab);letter-spacing:.2em;text-transform:uppercase;color
 .items-list .il .iq{font:600 11px/1 var(--lab);color:var(--faint);white-space:nowrap}
 .paid-sticker.unpaid{background:rgba(226,58,46,.14);color:#FF8A80;border-color:rgba(226,58,46,.3)}
 .pick-sticker{display:inline-flex;align-items:center;padding:4px 10px;margin-left:6px;border-radius:6px;font:800 9px/1 var(--lab);letter-spacing:.15em;text-transform:uppercase;background:rgba(166,91,255,.16);color:#C9A2FF;border:1px solid rgba(166,91,255,.32);transform:rotate(1.2deg)}
+.pick-sticker.test{background:rgba(255,255,255,.07);color:rgba(243,238,226,.62);border-color:rgba(243,238,226,.2)}
 .order.is-unpaid{opacity:.82;border-color:rgba(226,58,46,.26)}
 .total-line{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 0;padding:12px 0 0;border-top:1px dashed rgba(255,255,255,.1)}
 .total-line .tl{font:700 9.5px/1 var(--lab);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
@@ -207,7 +208,7 @@ h2{font:800 11px/1 var(--lab);letter-spacing:.2em;text-transform:uppercase;color
 
   <h2>Projected sales</h2>
   <div class="proj">
-    <p class="k">This month, on the run rate so far</p>
+    <p class="k">Rest of this month, on the trading so far</p>
     <p class="v" id="p-val">—</p>
     <p class="s" id="p-sub"></p>
   </div>
@@ -266,8 +267,23 @@ const $ = s => document.querySelector(s);
 const naira = n => '₦' + Math.round(n).toLocaleString('en-NG');
 const short = n => n >= 1e6 ? '₦' + (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M'
                  : n >= 1e4 ? '₦' + Math.round(n / 1e3) + 'k' : naira(n);
-const dayKey = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-const niceDay = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+/* Every date on this board is read in Enugu time, not the viewer's. Krymez paid at
+   2026-10-22T23:32Z, which is 00:32 on the 23rd here — opening day. Read in the wrong
+   zone that sale lands on the wrong day and the opening-day rate reads as zero. */
+const TZ = 'Africa/Lagos';
+/* The day YOWA opened. Paid transactions before it were our own tests; averaging real
+   takings across days the shop was shut is what turned one ₦40,000 day into ₦1,743 a day. */
+const OPENED = '2026-10-23';
+
+const lagos = (d, opts) => d.toLocaleDateString('en-GB', Object.assign({ timeZone: TZ }, opts));
+const dayKey = d => {
+  const p = {};
+  new Intl.DateTimeFormat('en-GB', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' })
+    .formatToParts(d).forEach(x => { if (x.type !== 'literal') p[x.type] = x.value; });
+  return p.year + '-' + p.month + '-' + p.day;          // 'YYYY-MM-DD', so plain < > compares days
+};
+const niceDay = d => lagos(d, { weekday: 'short', day: 'numeric', month: 'short' });
+const dayNo = k => Math.floor(Date.parse(k + 'T00:00:00Z') / 86400000);
 
 let KEY = sessionStorage.getItem('yowa-admin') || '';
 let ORDERS = [], FILTER = 'all', TRACKING = true;
@@ -310,18 +326,28 @@ const piecesIn = s => String(s || '').split('|').reduce((n, part) => {
   return n + (m ? parseInt(m[1], 10) : 0);
 }, 0);
 
-const paidOnly = () => ORDERS.filter(o => o.paid);
+/* A paid transaction only counts as a sale if it landed on or after opening day.
+   Pre-launch tests stay visible in the list below, badged, but never touch the money. */
+const isTest  = o => o.paid && (!o.paidAt || dayKey(new Date(o.paidAt)) < OPENED);
+const sales   = () => ORDERS.filter(o => o.paid && !isTest(o));
+const testRun = () => ORDERS.filter(isTest);
 
 function paint() {
-  const PAID = paidOnly();
+  const PAID = sales();
   const rev = PAID.reduce((s, o) => s + o.amount, 0);
   const pcs = PAID.reduce((s, o) => s + piecesIn(o.order), 0);
   const waiting = PAID.filter(o => !o.delivered && o.fulfil !== 'pickup').length;
+  const setAside = testRun().length;
 
   $('#m-rev').textContent = short(rev);
-  $('#m-rev-s').textContent = rev ? naira(rev) : 'nothing through yet';
+  $('#m-rev-s').textContent = !rev ? 'nothing through yet'
+    : naira(rev) + (setAside ? ' · ' + setAside + ' test set aside' : '');
   $('#m-ord').textContent = PAID.length;
-  $('#m-ord-s').textContent = waiting ? waiting + ' still to deliver' : 'all delivered';
+  const toCollect = PAID.filter(o => !o.delivered && o.fulfil === 'pickup').length;
+  $('#m-ord-s').textContent = [
+    waiting ? waiting + ' to deliver' : '',
+    toCollect ? toCollect + ' to collect' : ''
+  ].filter(Boolean).join(' · ') || (PAID.length ? 'all handed over' : '');
   $('#m-avg').textContent = PAID.length ? short(rev / PAID.length) : '—';
   $('#m-pcs').textContent = pcs || '—';
   $('#m-pcs-s').textContent = PAID.length ? (pcs / PAID.length).toFixed(1) + ' a basket' : '';
@@ -332,27 +358,44 @@ function paint() {
   orders();
 }
 
-// Where the month lands if the days so far keep their pace. Stated as a run rate, not a promise.
+/* Where the month lands if the days of trading so far keep their pace.
+   The window starts the day YOWA opened, never the 1st of the month: days the shop
+   was shut are not slow days, they are no days, and averaging across them reads a
+   ₦40,000 opening as ₦1,743 a day. Stated as a run rate, never as a promise. */
 function projection() {
-  const now = new Date(), mStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const soFar = paidOnly().filter(o => o.paidAt && new Date(o.paidAt) >= mStart).reduce((s, o) => s + o.amount, 0);
-  const elapsed = now.getDate(), inMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const month = now.toLocaleDateString('en-GB', { month: 'long' });
-  if (!soFar) {
+  const now = new Date(), today = dayKey(now);
+  const month = lagos(now, { month: 'long' });
+  const mStart = today.slice(0, 8) + '01';
+  const from = mStart > OPENED ? mStart : OPENED;       // this month, but not before we opened
+  if (today < from) {                                    // not open yet
     $('#p-val').textContent = '—';
-    $('#p-sub').textContent = 'Nothing has come in this month yet, so there is no rate to read.';
+    $('#p-sub').textContent = 'YOWA opens ' + niceDay(new Date(OPENED + 'T12:00:00Z')) + '. No trading days to read yet.';
     return;
   }
-  $('#p-val').textContent = short(soFar / elapsed * inMonth);
-  $('#p-sub').textContent = naira(soFar) + ' over ' + elapsed + (elapsed === 1 ? ' day' : ' days') + ' of ' + month +
-    ' — about ' + naira(soFar / elapsed) + ' a day, carried to all ' + inMonth + '.';
+  const soFar = sales().filter(o => dayKey(new Date(o.paidAt)) >= from).reduce((s, o) => s + o.amount, 0);
+  const traded = dayNo(today) - dayNo(from) + 1;         // today counts
+  // day 0 of next month is the last day of this one
+  const inMonth = new Date(Date.UTC(+today.slice(0, 4), +today.slice(5, 7), 0)).getUTCDate();
+  const left = inMonth - +today.slice(8, 10);
+  const rate = soFar / traded;
+
+  if (!soFar) {
+    $('#p-val').textContent = '—';
+    $('#p-sub').textContent = 'Nothing has come in since we opened, so there is no rate to read.';
+    return;
+  }
+  $('#p-val').textContent = short(soFar + rate * left);
+  $('#p-sub').textContent = naira(soFar) + ' over ' + traded + (traded === 1 ? ' day' : ' days') +
+    ' of trading — about ' + naira(rate) + ' a day, carried across the ' + left +
+    (left === 1 ? ' day' : ' days') + ' left in ' + month + '.' +
+    (traded < 3 ? ' Early days: one more day of sales will move this a long way.' : '');
 }
 
 function daily() {
   const days = [];
   for (let i = 13; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push({ d, total: 0 }); }
   const idx = {}; days.forEach((x, i) => { idx[dayKey(x.d)] = i; });
-  paidOnly().forEach(o => { const i = idx[dayKey(new Date(o.paidAt))]; if (i != null) days[i].total += o.amount; });
+  sales().forEach(o => { const i = idx[dayKey(new Date(o.paidAt))]; if (i != null) days[i].total += o.amount; });
 
   const max = Math.max(1, ...days.map(x => x.total));
   const host = $('#daily'); host.textContent = '';
@@ -368,7 +411,7 @@ function daily() {
     host.appendChild(b);
   });
   const xs = $('#daily-x'); xs.textContent = '';
-  days.forEach((x, i) => { const s = document.createElement('span'); s.textContent = (i % 3 === 0 || i === 13) ? x.d.getDate() : ''; xs.appendChild(s); });
+  days.forEach((x, i) => { const s = document.createElement('span'); s.textContent = (i % 3 === 0 || i === 13) ? lagos(x.d, { day: 'numeric' }) : ''; xs.appendChild(s); });
 
   // One direct label, on the best day only
   const best = days.reduce((a, b) => b.total > a.total ? b : a, days[0]);
@@ -379,7 +422,7 @@ function daily() {
 
 function states() {
   const by = {};
-  paidOnly().forEach(o => {
+  sales().forEach(o => {
     const k = o.state || 'Not given';
     (by[k] = by[k] || { rev: 0, n: 0 });
     by[k].rev += o.amount; by[k].n++;
@@ -410,9 +453,10 @@ function orders() {
   const list = ORDERS.filter(o => {
     if (FILTER === 'all')    return true;
     if (FILTER === 'unpaid') return !o.paid;
-    if (FILTER === 'pickup') return o.paid && o.fulfil === 'pickup';
-    if (FILTER === 'done')   return o.paid && o.delivered;
-    return o.paid && !o.delivered && o.fulfil !== 'pickup';   // needs delivery
+    if (!o.paid || isTest(o)) return false;  // every filter below is about real sales
+    if (FILTER === 'pickup') return o.fulfil === 'pickup';
+    if (FILTER === 'done')   return o.delivered;
+    return !o.delivered && o.fulfil !== 'pickup';   // needs delivery
   });
   if (!list.length) {
     host.innerHTML = '<p class="empty">' + (ORDERS.length ? 'Nothing under this filter.' : 'Nothing from Paystack yet.') + '</p>';
@@ -428,7 +472,8 @@ function orders() {
     el.innerHTML =
       '<div class="receipt-hdr"><span class="ym">YOWA</span>' +
         '<span class="paid-sticker' + (o.paid ? '' : ' unpaid') + '"></span>' +
-        (o.paid && o.fulfil === 'pickup' ? '<span class="pick-sticker">PICKUP</span>' : '') +
+        (isTest(o) ? '<span class="pick-sticker test">TEST</span>'
+          : o.paid && o.fulfil === 'pickup' ? '<span class="pick-sticker">PICKUP</span>' : '') +
       '</div>' +
       '<div class="hd"><p class="who"></p></div>' +
       '<span class="pill ' + (o.delivered ? 'ok' : 'wait') + '"><span class="d"></span><span class="st"></span></span>' +
@@ -465,7 +510,7 @@ function orders() {
     if (o.phone) el.querySelector('.ph a').textContent = o.phone;
     el.querySelector('.em').textContent = o.email || '—';
     el.querySelector('.ad').textContent = [o.address, o.lga, o.state].filter(Boolean).join(', ') || '—';
-    el.querySelector('.dt').textContent = when ? niceDay(when) + ', ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '—';
+    el.querySelector('.dt').textContent = when ? niceDay(when) + ', ' + when.toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' }) : '—';
     if (o.reference && el.querySelector('.rf')) el.querySelector('.rf').textContent = o.reference;
 
     const btn = document.createElement('button');
