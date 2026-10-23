@@ -69,6 +69,27 @@ async function fetchPaid(secret) {
 
 const str = v => (typeof v === 'string' ? v : v == null ? '' : String(v));
 
+// Our own record of every checkout, written when the buyer starts paying.
+// Paystack can only be asked about money it holds under the key we happen to
+// have; this table holds the order itself, so a sale is never lost to a wrong
+// key, a changed mode, or a payment that stopped half way.
+const ORDERS_TABLE = 'yowa_orders';
+async function fetchSaved() {
+  const url = process.env.SUPABASE_URL, key = supabaseKey();
+  if (!url || !key) return null;
+  try {
+    const r = await fetch(url.replace(/\/$/, '') + '/rest/v1/' + ORDERS_TABLE +
+      '?select=*&order=created_at.desc&limit=300', {
+      headers: { apikey: key, Authorization: 'Bearer ' + key }
+    });
+    if (!r.ok) return null;
+    const rows = await r.json();
+    return Array.isArray(rows) ? rows : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   const given = (req.headers && req.headers['x-admin-key']) || (req.body && req.body.password) || '';
   if (!process.env.ADMIN_PASSWORD) return res.status(503).json({ error: 'No ADMIN_PASSWORD is set, so the dashboard stays shut' });
@@ -78,8 +99,8 @@ export default async function handler(req, res) {
   if (!secret) return res.status(503).json({ error: 'PAYSTACK_SECRET_KEY is missing' });
 
   try {
-    const [rows, delivered] = await Promise.all([fetchPaid(secret), fetchDelivered()]);
-    const orders = rows.map(t => {
+    const [rows, delivered, saved] = await Promise.all([fetchPaid(secret), fetchDelivered(), fetchSaved()]);
+    const fromPaystack = rows.map(t => {
       const m = (t && t.metadata) || {};
       return {
         reference: str(t.reference),
@@ -97,10 +118,41 @@ export default async function handler(req, res) {
         fulfil: m.fulfil === 'pickup' ? 'pickup' : 'delivery',
         delivered: !!(delivered && delivered[str(t.reference)])
       };
-    }).sort((a, b) => String(b.paidAt).localeCompare(String(a.paidAt)));
+    });
+
+    // Merge the two by reference. Paystack wins on money and status, because it
+    // is the one that actually took it; our table fills in everything Paystack
+    // never saw, including checkouts that never reached it at all.
+    const byRef = {};
+    (saved || []).forEach(row => {
+      const ref = str(row.reference);
+      if (!ref) return;
+      byRef[ref] = {
+        reference: ref,
+        paidAt: str(row.paid_at || row.created_at),
+        amount: Math.round(Number(row.amount) || 0),
+        email: str(row.email), name: str(row.name), phone: str(row.phone),
+        address: str(row.address), state: str(row.state), lga: str(row.lga),
+        order: str(row.items),
+        status: str(row.status) || 'pending',
+        paid: row.status === 'success',
+        fulfil: row.fulfil === 'pickup' ? 'pickup' : 'delivery',
+        delivered: !!(delivered && delivered[ref]),
+        source: 'saved'
+      };
+    });
+    fromPaystack.forEach(o => {
+      byRef[o.reference] = Object.assign({}, byRef[o.reference] || {}, o, {
+        source: byRef[o.reference] ? 'both' : 'paystack'
+      });
+    });
+    const orders = Object.values(byRef)
+      .sort((a, b) => String(b.paidAt).localeCompare(String(a.paidAt)));
 
     return res.status(200).json({
       orders,
+      savedOrders: saved === null ? null : saved.length,
+      paystackOrders: fromPaystack.length,
       deliveryTracking: delivered !== null,
       deliveryNote: delivered === null
         ? 'Delivered marks need SUPABASE_URL and SUPABASE_SERVICE_KEY, and a `deliveries` table. Everything else below is live.'
