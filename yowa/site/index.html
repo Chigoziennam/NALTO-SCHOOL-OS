@@ -813,136 +813,42 @@ select.co-input option{background:#140E26;color:#fff}
 }
 
 /* ---------- the ceremony ---------- */
-.cut-stage{position:fixed;inset:0;z-index:240;overflow:hidden;cursor:pointer;
-  opacity:1;animation:stageIn .22s ease;-webkit-tap-highlight-color:transparent}
-@keyframes stageIn{from{opacity:0}}
-/* the snip lands in the room, not just on screen */
-.cut-stage.cut{animation:shake .4s cubic-bezier(.36,.07,.19,.97)}
-@keyframes shake{
-  0%,100%{transform:translate(0,0)}
-  12%{transform:translate(-9px,5px)}
-  26%{transform:translate(8px,-6px)}
-  42%{transform:translate(-6px,-3px)}
-  60%{transform:translate(4px,4px)}
-  80%{transform:translate(-2px,-1px)}
-}
-.cut-stage[data-done="1"]{animation:stageOut .6s ease forwards;pointer-events:none}
-@keyframes stageOut{to{opacity:0;visibility:hidden}}
+/* ---------- the opening announcement ----------
+   Two ribbons crossing the screen, each running its line of type the opposite
+   way. It says the shop is open and then gets out of the way: in, read, gone
+   in a little over three seconds, and it never blocks the page beneath. */
+.ann{position:fixed;inset:0;z-index:240;overflow:hidden;pointer-events:none}
+.ann::before{content:"";position:absolute;inset:0;background:rgba(8,6,14,.74);animation:annVeil .38s ease both}
+@keyframes annVeil{from{opacity:0}}
+.ann.out::before{animation:annVeilOut .42s ease forwards}
+@keyframes annVeilOut{to{opacity:0}}
 
-/* light comes from the cut point, so it is a vignette not a scrim */
-.cut-vig{position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 50%,rgba(74,26,148,.5) 0%,rgba(8,6,14,.82) 42%,rgba(8,6,14,.96) 100%);
-  opacity:0;animation:vigIn .7s ease .05s forwards}
-@keyframes vigIn{to{opacity:1}}
+.ann-band{position:absolute;left:-16%;width:132%;padding:clamp(10px,2.2vw,16px) 0;
+  overflow:hidden;white-space:nowrap;box-shadow:0 18px 50px -18px rgba(0,0,0,.8)}
+.ann-band.a{top:36%;background:var(--purple);color:var(--cream);
+  animation:annInA .52s cubic-bezier(.2,1.25,.4,1) both}
+.ann-band.b{top:52%;background:var(--cream);color:#2A0B57;
+  animation:annInB .52s cubic-bezier(.2,1.25,.4,1) .08s both}
+@keyframes annInA{from{transform:translateX(-118%) rotate(-9deg)}to{transform:translateX(0) rotate(-9deg)}}
+@keyframes annInB{from{transform:translateX(118%) rotate(7deg)}to{transform:translateX(0) rotate(7deg)}}
+.ann.out .ann-band.a{animation:annOutA .42s cubic-bezier(.5,0,.75,0) forwards}
+.ann.out .ann-band.b{animation:annOutB .42s cubic-bezier(.5,0,.75,0) forwards}
+@keyframes annOutA{to{transform:translateX(-118%) rotate(-9deg)}}
+@keyframes annOutB{to{transform:translateX(118%) rotate(7deg)}}
 
-.cut-rib{position:absolute;top:50%;width:50%;height:clamp(58px,12.5vw,104px);
-  margin-top:calc(clamp(58px,12.5vw,104px) / -2);
-  background:var(--satin-fold),var(--satin-wave),var(--satin);
-  box-shadow:0 3px 0 rgba(255,255,255,.2) inset,0 -3px 0 rgba(0,0,0,.5) inset,0 22px 70px -18px rgba(58,14,148,.85)}
-.cut-rib::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.1),transparent 36%,transparent 64%,rgba(0,0,0,.2))}
-.cut-rib.l{left:0;transform-origin:left center;animation:ribStretchL .5s cubic-bezier(.2,1.5,.4,1) forwards}
-.cut-rib.r{right:0;transform-origin:right center;animation:ribStretchR .5s cubic-bezier(.2,1.5,.4,1) forwards}
-@keyframes ribStretchL{0%{transform:scaleX(0) scaleY(.5)}62%{transform:scaleX(1.04) scaleY(1.1)}100%{transform:scaleX(1) scaleY(1)}}
-@keyframes ribStretchR{0%{transform:scaleX(0) scaleY(.5)}62%{transform:scaleX(1.04) scaleY(1.1)}100%{transform:scaleX(1) scaleY(1)}}
+.ann-run{display:inline-block;font-family:var(--f-shop);font-weight:700;
+  font-size:clamp(13px,3.1vw,21px);letter-spacing:.01em;will-change:transform}
+.ann-band.a .ann-run{animation:annRunL 11s linear infinite}
+.ann-band.b .ann-run{animation:annRunR 11s linear infinite}
+@keyframes annRunL{to{transform:translateX(-50%)}}
+@keyframes annRunR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.ann-run i{font-style:normal;opacity:.5;padding:0 .7em}
 
-/* tension releases toward the anchor first, then the free end whips away */
-.cut-stage.cut .cut-rib.l{animation:whipL .82s cubic-bezier(.4,0,.15,1) forwards}
-.cut-stage.cut .cut-rib.r{animation:whipR .82s cubic-bezier(.4,0,.15,1) forwards}
-@keyframes whipL{
-  0%{transform:scaleX(1) skewY(0) rotate(0)}
-  14%{transform:scaleX(.9) skewY(2.4deg) rotate(-1.4deg)}
-  38%{transform:scaleX(.78) skewY(-3.4deg) rotate(2.6deg) translateX(-6%)}
-  100%{transform:scaleX(.6) skewY(7deg) rotate(-10deg) translateX(-128%)}
-}
-@keyframes whipR{
-  0%{transform:scaleX(1) skewY(0) rotate(0)}
-  14%{transform:scaleX(.9) skewY(-2.4deg) rotate(1.4deg)}
-  38%{transform:scaleX(.78) skewY(3.4deg) rotate(-2.6deg) translateX(6%)}
-  100%{transform:scaleX(.6) skewY(-7deg) rotate(10deg) translateX(128%)}
+@media (prefers-reduced-motion:reduce){
+  .seal-band::after{animation:none;opacity:0}
+  .ann-run{animation:none!important}
 }
 
-/* the big rosette, centre stage, splits when cut */
-.cut-knot{position:absolute;left:50%;top:50%;width:clamp(148px,27vw,238px);height:clamp(148px,27vw,238px);
-  margin:calc(clamp(148px,27vw,238px) * -.4) 0 0 calc(clamp(148px,27vw,238px) / -2);
-  filter:drop-shadow(0 6px 22px rgba(0,0,0,.6));animation:knotIn .7s var(--e-settle) .18s backwards}
-@keyframes knotIn{from{transform:scale(.3) rotate(-50deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
-.cut-knot .kh{transform-box:view-box;transform-origin:50px 40px}
-.cut-knot .pet{fill:#6B23CE;stroke:rgba(255,255,255,.34);stroke-width:.8}
-.cut-knot .crease{fill:none;stroke:rgba(0,0,0,.34);stroke-width:1.5;stroke-linecap:round}
-.cut-knot .tail{fill:#551FAE;stroke:rgba(255,255,255,.22);stroke-width:1}
-.cut-knot .disc{fill:#3B1180;stroke:var(--gold);stroke-width:1.8}
-.cut-knot .dot{fill:var(--cream)}
-.cut-stage.cut .cut-knot .kh-l{animation:knotL .9s cubic-bezier(.3,.05,.2,1) forwards}
-.cut-stage.cut .cut-knot .kh-r{animation:knotR .9s cubic-bezier(.3,.05,.2,1) forwards}
-@keyframes knotL{to{transform:translate(-78px,34px) rotate(-130deg);opacity:0}}
-@keyframes knotR{to{transform:translate(78px,34px) rotate(130deg);opacity:0}}
-
-/* the flash at the cut point */
-.cut-flash{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
-  background:#fff;opacity:0;pointer-events:none}
-.cut-stage.cut .cut-flash{animation:flash .42s ease-out forwards}
-@keyframes flash{
-  0%{opacity:0;transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.9)}
-  14%{opacity:1;transform:scale(1.4);box-shadow:0 0 50px 22px rgba(255,255,255,.85)}
-  100%{opacity:0;transform:scale(3.4);box-shadow:0 0 120px 60px rgba(201,139,255,0)}
-}
-
-/* scissors: thin line art, one precise close */
-.cut-sciss{position:absolute;left:50%;top:50%;width:clamp(176px,31vw,284px);
-  margin-top:calc(clamp(176px,31vw,284px) * -.281);color:var(--cream);
-  filter:drop-shadow(0 0 4px rgba(16,4,38,.95)) drop-shadow(0 6px 14px rgba(0,0,0,.55));
-  animation:scissIn .46s cubic-bezier(.2,1.3,.4,1) .5s backwards;z-index:3}
-@keyframes scissIn{from{transform:translate(64vw,18px) rotate(24deg);opacity:0}to{transform:translate(-4%,0) rotate(0);opacity:1}}
-.cut-sciss svg{width:100%;height:auto;display:block;overflow:visible}
-.cut-sciss .blade{fill:currentColor;stroke:none}
-.cut-sciss .shank,.cut-sciss .ring{fill:none;stroke:currentColor;stroke-width:5.4;stroke-linecap:round}
-.cut-sciss .piv{fill:#2A0B57;stroke:currentColor;stroke-width:3}
-.cut-sciss .bl{transform-box:view-box;transform-origin:92px 45px}
-.cut-sciss .bl-up{transform:rotate(-10deg);animation:gapeU .26s ease .98s both}
-.cut-sciss .bl-dn{transform:rotate(10deg);animation:gapeD .26s ease .98s both}
-@keyframes gapeU{to{transform:rotate(-19deg)}}
-@keyframes gapeD{to{transform:rotate(19deg)}}
-.cut-stage.cut .cut-sciss{animation:scissOut 1s var(--e-pull) .34s forwards}
-@keyframes scissOut{0%{transform:translate(-4%,0) rotate(0)}18%{transform:translate(0,-7px) rotate(-6deg)}100%{transform:translate(38vw,48vh) rotate(38deg);opacity:0}}
-.cut-stage.cut .cut-sciss .bl-up{animation:snipU .1s cubic-bezier(.9,0,.2,1) forwards}
-.cut-stage.cut .cut-sciss .bl-dn{animation:snipD .1s cubic-bezier(.9,0,.2,1) forwards}
-@keyframes snipU{from{transform:rotate(-19deg)}to{transform:rotate(3deg)}}
-@keyframes snipD{from{transform:rotate(19deg)}to{transform:rotate(-3deg)}}
-
-/* foil flecks: few, large, slow. not confetti */
-.fleck{position:absolute;left:50%;top:50%;width:7px;height:11px;border-radius:1px;opacity:0;pointer-events:none;
-  will-change:transform,opacity}
-.cut-stage.cut .fleck{animation:foil 1.9s cubic-bezier(.12,.6,.3,1) forwards}
-@keyframes foil{
-  0%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}
-  8%{opacity:1}
-  70%{opacity:1}
-  100%{opacity:0;transform:translate(var(--fx),var(--fy)) rotate(var(--fr)) scale(1)}
-}
-
-/* the plate */
-.cut-plate{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(90vw,560px);
-  text-align:center;opacity:0;pointer-events:none;z-index:4}
-.cut-stage.cut .cut-plate{animation:plateIn .62s cubic-bezier(.2,1.4,.4,1) .5s forwards}
-@keyframes plateIn{0%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}55%{opacity:1;transform:translate(-50%,-50%) scale(.97)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-.cut-plate .cp-sig{width:clamp(130px,30vw,200px);height:auto;margin:0 auto 14px;display:block;
-  filter:drop-shadow(0 0 20px rgba(166,91,255,.75))}
-.cut-plate h2{font-family:var(--f-display);font-size:clamp(40px,12vw,86px);line-height:.92;margin:0;
-  color:var(--cream);letter-spacing:.012em;text-shadow:0 0 44px rgba(166,91,255,.6)}
-.cut-plate h2 b{color:var(--purple-l);font-weight:inherit}
-.cut-plate p{font-family:var(--f-label);font-size:clamp(8.5px,1.9vw,11px);letter-spacing:.34em;
-  color:var(--mut);text-transform:uppercase;margin:14px 0 0}
-
-/* the little seal that marks opening day once the ribbon is gone */
-.open-seal{display:inline-flex;align-items:center;gap:8px;margin:clamp(14px,3vw,26px) 0 0;
-  padding:7px 15px 7px 11px;border:1px solid var(--line);border-radius:999px;
-  background:rgba(122,47,224,.14);backdrop-filter:blur(6px)}
-.open-seal .rosette{width:20px;height:20px}
-.open-seal span{font-family:var(--f-label);font-size:clamp(7.5px,1.5vw,9.5px);letter-spacing:.26em;
-  color:var(--cream);text-transform:uppercase}
-
-/* nobody gets trapped, and nobody gets thrown around */
 /* Back from Paystack. This is the moment a buyer decides whether they trust you,
    so it gets a full screen and their reference, not a note tucked in the cart. */
 .paid-stage{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;
@@ -974,15 +880,6 @@ select.co-input option{background:#140E26;color:#fff}
 .paid-card .btn{margin:20px 0 0;width:100%;display:block}
 .paid-card.bad .paid-tick{background:rgba(226,58,46,.13);border-color:var(--red);box-shadow:0 0 40px rgba(226,58,46,.3)}
 .paid-card.bad .paid-tick svg{color:var(--red)}
-.cut-skip{position:absolute;right:clamp(14px,4vw,28px);bottom:clamp(14px,4vw,28px);
-  font-family:var(--f-label);font-size:9px;letter-spacing:.2em;color:var(--mut);
-  text-transform:uppercase;opacity:.6;z-index:5}
-@media (prefers-reduced-motion:reduce){
-  .seal-band::after,.cut-rib::after{animation:none;opacity:0}
-  .cut-rib,.cut-knot,.cut-sciss,.fleck{display:none}
-  .cut-stage.cut .cut-plate,.cut-plate{animation:none;opacity:1}
-  .cut-stage{animation:none;opacity:1}
-}
 </style>
 </head>
 <body>
@@ -2520,90 +2417,33 @@ const LIBRARY = [
   /* ---------- the ceremony ---------- */
   function ceremony(){
     if (seen) { seal(); return; }
+    mark(); seen = true;              // remembered at once, so a reload never repeats it
 
-    var st = document.createElement('div');
-    st.className = 'cut-stage';
-    st.setAttribute('role', 'img');
-    st.setAttribute('aria-label', 'YOWA is now open');
-    st.innerHTML =
-      '<div class="cut-vig"></div>' +
-      '<div class="cut-rib l"></div><div class="cut-rib r"></div>' +
-      rosette('cut-knot', true, true) +
-      '<div class="cut-flash"></div>' +
-      '<div class="cut-sciss">' +
-        '<svg viewBox="0 0 160 90">' +
-          '<g class="bl bl-up">' +
-            '<path class="blade" d="M6 43.2 L86 33.6 L94 43.4 L6 45.6 Z"/>' +
-            '<path class="shank" d="M94 43 L120 29"/><circle class="ring" cx="134" cy="24" r="11"/>' +
-          '</g>' +
-          '<g class="bl bl-dn">' +
-            '<path class="blade" d="M6 46.8 L86 56.4 L94 46.6 L6 44.4 Z"/>' +
-            '<path class="shank" d="M94 47 L120 61"/><circle class="ring" cx="134" cy="66" r="11"/>' +
-          '</g>' +
-          '<circle class="piv" cx="92" cy="45" r="4.2"/>' +
-        '</svg>' +
-      '</div>' +
-      '<div class="cut-plate">' +
-        '<img class="cp-sig" src="img/brand/yowa-signature.png" alt="" width="200" height="74">' +
-        '<h2>NOW <b>OPEN</b></h2>' +
-        '<p>Be you be different</p>' +
-      '</div>' +
-      '<span class="cut-skip">Tap to skip</span>';
-
-    /* foil flecks: few, large, slow */
-    if (!calm){
-      var tint = ['#A65BFF', '#F3EEE2', '#E8C879'], i, f, ang, dist;
-      for (i = 0; i < 18; i++){
-        f = document.createElement('i');
-        f.className = 'fleck';
-        ang = (i / 18) * Math.PI * 2 + Math.random() * .5;
-        dist = 130 + Math.random() * 190;
-        f.style.background = tint[i % 3];
-        f.style.setProperty('--fx', Math.cos(ang) * dist + 'px');
-        f.style.setProperty('--fy', (Math.sin(ang) * dist * .62 + 150) + 'px');
-        f.style.setProperty('--fr', Math.round(Math.random() * 900 - 450) + 'deg');
-        f.style.animationDelay = (Math.random() * .16) + 's';
-        st.appendChild(f);
-      }
+    // One line of type repeated enough to fill the band several times over, so
+    // the scroll loops without a visible seam.
+    function run(words){
+      var one = words.map(function(w){ return w + '<i>&#10022;</i>'; }).join('');
+      return '<span class="ann-run">' + one + one + one + one + '</span>';
     }
 
-    document.body.appendChild(st);
-    document.body.style.overflow = 'hidden';
-    // Remember straight away, not when it ends: reloading halfway through used to
-    // start the whole thing over.
-    mark();
+    var el = document.createElement('div');
+    el.className = 'ann';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-label', 'YOWA is now open');
+    el.innerHTML =
+      '<div class="ann-band a">' + run(['YOWA IS OPEN', 'BE YOU BE DIFFERENT']) + '</div>' +
+      '<div class="ann-band b">' + run(['NOW OPEN', 'HANDMADE IN ENUGU', 'LIMITED RUNS']) + '</div>';
+    document.body.appendChild(el);
 
-    var timers = [], over = false;
-    function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+    // Short on purpose. The page underneath is never covered for long and never
+    // locked: the banner takes no pointer events and scroll is left alone.
+    var go = setTimeout(function(){
+      el.classList.add('out');
+      setTimeout(function(){ try { el.remove(); } catch (e) {} seal(); }, 460);
+    }, calm ? 1200 : 2400);
 
-    function finish(){
-      if (over) return;
-      over = true;
-      timers.forEach(clearTimeout);
-      st.dataset.done = '1';
-      document.body.style.overflow = '';
-      mark();
-      seen = true;
-      setTimeout(function(){ st.remove(); seal(); }, 620);
-    }
-
-    if (calm){
-      st.classList.add('cut');
-      at(2400, finish);
-    } else {
-      at(1150, function(){ st.classList.add('cut'); });
-      at(3800, finish);
-    }
-
-    // Whatever happens above, the shop is reachable within seconds.
-    var guard = setTimeout(function(){ try { st.remove(); } catch(e){} document.body.style.overflow = ''; }, 9000);
-    var clearGuard = function(){ clearTimeout(guard); };
-    at(8000, clearGuard);
-
-    st.addEventListener('click', finish);
-    document.addEventListener('keydown', function esc(e){
-      if (e.key === 'Escape'){ document.removeEventListener('keydown', esc); finish(); }
-    });
+    // and it cannot outstay that, whatever happens above
+    setTimeout(function(){ clearTimeout(go); try { el.remove(); } catch (e) {} }, 6000);
   }
 
   /* ---------- route ---------- */
