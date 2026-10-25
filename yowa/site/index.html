@@ -2366,10 +2366,16 @@ const LIBRARY = [
    The sealed ribbon counts the hours down on the hero. At the hour the same
    ribbon fills the screen, the scissors cut it, and it whips away to reveal
    the shop. Plays once per visitor, then a small seal marks opening day.
-   To move the opening, change OPEN_AT below and nothing else. */
+   To move the opening, change OPEN_AT below; OPEN_UNTIL sets how long it stays. */
 (function(){
   var OPEN_AT = new Date('2026-10-23T00:00:00+01:00').getTime();  /* midnight in Enugu, opening day */
+  /* How long the opening stays up: the full-screen announcement for a first-time
+     visitor, and the mark on the hero. Both end together, on this date, in Enugu
+     time. Without an end the announcement would greet a stranger as a brand-new
+     shop a year from now. Move this one line to keep it up longer. */
+  var OPEN_UNTIL = new Date('2026-10-27T00:00:00+01:00').getTime();
   var SEEN = 'yowa-opened', DAY = 864e5;
+  var DAY_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
   var slot = document.getElementById('open-slot');
   if (!slot) return;
 
@@ -2440,17 +2446,22 @@ const LIBRARY = [
 
   /* ---------- the seal, opening day only ---------- */
   function seal(){
-    if (Date.now() > OPEN_AT + DAY) { slot.innerHTML = ''; return; }
+    if (Date.now() > OPEN_UNTIL) { slot.innerHTML = ''; return; }
+    // Count the day rather than hard-coding it: on day three "day one" is a lie.
+    var n = Math.floor((Date.now() - OPEN_AT) / DAY) + 1;
+    var word = DAY_WORD[n] ? 'Day ' + DAY_WORD[n] : '';
     slot.innerHTML =
-      '<p class="open-seal" aria-label="YOWA is open, day one">' +
+      '<p class="open-seal" aria-label="YOWA is open' + (word ? ', ' + word.toLowerCase() : '') + '">' +
         '<span class="lamp" aria-hidden="true"></span>' +
-        '<b>Open</b><s aria-hidden="true"></s><i>Day one</i>' +
+        '<b>Open</b>' +
+        (word ? '<s aria-hidden="true"></s><i>' + word + '</i>' : '') +
       '</p>';
   }
 
   /* ---------- the ceremony ---------- */
   function ceremony(){
-    if (seen) { seal(); return; }
+    // Past the window nobody gets the announcement, however new they are here.
+    if (seen || Date.now() > OPEN_UNTIL) { seal(); return; }
     mark(); seen = true;              // remembered at once, so a reload never repeats it
 
     // One line of type repeated enough to fill the band several times over, so
