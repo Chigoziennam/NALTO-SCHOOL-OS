@@ -2375,6 +2375,11 @@ const LIBRARY = [
      shop a year from now. Move this one line to keep it up longer. */
   var OPEN_UNTIL = new Date('2026-10-27T00:00:00+01:00').getTime();
   var SEEN = 'yowa-opened', DAY = 864e5;
+  /* Play the announcement on every load, not once per visitor. The note in
+     localStorage is still written, so setting this to false restores "once,
+     ever" and nothing else has to change. The guard for a buyer coming back
+     from Paystack is separate and still stands: their receipt is never covered. */
+  var ALWAYS = true;
   var DAY_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
   /* What the mark's second tier reads. "Day one" the way a brand says it, not
      the way a calendar does. Set this to '' to count the real days from OPEN_AT
@@ -2384,7 +2389,7 @@ const LIBRARY = [
   if (!slot) return;
 
   var seen = false;
-  try { seen = localStorage.getItem(SEEN) === '1'; } catch (e) {}
+  if (!ALWAYS) { try { seen = localStorage.getItem(SEEN) === '1'; } catch (e) {} }
   var calm = false;
   try { calm = matchMedia('(prefers-reduced-motion:reduce)').matches; } catch (e) {}
 
