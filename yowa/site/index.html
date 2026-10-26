@@ -2376,6 +2376,10 @@ const LIBRARY = [
   var OPEN_UNTIL = new Date('2026-10-27T00:00:00+01:00').getTime();
   var SEEN = 'yowa-opened', DAY = 864e5;
   var DAY_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
+  /* What the mark's second tier reads. "Day one" the way a brand says it, not
+     the way a calendar does. Set this to '' to count the real days from OPEN_AT
+     instead, and to drop the tier entirely once past day seven. */
+  var DAY_LABEL = 'Day one';
   var slot = document.getElementById('open-slot');
   if (!slot) return;
 
@@ -2447,9 +2451,11 @@ const LIBRARY = [
   /* ---------- the seal, opening day only ---------- */
   function seal(){
     if (Date.now() > OPEN_UNTIL) { slot.innerHTML = ''; return; }
-    // Count the day rather than hard-coding it: on day three "day one" is a lie.
-    var n = Math.floor((Date.now() - OPEN_AT) / DAY) + 1;
-    var word = DAY_WORD[n] ? 'Day ' + DAY_WORD[n] : '';
+    var word = DAY_LABEL;
+    if (!word) {                                     // counting the real days instead
+      var n = Math.floor((Date.now() - OPEN_AT) / DAY) + 1;
+      word = DAY_WORD[n] ? 'Day ' + DAY_WORD[n] : '';
+    }
     slot.innerHTML =
       '<p class="open-seal" aria-label="YOWA is open' + (word ? ', ' + word.toLowerCase() : '') + '">' +
         '<span class="lamp" aria-hidden="true"></span>' +
