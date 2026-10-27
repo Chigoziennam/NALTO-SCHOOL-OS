@@ -50,19 +50,18 @@ async function saveOrder(row) {
   } catch (e) { console.error('yowa: ' + ORDERS_TABLE + ' write failed, ' + e.message); }
 }
 
-// Where Paystack sends the buyer once they have paid. This used to be a hard-coded
-// domain; when that domain stopped resolving every buyer was dropped on a dead page
-// and never saw their confirmation. Take it from the request instead, so it always
-// points back at whatever host they actually bought from, and allow only our own.
-const SAFE_HOST = /^(?:[\w-]+\.)*(?:yowabybd\.com|vercel\.app)$/i;
-function siteOrigin(req) {
-  const h = String((req.headers && (req.headers['x-forwarded-host'] || req.headers.host)) || '').split(',')[0].trim();
-  if (h && SAFE_HOST.test(h.replace(/:\d+$/, ''))) {
-    const proto = String((req.headers && req.headers['x-forwarded-proto']) || 'https').split(',')[0].trim();
-    return proto + '://' + h;
-  }
-  return 'https://yowabybd.vercel.app';
-}
+// Where Paystack sends the buyer once they have paid.
+//
+// Pinned to one known-good host rather than taken from the request. It used to
+// be read from the host the buyer arrived on, with yowabybd.com allowed — and
+// that domain is suspended at the registrar and resolves nowhere, which is
+// exactly how a buyer once paid 40,000 naira and landed on a dead page holding
+// a receipt they never saw. A buyer who reaches the shop through a host that
+// later dies must still come back somewhere that is alive.
+//
+// If the custom domain is ever fixed and should take the returns, this is the
+// one line to change — and the host must be confirmed resolving first.
+const RETURN_TO = 'https://yowabybd.vercel.app';
 const clip = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
 
 export default async function handler(req, res) {
@@ -103,7 +102,7 @@ export default async function handler(req, res) {
       headers: { Authorization: 'Bearer ' + secret, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email, amount: grand * 100, currency: 'NGN',
-        callback_url: siteOrigin(req) + '/',
+        callback_url: RETURN_TO + '/',
         metadata: {
           name, phone, address, state, lga, fulfil,
           order: lines.join(' | '),
