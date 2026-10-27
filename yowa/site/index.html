@@ -2462,6 +2462,10 @@ const LIBRARY = [
       // a blank page after paying is the worst thing this site can do.
       const showReceipt = (j, err) => {
         const ok = !!(j && j.paid);
+        // err means we never got an answer out of Paystack. Telling someone who
+        // has just paid that they have not is how you get paid twice and
+        // deserve neither, so that case says so plainly instead.
+        const unknown = !ok && !!err;
         if (ok) { bag = []; saveBag(); renderBag(); }
         const st = document.createElement('div');
         st.className = 'paid-stage';
@@ -2478,10 +2482,12 @@ const LIBRARY = [
             '<button type="button" class="btn solid">Keep shopping</button>' +
           '</div>';
         const card = st.querySelector('.paid-card');
-        card.querySelector('h2').textContent = ok ? 'PAYMENT CONFIRMED' : 'NOT CONFIRMED YET';
+        card.querySelector('h2').textContent = ok ? 'PAYMENT CONFIRMED' : unknown ? 'NOT CONFIRMED YET' : 'PAYMENT DID NOT COMPLETE';
         card.querySelector('.who').textContent = ok
           ? ((j.name ? j.name.split(' ')[0] + ', your' : 'Your') + ' order is in. ')
-          : 'We could not reach Paystack to check.';
+          : unknown
+            ? 'We could not reach Paystack to check this one.'
+            : 'Paystack says this payment did not go through.';
 
         const box = card.querySelector('.paid-box');
         const put = (k, v, cls) => {
@@ -2500,7 +2506,9 @@ const LIBRARY = [
           ? (j.fulfil === 'pickup'
               ? 'We will message you on WhatsApp with where and when to collect. Keep this reference.'
               : 'We will message you on WhatsApp about your delivery. Keep this reference.')
-          : 'If you were charged, send us this reference on WhatsApp and we will sort it out straight away.';
+          : unknown
+            ? 'Do not pay again. If the money left your account it is safe — send us this reference on WhatsApp and we will confirm it by hand straight away.'
+            : 'Nothing has been taken. You can try again, or send us this reference on WhatsApp if you think that is wrong.';
 
         const close = () => { st.remove(); document.body.style.overflow = ''; };
         card.querySelector('.btn').addEventListener('click', close);
@@ -2510,8 +2518,14 @@ const LIBRARY = [
       };
 
       fetch('/api/verify?reference=' + encodeURIComponent(ref))
-        .then(r => r.json())
-        .then(j => showReceipt(j))
+        .then(r => r.json().then(j => ({ ok: r.ok, j })))
+        .then(x => {
+          if (!x.ok) {
+            if (x.j && x.j.reason) console.error('yowa: verify refused, ' + x.j.reason);
+            return showReceipt(x.j, true);        // could not check, not "unpaid"
+          }
+          showReceipt(x.j);
+        })
         .catch(() => showReceipt(null, true));
     } }
   saveBag();

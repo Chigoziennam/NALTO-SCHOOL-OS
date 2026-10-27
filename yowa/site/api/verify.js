@@ -4,6 +4,7 @@
 // Paystack is the authority on whether money moved; this writes that verdict
 // back onto our own row so the board does not depend on reaching Paystack.
 const ORDERS_TABLE = 'yowa_orders';
+const clip = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
 async function markOrder(ref, patch) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -31,7 +32,19 @@ export default async function handler(req, res) {
   try {
     const r = await fetch('https://api.paystack.co/transaction/verify/' + encodeURIComponent(ref), { headers: { Authorization: 'Bearer ' + secret } });
     const j = await r.json().catch(() => ({}));
-    const d = (j && j.data) || {};
+    // Paystack saying "this payment failed" and Paystack refusing to answer us
+    // are not the same answer, and the difference is somebody's money. Without
+    // this check a dead key made j.data undefined, which read as status
+    // 'failed' — so a buyer who had genuinely paid was shown an unpaid screen
+    // AND had their order overwritten as failed in our own table, destroying
+    // the only record that they were owed anything. Never write a verdict we
+    // did not actually receive.
+    if (!r.ok || !j.status || !j.data) {
+      const why = clip(j && j.message, 200) || ('HTTP ' + r.status);
+      console.error('yowa: paystack verify refused for ' + ref + ', HTTP ' + r.status + ', ' + why);
+      return res.status(502).json({ error: 'We could not reach Paystack to confirm this payment', reason: why });
+    }
+    const d = j.data;
     const m = d.metadata || {};
     const paid = d.status === 'success';
     await markOrder(ref, paid
