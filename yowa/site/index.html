@@ -1191,7 +1191,7 @@ PRODUCTS.forEach(p => { p.opts = p.opts || []; if (!p.images) p.images = imagesF
 // so YW·010 is always the same photo. Add new photos at the end with the next free code.
 // src is the full photo, the grid loads the small copy in img/library/t/. shelves: what's in the photo (Raglan shirts, Plain tees,
 // Skull caps, Caps, Joggers), which puts it on those Library shelves. product links "Shop this piece".
-// Any photo can be shared with a link like yowabybd.com/#yw-010, which opens it in the viewer.
+// Any photo can be shared with a link like yowabybd.vercel.app/#yw-010, which opens it in the viewer.
 // The photos from the YOWA Library, numbered. In real life and the Library both show them; new uploads on the Library site join after these.
 // Shelves are the product names (Raglans, Tees, Joggers, Jorts, Caps), set by what is in each photo. Real-life, brand and inbox folders are ignored.
 const LIBRARY = [
@@ -2290,7 +2290,7 @@ const LIBRARY = [
     box.hidden = !LIB.length;
   }
   paintShelves(); renderIrl(irlItems());
-  // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.com/#yw-010.
+  // Codes open straight in the viewer: from the hero caption, and from links like yowabybd.vercel.app/#yw-010.
   function openCode(no, from) { const k = LIB.findIndex(p => p.no === no); if (k < 0) return false; openLightbox(LIB, k, from || null); return true; }
   let pendingCode = '';
   function openFromHash() {
