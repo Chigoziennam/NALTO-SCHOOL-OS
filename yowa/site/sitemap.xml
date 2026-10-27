@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The shop is a single page: the menu moves between sections with the hash, and
+  Google does not index fragments as separate URLs, so listing #drop or #gallery
+  here would be listing the same page nine times. One URL is the honest answer.
+
+  What is worth listing is the photography. A clothing brand gets real traffic
+  from image search, and the image extension below is how the product shots get
+  there without a page of their own. Each one is the default look of a piece in
+  the shop — change a default in PRODUCTS and the matching line here follows.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://yowabybd.vercel.app/</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/raglan-black-front.webp</image:loc>
+      <image:title>YOWA Liberty Raglan</image:title>
+      <image:caption>The Liberty Raglan in black, handmade in Enugu — Liberty print with YOWA across the chest and beads down one sleeve.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/ringer-front.webp</image:loc>
+      <image:title>YOWA Ringer Tee</image:title>
+      <image:caption>White ringer tee with a black collar and cuffs and the YOWA signature on the chest.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/longsleeve-front.webp</image:loc>
+      <image:title>YOWA Long Sleeve</image:title>
+      <image:caption>Boxy white long sleeve with YOWA across the chest and snaps on the cuffs and hem.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/bybd-tee-front.webp</image:loc>
+      <image:title>YOWA Be Different Tee</image:title>
+      <image:caption>Black tee with Be You Be Different stamped across the back.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/logo-tee-front.webp</image:loc>
+      <image:title>YOWA Logo Tee</image:title>
+      <image:caption>Black tee with the YOWA wordmark across the chest.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/joggers-black-beads.webp</image:loc>
+      <image:title>YOWA Joggers</image:title>
+      <image:caption>Wide-leg black joggers with the signature on the hip and beads down the side.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/jorts-black.webp</image:loc>
+      <image:title>YOWA Jorts</image:title>
+      <image:caption>Long black jorts with the signature on the front and beads down both sides.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/skull-camo-sig.webp</image:loc>
+      <image:title>YOWA Skull Cap</image:title>
+      <image:caption>Grey camo skull cap with stitched seams, one size.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yowabybd.vercel.app/img/products/cap-black-front-white.webp</image:loc>
+      <image:title>YOWA 042 Cap</image:title>
+      <image:caption>The 042 patch cap in black with white beads — 042 for Enugu, with the YOWA wordmark and the flame.</image:caption>
+    </image:image>
+  </url>
+</urlset>

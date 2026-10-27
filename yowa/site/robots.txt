@@ -1,0 +1,17 @@
+# YOWA — https://yowabybd.vercel.app
+#
+# Everything a crawler can see, it may index. The shop is one page, so there is
+# no section to hold back. The two exceptions are the checkout and verify
+# endpoints: they take money and read Paystack, they return nothing a searcher
+# wants, and a crawler hitting them repeatedly is pure noise in the logs.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# The product and library photos are the point of a clothing brand in image
+# search, so they stay open to Google's image crawler by name as well.
+User-agent: Googlebot-Image
+Allow: /img/
+
+Sitemap: https://yowabybd.vercel.app/sitemap.xml
