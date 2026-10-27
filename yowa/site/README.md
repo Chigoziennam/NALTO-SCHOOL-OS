@@ -73,6 +73,30 @@ the Paystack return — now points at the Vercel domain only.
 To put a custom domain back: fix it at the registrar first, confirm it resolves,
 then attach it in Vercel and change `RETURN_TO` in `api/checkout.js`. Not before.
 
+## Search engines and assistants
+- `robots.txt` opens everything but `/api/`, and answers twenty crawlers by
+  name — the assistant ones included, because being quoted and priced by them
+  is the point. It also points at the sitemap.
+- `sitemap.xml` lists the one URL (the shop is a single page; Google does not
+  index fragments) plus the nine default product shots, for image search.
+- `llms.txt` is the brand in prose, with the full catalogue and prices, so an
+  assistant can answer about YOWA without guessing from the markup. Its prices
+  must match `PRICES` in `api/checkout.js` and `PRODUCTS` in `index.html`.
+- The JSON-LD block in `<head>` carries the same nine prices a third time.
+  Change a price and all three copies have to move together.
+- `googlea7b8718a3c1914e4.html` is the Google Search Console ownership proof.
+  Leave it exactly as it is, byte for byte — Google refetches it.
+- `<key>.txt` at the root is the IndexNow key, which is public by design: it
+  proves control of the host by being served from it. It is how the shop gets
+  pushed to Bing, Yandex and Seznam, and Bing is what ChatGPT search reads.
+
+**`cleanUrls` is deliberately off in `vercel.json`.** It turned every `.html`
+path into a 308 redirect, and Google's file check wants a plain 200 at the
+exact verification URL. It was buying nothing else here — the site is one page
+and nothing links to a `.html` path — so the one behaviour worth keeping,
+`/index.html` → `/`, is now an explicit redirect instead. Do not put
+`cleanUrls` back without moving verification to the meta-tag method first.
+
 ## Partner round notes
 
 - **Shop:** nine pieces, no "Drop 01" labels. Raglans and the 042 cap have With / Without beads, and the "without" raglan photos are the clean renders. Jorts are always beaded (no option). The black 042 cap adds Bead colour. The Skull Cap has camo and the two original black photos.
