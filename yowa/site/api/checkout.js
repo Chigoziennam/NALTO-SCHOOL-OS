@@ -115,7 +115,15 @@ export default async function handler(req, res) {
       })
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.status || !j.data) return res.status(502).json({ error: 'Paystack could not start the payment' });
+    if (!r.ok || !j.status || !j.data) {
+      // Paystack always says why, in j.message — a revoked key, an account not
+      // yet live, an amount below the minimum. Discarding it made all of those
+      // one indistinguishable 502, which is how a broken shop stays broken:
+      // nobody, buyer or owner, can see which of them it is.
+      const why = clip(j && j.message, 200) || ('HTTP ' + r.status);
+      console.error('yowa: paystack initialize refused, HTTP ' + r.status + ', ' + why);
+      return res.status(502).json({ error: 'Paystack could not start the payment', reason: why });
+    }
 
     await saveOrder({
       reference: j.data.reference,
