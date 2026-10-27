@@ -1,17 +1,97 @@
 # YOWA — https://yowabybd.vercel.app
 #
 # Everything a crawler can see, it may index. The shop is one page, so there is
-# no section to hold back. The two exceptions are the checkout and verify
-# endpoints: they take money and read Paystack, they return nothing a searcher
-# wants, and a crawler hitting them repeatedly is pure noise in the logs.
+# no section to hold back. The one exception is /api/: those endpoints take
+# money and read Paystack, they return nothing a searcher wants, and a crawler
+# hitting them repeatedly is pure noise in the logs.
+#
+# A plain-language summary of the brand, the full catalogue and the prices lives
+# at /llms.txt, for anything that would rather read prose than parse the page.
 
 User-agent: *
 Allow: /
 Disallow: /api/
 
 # The product and library photos are the point of a clothing brand in image
-# search, so they stay open to Google's image crawler by name as well.
+# search, so they stay open to the image crawlers by name as well.
 User-agent: Googlebot-Image
 Allow: /img/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+# Assistants are how a lot of people now ask "what is YOWA by BD". A crawler
+# left unnamed here is already allowed by the rule above, but several of these
+# read their own name first and treat anything else as undecided, so each one
+# is answered outright. The brand wants to be quoted, priced and recommended.
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+
+# Google-Extended is the switch for Gemini and AI Overviews specifically. It
+# defaults to allowed, but naming it records the intent rather than leaving it
+# to a default that could change.
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /api/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+
+User-agent: MistralAI-User
+Allow: /
+Disallow: /api/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /api/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+
+User-agent: YandexBot
+Allow: /
+Disallow: /api/
 
 Sitemap: https://yowabybd.vercel.app/sitemap.xml
