@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <script>try{if(localStorage.getItem("yowa-theme")==="\"light\"")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<title>YOWA</title>
-<meta name="description" content="YOWA. Be You Be Different. The Liberty Raglan in four colours, tees, joggers, jorts, the 042 cap and skull caps. Handmade, limited runs. When it's gone, it's gone.">
+<title>YOWA by BD — Nigerian Streetwear, Handmade in Enugu</title>
+<meta name="description" content="Handmade Nigerian streetwear from Enugu. Liberty Raglan, tees, joggers, jorts, the 042 cap and skull caps. Limited runs, card or transfer, delivered nationwide.">
 <link rel="canonical" href="https://yowabybd.vercel.app/">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="YOWA by BD">
+<meta property="og:locale" content="en_NG">
 <meta property="og:url" content="https://yowabybd.vercel.app/">
 <meta property="og:title" content="YOWA · Be You Be Different">
 <meta property="og:description" content="Handmade, limited runs. Get the code before the drop.">
@@ -16,6 +18,9 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="YOWA: a skater in the blue Liberty Raglan mid-kickflip">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="YOWA · Be You Be Different">
+<meta name="twitter:description" content="Handmade Nigerian streetwear from Enugu. Limited runs — when it's gone, it's gone.">
+<meta name="twitter:image" content="https://yowabybd.vercel.app/img/share.jpg">
 <meta name="theme-color" content="#08060E">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="48x48" href="img/brand/favicon-48.png">
@@ -25,6 +30,350 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="YOWA">
 <link rel="preload" as="image" href="img/hero/hero-3.webp" fetchpriority="high">
+<!-- What the brand is, in the form a search engine reads: the shop as an
+     organisation, the site, and all nine pieces with their real prices in
+     naira. This is what turns a bare blue link into a result with a logo and
+     a price on it. Prices live in three places and must agree: PRODUCTS below,
+     PRICES in api/checkout.js, and here. Change one, change all three. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "Organization",
+        "OnlineStore"
+      ],
+      "@id": "https://yowabybd.vercel.app/#brand",
+      "name": "YOWA",
+      "alternateName": [
+        "YOWA by BD",
+        "YOWA BYBD",
+        "yowabybd"
+      ],
+      "slogan": "Be You Be Different",
+      "url": "https://yowabybd.vercel.app/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://yowabybd.vercel.app/img/brand/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://yowabybd.vercel.app/img/share.jpg",
+      "description": "Handmade Nigerian streetwear, cut and sewn in limited runs in Enugu.",
+      "sameAs": [
+        "https://instagram.com/yowa_bybd"
+      ],
+      "location": {
+        "@type": "Place",
+        "name": "Enugu",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Enugu",
+          "addressRegion": "Enugu",
+          "addressCountry": "NG"
+        }
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Nigeria"
+      },
+      "currenciesAccepted": "NGN",
+      "paymentAccepted": "Credit Card, Debit Card, Bank Transfer, USSD",
+      "priceRange": "₦18,000–₦45,000"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://yowabybd.vercel.app/#site",
+      "url": "https://yowabybd.vercel.app/",
+      "name": "YOWA by BD",
+      "description": "Handmade Nigerian streetwear from Enugu.",
+      "inLanguage": "en-NG",
+      "publisher": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://yowabybd.vercel.app/#catalogue",
+      "name": "The YOWA shop",
+      "numberOfItems": 9,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-liberty-raglan"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-ringer-tee"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-yowa-long-sleeve"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-bybd-tee"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-logo-tee"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-joggers"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-jorts"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-skull-cap"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "item": {
+            "@id": "https://yowabybd.vercel.app/#product-cap-042"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-liberty-raglan",
+      "name": "YOWA Liberty Raglan",
+      "sku": "liberty-raglan",
+      "description": "Black body with the Liberty print and YOWA across the chest, Be You Be Different down one sleeve and beads down the other. Four sleeve colours, with beads or without. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/raglan-black-front.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 40000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-ringer-tee",
+      "name": "YOWA Ringer Tee",
+      "sku": "ringer-tee",
+      "description": "White tee with a black ringer collar and cuffs, the YOWA signature on the chest and snaps along the hem. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/ringer-front.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 22000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-yowa-long-sleeve",
+      "name": "YOWA YOWA Long Sleeve",
+      "sku": "yowa-long-sleeve",
+      "description": "Boxy white long sleeve with YOWA across the chest and snaps on the cuffs and hem. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/longsleeve-front.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 23500,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-bybd-tee",
+      "name": "YOWA Be Different Tee",
+      "sku": "bybd-tee",
+      "description": "Black tee with YOWA on the chest and Be You Be Different stamped big across the back. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/bybd-tee-front.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 30000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-logo-tee",
+      "name": "YOWA YOWA Logo Tee",
+      "sku": "logo-tee",
+      "description": "Black tee with the YOWA wordmark across the chest and Be You Be Different across the back. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/logo-tee-front.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 30000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-joggers",
+      "name": "YOWA Joggers",
+      "sku": "joggers",
+      "description": "Wide-leg joggers with the signature on the hip, in black or grey. Beads down the side or plain. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/joggers-black-beads.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 35000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-jorts",
+      "name": "YOWA Jorts",
+      "sku": "jorts",
+      "description": "Long jorts with the signature on the front and beads down both sides, in black, purple or grey. Handmade, limited run.",
+      "image": "https://yowabybd.vercel.app/img/products/jorts-black.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 30000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-skull-cap",
+      "name": "YOWA Skull Cap",
+      "sku": "skull-cap",
+      "description": "Skull cap with stitched seams, in grey camo or black. Keep it clean or add white or black beads. One size.",
+      "image": "https://yowabybd.vercel.app/img/products/skull-camo-sig.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 18000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://yowabybd.vercel.app/#product-cap-042",
+      "name": "YOWA 042 Cap",
+      "sku": "cap-042",
+      "description": "The 042 patch cap: 042 for Enugu, the YOWA wordmark, the heart, the flame and the signature down the side. Four colours, beads in white, red, purple or black. One size.",
+      "image": "https://yowabybd.vercel.app/img/products/cap-black-front-white.webp",
+      "brand": {
+        "@id": "https://yowabybd.vercel.app/#brand"
+      },
+      "category": "Apparel & Accessories > Clothing",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://yowabybd.vercel.app/",
+        "price": 45000,
+        "priceCurrency": "NGN",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://yowabybd.vercel.app/#brand"
+        }
+      }
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Pinyon+Script&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
