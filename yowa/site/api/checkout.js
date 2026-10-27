@@ -53,7 +53,7 @@ async function saveOrder(row) {
 // Where Paystack sends the buyer once they have paid.
 //
 // Pinned to one known-good host rather than taken from the request. It used to
-// be read from the host the buyer arrived on, with yowabybd.com allowed — and
+// be read from the host the buyer arrived on, with a custom domain allowed — and
 // that domain is suspended at the registrar and resolves nowhere, which is
 // exactly how a buyer once paid 40,000 naira and landed on a dead page holding
 // a receipt they never saw. A buyer who reaches the shop through a host that

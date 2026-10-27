@@ -31,7 +31,7 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 ## Library
 - `LIBRARY` lists every photo: code, file, size, caption, `shelves` (what's in the photo: Raglan shirts, Plain tees, Skull caps, Caps, Joggers) and the product it shows (adds "Shop this piece" in the viewer).
 - The shelves are the filters above the photos. A photo with a raglan and joggers in it sits on both.
-- Any photo can be shared with its own link, like `yowabybd.com/#yw-010`. It opens straight in the viewer, and the Share button in the viewer sends that link.
+- Any photo can be shared with its own link, like `yowabybd.vercel.app/#yw-010`. It opens straight in the viewer, and the Share button in the viewer sends that link.
 - `CONFIG.LIBRARY_FEED` reads `https://yowa-library.vercel.app/api/photos`. Photos filed there join the 21 bundled ones, numbered after them (see Partner round notes for the folder-to-shelf map). In real life shows up to 30 with the filters; the Library lists them all. Leaving a photo in `inbox` keeps it off the site.
 
 ## How it moves
@@ -59,8 +59,19 @@ The hero slides are set in `CONFIG.HERO_SLIDES`: `no` (the code), `src`, `cap` (
 - Env var `OPENROUTER_API_KEY` for the Ask YOWA chat (`api/chat.js`)
 - Env vars `SUPABASE_URL` and `SUPABASE_ANON_KEY` for sign-ups (`api/join.js`). They write to the same Supabase `waitlist` table as the waitlist site, and the key stays on the server. Formspree still gets a copy either way.
 
-## Domain: yowabybd.com (registered at Hostinger)
-The domain uses Vercel's nameservers (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`), so Vercel runs its DNS and the HTTPS certificate. `www.yowabybd.com` redirects to `yowabybd.com`. Email records (MX), if the domain ever needs email, are added in Vercel → Domains → yowabybd.com.
+## Domain: yowabybd.vercel.app
+The shop lives on its Vercel domain and nothing else. Vercel runs the DNS and
+the HTTPS certificate, so there is nothing to renew and nothing to misconfigure.
+
+A custom domain was attached once and taken off again: `yowabybd.com` is
+registered at Hostinger but suspended there, its nameservers replaced with
+`ns1/ns2.dns-suspended.com`, so it resolves nowhere. While it was attached and
+allowed as a payment-return host, a buyer who paid 40,000 naira was bounced onto
+a dead page and never saw their receipt. Everything — the shop, the share links,
+the Paystack return — now points at the Vercel domain only.
+
+To put a custom domain back: fix it at the registrar first, confirm it resolves,
+then attach it in Vercel and change `RETURN_TO` in `api/checkout.js`. Not before.
 
 ## Partner round notes
 
