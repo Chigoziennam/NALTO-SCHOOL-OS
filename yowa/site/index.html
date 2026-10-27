@@ -24,7 +24,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="YOWA">
-<link rel="preload" as="image" href="img/hero/hero-3.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="img/hero/hero-3.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Pinyon+Script&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
@@ -1118,11 +1118,11 @@ const CONFIG = {
   // Hero slideshow, in this order. Each photo is pinned by its Library code (no), so it never shifts.
   // pos: the part of the photo that stays in frame on a phone. Optional: hold (ms on screen), video (a looping clip over the photo).
   HERO_SLIDES: [
-    { src: 'img/hero/hero-3.jpg', pos: '50% 35%' },   // the red Liberty Raglan
-    { src: 'img/hero/hero-4.jpg', pos: '62% 45%' },   // black long sleeves at the shutter
-    { src: 'img/hero/hero-6.jpg', pos: '60% 52%' },   // the kickflip
-    { src: 'img/hero/hero-1.jpg', pos: '50% 45%' },   // the crew in the 042 caps on the balcony
-    { src: 'img/hero/hero-5.jpg', pos: '45% 55%' }   // raglans and the skateboard under the car park
+    { src: 'img/hero/hero-3.webp', pos: '50% 35%' },   // the red Liberty Raglan
+    { src: 'img/hero/hero-4.webp', pos: '62% 45%' },   // black long sleeves at the shutter
+    { src: 'img/hero/hero-6.webp', pos: '60% 52%' },   // the kickflip
+    { src: 'img/hero/hero-1.webp', pos: '50% 45%' },   // the crew in the 042 caps on the balcony
+    { src: 'img/hero/hero-5.webp', pos: '45% 55%' }   // raglans and the skateboard under the car park
   ],
   LIBRARY_FEED: 'https://yowa-library.vercel.app/api/photos', // photos filed in yowa-library join the Library on their own; '' turns it off
   PREVIEW: false                 // true only in the design preview link (no network there)
@@ -1384,10 +1384,25 @@ const LIBRARY = [
     const d = document.createElement('div'); d.className = 'slide'; d.dataset.cap = sl.cap || ''; d.dataset.no = sl.no || ''; if (sl.hold) d.dataset.hold = sl.hold;
     const im = document.createElement('img'); im.alt = ''; im.decoding = 'async'; if (i === 0) im.fetchPriority = 'high'; if (sl.pos) im.style.objectPosition = sl.pos;
     im.onerror = () => { const cur = slides()[si], gone = cur === d; d.remove(); si = Math.max(0, slides().indexOf(cur)); paintBars(); if (gone) goSlide(si, true); };
-    im.src = sl.src; d.appendChild(im);
+    // Only the slide you actually see is worth the first paint. The other four
+    // are a megabyte nobody looks at for six seconds, so they wait — on a slow
+    // connection that was the difference between the hero appearing and the
+    // page looking like it never opened.
+    if (i === 0) im.src = sl.src; else im.dataset.src = sl.src;
+    d.appendChild(im);
     if (sl.video && motionOK()) d.appendChild(clip(sl.video, d));
     slidesEl.appendChild(d);
   });
+  // Bring the rest in once the page has settled, and never later than the first
+  // slide's hold, so the slideshow never advances onto an image that is missing.
+  var woke = false;
+  function wakeSlides(){
+    if (woke) return; woke = true;
+    $$('img[data-src]', slidesEl).forEach(im => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
+  }
+  if (document.readyState === 'complete') wakeSlides();
+  else addEventListener('load', wakeSlides, { once: true });
+  setTimeout(wakeSlides, 2500);
   function paintBars() { barsEl.textContent = ''; slides().forEach(() => barsEl.appendChild(document.createElement('i')).appendChild(document.createElement('b'))); markBars(); }
   function markBars() { $$('i', barsEl).forEach((b, i) => { b.className = i < si ? 'past' : i === si ? 'now' : ''; b.firstChild.style.transform = i === si && reduced() ? 'scaleX(1)' : ''; }); }
   function goSlide(k, quiet) {
