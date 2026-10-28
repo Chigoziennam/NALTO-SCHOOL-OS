@@ -15,6 +15,22 @@ const NAMES = {
 // Delivery tiers: Nsukka ₦3,000 · Other Enugu ₦5,000 · Other states ₦8,500.
 // Collecting in person costs nothing, so a pickup order pays for the clothes alone.
 const PICKUP_AT = 'Enugu';
+
+// What is gone. The page marks these too, but the page is not the authority:
+// a tab left open since before a colour sold out, or a POST straight at this
+// endpoint, would otherwise sell stock that does not exist. Keep in step with
+// soldOut and soldOutWhen in index.html.
+const SOLD_OUT = {
+  'liberty-raglan': { sizes: ['XXL'], when: [{ Colour: 'Black' }, { Colour: 'Blue' }] },
+  'ringer-tee':     { sizes: ['XXL'] }
+};
+const isSoldOut = it => {
+  const r = SOLD_OUT[it && it.id];
+  if (!r) return false;
+  if (it.size && (r.sizes || []).indexOf(String(it.size)) >= 0) return true;
+  const o = it.opts && typeof it.opts === 'object' ? it.opts : {};
+  return (r.when || []).some(w => Object.keys(w).every(k => o[k] === w[k]));
+};
 const calcDelivery = (state, lga, fulfil) => {
   if (fulfil === 'pickup') return 0;
   if (!state) return 0;
@@ -71,8 +87,10 @@ export default async function handler(req, res) {
 
   const b = req.body || {};
   const email = clip(b.email, 160).toLowerCase(), name = clip(b.name, 80), phone = clip(b.phone, 30);
-  const fulfil = b.fulfil === 'pickup' ? 'pickup' : 'delivery';
-  const pickup = fulfil === 'pickup';
+  // Delivery only. Collecting in person is no longer offered, and a request that
+  // still asked for it would pay no delivery fee and give no address to send to.
+  const fulfil = 'delivery';
+  const pickup = false;
   const state = pickup ? 'Pickup' : clip(b.state, 60);
   const lga = pickup ? '' : clip(b.lga, 60);
   const address = pickup ? ('Collecting in ' + PICKUP_AT) : clip(b.address, 240);
@@ -84,6 +102,7 @@ export default async function handler(req, res) {
   for (const it of items) {
     const price = PRICES[it && it.id], qty = Math.floor(Number(it && it.qty));
     if (!price || !(qty >= 1 && qty <= 20)) return res.status(400).json({ error: 'Something in the cart is no longer available' });
+    if (isSoldOut(it)) return res.status(409).json({ error: 'The ' + NAMES[it.id] + ' is sold out in that choice. Pick another and try again.' });
     total += price * qty;
     const pick = it.opts && typeof it.opts === 'object' ? Object.values(it.opts).map(v => clip(String(v), 40)).filter(Boolean).join(', ') : '';
     lines.push(qty + ' x ' + NAMES[it.id] + (it.size && it.size !== 'One size' ? ' / ' + clip(it.size, 8) : '') + (pick ? ' / ' + pick : ''));

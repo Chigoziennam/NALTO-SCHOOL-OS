@@ -169,7 +169,7 @@
       "@id": "https://yowabybd.vercel.app/#product-liberty-raglan",
       "name": "YOWA Liberty Raglan",
       "sku": "liberty-raglan",
-      "description": "Black body with the Liberty print and YOWA across the chest, Be You Be Different down one sleeve and beads down the other. Four sleeve colours, with beads or without. Handmade, limited run.",
+      "description": "Black body with the Liberty print and YOWA across the chest, Be You Be Different down one sleeve and beads down the other. Sleeves in red or grey, with beads or without; black and blue are sold out. Handmade, limited run.",
       "image": "https://yowabybd.vercel.app/img/products/raglan-black-front.webp",
       "brand": {
         "@id": "https://yowabybd.vercel.app/#brand"
@@ -686,6 +686,10 @@ section{position:relative}
 .sw{position:relative;width:34px;height:34px;padding:0;border-radius:50%;border:0;background:var(--c,#333);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 0 0 1px var(--line);transition:box-shadow .25s,transform .25s var(--e-settle)}
 .sw[aria-checked="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 0 0 2px var(--void-2),0 0 0 4px var(--purple-l),0 0 14px rgba(166,91,255,.6)}
 .sw:active{transform:scale(.9)}
+/* gone, but still worth looking at — same red strike the sizes use */
+.sw.out{opacity:.5}
+.sw.out::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid #E23A2E;background:linear-gradient(to top right,transparent calc(50% - 1.4px),#E23A2E calc(50% - 1.4px),#E23A2E calc(50% + 1.4px),transparent calc(50% + 1.4px))}
+.sw.out[aria-checked="true"]{opacity:.75}
 .frame{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#140E26 url(img/brand/bg-swirl.jpg) center/cover;isolation:isolate;transition:transform .3s var(--e-settle)}
 .frame::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(8,6,14,.55)}
 .frame .art{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
@@ -962,6 +966,9 @@ section{position:relative}
 @media (prefers-reduced-motion:reduce){.stamp-pre,.stamp-pre b,.stamp-pre b::after,.stamp-pre::before,.stamp-pre::after{animation:none}}
 /* The same bar sitting in the product panel, not over a photo */
 .pv-pre{display:block;margin:6px 0 16px;padding:0 13px}
+/* the sold-out stamp is the pre-order stamp in red: same frame, opposite news */
+.stamp-pre.out b{background:rgba(199,36,26,.94)}
+.pre-chip.out{background:rgba(226,58,46,.16);border-color:rgba(226,58,46,.5);color:#FF7A70}
 .stamp-pre.pv-stamp{position:relative;left:auto;top:auto;transform:none;width:100%;max-width:190px;animation:none}
 .stamp-pre.pv-stamp b{font-size:11.5px;padding:10px 7px}
 .card-media{position:relative}
@@ -1410,6 +1417,7 @@ select.co-input option{background:#140E26;color:#fff}
       <span class="label" id="pv-line"></span>
       <h3 id="pv-title">Piece</h3>
       <div class="pv-pre" id="pv-pre" hidden><span class="stamp-pre pv-stamp" aria-label="Pre-order available now"><b>Pre order</b></span></div>
+      <div class="pv-pre" id="pv-out" hidden><span class="stamp-pre pv-stamp out" aria-label="Sold out in this colour"><b>Sold out</b></span></div>
       <div class="pv-price" id="pv-price"></div>
       <div class="pv-opts" id="pv-opts"></div>
       <div><span class="label">Size</span><div class="sizes" id="pv-sizes" role="group" aria-label="Size" style="margin-top:10px"></div></div>
@@ -1493,6 +1501,7 @@ const capLooks = (C, slug) => BEAD_COLOURS.values.map(b => { const k = b.v.toLow
 const skullLook = (C, B, imgs) => ({ when: { Colour: C, Beads: B }, images: imgs.map(f => IMG + f + '.webp') });
 const PRODUCTS = [
   { id: 'liberty-raglan', name: 'Liberty Raglan', cat: 'tops', cut: true, price: 40000, art: 'raglan', sizes: SIZES, soldOut: ['XXL'],
+    soldOutWhen: [{ Colour: 'Black' }, { Colour: 'Blue' }],   // black and blue raglans are gone; red and grey are not
     opts: [{ name: 'Colour', values: [{ v: 'Black', sw: '#121212' }, { v: 'Red', sw: '#D3202B' }, { v: 'Blue', sw: '#1F5BD8' }, { v: 'Grey', sw: '#5E5E63' }] }, BEADS],
     looks: [].concat(ragLooks('Black'), ragLooks('Red'), ragLooks('Blue'), ragLooks('Grey')),
     desc: 'Black body with the Liberty print and YOWA across the chest, Be You Be Different written down one sleeve and beads down the other. Pick the sleeve colour, with beads or without. Handmade, limited run.' },
@@ -1530,7 +1539,22 @@ const PRODUCTS = [
 // Categories for the menu's Shop list and the side shop
 const CATS = [['new', 'New'], ['all', 'All'], ['tops', 'Tops'], ['caps', 'Caps'], ['bottoms', 'Bottoms']];
 // What's picked to start, the photos for a pick, and the pick in words
-const optDefaults = p => { const c = {}; (p.opts || []).forEach(o => { c[o.name] = o.values[0].v; }); return c; };
+// Is this exact pick sold out? Matched the way looks are: every key in the rule
+// has to equal the current choice, so { Colour: 'Black' } kills black in every
+// bead variant without listing them one by one.
+const isOut = (p, c) => (p.soldOutWhen || []).some(w => Object.keys(w).every(k => c && c[k] === w[k]));
+const optDefaults = p => {
+  const c = {}; (p.opts || []).forEach(o => { c[o.name] = o.values[0].v; });
+  // Open on something you can actually buy. Black is the raglan's first colour
+  // and it is gone, and a card stamped SOLD OUT on arrival makes the whole
+  // piece look finished when two of its four colours are sitting right there.
+  (p.opts || []).forEach(o => {
+    if (!isOut(p, c)) return;
+    const ok = o.values.find(v => !isOut(p, Object.assign({}, c, { [o.name]: v.v })));
+    if (ok) c[o.name] = ok.v;
+  });
+  return c;
+};
 const imagesFor = (p, c) => { const l = (p.looks || []).find(l => Object.keys(l.when).every(k => c && c[k] === l.when[k])); return l ? l.images : p.images; };
 const optsFor = (p, c) => (p.opts || []).filter(o => !o.show || o.show(c || {}));   // an option can show only for some picks (bead colours, for the black cap with beads)
 const optText = (p, c) => optsFor(p, c).filter(o => o.values.length > 1).map(o => c && c[o.name]).filter(Boolean).join(' · ');
@@ -1935,12 +1959,26 @@ const LIBRARY = [
     let ch = optDefaults(p);
     const el = document.createElement('div'); el.className = 'card rv in';
     const col = p.opts.find(o => o.name === 'Colour' && o.values.length > 1);
-    el.innerHTML = '<div class="card-media">' + (p.preorder ? '<span class="stamp-pre" aria-label="Pre-order available now"><b>Pre order</b></span>' : '') + '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="' + (p.preorder ? 'Pre-order' : 'Add to cart') + '">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
+    el.innerHTML = '<div class="card-media">' + '<button type="button" class="' + frameCls(p) + '" aria-label="See ' + p.name + '">' + frameHTML(p) + '</button><div class="card-acts"><button type="button" class="ca" data-a="view" aria-label="Quick view">' + ICO.eye + '</button><button type="button" class="ca" data-a="add" aria-label="' + (p.preorder ? 'Pre-order' : 'Add to cart') + '">' + ICO.bag + '</button></div></div><span class="card-name"></span><span class="card-price"></span>' + (col ? '<div class="card-sw" role="radiogroup" aria-label="Colour"></div>' : '');
     const nm = el.querySelector('.card-name'), n1 = document.createElement('span'); n1.textContent = p.name + (p.colour ? ' //' : ''); nm.append(n1);
     if (p.colour) { const n2 = document.createElement('span'); n2.textContent = p.colour; nm.append(' ', n2); }
     el.querySelector('.card-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
     const paint = () => { const f = el.querySelector('.frame'); $$('img', f).forEach(i => i.remove()); f.insertAdjacentHTML('beforeend', frameImgs(p, imagesFor(p, ch))); };
-    if (col) col.values.forEach(v => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', v.v); b.setAttribute('aria-checked', String(ch.Colour === v.v)); b.addEventListener('click', () => { ch = Object.assign({}, ch, { Colour: v.v }); $$('.sw', el).forEach(x => x.setAttribute('aria-checked', String(x === b))); paint(); buzz(4); }); el.querySelector('.card-sw').appendChild(b); });
+    const media = el.querySelector('.card-media');
+    // Pre-order and sold out are both stamps and never both true, so one slot
+    // holds whichever the current pick earns.
+    const paintStamp = () => {
+      const old = media.querySelector('.stamp-pre'); if (old) old.remove();
+      const out = isOut(p, ch);
+      if (!out && !p.preorder) return;
+      const st = document.createElement('span');
+      st.className = 'stamp-pre' + (out ? ' out' : '');
+      st.setAttribute('aria-label', out ? 'Sold out in this colour' : 'Pre-order available now');
+      const bb = document.createElement('b'); bb.textContent = out ? 'Sold out' : 'Pre order';
+      st.appendChild(bb); media.appendChild(st);
+    };
+    paintStamp();
+    if (col) col.values.forEach(v => { const b = document.createElement('button'); b.type = 'button'; const vOut = isOut(p, Object.assign({}, ch, { Colour: v.v })); b.className = 'sw' + (vOut ? ' out' : ''); b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', v.v + (vOut ? ', sold out' : '')); b.setAttribute('aria-checked', String(ch.Colour === v.v)); b.addEventListener('click', () => { ch = Object.assign({}, ch, { Colour: v.v }); $$('.sw', el).forEach(x => x.setAttribute('aria-checked', String(x === b))); paint(); paintStamp(); buzz(4); }); el.querySelector('.card-sw').appendChild(b); });
     el.querySelector('.frame').addEventListener('click', () => open(p, { choice: ch }));
     el.querySelector('[data-a="view"]').addEventListener('click', () => open(p, { choice: ch }));
     el.querySelector('[data-a="add"]').addEventListener('click', e => quickAdd(p, ch, e.currentTarget, open));
@@ -1948,6 +1986,9 @@ const LIBRARY = [
   }
   // The bag on a card: a piece with nothing to choose goes straight in; anything else opens on its choices
   function quickAdd(p, ch, btn, open) {
+    // A sold-out pick opens the piece instead of going in, so they can see what
+    // is left rather than meet a refusal at the till.
+    if (isOut(p, ch)) { open(p, { choice: ch, pick: true }); return; }
     if (p.sizes.length === 1 && p.opts.every(o => o.values.length === 1)) { addToBag(p, p.sizes[0], 1, ch); buzz(14); burstFrom(btn); bumpBag(); return; }
     open(p, { choice: ch, pick: true });
   }
@@ -2007,11 +2048,11 @@ const LIBRARY = [
       const say = () => { lab.textContent = o.name + ' · '; const b = document.createElement('b'); b.textContent = choice[o.name]; lab.appendChild(b); };
       o.values.forEach(v => {
         const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.k = o.name + '|' + v.v; b.setAttribute('aria-checked', String(choice[o.name] === v.v));
-        if (o.name === 'Colour') { b.className = 'sw'; b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('aria-label', v.v); }
+        if (o.name === 'Colour') { const vOut = isOut(p, Object.assign({}, choice, { Colour: v.v })); b.className = 'sw' + (vOut ? ' out' : ''); b.style.setProperty('--c', v.sw || '#333'); b.setAttribute('aria-label', v.v + (vOut ? ', sold out' : '')); }
         else { b.className = 'pill'; b.setAttribute('aria-pressed', String(choice[o.name] === v.v)); if (v.sw) { const d = document.createElement('i'); d.className = 'dot'; d.style.setProperty('--c', v.sw); b.appendChild(d); } b.append(v.v); }
         b.addEventListener('click', () => {
           const before = imagesFor(p, choice).join(); choice = Object.assign({}, choice, { [o.name]: v.v });
-          paintOpts(p, o.name + '|' + v.v); paintLine(p); if (imagesFor(p, choice).join() !== before) pvBuild(p, imagesFor(p, choice)); buzz(5);
+          paintOpts(p, o.name + '|' + v.v); paintLine(p); paintStock(p); if (imagesFor(p, choice).join() !== before) pvBuild(p, imagesFor(p, choice)); buzz(5);
         });
         chips.appendChild(b);
       });
@@ -2022,12 +2063,26 @@ const LIBRARY = [
   }
   const CAT_NAME = {}; CATS.forEach(([id, label]) => { CAT_NAME[id] = label; });
   const paintLine = p => { const t = optText(p, choice) || p.colour; $('#pv-line').textContent = (CAT_NAME[p.cat] || '') + (t ? ' · ' + t : ''); };
+  // Everything that depends on whether this pick can be bought, in one place, so
+  // changing a colour can never leave the stamp and the button disagreeing.
+  function paintStock(p) {
+    const out = isOut(p, choice);
+    $('#pv-out').hidden = !out;
+    $('#pv-pre').hidden = out || !p.preorder;
+    const add = $('#pv-add');
+    add.disabled = out;
+    add.textContent = out ? 'Sold out' : p.preorder ? 'Pre-order' : 'Add to cart';
+    if (out) {
+      const left = (p.opts.find(o => o.name === 'Colour') || { values: [] }).values
+        .filter(v => !isOut(p, Object.assign({}, choice, { Colour: v.v }))).map(v => v.v);
+      $('#pv-msg').textContent = left.length ? 'This one is gone. Still here: ' + left.join(', ') + '.' : 'This one is gone.';
+    } else if ($('#pv-msg').textContent.indexOf('gone') >= 0) $('#pv-msg').textContent = '';
+  }
   function openProduct(p, o) {
     o = o || {}; current = p; size = p.sizes.length === 1 ? p.sizes[0] : null; lastFocus = document.activeElement;
     choice = Object.assign(optDefaults(p), o.choice || {});
     $('#pv-title').textContent = p.name; paintLine(p); putText($('#pv-desc'), p.desc); paintOpts(p);
-    $('#pv-pre').hidden = !p.preorder;
-    $('#pv-add').textContent = p.preorder ? 'Pre-order' : 'Add to cart';
+    paintStock(p);
     $('#pv-price').textContent = p.price == null ? 'Price drops soon' : naira(p.price) + ' NGN';
     qty = 1; paintQty();
     const sz = $('#pv-sizes'); sz.textContent = '';
@@ -2112,7 +2167,8 @@ const LIBRARY = [
       row.innerHTML = '<div class="th"></div><div><b></b><span></span></div><button type="button">Remove</button>';
       const pick = optText(p, it.opts) || p.colour, src = small(imagesFor(p, it.opts || {})[0]);
       row.querySelector('b').textContent = p.name + (pick ? ' · ' + pick : '');
-      if (p.preorder) { const chip = document.createElement('span'); chip.className = 'pre-chip'; chip.textContent = 'Pre-order'; row.querySelector('b').appendChild(chip); }
+      if (isOut(p, it.opts || {})) { const chip = document.createElement('span'); chip.className = 'pre-chip out'; chip.textContent = 'Sold out'; row.querySelector('b').appendChild(chip); }
+      else if (p.preorder) { const chip = document.createElement('span'); chip.className = 'pre-chip'; chip.textContent = 'Pre-order'; row.querySelector('b').appendChild(chip); }
       row.querySelector('span').textContent = (p.noSize ? '' : it.size + ' · ') + it.qty + ' × ' + (p.price == null ? '₦ ——' : naira(p.price));
       const t = new Image(); t.onload = () => { const th = row.querySelector('.th'); th.style.backgroundImage = 'url("' + src + '")'; if (p.cut) th.classList.add('cut'); }; t.src = src;
       row.querySelector('button').addEventListener('click', () => { bag.splice(idx, 1); saveBag(); renderBag(); }); body.appendChild(row);
@@ -2147,13 +2203,14 @@ const LIBRARY = [
   let coPage = 0;   // 0 details, 1 summary
   let coDir = 1;    // 1 forward, -1 back — drives the slide
 
-  const NOT_PICKUP = d => d.fulfil !== 'pickup';
+  // Everything is delivered now — there is no collecting in person, so there is
+  // no question to ask and no branch to carry. The pickup wording further down
+  // stays only because orders already placed that way still have to render
+  // their receipts truthfully.
+  const NOT_PICKUP = () => true;
   const CO_FIELDS = [
-    { id:'fulfil',  label:'How do you want it?', type:'choice', validate: v => v ? '' : 'Choose delivery or pickup.',
-      opts:[ { id:'delivery', label:'Delivery',  note:'Brought to your door. Fee by state.' },
-             { id:'pickup',   label:'I will pick up', note:'Collect in ' + PICKUP_AT + '. Pay for the clothes only.', tag:'No fee' } ] },
-    { id:'name',    label:'Full name',      hint:'We need this for your delivery.',               hintPick:'We need this to hand the order over.',  type:'text',  autocomplete:'name',           keyboard:'text',  validate: v => v.trim().length >= 2 ? '' : 'Enter your full name.' },
-    { id:'phone',   label:'Phone number',   hint:'We will contact you about delivery.',           hintPick:'We message you here about collecting.', type:'tel',   autocomplete:'tel',            keyboard:'tel',   validate: v => v.trim().length >= 7 ? '' : 'Enter a valid phone number.' },
+    { id:'name',    label:'Full name',      hint:'We need this for your delivery.',               type:'text',  autocomplete:'name',           keyboard:'text',  validate: v => v.trim().length >= 2 ? '' : 'Enter your full name.' },
+    { id:'phone',   label:'Phone number',   hint:'We will contact you about delivery.',           type:'tel',   autocomplete:'tel',            keyboard:'tel',   validate: v => v.trim().length >= 7 ? '' : 'Enter a valid phone number.' },
     { id:'email',   label:'Email address',  hint:'For your receipt and order updates.',           type:'email', autocomplete:'email',          keyboard:'email', validate: v => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()) ? '' : 'Enter a valid email address.' },
     { id:'state',   label:'State',          hint:'',                                              type:'state',                                                 validate: v => v ? '' : 'Pick your state.', onlyIf: NOT_PICKUP },
     { id:'lga',     label:'Area in Enugu',  hint:'Nsukka ₦3,000 · rest of Enugu ₦5,000.',         type:'lga',                                                   validate: v => v ? '' : 'Pick your area.', onlyIf: d => NOT_PICKUP(d) && d.state === 'Enugu' },
@@ -2289,36 +2346,23 @@ const LIBRARY = [
       fieldEls[f.id] = { wrap, input, err, hintEl, def: f };
     });
 
-    // What it costs, and which fields are even needed, both follow the choice
+    // What it costs follows the state, and the Enugu area only matters in Enugu.
+    // There is no fulfilment choice to branch on any more.
     const delNote = document.createElement('p'); delNote.className = 'co-delivery-note';
     fieldEls.state.wrap.appendChild(delNote);
-    const pickNote = document.createElement('p'); pickNote.className = 'co-delivery-note';
-    fieldEls.fulfil.wrap.appendChild(pickNote);
-    const pickingUp = () => fieldEls.fulfil.input.value === 'pickup';
     function paintNotes() {
-      const pick = pickingUp();
-      sub.textContent = pick ? 'For your pickup and receipt.' : 'For your delivery and receipt.';
-      CO_FIELDS.forEach(f => {
-        const fe = fieldEls[f.id];
-        if (fe && fe.hintEl && f.hintPick) fe.hintEl.textContent = pick ? f.hintPick : f.hint;
-      });
-      pickNote.hidden = !pick;
-      if (pick) pickNote.textContent = 'Collect in ' + PICKUP_AT + ' — no delivery fee, you pay for the clothes only. We message you the spot and the time once you have paid.';
+      sub.textContent = 'For your delivery and receipt.';
       const st = fieldEls.state.input.value, lga = st === 'Enugu' ? fieldEls.lga.input.value : '';
-      delNote.hidden = pick;
-      delNote.textContent = (!pick && st) ? 'Delivery to ' + st + (lga ? ', ' + lga : '') + ' · ' + naira(calcDelivery(st, lga)) : '';
+      delNote.hidden = !st;
+      delNote.textContent = st ? 'Delivery to ' + st + (lga ? ', ' + lga : '') + ' · ' + naira(calcDelivery(st, lga)) : '';
     }
     function toggleFields() {
-      const pick = pickingUp(), enugu = fieldEls.state.input.value === 'Enugu';
-      fieldEls.state.wrap.classList.toggle('hide', pick);
-      fieldEls.address.wrap.classList.toggle('hide', pick);
-      fieldEls.lga.wrap.classList.toggle('hide', pick || !enugu);
-      if (pick || !enugu) fieldEls.lga.err.hidden = true;
-      if (pick) { fieldEls.state.err.hidden = true; fieldEls.address.err.hidden = true; }
+      const enugu = fieldEls.state.input.value === 'Enugu';
+      fieldEls.lga.wrap.classList.toggle('hide', !enugu);
+      if (!enugu) fieldEls.lga.err.hidden = true;
     }
     fieldEls.state.input.addEventListener('change', () => { toggleFields(); paintNotes(); });
     fieldEls.lga.input.addEventListener('change', paintNotes);
-    fieldEls.fulfil.input.addEventListener('change', () => { toggleFields(); paintNotes(); });
     toggleFields();
     paintNotes();
 
@@ -2335,7 +2379,7 @@ const LIBRARY = [
       let firstBad = null;
       const data = {};
       CO_FIELDS.forEach(f => {
-        if (f.onlyIf && !f.onlyIf({ state: fieldEls.state.input.value, fulfil: fieldEls.fulfil.input.value })) {
+        if (f.onlyIf && !f.onlyIf({ state: fieldEls.state.input.value, fulfil: 'delivery' })) {
           fieldEls[f.id].err.hidden = true;
           fieldEls[f.id].input.classList.remove('err');
           return;
@@ -2435,6 +2479,7 @@ const LIBRARY = [
   function openCheckout() {
     if (!bag.length) return;
     const saved = store.get('yowa-ship', null); if (saved) coData = Object.assign({}, saved); else coData = {};
+    coData.fulfil = 'delivery';   // a saved 'pickup' from before would be free delivery to nowhere
     coPage = 0; coDir = 1;
     closeBag(true);
     coOverlay.hidden = false; document.body.style.overflow = 'hidden';
